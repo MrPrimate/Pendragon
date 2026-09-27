@@ -2,6 +2,8 @@ const { HTMLField, SchemaField, NumberField, StringField, FilePathField, ArrayFi
   foundry.data.fields;
 
 export class SkillData extends foundry.abstract.TypeDataModel {
+  static SKILL_TOOLTIP_TEMPLATE = "systems/Pendragon/templates/item/tooltip/skill.hbs";
+
   static defineSchema() {
     const requiredInteger = { required: true, nullable: false, integer: true };
     return {
@@ -43,5 +45,27 @@ export class SkillData extends foundry.abstract.TypeDataModel {
       catLabels.push(game.i18n.localize("PEN.skillcat." + cat));
     }
     this.categoryLabels = catLabels;
+  }
+
+  // this will render the tooltip template
+  async renderTooltip() {
+    const desc = await foundry.applications.ux.TextEditor.implementation.enrichHTML(this.description, {
+      async: true,
+      secrets: false,
+    });
+    const context = {
+      ...this.buildTooltipContext(),
+      description: desc,
+    };
+    return {
+      content: await foundry.applications.handlebars.renderTemplate(this.constructor.SKILL_TOOLTIP_TEMPLATE, context),
+    };
+  }
+
+  // this will build the context needed by the template
+  buildTooltipContext() {
+    return {
+      parent: this.parent,
+    };
   }
 }

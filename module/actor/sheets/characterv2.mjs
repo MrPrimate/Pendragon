@@ -503,6 +503,7 @@ export class PendragonCharacterSheetv2 extends PendragonActorSheet {
       .filter((i) => i.type == "skill")
       .map((s) => ({
         _id: s._id,
+        uuid: s.uuid,
         name: s.name,
         critical: s.system.total - 20,
         system: s.system,

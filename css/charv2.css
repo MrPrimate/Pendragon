@@ -602,3 +602,26 @@
     grid-template-columns: 50px 110px;
   }
 }
+
+.Pendragon.tooltip {
+  --font-h2: Messiri, Signika, sans-serif;
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  h2 {
+    font-size: 1.5rem;
+    color: var(--heading-color);
+    font-weight: bold;
+    margin-block-end: 0;
+  }
+
+  .pills {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    flex-wrap: wrap;
+    gap: 0.25em;
+    font-size: 0.6875rem;
+}

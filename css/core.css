@@ -120,3 +120,41 @@
   --pendragon-geneality-back: oklch(0.15096 0.0192 288.951);
   --active-effect-aura: url("../assets/Icons/aura.svg");
 }
+
+/* Used for keyboard keys */
+kbd {
+  padding: 0.1em 0.6em;
+  border: 1px solid var(--color-text-secondary);
+  font-size: 75%;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  display: inline-block;
+  margin: 0 0.1em;
+  text-shadow: 0 1px 0 var(--color-shadow-dark);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* Hints regarding clicks or keybinds */
+.control-hints {
+  font-size: 0.8125rem;
+  opacity: 0.7;
+
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+  }
+
+  li + li {
+    margin-block-start: 0.5em;
+  }
+
+  /* used for left/middle/right click */
+  img {
+    display: inline-block;
+    height: 1em;
+    aspect-ratio: 1;
+    vertical-align: middle;
+  }
+}
