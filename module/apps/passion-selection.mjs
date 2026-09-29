@@ -18,7 +18,7 @@ export class PassionsSelectDialog extends PENDialog {
   }
 
   async _onSelectArrowClicked(event, change) {
-    const chosen = event.currentTarget.closest(".large-icon");
+    const chosen = event.currentTarget.closest(".targetIcon");
     let choice = chosen.dataset.set;
     let newCap = 0;
     const chosenPassion = this.options.data.passions[choice];

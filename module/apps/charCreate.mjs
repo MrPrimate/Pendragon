@@ -1504,7 +1504,7 @@ export class PENCharCreate {
     return itemData;
   }
 
-  //Choose Item Dialog
+  //Choose Item Dialog -  TODO Is this being used anywhere>  Redundant?
   static async selectActorItem(actor, type, title) {
     //Get list of items
     let newList = await actor.items

@@ -9,7 +9,7 @@ export class SkillTrainingDialog extends api.HandlebarsApplicationMixin(api.Appl
     this.trainingRoute = trainingRoute;
   }
   static DEFAULT_OPTIONS = {
-    classes: ["Pendragon", "sheet", "winter-selector"],
+    classes: ["Pendragon dialogV2", "sheet", "winter-selector"],
     tag: "form",
     // automatically updates the item
     form: {

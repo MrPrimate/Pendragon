@@ -20,7 +20,7 @@ export class TraitsSelectDialog extends PENDialog {
 
   async _onSelectArrowClicked(event, change) {
     const form = event.currentTarget.closest(".stats-input");
-    const chosen = event.currentTarget.closest(".large-icon");
+    const chosen = event.currentTarget.closest(".targetIcon");
     let choice = chosen.dataset.set;
     let newCap = 0;
 

@@ -559,7 +559,7 @@ export class PENCheck {
       flatMod: options.flatMod,
     };
     const html = await foundry.applications.handlebars.renderTemplate(options.dialogTemplate, data);
-    const result = await foundry.applications.api.DialogV2.input({
+    const result = await PENDialog.input({
       window: { title: options.winTitle ?? "Roll Options" },
       content: html,
       ok: {

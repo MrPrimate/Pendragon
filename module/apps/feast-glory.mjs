@@ -42,7 +42,7 @@ export class FeastGlory {
       "systems/Pendragon/templates/dialog/feastGlory.hbs",
       data,
     );
-    const awards = await foundry.applications.api.DialogV2.input({
+    const awards = await PENDialog.input({
       window: {
         title: game.i18n.localize("PEN.feast.feastGlory"),
       },
