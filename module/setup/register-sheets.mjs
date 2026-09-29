@@ -27,6 +27,7 @@ import { PendragonCharacterSheetv2 } from "../actor/sheets/characterv2.mjs";
 import { PendragonManorimpSheet } from "../item/sheets/manorImp.mjs";
 import { PendragonBaronySheet } from "../actor/sheets/barony.mjs";
 import { PendragonBackgroundSheet } from "../item/sheets/background.mjs";
+import { PendragonArchetypeSheet } from "../item/sheets/archetype.mjs";
 
 export function registerSheets() {
   const { sheets } = foundry.applications;
@@ -169,6 +170,11 @@ export function registerSheets() {
 
   collections.Items.registerSheet("Pendragon", PendragonBackgroundSheet, {
     types: ["background"],
+    makeDefault: true,
+  });
+
+  collections.Items.registerSheet("Pendragon", PendragonArchetypeSheet, {
+    types: ["archetype"],
     makeDefault: true,
   });
 

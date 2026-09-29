@@ -312,7 +312,8 @@ export class PendragonBattleSheet extends api.HandlebarsApplicationMixin(sheets.
     }
     const { pid, property: uuid } = target.closest(".partic-item").dataset;
     //Check to see if Encounter is in game world
-    let enc = pid && game.actors.find((actr) => actr.type === "encounter" && actr.flags?.Pendragon?.pidFlag?.id === pid);
+    let enc =
+      pid && game.actors.find((actr) => actr.type === "encounter" && actr.flags?.Pendragon?.pidFlag?.id === pid);
     //If not in game then check compendiums as well
     if (!enc) {
       enc = (await game.system.api.pid.fromPIDBest({ pid: pid }))[0];

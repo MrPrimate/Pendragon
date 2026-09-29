@@ -116,4 +116,23 @@ export class NpcData extends foundry.abstract.TypeDataModel {
       random: new ArrayField(new ObjectField()),
     };
   }
+
+  prepareDerivedData() {
+    super.prepareDerivedData();
+    // Handle stats scores, adding labels to stats
+    for (let [key, stat] of Object.entries(this.stats)) {
+      stat.label = game.i18n.localize(CONFIG.PENDRAGON.stats[key]) ?? key;
+      stat.labelShort = game.i18n.localize(CONFIG.PENDRAGON.statsAbbreviations[key]) ?? key;
+      stat.total =
+        Number(stat.value) +
+        Number(stat.culture) +
+        Number(stat.create) +
+        Number(stat.poison) +
+        Number(stat.disease) +
+        Number(stat.sol) +
+        Number(stat.age) +
+        Number(stat.major) +
+        Number(stat.winter);
+    }
+  }
 }

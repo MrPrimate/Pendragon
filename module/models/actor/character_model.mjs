@@ -21,10 +21,15 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          youth: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
           growth: new NumberField({ ...requiredInteger, initial: 0 }),
-          formula: new StringField({ required: true, initial: "" }),
+          formula: new StringField({ required: true, initial: "2D6+5" }),
+          min: new NumberField({ ...requiredInteger, initial: 8 }), //Starting Value min
+          max: new NumberField({ ...requiredInteger, initial: 15 }), //Starting Value max
+          cMax: new NumberField({ ...requiredInteger, initial: 18 }), //Cultural Max from Archetype
+          tMax: new NumberField({ ...requiredInteger, initial: 0, persisted: false }), //Total Stat Max adjusted for Culture
         }),
         dex: new SchemaField({
           value: new NumberField({ ...requiredInteger, min: 0, initial: 10 }),
@@ -34,10 +39,15 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          youth: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
           growth: new NumberField({ ...requiredInteger, initial: 0 }),
-          formula: new StringField({ required: true, initial: "" }),
+          formula: new StringField({ required: true, initial: "2D6+5" }),
+          min: new NumberField({ ...requiredInteger, initial: 8 }),
+          max: new NumberField({ ...requiredInteger, initial: 15 }),
+          cMax: new NumberField({ ...requiredInteger, initial: 18 }),
+          tMax: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
         }),
         str: new SchemaField({
           value: new NumberField({ ...requiredInteger, min: 0, initial: 10 }),
@@ -47,10 +57,15 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          youth: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
           growth: new NumberField({ ...requiredInteger, initial: 0 }),
-          formula: new StringField({ required: true, initial: "" }),
+          formula: new StringField({ required: true, initial: "2D6+5" }),
+          min: new NumberField({ ...requiredInteger, initial: 8 }),
+          max: new NumberField({ ...requiredInteger, initial: 15 }),
+          cMax: new NumberField({ ...requiredInteger, initial: 18 }),
+          tMax: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
         }),
         con: new SchemaField({
           value: new NumberField({ ...requiredInteger, min: 0, initial: 10 }),
@@ -60,10 +75,15 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          youth: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
           growth: new NumberField({ ...requiredInteger, initial: 0 }),
-          formula: new StringField({ required: true, initial: "" }),
+          formula: new StringField({ required: true, initial: "2D6+5" }),
+          min: new NumberField({ ...requiredInteger, initial: 8 }),
+          max: new NumberField({ ...requiredInteger, initial: 15 }),
+          cMax: new NumberField({ ...requiredInteger, initial: 18 }),
+          tMax: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
         }),
         app: new SchemaField({
           value: new NumberField({ ...requiredInteger, min: 0, initial: 10 }),
@@ -73,12 +93,18 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          youth: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
           growth: new NumberField({ ...requiredInteger, initial: 0 }),
-          formula: new StringField({ required: true, initial: "" }),
+          formula: new StringField({ required: true, initial: "2D6+5" }),
+          min: new NumberField({ ...requiredInteger, initial: 8 }),
+          max: new NumberField({ ...requiredInteger, initial: 15 }),
+          cMax: new NumberField({ ...requiredInteger, initial: 18 }),
+          tMax: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
         }),
       }),
+      statTotal: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
       coatOfArms: new FilePathField({
         required: true,
         categories: ["IMAGE"],
@@ -86,7 +112,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       }),
       born: new NumberField({ ...requiredInteger, min: 0, initial: 487 }),
       died: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
-      age: new NumberField({ ...requiredInteger, min: 0, initial: 0, persisted: false }),      
+      age: new NumberField({ ...requiredInteger, min: 0, initial: 0, persisted: false }),
       aggravDam: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
       deterDam: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
       beauty: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
@@ -100,6 +126,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       class: new StringField({ required: true, blank: true, initial: "" }),
       parentclass: new StringField({ required: true, blank: true, initial: "" }),
       sol: new StringField({ required: true, blank: true, initial: "ordinary" }),
+      archetype: new StringField({ required: true, blank: true, initial: "" }),
       culture: new StringField({ required: true, blank: true, initial: "" }),
       religion: new StringField({ required: true, blank: true, initial: "" }),
       homeland: new StringField({ required: true, blank: true, initial: "" }),
@@ -117,6 +144,8 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       homelandName: new StringField({ required: true, blank: true, initial: "", persisted: false }),
       religionID: new StringField({ required: true, blank: true, initial: "", persisted: false }),
       religionName: new StringField({ required: true, blank: true, initial: "", persisted: false }),
+      archetypeID: new StringField({ required: true, blank: true, initial: "", persisted: false }),
+      archetypeName: new StringField({ required: true, blank: true, initial: "", persisted: false }),
       heir: new BooleanField({ initial: false }),
       lock: new BooleanField({ initial: false }),
       motto: new StringField({ required: true, blank: true, initial: "" }),
@@ -175,8 +204,58 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
     };
   }
 
+  static migrateData(source) {
+    if (source.stats?.str?.formula === "") {
+      source.stats.str.formula = "2D6+5";
+    }
+    if (source.stats?.dex?.formula === "") {
+      source.stats.dex.formula = "2D6+5";
+    }
+    if (source.stats?.siz?.formula === "") {
+      source.stats.siz.formula = "2D6+5";
+    }
+    if (source.stats?.con?.formula === "") {
+      source.stats.con.formula = "2D6+5";
+    }
+    if (source.stats?.app?.formula === "") {
+      source.stats.app.formula = "2D6+5";
+    }
+    return source;
+  }
+
   prepareDerivedData() {
     super.prepareDerivedData();
+
+    this.age = game.time.components.year - this.born;
+    if (this.died > 0) {
+      this.age = this.died - this.born;
+    }
+
+    // Handle stats scores, adding labels to stats
+    for (let [key, stat] of Object.entries(this.stats)) {
+      stat.label = game.i18n.localize(CONFIG.PENDRAGON.stats[key]) ?? key;
+      stat.labelShort = game.i18n.localize(CONFIG.PENDRAGON.statsAbbreviations[key]) ?? key;
+      stat.youth = 0;
+      //If character age <13 reduce stats
+      if (this.age < 13) {
+        stat.youth = Math.round((Number(stat.value) + Number(stat.culture)) * ((13 - Math.max(7, this.age)) / -12));
+      }
+      stat.tMax = stat.cMax + stat.culture;
+      stat.total = Math.min(
+        stat.tMax,
+        stat.value +
+          stat.culture +
+          stat.create +
+          stat.poison +
+          stat.disease +
+          stat.sol +
+          stat.age +
+          stat.youth +
+          stat.major +
+          stat.winter,
+      );
+      this.statTotal = this.statTotal + stat.value;
+    }
 
     //Set Culture ID
     const culture = this.parent.items.find((itm) => itm.type === "culture");
@@ -205,12 +284,13 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       this.religionName = religion.name;
     }
 
-    this.age = game.time.components.year - this.born;
-    if (this.died > 0) {
-      this.age = this.died - this.born;
+    //Set Archetype ID
+    const archetype = this.parent.items.find((itm) => itm.type === "archetype");
+    if (archetype) {
+      this.archetypeID = archetype._id;
+      this.archetypeName = archetype.name;
     }
 
-    //Actor only Adjustments
     this.damage = this.damage + this.damAdj;
     this.move = this.move + this.moveAdj;
     this.armour = this.armour + this.armourAdj;

@@ -48,23 +48,6 @@ export class PendragonItemSheet extends api.HandlebarsApplicationMixin(sheets.It
    * @returns {Promise}
    * @protected
    */
-  static async _onEditImage(event, target) {
-    const attr = target.dataset.edit;
-    const current = foundry.utils.getProperty(this.document, attr);
-    const { img } = this.document.constructor.getDefaultArtwork?.(this.document.toObject()) ?? {};
-    const fp = new FilePicker({
-      current,
-      type: "image",
-      redirectToRoot: img ? [img] : [],
-      callback: (path) => {
-        this.document.update({ [attr]: path });
-      },
-      top: this.position.top + 39,
-      left: this.position.left + 9,
-    });
-    return fp.browse();
-  }
-
   // handle editPid action
   static _onEditPid(event) {
     event.stopPropagation(); // Don't trigger other events

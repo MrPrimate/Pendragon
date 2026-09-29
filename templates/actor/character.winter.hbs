@@ -27,9 +27,9 @@
           <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
         {{/unless}}
       </div>
-    </li>  
+    </li>
     <li>
-      <div class="stat-name left bold clickable" data-action="squireAge">{{localize 'PEN.squireMaidenRoll'}} 
+      <div class="stat-name left bold clickable" data-action="squireAge">{{localize 'PEN.squireMaidenRoll'}}
         {{#unless system.status.squireAge}}
           <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
         {{/unless}}
@@ -103,11 +103,11 @@
           {{/if}}
         </li>
       </ul>
-    </li> 
+    </li>
 
     {{#if isGM}}
       {{#unless system.lock}}
-        <div class="item-culture-grid">
+        <div class="winter-prestige-grid">
           <div class="stat-name"> {{localize 'PEN.prestigeSpent'}}</div>
           <div class="dam-name-input centre"><input name="system.prestige" type="number" value="{{system.prestige}}" placeholder=10/></div>
         </div>

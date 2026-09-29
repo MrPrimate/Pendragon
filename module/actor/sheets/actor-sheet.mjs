@@ -30,22 +30,7 @@ export class PendragonActorSheet extends api.HandlebarsApplicationMixin(sheets.A
     el.insertAdjacentHTML("beforebegin", pidEditor);
     return frame;
   }
-  static async _onEditImage(event, target) {
-    const attr = target.dataset.edit;
-    const current = foundry.utils.getProperty(this.document, attr);
-    const { img } = this.document.constructor.getDefaultArtwork?.(this.document.toObject()) ?? {};
-    const fp = new FilePicker({
-      current,
-      type: "image",
-      redirectToRoot: img ? [img] : [],
-      callback: (path) => {
-        this.document.update({ [attr]: path });
-      },
-      top: this.position.top + 40,
-      left: this.position.left + 10,
-    });
-    return fp.browse();
-  }
+
   _initTabs(group, tabNames) {
     const tabs = {};
     tabNames.forEach((name) => {

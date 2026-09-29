@@ -22,7 +22,6 @@ export class PendragonArmourSheet extends PendragonItemSheet {
     },
     actions: {
       // probably should be implemented on a base class
-      onEditImage: this._onEditImage,
       editPid: this._onEditPid,
     },
   };

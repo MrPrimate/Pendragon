@@ -78,6 +78,17 @@ export class PENactorItemDrop {
         continue;
       }
 
+      //Only allow Archetypes on Characters
+      if ((actor.type != "character") & ["archetype"].includes(dropItm.type)) {
+        ui.notifications.warn(
+          game.i18n.format("PEN.itemActormismatch", {
+            itemType: game.i18n.localize("TYPES.Item." + dropItm.type),
+            actorType: game.i18n.localize("TYPES.Actor." + actor.type),
+          }),
+        );
+        continue;
+      }
+
       let dropItmPID = dropItm.flags?.Pendragon?.pidFlag?.id;
       let reqResult = 1;
       let errMsg = "";
@@ -85,7 +96,7 @@ export class PENactorItemDrop {
       //Automatically allow items in this list to be added
       if (!["gear", "armour", "weapon"].includes(dropItm.type)) {
         //Test for a duplicate item for certain types
-        if (["culture", "homeland", "class", "religion"].includes(dropItm.type)) {
+        if (["culture", "homeland", "class", "religion", "archetype"].includes(dropItm.type)) {
           if (actor.items.filter((aItm) => aItm.type === dropItm.type).length > 0) {
             if (game.user.isGM && dropItm.type === "class") {
               let knighted = await PENactorItemDrop._getKnighted(actor, dropItm);
@@ -204,6 +215,8 @@ export class PENactorItemDrop {
           await PENCharCreate.addClass(actor, dropItm, true, true);
         } else if (dropItm.type === "religion") {
           await PENCharCreate.addReligion(actor, dropItm);
+        } else if (dropItm.type === "archetype") {
+          await PENCharCreate.addArchetype(actor, dropItm);
         }
       }
     }

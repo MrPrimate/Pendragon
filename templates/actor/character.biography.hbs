@@ -1,5 +1,18 @@
 <section class='character tab biography {{tab.cssClass}}' data-group='primary' data-tab='biography'>
   <div class="biog-grid">
+    <div class="stat-name bold">{{localize 'PEN.Entities.Archetype'}}</div>
+    {{#if hasArchetype}}
+      <div>
+        <span class="stat-name clickable item" data-action="viewDoc" data-itemid = "{{system.archetypeID}}">{{system.archetypeName}}</span>
+        {{#unless isLocked}}
+          <span><a class="darkredreset" data-action="resetArchetype" data-tooltip="{{ localize 'PEN.resetArchetype'}}"><i class="far fa-times-circle"></i></a></span>
+        {{/unless}}
+      </div>
+    {{else}}
+      <div class="stat-name-input"><input name="system.archetype" type="text" value="{{system.archetype}}"/></div>
+    {{/if}}
+    <div></div>
+
     <div class="stat-name bold">{{localize 'PEN.culture'}}</div>
     {{#if hasCulture}}
       <div>
@@ -11,18 +24,19 @@
     {{else}}
       <div class="stat-name-input"><input name="system.culture" type="text" value="{{system.culture}}"/></div>
     {{/if}}
-    <div></div>
+
     <div class="stat-name bold">{{localize 'PEN.religion'}}</div>
     {{#if hasReligion}}
       <div>
         <span class="stat-name clickable item" data-action="viewDoc" data-itemid = "{{system.religionID}}">{{system.religionName}}</span>
         {{#unless isLocked}}
           <span><a class=" darkredreset" data-action="resetReligion" data-tooltip="{{ localize 'PEN.resetReligion'}}"><i class="far fa-times-circle"></i></a></span>
-        {{/unless}}    
+        {{/unless}}
       </div>
     {{else}}
       <div class="stat-name-input"><input name="system.religion" type="text" value="{{system.religion}}"/></div>
     {{/if}}
+    <div></div>
 
     <div class="stat-name bold item">{{localize 'PEN.homeland'}}</div>
     {{#if hasHomeland}}
@@ -30,29 +44,31 @@
         <span class="stat-name clickable item" data-action="viewDoc" data-itemid = "{{system.homelandID}}">{{system.homelandName}}</span>
         {{#unless isLocked}}
           <span><a class="darkredreset" data-action="resetHomeland" data-tooltip="{{ localize 'PEN.resetHomeland'}}"><i class="far fa-times-circle"></i></a></span>
-       {{/unless}}        
+       {{/unless}}
       </div>
     {{else}}
       <div class="stat-name-input"><input name="system.homeland" type="text" value="{{system.homeland}}"/></div>
     {{/if}}
-    <div></div>
+
     <div class="stat-name bold">{{localize 'PEN.class'}}</div>
     {{#if hasClass}}
       <div>
         <span class="stat-name clickable item" data-action="viewDoc" data-itemid = "{{system.classID}}">{{system.className}}</span>
         {{#unless isLocked}}
           <span><a class="darkredreset" data-action="resetClass" data-tooltip="{{ localize 'PEN.resetClass'}}"><i class="far fa-times-circle"></i></a></span>
-        {{/unless}}                
+        {{/unless}}
       </div>
-    {{else}}    
+    {{else}}
       <div class="stat-name-input "><input name="system.class" type="text" value="{{system.class}}"/></div>
-    {{/if}}  
+    {{/if}}
+    <div></div>
 
     <div class="stat-name bold">{{localize 'PEN.lord'}}</div>
     <div class="stat-name-input"><input name="system.lord" type="text" value="{{system.lord}}"/></div>
-    <div></div>
+
     <div class="stat-name bold">{{localize 'PEN.home'}}</div>
-    <div class="stat-name-input"><input name="system.home" type="text" value="{{system.home}}"/></div>        
+    <div class="stat-name-input"><input name="system.home" type="text" value="{{system.home}}"/></div>
+    <div></div>
 
     <div class="stat-name bold">{{localize 'PEN.born'}}</div>
     {{#if isLocked}}
@@ -60,10 +76,10 @@
     {{else}}
       <div class="stat-name-input"><input name="system.born" type="number" value="{{system.born}}" /></div>
     {{/if}}
-    <div></div>    
+
     <div class="stat-name bold">{{localize 'PEN.age'}}</div>
     <div class="stat-name">{{system.age}}</div>
-
+    <div></div>
     <div class="stat-name bold">{{localize 'PEN.died'}}</div>
     {{#if isLocked}}
       {{#if (eq system.died 0)}}
@@ -74,38 +90,38 @@
     {{else}}
       <div class="stat-name-input"><input name="system.died" type="number" value="{{#unless (eq system.died 0)}}{{system.died}}{{/unless}}" /></div>
     {{/if}}
-    <div></div>
-    <div class="stat-name bold">{{localize 'PEN.parentClass'}}</div>
-    <div class="stat-name-input"><input name="system.parentclass" type="text" value="{{system.parentclass}}"/></div>    
 
+    <div class="stat-name bold">{{localize 'PEN.parentClass'}}</div>
+    <div class="stat-name-input"><input name="system.parentclass" type="text" value="{{system.parentclass}}"/></div>
+    <div></div>
 
     <div class="stat-name bold">{{localize 'PEN.gender'}}</div>
     <div class="stat-name-input"><input name="system.gender" type="text" value="{{system.gender}}"/></div>
-    <div></div>
+
     <div class="stat-name bold">{{localize 'PEN.heir'}}</div>
     <div class="check-lower"><a class="item-control large-icon" data-action="toggleActor" data-property = "heir" data-tooltip="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if system.heir}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
-
-    <div class="stat-name bold">{{localize 'PEN.sol'}}</div>
-    <div class="stat-name">{{solLabel}}</div>  
     <div></div>
+    <div class="stat-name bold">{{localize 'PEN.sol'}}</div>
+    <div class="stat-name">{{solLabel}}</div>
+
     <div class="stat-name bold">{{localize 'PEN.barren'}}</div>
     <div class="check-lower"><a class="item-control large-icon" data-action="toggleActor" data-property = "barren" data-tooltip="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if system.status.barren}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
-    
+
   </div>
   <div class="biog-herald">
     <div class="stat-name bold">{{localize 'PEN.familyChar'}}</div>
     {{#if hasFamily}}
-      <div class="stat-name">{{system.family}}</div>    
+      <div class="stat-name">{{system.family}}</div>
     {{else}}
       <div class="stat-name-input"><input name="system.family" type="text" value="{{system.family}}"/></div>
     {{/if}}
     <div class="stat-name bold">{{localize 'PEN.motto'}}</div>
     <div class="stat-name-input"><input name="system.motto" type="text" value="{{system.motto}}"/></div>
-    <div class="stat-name bold">{{localize 'PEN.heraldry'}}</div> 
+    <div class="stat-name bold">{{localize 'PEN.heraldry'}}</div>
     <div class="stat-name-input"><input name="system.heraldry" type="text" value="{{system.heraldry}}"/></div>
-    <div class="stat-name bold">{{localize 'PEN.distFeat'}}</div> 
+    <div class="stat-name bold">{{localize 'PEN.distFeat'}}</div>
     <div class="stat-name-input"><input name="system.features" type="text" value="{{system.features}}"/></div>
-    <div class="stat-name bold"></div> 
+    <div class="stat-name bold"></div>
     <div class="stat-name">{{sizLabel}}</div>
   </div>
 

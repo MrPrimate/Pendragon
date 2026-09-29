@@ -12,7 +12,7 @@ export class PendragonManorimpSheet extends PendragonItemSheet {
   }
 
   static DEFAULT_OPTIONS = {
-    classes: ["Pendragon", "sheet", "item2"],
+    classes: ["Pendragon", "sheet", "itemV2"],
     position: {
       width: 520,
       height: 630,
@@ -26,7 +26,6 @@ export class PendragonManorimpSheet extends PendragonItemSheet {
       resizable: true,
     },
     actions: {
-      onEditImage: this._onEditImage,
       editPid: this._onEditPid,
       deleteItem: PendragonManorimpSheet.#deleteItem,
       addEffect: this._onCreateActiveEffect,

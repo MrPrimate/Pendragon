@@ -44,6 +44,7 @@ import {
   IdealData,
   RelationshipData,
   BackgroundData,
+  ArchetypeData,
 } from "./models/items/index.mjs";
 import drawNote from "./hooks/draw-note.mjs";
 import RenderNoteConfig from "./hooks/render-note-config.mjs";
@@ -119,6 +120,7 @@ Hooks.once("init", async function () {
   CONFIG.Item.dataModels.ideal = IdealData;
   CONFIG.Item.dataModels.relationship = RelationshipData;
   CONFIG.Item.dataModels.background = BackgroundData;
+  CONFIG.Item.dataModels.archetype = ArchetypeData;
 
   // Define custom Document classes
   CONFIG.Actor.documentClass = PendragonActor;
@@ -176,19 +178,20 @@ Hooks.on("renderJournalEntryPageTextSheet", RenderJournalEntryPageTextSheet);
 Hooks.on("renderJournalEntrySheet", RenderJournalEntrySheet);
 Hooks.on("renderRollTableSheet", RenderRollTableSheet);
 Hooks.on("createToken", createToken);
-Hooks.on('updateWorldTime', (worldTime, dt, options, userId) => {
+Hooks.on("updateWorldTime", (worldTime, dt, options, userId) => {
   for (const doc of game.actors) {
-    doc._initialize()
+    doc._initialize();
   }
-  foundry.applications.instances.forEach(sheet => {
-    if (sheet instanceof CONFIG.Actor.sheetClasses.character['Pendragon.PendragonCharacterSheet'].cls ||
-        sheet instanceof CONFIG.Actor.sheetClasses.character['Pendragon.PendragonCharacterSheetv2'].cls
+  foundry.applications.instances.forEach((sheet) => {
+    if (
+      sheet instanceof CONFIG.Actor.sheetClasses.character["Pendragon.PendragonCharacterSheet"].cls ||
+      sheet instanceof CONFIG.Actor.sheetClasses.character["Pendragon.PendragonCharacterSheetv2"].cls ||
+      sheet instanceof CONFIG.Actor.sheetClasses.follower["Pendragon.PendragonFollowerSheet"].cls
     ) {
-      sheet.render({ force: true })
+      sheet.render({ force: true });
     }
-  })
-})
-
+  });
+});
 
 PendragonHooks.listen();
 

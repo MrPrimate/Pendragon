@@ -30,7 +30,7 @@
 
       {{!-- Image Section --}}
       <section class="sheet-header">
-        <img class="profile-img" data-action="onEditImage" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="70" width="70"/>
+        <img class="profile-img" data-action="editImage" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="70" width="70"/>
       </section>
 
       {{!-- Icons Section --}}
@@ -120,6 +120,8 @@
         {{#unless system.lock}}
           <div class="npc-name left bold new-row">{{localize 'PEN.born'}}</div>
           <div class="npc-name-input centre"><input name="system.born" type="number" value="{{system.born}}"/></div>
+          <div class="npc-name left bold new-row">{{localize 'PEN.died'}}</div>
+          <div class="npc-name-input centre"><input name="system.died" type="number" value="{{system.died}}"/></div>
           <div class="npc-name left bold new-row">{{localize 'PEN.culture'}}</div>
           <div class="npc-name-input centre {{#if (eq system.culture '')}} input-border {{/if}}"><input name="system.culture" type="text" value="{{system.culture}}"/></div>
           <div class="npc-name left bold new-row">{{localize 'PEN.homeland'}}</div>
@@ -170,9 +172,9 @@
         </a></div>
         <div class="npc-name left bold">{{localize 'PEN.age'}}</div>
         {{#if (eq system.subtype 'squire')}}
-          <div class="npc-name centre rollable squire" data-type="actorAge" data-itemid="">{{age}}</div>
+          <div class="npc-name centre rollable squire" data-type="actorAge" data-itemid="">{{system.age}}</div>
         {{else}}
-          <div class="npc-name centre">{{age}}</div>
+          <div class="npc-name centre">{{system.age}}</div>
         {{/if}}
       </section>
     {{else}}

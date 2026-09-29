@@ -24,8 +24,11 @@ export class StatsSelectDialog extends PENDialog {
     if (this.options.data.added + change > this.options.data.pointsMax) {
       change = 0;
     }
-    //Stats only allowed in range 8-15
-    if (this.options.data.stats[choice].value + change < 8 || this.options.data.stats[choice].value + change > 15) {
+    //Stats only allowed in range min-max
+    if (
+      this.options.data.stats[choice].value + change < this.options.data.stats[choice].min ||
+      this.options.data.stats[choice].value + change > this.options.data.stats[choice].max
+    ) {
       change = 0;
     }
     //Change the stat value & points spent
@@ -40,18 +43,48 @@ export class StatsSelectDialog extends PENDialog {
     statVal.innerText = this.options.data.stats[choice].value;
   }
 
-  static async create(culture) {
+  static async create(actor) {
     let destination = "systems/Pendragon/templates/dialog/statsInput.hbs";
     let winTitle = game.i18n.localize("PEN.inputStats");
     let data = {
       stats: {
-        siz: { value: 10, label: game.i18n.localize("PENDRAGON.StatSiz"), bonus: culture.system.stats.siz.bonus },
-        dex: { value: 10, label: game.i18n.localize("PENDRAGON.StatDex"), bonus: culture.system.stats.dex.bonus },
-        str: { value: 10, label: game.i18n.localize("PENDRAGON.StatStr"), bonus: culture.system.stats.str.bonus },
-        con: { value: 10, label: game.i18n.localize("PENDRAGON.StatCon"), bonus: culture.system.stats.con.bonus },
-        app: { value: 10, label: game.i18n.localize("PENDRAGON.StatApp"), bonus: culture.system.stats.app.bonus },
+        siz: {
+          value: 10,
+          min: actor.system.stats.siz.min,
+          max: actor.system.stats.siz.max,
+          label: game.i18n.localize("PENDRAGON.StatSiz"),
+          bonus: actor.system.stats.siz.culture,
+        },
+        dex: {
+          value: 10,
+          min: actor.system.stats.dex.min,
+          max: actor.system.stats.dex.max,
+          label: game.i18n.localize("PENDRAGON.StatDex"),
+          bonus: actor.system.stats.dex.culture,
+        },
+        str: {
+          value: 10,
+          min: actor.system.stats.str.min,
+          max: actor.system.stats.str.max,
+          label: game.i18n.localize("PENDRAGON.StatStr"),
+          bonus: actor.system.stats.str.culture,
+        },
+        con: {
+          value: 10,
+          min: actor.system.stats.con.min,
+          max: actor.system.stats.con.max,
+          label: game.i18n.localize("PENDRAGON.StatCon"),
+          bonus: actor.system.stats.con.culture,
+        },
+        app: {
+          value: 10,
+          min: actor.system.stats.app.min,
+          max: actor.system.stats.app.max,
+          label: game.i18n.localize("PENDRAGON.StatApp"),
+          bonus: actor.system.stats.app.culture,
+        },
       },
-      culture,
+      actor,
       pointsMax: 60,
       added: 50,
     };

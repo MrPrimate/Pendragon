@@ -1,10 +1,22 @@
 # CHANGELOG
 
+## Unreleased
+
+- Archetype added - for characters only - https://github.com/cragstone/Pendragon/wiki/Archetype
+- Holds base stats and starting values for skills
+- Can add via drag/drop and character creation
+- Char stats in Constructed mode limited by min/max from Archetype
+- Culture has stats and max removed, leaving bonus and skills
+- Characters and Followers now have their stats reduced where age is <13
+- Followers have a died entry to record year of death
+
 ## 14.20
+
 - "Event (History)" can't be created as an item from the Item Directory - you only do this from the character sheet
 - Minor CSS tweaks
 
 ## 14.19
+
 - Localized Skill Categories pills on CharV2 skill tab
 - Fixed an issue with Starting Skill scores not calculating when dropping an skill on a character sheet.
 - Character ages will automatically update when game year is changed via GM menu
@@ -12,6 +24,7 @@
 - Follower autocalc of derived stats fixed
 
 ## 14.18
+
 - Additional Combat Actions Implemented disarm, evade, zigzag, dodge, set spear (ryak2)
 
 ## 14.17

@@ -11,18 +11,18 @@
 
   <div class="statsCreate">
     {{#each stats as |stat key|}}
-      <div class="bold stat-name">{{stat.label}}</div>   
+      <div class="bold stat-name">{{stat.label}} ({{stat.min}}-{{stat.max}})</div>
       <div class="centre"><a class="large-icon darkred up rollable" data-set="{{key}}"> <i class="fas fa-circle-up"></i> </a></div>
       <div class="stat-name centre item-{{key}}">{{stat.value}}</div>
       {{#if (gt stat.bonus 0)}}
         <div class="stat-name centre" data-tooltip="{{localize 'PEN.cultureBonus'}}">(+{{stat.bonus}})</div>
-      {{/if}}  
+      {{/if}}
       {{#if (lt stat.bonus 0)}}
         <div class="stat-name centre" data-tooltip="{{localize 'PEN.cultureBonus'}}">({{stat.bonus}})</div>
-      {{/if}} 
+      {{/if}}
       {{#if (eq stat.bonus 0)}}
         <div class="centre"></div>
-      {{/if}}         
+      {{/if}}
       <div class="centre"><a class="large-icon darkred down rollable" data-set="{{key}}"> <i class="fas fa-circle-down"></i> </a></div>
     {{/each}}
   </div>

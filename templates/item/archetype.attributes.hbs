@@ -1,0 +1,107 @@
+<section class="tab attributes {{tab.cssClass}}" data-group="primary" data-tab="attributes">
+  <div class="helpicon">
+    {{#if showHelp}}
+      <a class="" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Archetype" data-tooltip='{{localize "PEN.openWiki"}}'>
+        <i class="fas fa-circle-question"></i>
+      </a>
+    {{/if}}
+  </div>
+
+  <div class="item-archetype-grid">
+    <div class="stat-name left bold">{{localize 'PEN.characteristic'}}</div>
+    <div class="stat-name centre"> {{localize 'PEN.roll'}}</div>
+    <div class="stat-name centre" data-tooltip="{{localize 'PEN.startingMin'}}"> {{localize 'PEN.startingMinAbbr'}}</div>
+    <div class="stat-name centre" data-tooltip="{{localize 'PEN.startingMax'}}"> {{localize 'PEN.startingMaxAbbr'}}</div>
+    <div class="stat-name centre" data-tooltip="{{localize 'PEN.culturalMax'}}"> {{localize 'PEN.culturalMaxAbbr'}}</div>
+
+    {{#if isGM}}
+      <div class="stat-name left bold">{{localize 'PENDRAGON.StatSiz'}}</div>
+      <div class="stat-name-input centre"><input name="system.stats.siz.formula" type="text" value="{{item.system.stats.siz.formula}}"/></div>
+      <div class="stat-name-input centre"><input name="system.stats.siz.min" type="number" value="{{item.system.stats.siz.min}}"/></div>
+      <div class="stat-name-input centre"><input name="system.stats.siz.max" type="number" value="{{item.system.stats.siz.max}}"/></div>
+      <div class="stat-name-input centre"><input name="system.stats.siz.culturalMax" type="number" value="{{item.system.stats.siz.culturalMax}}"/></div>
+
+      <div class="stat-name left bold">{{localize 'PENDRAGON.StatDex'}}</div>
+      <div class="stat-name-input centre"><input name="system.stats.dex.formula" type="text" value="{{item.system.stats.dex.formula}}"/></div>
+      <div class="stat-name-input centre"><input name="system.stats.dex.min" type="number" value="{{item.system.stats.dex.min}}"/></div>
+      <div class="stat-name-input centre"><input name="system.stats.dex.max" type="number" value="{{item.system.stats.dex.max}}"/></div>
+      <div class="stat-name-input centre"><input name="system.stats.dex.culturalMax" type="number" value="{{item.system.stats.dex.culturalMax}}"/></div>
+
+      <div class="stat-name left bold">{{localize 'PENDRAGON.StatStr'}}</div>
+      <div class="stat-name-input centre"><input name="system.stats.str.formula" type="text" value="{{item.system.stats.str.formula}}"/></div>
+      <div class="stat-name-input centre"><input name="system.stats.str.min" type="number" value="{{item.system.stats.str.min}}"/></div>
+      <div class="stat-name-input centre"><input name="system.stats.str.max" type="number" value="{{item.system.stats.str.max}}"/></div>
+      <div class="stat-name-input centre"><input name="system.stats.str.culturalMax" type="number" value="{{item.system.stats.str.culturalMax}}"/></div>
+
+
+      <div class="stat-name left bold">{{localize 'PENDRAGON.StatCon'}}</div>
+      <div class="stat-name-input centre"><input name="system.stats.con.formula" type="text" value="{{item.system.stats.con.formula}}"/></div>
+      <div class="stat-name-input centre"><input name="system.stats.con.min" type="number" value="{{item.system.stats.con.min}}"/></div>
+      <div class="stat-name-input centre"><input name="system.stats.con.max" type="number" value="{{item.system.stats.con.max}}"/></div>
+      <div class="stat-name-input centre"><input name="system.stats.con.culturalMax" type="number" value="{{item.system.stats.con.culturalMax}}"/></div>
+
+      <div class="stat-name left bold">{{localize 'PENDRAGON.StatApp'}}</div>
+      <div class="stat-name-input centre"><input name="system.stats.app.formula" type="text" value="{{item.system.stats.app.formula}}"/></div>
+      <div class="stat-name-input centre"><input name="system.stats.app.min" type="number" value="{{item.system.stats.app.min}}"/></div>
+      <div class="stat-name-input centre"><input name="system.stats.app.max" type="number" value="{{item.system.stats.app.max}}"/></div>
+      <div class="stat-name-input centre"><input name="system.stats.app.culturalMax" type="number" value="{{item.system.stats.app.culturalMax}}"/></div>
+    {{else}}
+      <div class="stat-name left bold">{{localize 'PENDRAGON.StatSiz'}}</div>
+      <div class="stat-name centre">{{item.system.stats.siz.formula}}</div>
+      <div class="stat-name centre">{{item.system.stats.siz.min}}</div>
+      <div class="stat-name centre">{{item.system.stats.siz.max}}</div>
+      <div class="stat-name centre">{{item.system.stats.siz.culturalMax}}</div>
+
+      <div class="stat-name left bold">{{localize 'PENDRAGON.StatDex'}}</div>
+      <div class="stat-name centre">{{item.system.stats.dex.formula}}</div>
+      <div class="stat-name centre">{{item.system.stats.dex.min}}</div>
+      <div class="stat-name centre">{{item.system.stats.dex.max}}</div>
+      <div class="stat-name centre">{{item.system.stats.dex.culturalMax}}</div>
+
+      <div class="stat-name left bold">{{localize 'PENDRAGON.StatStr'}}</div>
+      <div class="stat-name centre">{{item.system.stats.str.formula}}</div>
+      <div class="stat-name centre">{{item.system.stats.str.min}}</div>
+      <div class="stat-name centre">{{item.system.stats.str.max}}</div>
+      <div class="stat-name centre">{{item.system.stats.str.culturalMax}}</div>
+
+      <div class="stat-name left bold">{{localize 'PENDRAGON.StatCon'}}</div>
+      <div class="stat-name centre">{{item.system.stats.con.formula}}</div>
+      <div class="stat-name centre">{{item.system.stats.con.min}}</div>
+      <div class="stat-name centre">{{item.system.stats.con.max}}</div>
+      <div class="stat-name centre">{{item.system.stats.con.culturalMax}}</div>
+
+      <div class="stat-name left bold">{{localize 'PENDRAGON.StatApp'}}</div>
+      <div class="stat-name centre">{{item.system.stats.app.formula}}</div>
+      <div class="stat-name centre">{{item.system.stats.app.min}}</div>
+      <div class="stat-name centre">{{item.system.stats.app.max}}</div>
+      <div class="stat-name centre">{{item.system.stats.app.culturalMax}}</div>
+    {{/if}}
+  </div>
+  <br>
+
+  {{!-- Skills --}}
+  <div class="stat-name bold">{{ localize "PEN.skills"}}</div>
+  <div class="horizontalboxed {{#if isGM}} droppable {{/if}} virtues" style="min-height: 20px;" data-collection = "skills">
+    <ol class="item-list">
+      {{#each skills as |skill|}}
+        <li class="item flexrow" data-item-id="{{skill.uuid}}" >
+          <div class="item-name flexrow">
+            {{#if skill.valid}}
+              <div class="stat-name">{{skill.name}}</div>
+            {{else}}
+              <div class="stat-name result-success">{{skill.name}} [{{localize 'PEN.invalid'}}]</div>
+            {{/if}}
+          </div>
+          <div class="stat-name centre">{{skill.formula}}</div>
+          <div class="item-controls">
+            {{#if ../isGM}}
+              <a class="item-control item-delete" title="{{localize 'PEN.deleteItem'}}" data-action="deleteItem"><i class="fas fa-trash" style="padding-top: 5px;"></i></a>
+            {{/if}}
+          </div>
+        </li>
+      {{else}}
+        <div class="centre italics" style="height:60px; padding-top: 20px;">{{localize 'PEN.emptyList'}}</td>
+      {{/each}}
+    </ol>
+  </div>
+</section>

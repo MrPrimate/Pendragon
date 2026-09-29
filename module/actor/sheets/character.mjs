@@ -29,13 +29,13 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
       submitOnChange: true,
     },
     actions: {
-      onEditImage: this._onEditImage,
       editPid: this._onEditPid,
       individualWinter: this._individualWinter,
       toggleActor: this._onActorToggle,
       createDoc: this._createDoc,
       viewDoc: this._viewDoc,
       deleteDoc: this._deleteDoc,
+      resetArchetype: this._onUndoArchetype,
       resetCulture: this._onUndoCulture,
       resetReligion: this._onUndoReligion,
       resetHomeland: this._onUndoHomeland,
@@ -262,6 +262,7 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
     context.hasClass = false;
     context.hasKnightClass = false;
     context.hasReligion = false;
+    context.hasArchetype = false;
     context.hasFamily = false;
     context.hasTraits = false;
     context.hasParentPassion = false;
@@ -299,10 +300,11 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
     if (this.actor.system.homelandID != "") {
       context.hasHomeland = true;
     }
+    if (this.actor.system.archetypeID != "") {
+      context.hasArchetype = true;
+    }
     if (this.actor.system.classID != "") {
       context.hasClass = true;
-      //let tempClass = await this.actor.items.get(actorData.system.classID);
-      //if (!tempClass.system.starter) {context.hasKnightClass = true}
       context.hasKnightClass = true;
     }
     if (this.actor.system.religionID != "") {
@@ -724,23 +726,6 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
   }
 
   /* --------------------------------ACTIONS--------------------- */
-  // Handle edit Image action
-  static async _onEditImage(event, target) {
-    const attr = target.dataset.edit;
-    const current = foundry.utils.getProperty(this.document, attr);
-    const { img } = this.document.constructor.getDefaultArtwork?.(this.document.toObject()) ?? {};
-    const fp = new foundry.applications.apps.FilePicker.implementation({
-      current,
-      type: "image",
-      redirectToRoot: img ? [img] : [],
-      callback: (path) => {
-        this.document.update({ [attr]: path });
-      },
-      top: this.position.top + 40,
-      left: this.position.left + 10,
-    });
-    return fp.browse();
-  }
 
   // Handle editPid action
   static _onEditPid(event, target) {
@@ -850,6 +835,14 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
       const item = this.actor.items.get(li.dataset.itemid);
       if (!item) return;
       item.delete();
+    }
+  }
+
+  //Trigger Culture Deletion
+  static async _onUndoArchetype(event, target) {
+    if (event.detail === 2) {
+      //Only perform on double click
+      await PENCharCreate.removeArchetype(this.actor);
     }
   }
 

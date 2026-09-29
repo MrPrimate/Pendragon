@@ -9,7 +9,7 @@
         <button type="button" data-action="switchSheet" data-tooltip="Click to preview v2 sheet" style="display:inline-flex;">v2</button>
         <a class="large-icon" data-action="toggleActor" data-property="lock" data-tooltip='{{localize "PEN.lock"}}'><i class="fas {{#if isLocked}}fa-lock{{else}}fa-lock-open{{/if}}"></i></a></div>
         <div class="new-row">
-          <img class="profile-img" src="{{actor.system.coatOfArms}}" data-action="onEditImage" data-edit="system.coatOfArms" data-tooltip="{{actor.system.heraldry}}" height="140" width="140"/>
+          <img class="profile-img" src="{{actor.system.coatOfArms}}" data-action="editImage" data-edit="system.coatOfArms" data-tooltip="{{actor.system.heraldry}}" height="140" width="140"/>
         </div>
       <section class="sheet-header">
 
@@ -69,7 +69,7 @@
       {{!-- Image Section --}}
       <section class="sheet-header">
         <div class="">
-          <img class="profile-img" src="{{actor.img}}" data-action="onEditImage" data-edit="img" data-tooltip="{{actor.name}}" height="140" width="140"/>
+          <img class="profile-img" src="{{actor.img}}" data-action="editImage" data-edit="img" data-tooltip="{{actor.name}}" height="140" width="140"/>
         </div>
       </section>
     </section>

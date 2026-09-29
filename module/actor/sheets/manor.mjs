@@ -28,7 +28,6 @@ export class PendragonManorSheet extends api.HandlebarsApplicationMixin(sheets.A
     },
     actions: {
       editPid: this._onEditPid,
-      onEditImage: this._onEditImage,
       viewDoc: this._viewDoc,
       deleteDoc: this._deleteDoc,
       viewEnf: this._viewEnf,
@@ -301,24 +300,6 @@ export class PendragonManorSheet extends api.HandlebarsApplicationMixin(sheets.A
       await item.update(checkProp);
     }
     return;
-  }
-
-  // Handle edit Image action
-  static async _onEditImage(event, target) {
-    const attr = target.dataset.edit;
-    const current = foundry.utils.getProperty(this.document, attr);
-    const { img } = this.document.constructor.getDefaultArtwork?.(this.document.toObject()) ?? {};
-    const fp = new foundry.applications.apps.FilePicker.implementation({
-      current,
-      type: "image",
-      redirectToRoot: img ? [img] : [],
-      callback: (path) => {
-        this.document.update({ [attr]: path });
-      },
-      top: this.position.top + 40,
-      left: this.position.left + 10,
-    });
-    return fp.browse();
   }
 
   //View an Embedded Document

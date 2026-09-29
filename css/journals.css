@@ -211,11 +211,10 @@ div.pen-adventure-entry {
         }
 
         &.broken {
-          display:none;
+          display: none;
         }
       }
     }
-
 
     .redbox a.content-link {
       background: none;

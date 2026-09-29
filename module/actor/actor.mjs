@@ -32,26 +32,12 @@ export class PendragonActor extends Actor {
   _prepareCharacterData(actorData) {
     if (actorData.type !== "character") return;
     const systemData = actorData.system;
-    //Set basic object IDs
-    systemData.statTotal = 0;
     systemData.fidelitas = 0;
     systemData.fervor = 0;
     systemData.adoratio = 0;
     systemData.civilitas = 0;
     systemData.honor = 0;
     systemData.winter = 0;
-
-    //Set stats max
-    const culture = actorData.items.find((itm) => itm.type === "culture");
-
-    for (let [key, stat] of Object.entries(actorData.system.stats)) {
-      stat.max = 18 + stat.culture;
-      if (culture) {
-        stat.max = culture.system.stats[key].max ?? 18;
-      }
-      stat.total = Math.min(stat.total, stat.max);
-      systemData.statTotal = systemData.statTotal + Number(stat.value);
-    }
 
     //Calculate passive Glory
     systemData.appeal = 0;
@@ -237,23 +223,6 @@ export class PendragonActor extends Actor {
   // Prepare Common type specific data.
   _prepareCommonData(actorData) {
     if (!["npc", "character", "follower"].includes(actorData.type)) return;
-    actorData.system.statTotal = 0;
-    // Handle stats scores, adding labels to stats
-    for (let [key, stat] of Object.entries(actorData.system.stats)) {
-      stat.label = game.i18n.localize(CONFIG.PENDRAGON.stats[key]) ?? key;
-      stat.labelShort = game.i18n.localize(CONFIG.PENDRAGON.statsAbbreviations[key]) ?? key;
-      stat.total =
-        Number(stat.value) +
-        Number(stat.culture) +
-        Number(stat.create) +
-        Number(stat.poison) +
-        Number(stat.disease) +
-        Number(stat.sol) +
-        Number(stat.age) +
-        Number(stat.major) +
-        Number(stat.winter);
-    }
-
     //If NPC is Spriggan
     if (actorData.type === "npc") {
       let pid = actorData.flags?.Pendragon?.pidFlag?.id;

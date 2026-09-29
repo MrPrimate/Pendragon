@@ -49,7 +49,7 @@
   cursor: pointer;
 }
 
-.Pendragon:not(.party, .actor2) .window-content {
+.Pendragon:not(.party, .actor2, .itemV2) .window-content {
   background-image: url("../assets/parchment.jpg");
   background-size: cover;
   padding: 0.5em;
@@ -621,7 +621,7 @@
   margin-bottom: 0px;
 }
 
-.Pendragon .item-culture-grid {
+.Pendragon .winter-prestige-grid {
   display: grid;
   grid-template-columns: 150px 100px 75px 75px;
   gap: 0px;
@@ -1153,9 +1153,9 @@
 
 .Pendragon .statsCreate {
   display: grid;
-  width: 355px;
+  width: 405px;
   margin-left: 5px;
-  grid-template-columns: 150px 50px 50px 50px 50px;
+  grid-template-columns: 200px 50px 50px 50px 50px;
 }
 
 #help-tooltip {
@@ -1213,7 +1213,7 @@
   row-gap: 0px;
   column-gap: 0px;
   font-size: 14px;
-  grid-template-columns: 60px 60px 65px 65px 65px 65px 65px 65px 65px 65px 60px 50px 80px;
+  grid-template-columns: 60px 60px 65px 60px 65px 65px 60px 60px 65px 65px 65px 60px 50px 30px;
 }
 
 .Pendragon .stat-item {

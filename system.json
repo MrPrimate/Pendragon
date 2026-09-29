@@ -228,6 +228,9 @@
       },
       "manorImp": {
         "htmlFields": ["description", "GMdescription"]
+      },
+      "archetype": {
+        "htmlFields": ["description", "GMdescription"]
       }
     },
     "RegionBehavior": {

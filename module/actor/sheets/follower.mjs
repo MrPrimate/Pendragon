@@ -22,7 +22,6 @@ export class PendragonFollowerSheet extends api.HandlebarsApplicationMixin(sheet
       submitOnChange: true,
     },
     actions: {
-      onEditImage: this._onEditImage,
       editPid: this._onEditPid,
       actorToggle: this._onActorToggle,
       autoCalc: this._onAutoCalc,
@@ -63,7 +62,7 @@ export class PendragonFollowerSheet extends api.HandlebarsApplicationMixin(sheet
       displayNotes: this.actor.system.noteView,
     };
 
-    context.age = game.time.components.year - this.actor.system.born;
+    //context.age = game.time.components.year - this.actor.system.born;  Moved to Data Model
     context.followerType = await PENSelectLists.getFollowerType();
     context.follower = context.followerType[this.actor.system.subType];
     context.solType = await PENSelectLists.getSOLType();
@@ -317,23 +316,6 @@ export class PendragonFollowerSheet extends api.HandlebarsApplicationMixin(sheet
     } else return console.warn("Could not find document class");
   }
 
-  static async _onEditImage(event, target) {
-    const attr = target.dataset.edit;
-    const current = foundry.utils.getProperty(this.document, attr);
-    const { img } = this.document.constructor.getDefaultArtwork?.(this.document.toObject()) ?? {};
-    const fp = new foundry.applications.apps.FilePicker.implementation({
-      current,
-      type: "image",
-      redirectToRoot: img ? [img] : [],
-      callback: (path) => {
-        this.document.update({ [attr]: path });
-      },
-      top: this.position.top + 40,
-      left: this.position.left + 10,
-    });
-    return fp.browse();
-  }
-
   // Handle editPid action
   static _onEditPid(event) {
     event.stopPropagation(); // Don't trigger other events
@@ -363,10 +345,12 @@ export class PendragonFollowerSheet extends api.HandlebarsApplicationMixin(sheet
       "system.manMjrWnd": this.actor.system.hp.majorWnd,
       "system.manDmg": this.actor.system.damage,
       "system.manHealRate": this.actor.system.healRate,
-      "system.manMaxHP": this.actor.system.stats.siz.total + this.actor.system.stats.con.total + this.actor.system.hp.adj,
-      "system.manUnconscious": Math.round((this.actor.system.stats.siz.total + this.actor.system.stats.con.total + this.actor.system.hp.adj) / 4),
+      "system.manMaxHP":
+        this.actor.system.stats.siz.total + this.actor.system.stats.con.total + this.actor.system.hp.adj,
+      "system.manUnconscious": Math.round(
+        (this.actor.system.stats.siz.total + this.actor.system.stats.con.total + this.actor.system.hp.adj) / 4,
+      ),
     });
-
   }
 
   //-------------Drag and Drop--------------

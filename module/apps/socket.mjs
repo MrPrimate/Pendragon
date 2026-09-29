@@ -24,7 +24,7 @@ export class PENSystemSocket {
         break;
       case "updatechar":
         PENUtilities.updateCharSheets();
-        break;  
+        break;
     }
   }
 }

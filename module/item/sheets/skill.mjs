@@ -22,7 +22,6 @@ export class PendragonSkillSheet extends PendragonItemSheet {
       resizable: true,
     },
     actions: {
-      onEditImage: this._onEditImage,
       editPid: this._onEditPid,
     },
   };

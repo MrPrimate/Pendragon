@@ -24,7 +24,6 @@ export class PendragonIdealSheet extends PendragonItemSheet {
       resizable: true,
     },
     actions: {
-      onEditImage: this._onEditImage,
       editPid: this._onEditPid,
       deleteItem: PendragonIdealSheet.#deleteItem,
     },

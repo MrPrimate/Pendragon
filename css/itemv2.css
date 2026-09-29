@@ -1,4 +1,4 @@
-.Pendragon.item2 {
+.Pendragon.itemV2 {
   font-family: Messiri;
   font-size: var(--font-size-16);
   overflow: visible;
@@ -109,6 +109,7 @@
   & section.tab {
     overflow: hidden auto;
     scrollbar-gutter: stable;
+    height: 100%;
   }
 
   & .sheet-header {
@@ -285,6 +286,27 @@
   & .small-cost-grid {
     display: grid;
     grid-template-columns: 95px 30px 95px;
+    gap: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  .item-archetype-grid {
+    display: grid;
+    grid-template-columns: 150px 100px 75px 75px 75px;
+    column-gap: 20px;
+    row-gap: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  .icon-img {
+    filter: var(--icon-img-filter, none);
+  }
+
+  .item-culture-grid {
+    display: grid;
+    grid-template-columns: 150px 100px;
     gap: 0px;
     margin-top: 0px;
     margin-bottom: 0px;
