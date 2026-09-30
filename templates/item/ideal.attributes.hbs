@@ -4,8 +4,8 @@
 
   {{!-- Trait Group --}}
     <div class="stat-name groupTitle">
-      <div class="bold">{{ localize "PEN.traitGroup"}}</div>
-      <div class="bold">{{ localize "PEN.required"}}</div>
+      <div class="stat-name bold">{{ localize "PEN.traitGroup"}}</div>
+      <div class="stat-name bold">{{ localize "PEN.required"}}</div>
       {{#if isGM}}
         <div class="stat-name-input {{#if (eq item.system.traitGroupScore '')}} input-border {{/if}} centre"><input name="system.traitGroupScore" type="number" value="{{item.system.traitGroupScore}}"/></div>
       {{else}}
@@ -75,7 +75,7 @@
       <div class="stat-name left bold">{{localize 'PEN.move'}}</div>
       <div class="stat-name-input "><input name="system.move" type="number" value="{{item.system.move}}"/></div>
       <div class="stat-name left bold" data-tooltip="{{localize 'PEN.magicProt'}}">{{localize 'PEN.magicProtShort'}}</div>
-      <div class="stat-name"><a class="item-control item-toggle large-icon" data-property = "protect" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if item.system.protect}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>  
+      <div class="stat-name"><a class="item-control item-toggle large-icon" data-property = "protect" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if item.system.protect}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
     {{else}}
       <div class="stat-name left bold">{{localize 'PEN.passive'}}</div>
       <div class="stat-name">{{item.system.glory}}</div>
@@ -90,7 +90,7 @@
       <div class="stat-name left bold">{{localize 'PEN.move'}}</div>
       <div class="stat-name">{{item.system.move}}</div>
       <div class="stat-name left bold" data-tooltip="{{localize 'PEN.magicProt'}}">{{localize 'PEN.magicProtShort'}}</div>
-      <div class="stat-name"><a class="large-icon"><i class="{{#if item.system.protect}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>  
+      <div class="stat-name"><a class="large-icon"><i class="{{#if item.system.protect}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
 
     {{/if}}
   </div>

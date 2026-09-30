@@ -4,7 +4,7 @@
     <div class="stat-name left bold">{{localize 'PEN.court'}}</div>
     {{#if isGM}}
       <div class="stat-name centre">
-        <select data-handle-change name="system.court">
+        <select class="centre" data-handle-change name="system.court">
           {{selectOptions courtType selected=item.system.court}}
         </select>
       </div>
@@ -13,7 +13,7 @@
     {{/if}}
     <br>
     <div class="stat-name left bold new-row">{{localize 'PEN.specialisation'}}</div>
-    <div class="centre"><a class="item-control item-toggle large-icon" data-property = "specialisation" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if item.system.specialisation}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>    
+    <div class="centre pad-icon"><a class="item-control item-toggle large-icon" data-property = "specialisation" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if item.system.specialisation}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
     <br>
 
     {{#if hasOwner}}
@@ -36,7 +36,7 @@
     {{/if}}
     <br>
     <div class="stat-name left bold new-row">{{localize 'PEN.xpCheck'}}</div>
-    <div class="centre"><a class="item-control item-toggle large-icon" data-property = "XP" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if item.system.XP}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
+    <div class="centre pad-icon"><a class="item-control item-toggle large-icon" data-property = "XP" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if item.system.XP}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
     {{/if}}
   </div>
 </section>

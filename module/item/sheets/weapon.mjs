@@ -10,7 +10,7 @@ export class PendragonWeaponSheet extends PendragonItemSheet {
     classes: ["Pendragon", "sheet", "itemV2"],
     position: {
       width: 520,
-      height: 760,
+      height: 800,
     },
     tag: "form",
     // automatically updates the item

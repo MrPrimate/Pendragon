@@ -679,7 +679,7 @@
 
 .Pendragon .wound-item-grid {
   display: grid;
-  grid-template-columns: 150px 350px;
+  grid-template-columns: 150px 330px;
   gap: 0px;
   margin-top: 0px;
   margin-bottom: 0px;
@@ -1556,15 +1556,15 @@
 }
 
 .Pendragon .skillcat {
-  border: 1px solid black;
+  border: 1px solid var(--pendragon-primary-text);
   border-radius: 4px;
   text-align: center;
-  font-family: AGaramondPro;
-  color: black;
+  font-family: Messiri;
+  color: var(--pendragon-primary-text);
 }
 
 .Pendragon .activeskillcat {
-  background-color: darkred;
+  background-color: var(--pendragon-darkred);
   color: cornsilk;
 }
 

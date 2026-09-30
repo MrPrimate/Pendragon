@@ -6,7 +6,7 @@ export class PendragonGearSheet extends PendragonItemSheet {
   }
 
   static DEFAULT_OPTIONS = {
-    classes: ["Pendragon", "sheet", "item", "theme-light"],
+    classes: ["Pendragon", "sheet", "itemV2"],
     position: {
       width: 550,
       height: 480,

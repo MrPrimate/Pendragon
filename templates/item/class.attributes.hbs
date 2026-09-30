@@ -2,7 +2,7 @@
   <br>
   <div class="item-trait-grid">
     <div class="stat-name left bold" data-tooltip="{{localize 'PEN.starterClassHint'}}">{{localize 'PEN.starterClass'}}</div>
-    <div class="centre"><a class="item-control item-toggle large-icon" data-property = "starter" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if item.system.starter}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>  
+    <div class="centre" style="padding-top: 8px;"><a class="item-control item-toggle large-icon" data-property = "starter" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if item.system.starter}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
   </div>
   <br>
   <div class="stat-name bold">{{ localize "PEN.passions"}}</div>
@@ -19,14 +19,14 @@
               <div class="stat-name result-success">{{passion.name}} [{{localize 'PEN.invalid'}}]</div>
             {{/if}}
           </div>
-          <div class="item-controls">
+          <div class="item-controls" style="padding-top: 8px;">
             {{#if ../isGM}}
               <a class="item-control item-delete" title="{{localize 'PEN.deleteItem'}}" data-action="deleteItem"><i class="fas fa-trash"></i></a>
             {{/if}}
           </div>
         </li>
       {{else}}
-          <div class="centre stat-name italics">{{localize 'PEN.emptyList'}}</div> 
+          <div class="centre stat-name italics">{{localize 'PEN.emptyList'}}</div>
       {{/each}}
     </ol>
   </div>
@@ -44,18 +44,18 @@
               <div class="stat-name result-success">{{passion.name}} [{{localize 'PEN.invalid'}}]</div>
             {{/if}}
           </div>
-          <div class="item-controls">
+          <div class="item-controls" style="padding-top: 8px;">
             {{#if ../isGM}}
               <a class="item-control item-delete" title="{{localize 'PEN.deleteItem'}}" data-action="deleteItem"><i class="fas fa-trash"></i></a>
             {{/if}}
           </div>
         </li>
       {{else}}
-          <div class="centre stat-name italics">{{localize 'PEN.emptyList'}}</div> 
+          <div class="centre stat-name italics">{{localize 'PEN.emptyList'}}</div>
       {{/each}}
     </ol>
   </div>
-  
+
   {{!-- Tertiary Passions --}}
   <div class="horizontalboxed {{#if isGM}} droppable {{/if}} virtues" data-collection = "passions" data-section = "tertiary">
     <div class="stat-name">{{ localize "PEN.tertiary"}}</div>
@@ -69,14 +69,14 @@
               <div class="stat-name result-success">{{passion.name}} [{{localize 'PEN.invalid'}}]</div>
             {{/if}}
           </div>
-          <div class="item-controls">
+          <div class="item-controls" style="padding-top: 8px;">
             {{#if ../isGM}}
               <a class="item-control item-delete" title="{{localize 'PEN.deleteItem'}}" data-action="deleteItem"><i class="fas fa-trash"></i></a>
             {{/if}}
           </div>
         </li>
       {{else}}
-          <div class="centre stat-name italics">{{localize 'PEN.emptyList'}}</div>         
+          <div class="centre stat-name italics">{{localize 'PEN.emptyList'}}</div>
       {{/each}}
     </ol>
   </div>
@@ -95,14 +95,14 @@
             <div class="stat-name result-success">{{gear.name}} [{{localize 'PEN.invalid'}}]</div>
             {{/if}}
           </div>
-          <div class="item-controls">
+          <div class="item-controls" style="padding-top: 8px;">
             {{#if ../isGM}}
               <a class="item-control item-delete" title="{{localize 'PEN.deleteItem'}}" data-action="deleteItem"><i class="fas fa-trash"></i></a>
             {{/if}}
           </div>
         </li>
       {{else}}
-          <div class="centre stat-name italics">{{localize 'PEN.emptyList'}}</div>         
+          <div class="centre stat-name italics">{{localize 'PEN.emptyList'}}</div>
       {{/each}}
     </ol>
   </div>

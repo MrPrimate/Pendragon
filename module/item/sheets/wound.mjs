@@ -6,7 +6,7 @@ export class PendragonWoundSheet extends PendragonItemSheet {
   }
 
   static DEFAULT_OPTIONS = {
-    classes: ["Pendragon", "sheet", "item"],
+    classes: ["Pendragon", "sheet", "itemV2"],
     position: {
       width: 520,
       height: 240,
