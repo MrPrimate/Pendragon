@@ -35,7 +35,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.351"
+      coreVersion: '13.351'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -43,7 +43,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!CJOK9y9zaz3G50kC.nAnfT3prxUcWuPAC"
+    _key: '!journal.pages!CJOK9y9zaz3G50kC.nAnfT3prxUcWuPAC'
   - sort: 200000
     name: Horse Damage
     type: text
@@ -75,7 +75,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -83,7 +83,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!CJOK9y9zaz3G50kC.HW6JQrGlDvPURzrF"
+    _key: '!journal.pages!CJOK9y9zaz3G50kC.HW6JQrGlDvPURzrF'
 flags:
   Pendragon:
     pidFlag:
@@ -94,9 +94,9 @@ flags:
     fixed-adventure-heading: true
 _stats:
   duplicateSource: null
-  coreVersion: "14.364"
+  coreVersion: '14.364'
   systemId: Pendragon
-  systemVersion: "14.1"
+  systemVersion: '14.1'
   createdTime: 1734462613625
   modifiedTime: 1781499216270
   lastModifiedBy: pendragonBuilder
@@ -105,4 +105,4 @@ sort: 98829
 ownership:
   default: 0
 categories: []
-_key: "!journal!CJOK9y9zaz3G50kC"
+_key: '!journal!CJOK9y9zaz3G50kC'

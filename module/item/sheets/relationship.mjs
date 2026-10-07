@@ -6,21 +6,9 @@ export class PendragonRelationshipSheet extends PendragonItemSheet {
   }
 
   static DEFAULT_OPTIONS = {
-    classes: ["Pendragon", "sheet", "itemV2"],
     position: {
-      width: 595,
+      width: 610,
       height: 480,
-    },
-    tag: "form",
-    // automatically updates the item
-    form: {
-      submitOnChange: true,
-    },
-    window: {
-      resizable: true,
-    },
-    actions: {
-      editPid: this._onEditPid,
     },
   };
 
@@ -37,6 +25,9 @@ export class PendragonRelationshipSheet extends PendragonItemSheet {
     },
     description: {
       template: "systems/Pendragon/templates/item/base.description.hbs",
+    },
+    effects: {
+      template: "systems/Pendragon/templates/item/effects.hbs",
     },
     gmTab: {
       template: "systems/Pendragon/templates/item/gmtab.hbs",
@@ -77,7 +68,7 @@ export class PendragonRelationshipSheet extends PendragonItemSheet {
         secrets: sheetData.editable,
       },
     );
-    let parts = ["attributes", "description"];
+    let parts = ["attributes", "description", "effects"];
     if (game.user.isGM) {
       parts.push("gmTab");
     }
@@ -91,6 +82,7 @@ export class PendragonRelationshipSheet extends PendragonItemSheet {
     switch (partId) {
       case "attributes":
       case "description":
+      case "effects":
       case "gmTab":
         context.tab = context.tabs[partId];
         break;

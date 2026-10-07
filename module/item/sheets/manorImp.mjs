@@ -12,27 +12,12 @@ export class PendragonManorimpSheet extends PendragonItemSheet {
   }
 
   static DEFAULT_OPTIONS = {
-    classes: ["Pendragon", "sheet", "itemV2"],
     position: {
-      width: 520,
+      width: 560,
       height: 630,
     },
-    tag: "form",
-    // automatically updates the item
-    form: {
-      submitOnChange: true,
-    },
-    window: {
-      resizable: true,
-    },
     actions: {
-      editPid: this._onEditPid,
       deleteItem: PendragonManorimpSheet.#deleteItem,
-      addEffect: this._onCreateActiveEffect,
-      editEffect: this._onEditActiveEffect,
-      removeEffect: this._onDeleteActiveEffect,
-      toggleEffect: this._onToggleActiveEffect,
-      openWiki: this._openWiki,
     },
     dragDrop: [{ dropSelector: ".droppable" }],
   };
@@ -68,23 +53,6 @@ export class PendragonManorimpSheet extends PendragonItemSheet {
     if (game.user.isGM) {
       options.parts.push("gmTab");
     }
-  }
-
-  //Add effects and their changes
-  async _prepareEffects(context) {
-    context.tab = context.tabs.effects;
-    const effectList = await this.item.effects;
-    const effects = [];
-    for (const e of effectList) {
-      e.effMain = true;
-      effects.push(e);
-      for (const c of e.system.changes) {
-        c.effMain = false;
-        effects.push(c);
-      }
-    }
-    context.effects = effects;
-    return context;
   }
 
   async _prepareContext(options) {
@@ -242,11 +210,10 @@ export class PendragonManorimpSheet extends PendragonItemSheet {
     switch (partId) {
       case "attributes":
       case "description":
+      case "effects":
       case "gmTab":
         context.tab = context.tabs[partId];
         break;
-      case "effects":
-        return this._prepareEffects(context);
       default:
     }
     return context;

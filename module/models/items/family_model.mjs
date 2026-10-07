@@ -17,6 +17,15 @@ export class FamilyData extends foundry.abstract.TypeDataModel {
       born: new NumberField({ ...requiredInteger, initial: 0 }),
       glory: new NumberField({ ...requiredInteger, initial: 0 }),
       heroic: new NumberField({ ...requiredInteger, initial: 0 }),
+      age: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
     };
+  }
+
+  prepareDerivedData() {
+    super.prepareDerivedData();
+    this.age = game.time.components.year - this.born;
+    if (this.died > 0) {
+      this.age = this.died - this.born;
+    }
   }
 }

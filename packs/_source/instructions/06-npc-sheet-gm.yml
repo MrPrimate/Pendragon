@@ -84,7 +84,7 @@ pages:
         the Base Stats section under "Variable Skills etc". The GM can delete
         them. To change the value you will need to delete and then add the skill
         etc again, entering the new value.</p>
-      markdown: ""
+      markdown: ''
     video:
       controls: true
       volume: 0.5
@@ -95,7 +95,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.351"
+      coreVersion: '13.351'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: null
@@ -103,7 +103,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!GqufLodIc2MsQ6Xl.t9u8GHl6vk0RGgre"
+    _key: '!journal.pages!GqufLodIc2MsQ6Xl.t9u8GHl6vk0RGgre'
 flags:
   Pendragon:
     pidFlag:
@@ -114,9 +114,9 @@ flags:
     fixed-adventure-heading: true
 _stats:
   duplicateSource: null
-  coreVersion: "14.364"
+  coreVersion: '14.364'
   systemId: Pendragon
-  systemVersion: "14.1"
+  systemVersion: '14.1'
   createdTime: 1719597783187
   modifiedTime: 1781499163999
   lastModifiedBy: pendragonBuilder
@@ -125,4 +125,4 @@ sort: 62500
 ownership:
   default: 0
 categories: []
-_key: "!journal!GqufLodIc2MsQ6Xl"
+_key: '!journal!GqufLodIc2MsQ6Xl'

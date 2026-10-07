@@ -15,6 +15,24 @@ export class PendragonActor extends Actor {
    * available both inside and outside of character sheets (such as if an actor
    * is queried and has a roll executed directly from it).
    */
+
+  prepareBaseData() {
+    super.prepareBaseData();
+    const actorData = this;
+    const systemData = actorData.system;
+    const options = this.items.reduce((c, d) => {
+      if (["skill", "trait", "passion"].includes(d.type)) {
+        let id = d.flags?.Pendragon?.pidFlag?.id;
+        if (id) {
+          let newId = id.replaceAll(".", "-");
+          c[newId] = d;
+        }
+      }
+      return c;
+    }, {});
+    this.pidItems = options;
+  }
+
   prepareDerivedData() {
     const actorData = this;
 
@@ -91,35 +109,17 @@ export class PendragonActor extends Actor {
     systemData.passglory.ideals = 0;
     for (let i of actorData.items) {
       if (i.type === "ideal") {
-        i.system.active = true;
-        for (let rItm of i.system.require) {
-          let actItm = actorData.items.filter((itm) => itm.flags?.Pendragon?.pidFlag?.id === rItm.pid)[0];
-          if (!actItm) {
-            i.system.active = false;
-          } else {
-            if (rItm.score < 0) {
-              if (actItm.system.total > 20 + rItm.score) {
-                i.system.active = false;
-              }
-            } else {
-              if (actItm.system.total < rItm.score) {
-                i.system.active = false;
-              }
-            }
-          }
-        }
-        if (i.system.active) {
+        let testActive = this.testIdeal(i, actorData);
+        i.system.activeIdeal = testActive.activeIdeal;
+        i.system.requirements = testActive.requirements;
+        i.system.reqMsg = testActive.reqMsg;
+        if (i.system.activeIdeal) {
           systemData.passglory.ideals = systemData.passglory.ideals + i.system.glory;
-          systemData.armour = systemData.armour + i.system.armour;
-          /*let damAdj = i.system.dam.toUpperCase();
-          if (damAdj.split("D").length > 1) {
-            systemData.damage = systemData.damage + Number(damAdj.split("D")[0]);
-          } else {
-            systemData.damageMod = systemData.damageMod + i.system.dam;
-          }*/
-          systemData.move = systemData.move + i.system.move;
-          systemData.hp.max = systemData.hp.max + i.system.hp;
-          systemData.healRate = systemData.healRate + i.system.hr;
+          //Removed in favour of Active Effects
+          //systemData.armour = systemData.armour + i.system.armour;
+          //systemData.move = systemData.move + i.system.move;
+          //systemData.hp.max = systemData.hp.max + i.system.hp;
+          //systemData.healRate = systemData.healRate + i.system.hr;
         }
       }
     }
@@ -223,6 +223,60 @@ export class PendragonActor extends Actor {
   // Prepare Common type specific data.
   _prepareCommonData(actorData) {
     if (!["npc", "character", "follower"].includes(actorData.type)) return;
+
+    //Calcualte Skill Total to allow for Active Effects
+    for (let i of actorData.items) {
+      if (["skill"].includes(i.type)) {
+        i.system.total =
+          i.system.value + i.system.culture + i.system.family + i.system.winter + i.system.create + i.system.effects;
+      } else if (["trait"].includes(i.type)) {
+        let tempTotal = i.system.value + i.system.archetype + i.system.religious + i.system.winter + i.system.effects;
+        if (tempTotal > 20) {
+          i.system.total = tempTotal;
+          i.system.oppvalue = 0;
+        } else if (tempTotal < 0) {
+          i.system.total = 0;
+          i.system.oppvalue = 20 - tempTotal;
+        } else {
+          i.system.total = tempTotal;
+          i.system.oppvalue = 20 - tempTotal;
+        }
+        //Flavour Labels
+        if (i.system.total < 5) {
+          i.system.flavour = game.i18n.localize("PEN.unsung");
+        } else if (i.system.total > 20) {
+          i.system.flavour = game.i18n.localize("PEN.exalted");
+        } else if (i.system.total > 15) {
+          i.system.flavour = game.i18n.localize("PEN.famous");
+        } else {
+          i.system.flavour = "";
+        }
+        if (i.system.oppvalue < 5) {
+          i.system.oppFlavour = game.i18n.localize("PEN.unsung");
+        } else if (i.system.oppvalue > 20) {
+          i.system.oppFlavour = game.i18n.localize("PEN.exalted");
+        } else if (i.system.oppvalue > 15) {
+          i.system.oppFlavour = game.i18n.localize("PEN.famous");
+        } else {
+          i.system.oppFlavour = "";
+        }
+      } else if (["passion"].includes(i.type)) {
+        i.system.total =
+          i.system.value + i.system.inherit + i.system.sol + i.system.winter + i.system.homeland + i.system.effects;
+
+        //Flavour Labels
+        if (i.system.total < 5) {
+          i.system.flavour = game.i18n.localize("PEN.unsung");
+        } else if (i.system.total > 20) {
+          i.system.flavour = game.i18n.localize("PEN.exalted");
+        } else if (i.system.total > 15) {
+          i.system.flavour = game.i18n.localize("PEN.famous");
+        } else {
+          i.system.flavour = "";
+        }
+      }
+    }
+
     //If NPC is Spriggan
     if (actorData.type === "npc") {
       let pid = actorData.flags?.Pendragon?.pidFlag?.id;
@@ -243,7 +297,7 @@ export class PendragonActor extends Actor {
       if (systemData.manMaxHP != 0) {
         systemData.hp.max = systemData.manMaxHP;
       } else {
-        systemData.hp.max = systemData.stats.siz.total + systemData.stats.con.total + systemData.hp.adj;
+        systemData.hp.max = systemData.stats.siz.total + systemData.stats.con.total + systemData.hp.effects;
       }
       if (systemData.manKnockdown != 0) {
         systemData.hp.knockdown = systemData.manKnockdown;
@@ -256,7 +310,7 @@ export class PendragonActor extends Actor {
         systemData.hp.unconscious = Math.round(systemData.hp.max / 4);
       }
     } else {
-      systemData.hp.max = systemData.stats.siz.total + systemData.stats.con.total + systemData.hp.adj;
+      systemData.hp.max = systemData.stats.siz.total + systemData.stats.con.total + systemData.hp.effects;
       systemData.hp.unconscious = Math.round(systemData.hp.max / 4);
       systemData.hp.knockdown = systemData.stats.siz.total;
     }
@@ -264,8 +318,8 @@ export class PendragonActor extends Actor {
     systemData.damage = Math.round((systemData.stats.str.total + systemData.stats.siz.total) / 6);
     systemData.horseDam = "";
     systemData.horseChgDam = "";
-    systemData.healRate = Math.round(systemData.stats.con.total / 5);
-    systemData.move = Math.round((systemData.stats.str.total + systemData.stats.dex.total) / 2) + 5;
+    //systemData.healRate = Math.round(systemData.stats.con.total / 5);
+    //systemData.move = Math.round((systemData.stats.str.total + systemData.stats.dex.total) / 2) + 5;
     systemData.reputation = "";
 
     //Loop through all items to see if they have impact
@@ -278,6 +332,7 @@ export class PendragonActor extends Actor {
         : Infinity;
     let winterGlory = 0;
     let armour = 0;
+    let armour = systemData.armourEffects;
     let shield = 0;
     for (let i of actorData.items) {
       if (i.type === "wound") {
@@ -1225,5 +1280,98 @@ export class PendragonActor extends Actor {
       actorData.system.folkCost.denarii = 0;
     }
     return;
+  }
+
+  //Test Ideals
+  testIdeal(ideal, actor) {
+    let requirements = [];
+    let activeIdeal = true;
+    let reqMsg = "";
+    // Test Age Requirement
+    if (ideal.system.age > 0) {
+      requirements.push({
+        name: game.i18n.localize("PEN.age"),
+        score: ideal.system.age,
+        active: ideal.system.age <= actor.system.age,
+      });
+      if (ideal.system.age > actor.system.age) activeIdeal = false;
+    }
+
+    //Test Trait Group Requirement
+    if (ideal.system.traitGroupScore > 0) {
+      let score = 0;
+      let gPIDs = ideal.system.traitGroup
+        .filter((itm) => itm)
+        .map((itm) => {
+          return itm.pid;
+        });
+      for (let item of actor.items) {
+        if ([gPIDs].includes(item.flags?.Pendragon?.pidFlag?.id)) {
+          score = score + item.total;
+        }
+      }
+      requirements.push({
+        name: game.i18n.localize("PEN.traitGroup"),
+        score: ideal.system.traitGroupScore,
+        active: score >= ideal.system.traitGroupScore,
+      });
+      if (score < ideal.system.traitGroupScore) activeIdeal = false;
+    }
+
+    //Test Skill Group Requirements
+    if (ideal.system.skillGroupCount > 0) {
+      let counter = 0;
+      for (let skillReq of ideal.system.skillGroup) {
+        let result = this.checkRequirement(skillReq, actor);
+        if (result.active) counter++;
+      }
+      requirements.push({
+        name: game.i18n.localize("PEN.skillGroup"),
+        score: ideal.system.skillGroupCount,
+        active: counter >= ideal.system.skillGroupCount,
+      });
+      if (counter < ideal.system.skillGroupCount) activeIdeal = false;
+    }
+
+    //Test Individual Requirements
+    for (let req of ideal.system.require) {
+      let result = this.checkRequirement(req, actor);
+      requirements.push(result);
+      if (!result.active) activeIdeal = false;
+    }
+    for (let test of requirements) {
+      reqMsg = reqMsg + "<p>" + test.name + " (" + test.score + "): ";
+      if (test.active) {
+        reqMsg = reqMsg + game.i18n.localize("PEN.knightly.pass");
+      } else {
+        reqMsg = reqMsg + game.i18n.localize("PEN.knightly.fail");
+      }
+    }
+    return { requirements, activeIdeal, reqMsg };
+  }
+
+  //Test Individual Requirement
+  checkRequirement(rItm, actor) {
+    let actItm = actor.items.filter((itm) => itm.flags.Pendragon?.pidFlag?.id === rItm.pid)[0];
+    if (!actItm) {
+      return {
+        name: rItm.name,
+        score: rItm.score,
+        active: false,
+      };
+    }
+    if (rItm.score < 0) {
+      return {
+        name: actItm.system.oppName,
+        score: -rItm.score,
+        active: actItm.system.total <= 20 + rItm.score,
+      };
+    } else {
+      return {
+        name: actItm.name,
+        score: rItm.score,
+        active: actItm.system.total >= rItm.score,
+      };
+    }
   }
 }

@@ -38,13 +38,13 @@ pages:
     _stats:
       duplicateSource: null
       exportSource: null
-      coreVersion: "13.350"
+      coreVersion: '13.350'
       systemId: Pendragon
       systemVersion: 13.1.42
       createdTime: 1762882273501
       modifiedTime: 1762882478665
       lastModifiedBy: pendragonBuilder
-    _key: "!journal.pages!2Jzi6L24kU8j8GDv.lYsoIUdd4zoNZsvz"
+    _key: '!journal.pages!2Jzi6L24kU8j8GDv.lYsoIUdd4zoNZsvz'
 folder: null
 categories: []
 sort: 0
@@ -61,10 +61,10 @@ flags:
 _stats:
   duplicateSource: null
   exportSource: null
-  coreVersion: "14.364"
+  coreVersion: '14.364'
   systemId: Pendragon
-  systemVersion: "14.1"
+  systemVersion: '14.1'
   createdTime: 1762882262381
   modifiedTime: 1781499186840
   lastModifiedBy: pendragonBuilder
-_key: "!journal!2Jzi6L24kU8j8GDv"
+_key: '!journal!2Jzi6L24kU8j8GDv'

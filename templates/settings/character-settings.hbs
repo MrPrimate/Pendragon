@@ -1,0 +1,47 @@
+<div class="settingsForm flexcol" autocomplete="off">
+
+
+    <h2 class="bold">{{localize 'PEN.Settings.characterOptions'}}</h2>
+
+    <div class="form-group">
+      <label class="bold">{{localize 'PEN.Settings.manualGlory'}}</label>
+      <div class="form-fields" style="flex: 1;">
+        <input type="checkbox" {{checked optSet.manualGlory.value}} name="manualGlory">
+      </div>
+      <p class="settingNote">{{localize 'PEN.Settings.manualGloryHint'}}</p>
+    </div>
+    <br>
+    <div class="form-group">
+      <label class="bold">{{localize 'PEN.Settings.childMortality'}}</label>
+      <div class="form-fields" style="flex: 1;">
+        <input type="checkbox" {{checked optSet.childMortality.value}} name="childMortality">
+      </div>
+      <p class="settingNote">{{localize 'PEN.Settings.childMortalityHint'}}</p>
+    </div>
+    <br>
+    <div class="form-group">
+      <label class="bold">{{localize 'PEN.Settings.tokenVision'}}</label>
+      <div class="form-fields" style="flex: 1;">
+        <input type="checkbox" {{checked optSet.tokenVision.value}} name="tokenVision">
+      </div>
+      <p class="settingNote">{{localize 'PEN.Settings.tokenVisionHint'}}</p>
+    </div>
+    <br>
+    <div class="form-group">
+      <label class="bold">{{localize 'PEN.Settings.useRelation'}}</label>
+      <div class="form-fields" style="flex: 1;">
+        <input type="checkbox" {{checked optSet.useRelation.value}} name="useRelation">
+      </div>
+      <p class="settingNote">{{localize 'PEN.Settings.useRelationHint'}}</p>
+    </div>
+    <br>
+    <div class="form-group">
+      <label class="bold">{{localize 'PEN.Settings.youthAge'}}</label>
+      <div class="form-fields" style="flex: 1;">
+        <input  style="text-align:right;" type="number" value={{optSet.youthAge.value}} name="youthAge">
+      </div>
+      <p class="settingNote">{{localize 'PEN.Settings.youthAgeHint'}}</p>
+    </div>
+    <br>
+
+  </div>

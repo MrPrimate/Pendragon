@@ -3,14 +3,38 @@
 ## Unreleased
 
 - Archetype added - for characters only - https://github.com/cragstone/Pendragon/wiki/Archetype
-- Holds base stats and starting values for skills
-- Can add via drag/drop and character creation
+- Archetype Holds base stats and starting values for skills
+- Archetype now holds bonus trait (Valorous for Knight) and starting trait (one starts at 16 if constructed)
+- Archetype has an "ideal" - to test for becoming a Knight or a Lady.
+- Can add Archetype via drag/drop and character creation
 - Char stats in Constructed mode limited by min/max from Archetype
 - Culture has stats and max removed, leaving bonus and skills
 - Characters and Followers now have their stats reduced where age is <13
 - Followers have a died entry to record year of death
 - Dialog box now use Light/Dark mode and follow the general colour theme
 - All items now use Light/Dark mode and follow the general colour theme
+- Character v1 now use Light/Dark mode and follow the general colour theme and has had a bit of a tab update/rejig
+- Classes now have an "Age" entry - it's the usual upper age limit for a class. Used to order the classes on an Archetype
+  (leave blank for knights and ladies where there is no age limit)
+- In character creation the second class step has been absorbed in to the Meet Ideal (what was Knighted) step
+- Some Game Settings have been moved to Character Options game settings
+- A "Youth" age setting added, change the default age (13) or set to 0 to turn it off.
+- Characters and Followers under Youth age have their stats reduced and Chaste/Lustful trait hidden
+- In V1 any ideal can be added to character - no longer checks that requirements are met on drop
+- When spending Personal Skill Points in character creation you can increase Weapon Skill scores even if they are at zero
+- Ideals expanded to have an Age requirement, and Skill Group requirement (e.g. two skills of this group with score 10+)
+- Ideals also have space for a Luck Benefit table to be dropped. This is used in character creation.
+- Ideals, if on a character, have an additional toggle flag "Joined". You need to meet the requirements of the ideal to join.
+- Active Effects on an Ideal are only active if the Ideal has been set to "Joined"
+- Squires now have born and died values, with Age being calculated rather than input
+- Active Effects added to Character V1
+- Old adjustments on Character Stats tab no longer effective but shown for now to allow replacement with Active Effects
+- All items except Wounds now have Active Effects
+- Active Effects for Skills, Traits and Passions can be added by using the key 'pidItems.i-<itemtype>-<itemPid>.system.effects' e.g. pidItems.i-skill-compose.system.effects Because the list of pidItems is only created in the actor and not on the item the skill total can't be calculated in the item data model so these calcs have come back to the actor.mjs file
+- Active Effects on an Ideal are only active if the Ideal has been set to "Joined"
+- There are some pre-defined keys for Active Effects and a small library of AE are included in the system (may remove these to Core Rulebook module perhaps)
+- Localized the Character V2 Treat Wounds dialog box
+- Adjusted Mounted Charge attack so Charge skill not reduced if using a Lance or Spear (not thrown)
 
 ## 14.20
 

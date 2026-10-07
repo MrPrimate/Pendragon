@@ -11,6 +11,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         min: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
         max: new NumberField({ ...requiredInteger, min: 0, initial: 10 }),
         adj: new NumberField({ ...requiredInteger, initial: 0 }),
+        effects: new NumberField({ ...requiredInteger, initial: 0 }),
       }),
       stats: new SchemaField({
         siz: new SchemaField({
@@ -21,6 +22,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          effects: new NumberField({ ...requiredInteger, initial: 0 }),
           youth: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
@@ -39,6 +41,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          effects: new NumberField({ ...requiredInteger, initial: 0 }),
           youth: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
@@ -57,6 +60,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          effects: new NumberField({ ...requiredInteger, initial: 0 }),
           youth: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
@@ -75,6 +79,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          effects: new NumberField({ ...requiredInteger, initial: 0 }),
           youth: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
@@ -93,6 +98,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          effects: new NumberField({ ...requiredInteger, initial: 0 }),
           youth: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
@@ -117,9 +123,16 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       deterDam: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
       beauty: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
       prestige: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
-      damAdj: new NumberField({ ...requiredInteger, initial: 0 }),
-      moveAdj: new NumberField({ ...requiredInteger, initial: 0 }),
-      armourAdj: new NumberField({ ...requiredInteger, initial: 0 }),
+      damAdj: new NumberField({ ...requiredInteger, initial: 0 }), //To be Deleted
+      damEffects: new NumberField({ ...requiredInteger, initial: 0 }),
+      damBonus: new StringField({ required: true, blank: true, initial: "" }),
+      moveAdj: new NumberField({ ...requiredInteger, initial: 0 }), //To be Deleted
+      moveEffects: new NumberField({ ...requiredInteger, initial: 0 }),
+      healRate: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
+      healRateEffects: new NumberField({ ...requiredInteger, initial: 0 }),
+      genialityAdj: new NumberField({ ...requiredInteger, initial: 0 }),
+      armourAdj: new NumberField({ ...requiredInteger, initial: 0 }), //To be Deleted
+      armourEffects: new NumberField({ ...requiredInteger, initial: 0 }),
       impoverished: new NumberField({ ...requiredInteger, initial: 0 }),
       manualGlory: new NumberField({ ...requiredInteger, initial: 0 }),
       lord: new StringField({ required: true, blank: true, initial: "" }),
@@ -236,9 +249,13 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       stat.label = game.i18n.localize(CONFIG.PENDRAGON.stats[key]) ?? key;
       stat.labelShort = game.i18n.localize(CONFIG.PENDRAGON.statsAbbreviations[key]) ?? key;
       stat.youth = 0;
-      //If character age <13 reduce stats
-      if (this.age < 13) {
-        stat.youth = Math.round((Number(stat.value) + Number(stat.culture)) * ((13 - Math.max(7, this.age)) / -12));
+      //For "young" characters reduce stats
+      if (this.age < game.settings.get("Pendragon", "youthAge")) {
+        stat.youth = Math.round(
+          (Number(stat.value) + Number(stat.culture)) *
+            ((game.settings.get("Pendragon", "youthAge") - Math.max(7, this.age)) /
+              -(game.settings.get("Pendragon", "youthAge") - 1)),
+        );
       }
       stat.tMax = stat.cMax + stat.culture;
       stat.total = Math.min(
@@ -250,6 +267,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
           stat.disease +
           stat.sol +
           stat.age +
+          stat.effects +
           stat.youth +
           stat.major +
           stat.winter,
@@ -291,9 +309,11 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       this.archetypeName = archetype.name;
     }
 
-    this.damage = this.damage + this.damAdj;
-    this.move = this.move + this.moveAdj;
-    this.armour = this.armour + this.armourAdj;
+    this.damage = this.damage + this.damEffects;
+    this.move = this.move + this.moveEffects;
+    this.armour = this.armour + this.armourEffects;
+    this.healRate = Math.round(this.stats.con.total / 5) + this.healRateEffects;
+    this.move = Math.round((this.stats.str.total + this.stats.dex.total) / 2) + 5 + this.moveEffects;
 
     if (game.settings.get("Pendragon", "trackWnd")) {
       this.hp.value = this.hp.max - this.totalWounds - this.aggravDam - this.deterDam;

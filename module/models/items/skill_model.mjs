@@ -19,6 +19,7 @@ export class SkillData extends foundry.abstract.TypeDataModel {
       XP: new BooleanField({ initial: false }),
       weaponType: new StringField({ required: true, blank: true, initial: "" }),
       value: new NumberField({ ...requiredInteger, initial: 0 }),
+      effects: new NumberField({ ...requiredInteger, initial: 0 }),
       culture: new NumberField({ ...requiredInteger, initial: 0 }),
       family: new NumberField({ ...requiredInteger, initial: 0 }),
       create: new NumberField({ ...requiredInteger, initial: 0 }),
@@ -37,7 +38,6 @@ export class SkillData extends foundry.abstract.TypeDataModel {
 
   prepareDerivedData() {
     super.prepareDerivedData();
-    this.total = this.value + this.culture + this.family + this.winter + this.create;
     let catLabels = [];
     for (let cat of this.categories) {
       catLabels.push(game.i18n.localize("PEN.skillcat." + cat));

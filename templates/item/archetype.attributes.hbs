@@ -79,20 +79,45 @@
   </div>
   <br>
 
-  {{!-- Skills --}}
-  <div class="stat-name bold">{{ localize "PEN.skills"}}</div>
-  <div class="horizontalboxed {{#if isGM}} droppable {{/if}} virtues" style="min-height: 20px;" data-collection = "skills">
+  {{!-- Ideal --}}
+  <div class="stat-name bold">{{ localize "TYPES.Item.ideal"}}</div>
+  <div class="horizontalboxed {{#if isGM}} droppable {{/if}} virtues" style="min-height: 20px;" data-collection = "ideals">
     <ol class="item-list">
-      {{#each skills as |skill|}}
-        <li class="item flexrow" data-item-id="{{skill.uuid}}" >
+      {{#each ideals as |ideal|}}
+        <li class="item flexrow" data-item-id="{{ideal.uuid}}" >
           <div class="item-name flexrow">
-            {{#if skill.valid}}
-              <div class="stat-name">{{skill.name}}</div>
+            {{#if ideal.valid}}
+              <div class="stat-name">{{ideal.name}}</div>
             {{else}}
-              <div class="stat-name result-success">{{skill.name}} [{{localize 'PEN.invalid'}}]</div>
+              <div class="stat-name result-success">{{ideal.name}} [{{localize 'PEN.invalid'}}]</div>
             {{/if}}
           </div>
-          <div class="stat-name centre">{{skill.formula}}</div>
+          <div class="item-controls">
+            {{#if ../isGM}}
+              <a class="item-control item-delete" title="{{localize 'PEN.deleteItem'}}" data-action="deleteItem"><i class="fas fa-trash" style="padding-top: 5px;"></i></a>
+            {{/if}}
+          </div>
+        </li>
+      {{else}}
+        <div class="centre italics" style="height:60px; padding-top: 20px;">{{localize 'PEN.emptyList'}}</td>
+      {{/each}}
+    </ol>
+  </div>
+  <br>
+
+  {{!-- Classes --}}
+  <div class="stat-name bold">{{ localize "PEN.classes"}}</div>
+  <div class="horizontalboxed {{#if isGM}} droppable {{/if}} virtues" style="min-height: 20px;" data-collection = "classes">
+    <ol class="item-list">
+      {{#each classes as |class|}}
+        <li class="item flexrow" data-item-id="{{class.uuid}}" >
+          <div class="item-name flexrow">
+            {{#if class.valid}}
+              <div class="stat-name">{{class.name}}</div>
+            {{else}}
+              <div class="stat-name result-success">{{class.name}} [{{localize 'PEN.invalid'}}]</div>
+            {{/if}}
+          </div>
           <div class="item-controls">
             {{#if ../isGM}}
               <a class="item-control item-delete" title="{{localize 'PEN.deleteItem'}}" data-action="deleteItem"><i class="fas fa-trash" style="padding-top: 5px;"></i></a>

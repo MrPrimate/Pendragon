@@ -93,6 +93,7 @@
     --input-focus-outline-color: var(--color-warm-2);
   }
   --heading-color: var(--pendragon-darkred);
+  --active-effect-aura: url("../assets/icons/inverse-aura.svg");
 }
 .theme-dark {
   --icon-img-filter: none;

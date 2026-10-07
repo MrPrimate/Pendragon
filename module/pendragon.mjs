@@ -14,6 +14,9 @@ import { migrateWorld } from "./setup/migrations.mjs";
 import { PendragonCombatTracker } from "./apps/combat-tracker.mjs";
 import { PendragonStatusEffects } from "./apps/status-effects.mjs";
 import { PIDEditor } from "./pid/pid-editor.mjs";
+import { PendragonActiveEffect } from "./apps/active-effects.mjs";
+import RenderActiveEffectConfig from "./hooks/render-active-effect-config.mjs";
+
 import {
   CharacterData,
   NpcData,
@@ -127,6 +130,7 @@ Hooks.once("init", async function () {
   CONFIG.Item.documentClass = PendragonItem;
   CONFIG.Combat.documentClass = PendragonCombat;
   CONFIG.Combatant.documentClass = PendragonCombatant;
+  CONFIG.ActiveEffect.documentClass = PendragonActiveEffect;
 
   CONFIG.statusEffects = PendragonStatusEffects.allStatusEffects;
   CONFIG.ui.combat = PendragonCombatTracker;
@@ -202,6 +206,9 @@ Hooks.on("renderRollTableSheet", (application, element) => PIDEditor.addPIDSheet
 Hooks.on("renderCombatTracker", async (combatTracker, html, combatData) =>
   combatTracker.renderTracker(html instanceof HTMLElement ? html : html[0]),
 );
+
+//Render Active Effect Sheet
+Hooks.on("renderActiveEffectConfig", RenderActiveEffectConfig);
 
 /* -------------------------------------------- */
 /*  Ready Hook                                  */

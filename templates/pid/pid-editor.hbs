@@ -1,10 +1,10 @@
 <div class="{{cssClass}}" autocomplete="off">
-  <h2 class="black">{{localize 'PEN.PIDFlag.title'}}</h2>
-  <p>{{{localize 'PEN.PIDFlag.summary' type=objtype }}}</p>
+  <h2 class="">{{localize 'PEN.PIDFlag.title'}}</h2>
+  <p class="stat-name">{{{localize 'PEN.PIDFlag.summary' type=objtype }}}</p>
   <input type="hidden" name="id" value="{{id}}">
-  <div class="form-group">
+  <div class="form-group stat-name">
     <label for="_existing">{{localize 'PEN.PIDFlag.key'}}:</label>
-    <div class="flexrow" style="flex: 2; border: 1px solid transparent; padding: 1px 3px 1px 0;">
+    <div class="flexrow stat-name" style="flex: 2; border: 1px solid transparent; padding: 1px 3px 1px 0;">
       {{#if existingKeys.length}}
       <select style="margin-left: -2px;" name="known">
         <option value="">{{localize 'PEN.PIDFlag.new'}}</option>
@@ -12,7 +12,7 @@
       </select>
       {{else}}
       <span style="flex: 0; margin-top: 2px;">{{idPrefix}}</span>
-      <input type="text" style="flex: 2;" name="_existing" value="{{_existing}}" data-prefix="{{idPrefix}}">
+      <input class="stat-name" type="text" style="flex: 2;" name="_existing" value="{{_existing}}" data-prefix="{{idPrefix}}">
       {{/if}}
       {{#if isEditable}}
       <a style="flex: 0 0 20px; align-self: center; text-align: right;" title="{{localize 'PEN.PIDFlag.guess'}}"

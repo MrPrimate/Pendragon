@@ -98,6 +98,13 @@ export class TraitsSelectDialog extends PENDialog {
     return new Promise((resolve) => {
       const dlg = TraitsSelectDialog.wait({
         window: { title: winTitle },
+        position: {
+          width: 570,
+          height: 830,
+        },
+        window: {
+          resizable: true,
+        },
         form: { closeOnSubmit: false },
         content: html,
         data,

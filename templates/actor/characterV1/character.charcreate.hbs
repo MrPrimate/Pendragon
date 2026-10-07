@@ -9,27 +9,9 @@
         <div class="stat-name centre bold">{{localize 'PEN.notes'}}</div>
     </li>
 
-
-
-  {{! - Add Archetype}}
-    <li class="charcreate" data-step="addArchetype">
-        <div class="stat-name">{{localize 'PEN.step.addArchetype'}}</div>
-        {{#if hasArchetype}}
-          <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
-          <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>
-          <div class="stat-name centre" data-action="charDelete" data-tooltip="{{localize 'PEN.resetHint'}}"><a><i class="fas fa-broom"></i></a></div>
-          <div class="stat-name centre bold">{{system.archetypeName}}</div>
-        {{else}}
-          <div class="stat-name centre" data-tooltip="{{localize 'PEN.incomplete'}}"><a class=""><i class="darkred fas fa-shield-xmark"></i></a></div>
-          <div class="stat-name centre" data-action="charCreate"><a class="darkred"><i class="fas fa-circle-exclamation"></i></a></div>
-          <div class="stat-name centre"><a class="fade"><i class="fas fa-broom"></i></a></div>
-          <div class="stat-name centre"></div>
-        {{/if}}
-    </li>
-
     {{! - Creation Method}}
-    <li class="charcreate" data-step="1">
-        <div class="stat-name">{{localize 'PEN.step.1'}}</div>
+    <li class="charcreate" data-step="createMethod">
+        <div class="stat-name">{{localize 'PEN.step.createMethod'}}</div>
         {{#if (eq system.create.step 1)}}
           <div class="stat-name centre" data-tooltip="{{localize 'PEN.incomplete'}}"><a class=""><i class="darkred fas fa-shield-xmark"></i></a></div>
           <div class="stat-name centre" data-action="charCreate"><a class="darkred"><i class="fas fa-circle-exclamation"></i></a></div>
@@ -49,9 +31,25 @@
         {{/if}}
     </li>
 
+    {{! - Add Archetype}}
+    <li class="charcreate" data-step="addArchetype">
+        <div class="stat-name">{{localize 'PEN.step.addArchetype'}}</div>
+        {{#if hasArchetype}}
+          <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
+          <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>
+          <div class="stat-name centre" data-action="charDelete" data-tooltip="{{localize 'PEN.resetHint'}}"><a><i class="fas fa-broom"></i></a></div>
+          <div class="stat-name centre bold">{{system.archetypeName}}</div>
+        {{else}}
+          <div class="stat-name centre" data-tooltip="{{localize 'PEN.incomplete'}}"><a class=""><i class="darkred fas fa-shield-xmark"></i></a></div>
+          <div class="stat-name centre" data-action="charCreate"><a class="darkred"><i class="fas fa-circle-exclamation"></i></a></div>
+          <div class="stat-name centre"><a class="fade"><i class="fas fa-broom"></i></a></div>
+          <div class="stat-name centre"></div>
+          {{/if}}
+  </li>
+
     {{! - Culture}}
-    <li class="charcreate" data-step="3">
-        <div class="stat-name">{{localize 'PEN.step.3'}}</div>
+    <li class="charcreate" data-step="addCulture">
+        <div class="stat-name">{{localize 'PEN.step.addCulture'}}</div>
         {{#if hasCulture}}
           <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
           <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>
@@ -66,8 +64,8 @@
     </li>
 
     {{! - Homeland}}
-    <li class="charcreate" data-step="8">
-        <div class="stat-name">{{localize 'PEN.step.8'}}</div>
+    <li class="charcreate" data-step="addHomeland">
+        <div class="stat-name">{{localize 'PEN.step.addHomeland'}}</div>
         {{#if hasHomeland}}
           <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
           <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>
@@ -114,8 +112,8 @@
     </li>
 
     {{! - Religion}}
-    <li class="charcreate" data-step="5">
-        <div class="stat-name">{{localize 'PEN.step.5'}}</div>
+    <li class="charcreate" data-step="addReligion">
+        <div class="stat-name">{{localize 'PEN.step.addReligion'}}</div>
         {{#if hasReligion}}
           <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
           <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>
@@ -162,8 +160,8 @@
     </li>
 
     {{! - Chartacteristics}}
-    <li class="charcreate" data-step="4">
-        <div class="stat-name">{{localize 'PEN.step.4'}}</div>
+    <li class="charcreate" data-step="addStats">
+        <div class="stat-name">{{localize 'PEN.step.addStats'}}</div>
         {{#if system.create.charSet}}
           <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
           <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>
@@ -178,8 +176,8 @@
     </li>
 
     {{! - Traits}}
-    <li class="charcreate" data-step="6">
-        <div class="stat-name">{{localize 'PEN.step.6'}}</div>
+    <li class="charcreate" data-step="addTraits">
+        <div class="stat-name">{{localize 'PEN.step.addTraits'}}</div>
         {{#if hasTraits}}
           <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
           <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>
@@ -194,8 +192,8 @@
     </li>
 
     {{! - Passions}}
-    <li class="charcreate" data-step="7">
-        <div class="stat-name">{{localize 'PEN.step.7'}}</div>
+    <li class="charcreate" data-step="addPassions">
+        <div class="stat-name">{{localize 'PEN.step.addPassions'}}</div>
         {{#if hasClass}}
           <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
           <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>
@@ -211,8 +209,8 @@
     </li>
 
     {{! - Parent Passion}}
-    <li class="charcreate" data-step="9">
-        <div class="stat-name">{{localize 'PEN.step.9'}}</div>
+    <li class="charcreate" data-step="parentPassion">
+        <div class="stat-name">{{localize 'PEN.step.parentPassion'}}</div>
         {{#if hasParentPassion}}
           <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
           <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>
@@ -227,8 +225,8 @@
     </li>
 
     {{! - Family Characteristic}}
-    <li class="charcreate" data-step="11">
-        <div class="stat-name">{{localize 'PEN.step.11'}}</div>
+    <li class="charcreate" data-step="addFamilyChar">
+        <div class="stat-name">{{localize 'PEN.step.addFamilyChar'}}</div>
         {{#if hasFamily}}
           <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
           <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>
@@ -243,8 +241,8 @@
     </li>
 
     {{! - Skill Points}}
-    <li class="charcreate" data-step="12">
-        <div class="stat-name">{{localize 'PEN.step.12'}}</div>
+    <li class="charcreate" data-step="personalSkillPoints">
+        <div class="stat-name">{{localize 'PEN.step.personalSkillPoints'}}</div>
         {{#if hasPSP}}
           <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
           <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>
@@ -259,8 +257,8 @@
     </li>
 
     {{! - Training & Practice}}
-    <li class="charcreate" data-step="13">
-        <div class="stat-name">{{localize 'PEN.step.13'}}</div>
+    <li class="charcreate" data-step="addPractice">
+        <div class="stat-name">{{localize 'PEN.step.addPractice'}}</div>
           {{#if system.create.train}}
             <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
             <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>
@@ -274,9 +272,9 @@
           {{/if}}
     </li>
 
-    {{! - Knighted}}
-    <li class="charcreate" data-step="15">
-        <div class="stat-name">{{localize 'PEN.step.15'}}</div>
+    {{! - Meet the Ideal e.g. Knighted}}
+    <li class="charcreate" data-step="meetIdeal">
+        <div class="stat-name">{{localize 'PEN.step.meetIdeal' type=system.archetypeName}}</div>
           {{#if knightly}}
             {{#if system.create.knighted}}
               <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
@@ -297,26 +295,9 @@
           {{/if}}
     </li>
 
-    {{! - Knightly Class}}
-    <li class="charcreate" data-step="addClass">
-        <div class="stat-name">{{localize 'PEN.step.addClass'}}</div>
-        {{#if hasKnightClass}}
-          <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
-          <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>
-          <div class="stat-name centre" data-action="charDelete" data-tooltip="{{localize 'PEN.resetHint'}}"><a><i class="fas fa-broom"></i></a></div>
-          <div class="stat-name centre bold">{{system.className}}</div>
-        {{else}}
-          <div class="stat-name centre" data-tooltip="{{localize 'PEN.incomplete'}}"><a class=""><i class="darkred fas fa-shield-xmark"></i></a></div>
-          <div class="stat-name centre" data-action="charCreate"><a class="darkred"><i class="fas fa-circle-exclamation"></i></a></div>
-          <div class="stat-name centre"><a class="fade"><i class="fas fa-broom"></i></a></div>
-          <div class="stat-name centre">{{localize 'PEN.optional'}}</div>
-        {{/if}}
-        <div class="stat-name centre" data-tooltip="{{localize 'PEN.classHint'}}"><a class=""><i class="darkred fas fa-shield-exclamation"></i></a></div>
-    </li>
-
     {{! - Parents}}
-    <li class="charcreate" data-step="2">
-        <div class="stat-name">{{localize 'PEN.step.2'}}</div>
+    <li class="charcreate" data-step="addParents">
+        <div class="stat-name">{{localize 'PEN.step.addParents'}}</div>
         {{#if system.create.parents}}
           <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
           <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>
@@ -370,8 +351,8 @@
     </li>
 
     {{! - Luck Benefit}}
-    <li class="charcreate" data-step="14">
-        <div class="stat-name">{{localize 'PEN.step.14'}}</div>
+    <li class="charcreate" data-step="addLuckBenefit">
+        <div class="stat-name">{{localize 'PEN.step.addLuckBenefit'}}</div>
         {{#if hasLuck}}
           <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
           <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>

@@ -1,0 +1,141 @@
+<section class='character tab house {{tab.cssClass}}' data-group='primary' data-tab='house' data-collection="relationship">
+  <div class="squire-grid">
+    <div class="stat-name grid-item greyBack bold ">{{localize 'PEN.squires'}}</div>
+    <div class="stat-name grid-item greyBack bold centre">{{localize 'PEN.gender'}}</div>
+    <div class="stat-name grid-item greyBack bold centre">{{localize 'PEN.age'}}</div>
+    <div class="stat-name grid-item greyBack bold centre">{{localize 'PEN.skill'}}</div>
+    <div class="stat-name grid-item greyBack bold centre" data-tooltip="{{localize 'PEN.knightlyMod'}}">{{localize 'PEN.mod'}}</div>
+    <div class="stat-name grid-item greyBack bold centre">{{localize 'PEN.glory'}}</div>
+    <div class="stat-name bold grid-item greyBack centre" data-action="createDoc" data-document-class='Item' data-type="squire">
+      <a class="large-icon" data-tooltip="{{localize 'PEN.addSquire'}}"><i class="item-control fas fa-plus"></i></a>
+    </div>
+  </div>
+
+  {{#each squires as |squire key|}}
+    <li class="item squire-grid" data-drag='true' data-document-class='Item' data-item-id="{{squire._id}}">
+      <div class="stat-name grid-item" >{{squire.name}} {{#if (gt squire.system.died 0)}} &nbsp({{localize 'PEN.deceased'}}) {{/if}}</div>
+      <div class="stat-name grid-item centre">{{squire.system.gender}}</div>
+      <div class="stat-name grid-item centre rollable squire" data-tooltip="{{localize 'PEN.rollHint'}}" data-type ="squireAge" data-itemid="{{squire._id}}">{{squire.system.newAge}}</div>
+      <div class="stat-name grid-item centre rollable squire" data-tooltip="{{localize 'PEN.rollHint'}}" data-type ="squire" data-itemid="{{squire._id}}">{{squire.system.skill}}</div>
+      <div class="stat-name grid-item centre">{{squire.system.knightMod}}</div>
+      <div class="stat-name grid-item centre">{{squire.system.glory}}</div>
+      <div class="centre grid-item item" data-itemid ="{{squire._id}}">
+        <a class="item-control large-icon fade" data-action="viewDoc"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
+        {{#unless ../system.lock}}
+          <a class="item-control large-icon fade" data-action="deleteDoc"><i data-tooltip="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
+        {{/unless}}
+      </div>
+    </li>
+  {{/each}}
+  <div class="squire-grid"></div>
+  <br>
+
+  <div class="family-grid">
+    <div class="stat-name grid-item-bottom greyBack bold">{{localize 'PEN.family'}}</div>
+    <div class="stat-name grid-item-bottom greyBack bold centre">{{localize 'PEN.gender'}}</div>
+    <div class="stat-name grid-item-bottom greyBack bold centre">{{localize 'PEN.type'}}</div>
+    <div class="stat-name grid-item-bottom greyBack bold centre">{{localize 'PEN.age'}}</div>
+    <div class="stat-name grid-item-bottom greyBack bold centre">{{localize 'PEN.glory'}}</div>
+    <div class="stat-name bold grid-item-bottom greyBack centre" data-action="createDoc" data-document-class='Item' data-type="family">
+      <a class="large-icon" data-tooltip="{{localize 'PEN.addFamily'}}"><i class="item-control fas fa-plus"></i></a>
+    </div>
+
+    {{#each families as |family key|}}
+      <div class="stat-name grid-item-bottom">{{family.name}} {{#if (gt family.system.died 0)}} &nbsp({{localize 'PEN.deceased'}}) {{/if}}</div>
+      <div class="stat-name centre grid-item-bottom">{{family.system.gender}}</div>
+      <div class="stat-name centre grid-item-bottom">{{family.system.typeName}}</div>
+      <div class="stat-name centre grid-item-bottom">{{family.system.age}}</div>
+      <div class="stat-name centre grid-item-bottom">{{family.system.glory}}</div>
+      <div class="centre item grid-item-bottom" data-itemid ="{{family._id}}">
+        <a class="item-control large-icon fade" data-action="viewDoc"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
+        {{#unless ../system.lock}}
+          <a class="item-control large-icon fade" data-action="deleteDoc"><i data-tooltip="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
+        {{/unless}}
+      </div>
+    {{/each}}
+  </div>
+  <br>
+
+  <div class="retainer-grid">
+    <div class="stat-name grid-item-bottom greyBack bold">{{localize 'PEN.retainers'}}</div>
+    <div class="stat-name grid-item-bottom greyBack bold centre">{{localize 'PEN.gender'}}</div>
+    <div class="stat-name grid-item-bottom greyBack bold centre">{{localize 'PEN.position'}}</div>
+    <div class="stat-name grid-item-bottom greyBack bold centre">{{localize 'PEN.age'}}</div>
+    <div class="stat-name bold grid-item-bottom greyBack centre" data-action="createDoc" data-document-class='Item' data-type="squire">
+      <a class="large-icon" data-tooltip="{{localize 'PEN.addRetainer'}}"><i class="item-control fas fa-plus"></i></a>
+    </div>
+
+    {{#each household as |retainer key|}}
+      <div class="stat-name grid-item-bottom">{{retainer.name}} {{#if (gt retainer.system.died 0)}} &nbsp({{localize 'PEN.deceased'}}) {{/if}}</div>
+      <div class="stat-name centre grid-item-bottom">{{retainer.system.gender}}</div>
+      <div class="stat-name centre grid-item-bottom">{{retainer.system.squireType}}</div>
+      <div class="stat-name centre grid-item-bottom">{{retainer.system.age}}</div>
+      <div class="centre item grid-item-bottom" data-itemid ="{{retainer._id}}">
+        <a class="item-control large-icon fade" data-action="viewDoc"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
+      {{#unless ../system.lock}}
+        <a class="item-control large-icon fade" data-action="deleteDoc"><i data-tooltip="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
+      {{/unless}}
+      </div>
+    {{/each}}
+  </div>
+  <br>
+  {{#if useRelation}}
+    <div class="follower-list-grid">
+      <div class="stat-name grid-item greyBack bold">{{localize 'PEN.person'}}</div>
+      <div class="stat-name grid-item greyBack bold centre">{{localize 'PEN.type'}}</div>
+      <div class="stat-name grid-item greyBack bold centre">{{localize 'PEN.relationship'}}</div>
+      <div class="stat-name grid-item greyBack bold centre">{{localize 'PEN.age'}}</div>
+      <div class="stat-name grid-item greyBack bold centre">{{localize 'PEN.squire'}}</div>
+      <div class="stat-name grid-item greyBack bold centre"></div>
+    </div>
+
+    {{#each followers as |follower key|}}
+      <li class="item follower-list-grid droppable" data-drag='true' data-document-class='Item' data-item-id="{{follower._id}}">
+        <div class="stat-name grid-item new-row rollable" data-action="openActor" data-actoruuid = {{follower.system.sourceUuid}}>{{follower.system.person1Name}}</div>
+        <div class="stat-name centre grid-item">{{follower.system.typeName}}</div>
+        <div class="stat-name centre grid-item">{{follower.system.connection}}</div>
+        {{#if (eq follower.system.typeLabel 'squire')}}
+        <div class="stat-name centre rollable squire grid-item" data-type="followerAge" data-itemid="{{follower._id}}">{{follower.system.age}}</div>
+          <div class="stat-name centre rollable squire grid-item" data-type="followerSquire" data-itemid="{{follower._id}}">{{follower.system.squire}}</div>
+        {{else}}
+          <div class="stat-name centre grid-item">{{follower.system.age}}</div>
+          <div class="stat-name centre grid-item"></div>
+        {{/if}}
+        <div class="centre item grid-item" data-itemid ="{{follower._id}}">
+          <a class="item-control large-icon fade" data-action="viewDoc"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
+          {{#unless ../system.lock}}
+            <a class="item-control large-icon fade" data-action="deleteDoc"><i data-tooltip="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
+          {{/unless}}
+        </div>
+      </li>
+    {{/each}}
+    <div class="follower-list-grid"></div>
+    <br>
+  {{/if}}
+
+  <div class="estate-grid droppable" data-collection = "estates" >
+    <div class="stat-name grid-item-bottom bold greyBack">{{localize 'PEN.estate'}}</div>
+    <div class="stat-name grid-item-bottom bold greyBack centre">{{localize 'PEN.type'}}</div>
+    <div class="stat-name grid-item-bottom bold greyBack centre">{{localize 'PEN.armySize'}}</div>
+    <div class="stat-name grid-item-bottom bold greyBack centre">{{localize 'PEN.manor.privyInc'}}</div>
+    <div class="stat-name grid-item-bottom bold greyBack centre">{{localize 'PEN.dv.title'}}</div>
+    <div class="stat-name grid-item-bottom bold greyBack centre"></div>
+
+    {{#each estates as |estate key|}}
+      <div class="stat-name grid-item-bottom">{{estate.name}}</div>
+      <div class="stat-name centre grid-item-bottom">{{estate.typeLabel}}</div>
+      <div class="stat-name centre grid-item-bottom">{{estate.armyTotal}}</div>
+      <div class="stat-name centre grid-item-bottom">{{estate.privyInc}}</div>
+      <div class="stat-name centre grid-item-bottom" data-tooltip="{{dvLabelHint}}">{{estate.dvLabel}}</div>
+      <div class="centre grid-item-bottom" data-itemid ="{{estate.uuid}}">
+        <a class="item-control large-icon fade" data-action="viewEstate"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
+      {{#unless ../system.lock}}
+        <a class="item-control large-icon fade" data-action="deleteEstate"><i data-tooltip="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
+      {{/unless}}
+      </div>
+    {{/each}}
+  </div>
+  <br>
+
+
+</section>

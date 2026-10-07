@@ -10,7 +10,7 @@ export class PIDEditor extends foundry.applications.api.HandlebarsApplicationMix
     this.document = document;
   }
   static DEFAULT_OPTIONS = {
-    classes: ["Pendragon", "dialog", "pid-editor", "theme-light"],
+    classes: ["Pendragon", "dialogV2", "pid-editor"],
     tag: "form",
     window: {
       title: "PEN.PIDFlag.title",

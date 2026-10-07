@@ -1,5 +1,5 @@
 import { PENUtilities } from "../../apps/utilities.mjs";
-import { PENCharCreate } from "../../apps/charCreate.mjs";
+import { PENCharCreateV2 } from "../../apps/charCreateV2.mjs";
 import { PendragonItemSheet } from "./item-sheet.mjs";
 
 export class PendragonIdealSheet extends PendragonItemSheet {
@@ -10,22 +10,13 @@ export class PendragonIdealSheet extends PendragonItemSheet {
   }
 
   static DEFAULT_OPTIONS = {
-    classes: ["Pendragon", "sheet", "itemV2"],
     position: {
       width: 560,
       height: 670,
     },
-    tag: "form",
-    // automatically updates the item
-    form: {
-      submitOnChange: true,
-    },
-    window: {
-      resizable: true,
-    },
     actions: {
-      editPid: this._onEditPid,
       deleteItem: PendragonIdealSheet.#deleteItem,
+      promoted: PendragonIdealSheet._promoted,
     },
     dragDrop: [{ dropSelector: ".droppable" }],
   };
@@ -43,8 +34,15 @@ export class PendragonIdealSheet extends PendragonItemSheet {
       template: "systems/Pendragon/templates/item/ideal.attributes.hbs",
       scrollable: [""],
     },
+    benefits: {
+      template: "systems/Pendragon/templates/item/ideal.benefits.hbs",
+      scrollable: [""],
+    },
     description: {
       template: "systems/Pendragon/templates/item/base.description.hbs",
+    },
+    effects: {
+      template: "systems/Pendragon/templates/item/effects.hbs",
     },
     gmTab: {
       template: "systems/Pendragon/templates/item/gmtab.hbs",
@@ -59,7 +57,9 @@ export class PendragonIdealSheet extends PendragonItemSheet {
       ...(await super._prepareContext(options)),
     };
     const traitGroup = [];
+    const skillGroup = [];
     const require = [];
+    const luckTables = [];
 
     for (let pItm of this.item.system.require) {
       let valid = true;
@@ -104,8 +104,37 @@ export class PendragonIdealSheet extends PendragonItemSheet {
       return 0;
     });
 
+    for (let pItm of this.item.system.skillGroup) {
+      let valid = true;
+      if ((await game.system.api.pid.fromPIDBest({ pid: pItm.pid })).length < 1) {
+        valid = false;
+      }
+      skillGroup.push({ name: pItm.name, uuid: pItm.uuid, pid: pItm.pid, score: pItm.score, valid: valid });
+    }
+    skillGroup.sort(function (a, b) {
+      let x = a.name;
+      let y = b.name;
+      if (x < y) {
+        return -1;
+      }
+      if (x > y) {
+        return 1;
+      }
+      return 0;
+    });
+
+    for (let pItm of this.item.system.luck) {
+      let valid = true;
+      if ((await game.system.api.pid.fromPIDBest({ pid: pItm.pid })).length < 1) {
+        valid = false;
+      }
+      luckTables.push({ name: pItm.name, uuid: pItm.uuid, pid: pItm.pid, valid: valid });
+    }
+
     sheetData.require = require;
     sheetData.traitGroup = traitGroup;
+    sheetData.skillGroup = skillGroup;
+    sheetData.luckTables = luckTables;
 
     // these two values could be set during _preparePartContext
     sheetData.enrichedDescriptionValue = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
@@ -123,7 +152,7 @@ export class PendragonIdealSheet extends PendragonItemSheet {
         secrets: sheetData.editable,
       },
     );
-    let parts = ["attributes", "description"];
+    let parts = ["attributes", "benefits", "description", "effects"];
     if (game.user.isGM) {
       parts.push("gmTab");
     }
@@ -137,6 +166,8 @@ export class PendragonIdealSheet extends PendragonItemSheet {
     switch (partId) {
       case "attributes":
       case "description":
+      case "benefits":
+      case "effects":
       case "gmTab":
         context.tab = context.tabs[partId];
         break;
@@ -165,6 +196,22 @@ export class PendragonIdealSheet extends PendragonItemSheet {
     return;
   }
 
+  static async _promoted(event, target) {
+    event.preventDefault();
+    if (this.document.system.promoted) {
+      let confirm = await PENUtilities.confirmation(game.i18n.localize("PEN.leaveIdeal"));
+      if (confirm) {
+        await this.document.update({ "system.promoted": false });
+      }
+    } else {
+      if (this.document.system.activeIdeal) {
+        await this.document.update({ "system.promoted": true });
+      }
+    }
+  }
+
+  //-----------------------DRAG DROP-----------------------------------
+
   #createDragDropHandlers() {
     return this.options.dragDrop.map((d) => {
       d.permissions = {
@@ -187,21 +234,30 @@ export class PendragonIdealSheet extends PendragonItemSheet {
   async _onDrop(event) {
     event.preventDefault();
     event.stopPropagation();
+    const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
+    if (data.type === "ActiveEffect") {
+      return this._onDropActiveEffect(event, data);
+    }
+
+    let mainType = "Item";
     const type = ["trait"];
     const collectionName = event.currentTarget.dataset.collection ?? "traitGroup";
-    if (["require"].includes(collectionName)) {
+    if (["require", "skillGroup"].includes(collectionName)) {
       type.push("passion", "skill");
     }
-    const dataList = await PENUtilities.getDataFromDropEvent(event, "Item");
+    if (["luck"].includes(collectionName)) {
+      mainType = "RollTable";
+    }
+
+    const dataList = await PENUtilities.getDataFromDropEvent(event, mainType);
     const collection = this.item.system[collectionName]
       ? foundry.utils.duplicate(this.item.system[collectionName])
       : [];
 
     for (const item of dataList) {
-      if (!item || !item.system) continue;
-      if (!type.includes(item.type)) {
-        continue;
-      }
+      if (!item) continue;
+      if (mainType != "RollTable" && !item.system) continue;
+      if (mainType != "RollTable" && !type.includes(item.type)) continue;
 
       //If no PID then give warning and move to next item
       if (typeof item.flags?.Pendragon?.pidFlag?.id === "undefined") {
@@ -216,18 +272,26 @@ export class PendragonIdealSheet extends PendragonItemSheet {
       }
 
       let score = 0;
-      if (["require"].includes(collectionName)) {
-        score = Number((await PENCharCreate.inpValue(game.i18n.localize("PEN.minScore"))).age);
+      if (["require", "skillGroup"].includes(collectionName)) {
+        score = Number((await PENCharCreateV2.inpValue(game.i18n.localize("PEN.minScore"))).age);
       }
 
-      //Add item to collection
-      collection.push({
-        name: item.name,
-        oppName: item.system.oppName,
-        uuid: item.uuid,
-        pid: item.flags.Pendragon.pidFlag.id,
-        score: Number(score),
-      });
+      if (collectionName === "luck") {
+        collection.push({
+          name: item.name,
+          uuid: item.uuid,
+          pid: item.flags.Pendragon.pidFlag.id,
+        });
+      } else {
+        //Add item to collection
+        collection.push({
+          name: item.name,
+          oppName: item.system.oppName,
+          uuid: item.uuid,
+          pid: item.flags.Pendragon.pidFlag.id,
+          score: Number(score),
+        });
+      }
     }
 
     await this.item.update({ [`system.${collectionName}`]: collection });
@@ -239,5 +303,18 @@ export class PendragonIdealSheet extends PendragonItemSheet {
     const { collection } = target.closest("[data-collection]").dataset ?? {};
     const coll = this.item.system[collection] ?? [];
     await this.item.update({ [`system.${collection}`]: coll.filter((itm) => itm.uuid != itemId) });
+  }
+
+  //Handle the dropping of ActiveEffect data onto an Item Sheet
+  async _onDropActiveEffect(event, effect) {
+    let tempEffect = await fromUuid(effect.uuid);
+    let newEffect = tempEffect.toObject();
+    const item = this.document;
+    newEffect.transfer = true;
+    if (!this.isEditable || !item.isOwner || item === tempEffect.parent) {
+      return null;
+    }
+    const result = await ActiveEffect.implementation.create(newEffect, { parent: item });
+    return result ?? null;
   }
 }

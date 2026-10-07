@@ -3,6 +3,8 @@
   <div class="item-trait-grid">
     <div class="stat-name left bold" data-tooltip="{{localize 'PEN.starterClassHint'}}">{{localize 'PEN.starterClass'}}</div>
     <div class="centre" style="padding-top: 8px;"><a class="item-control item-toggle large-icon" data-property = "starter" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if item.system.starter}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
+    <div class="stat-name left bold" data-tooltip="{{localize 'PEN.ageClassHint'}}">{{localize 'PEN.age'}}</div>
+    <div class="stat-name-input  centre"><input name="system.age" type="number" value="{{item.system.age}}"/></div>
   </div>
   <br>
   <div class="stat-name bold">{{ localize "PEN.passions"}}</div>
@@ -67,32 +69,6 @@
               <div class="stat-name">{{passion.name}}</div>
             {{else}}
               <div class="stat-name result-success">{{passion.name}} [{{localize 'PEN.invalid'}}]</div>
-            {{/if}}
-          </div>
-          <div class="item-controls" style="padding-top: 8px;">
-            {{#if ../isGM}}
-              <a class="item-control item-delete" title="{{localize 'PEN.deleteItem'}}" data-action="deleteItem"><i class="fas fa-trash"></i></a>
-            {{/if}}
-          </div>
-        </li>
-      {{else}}
-          <div class="centre stat-name italics">{{localize 'PEN.emptyList'}}</div>
-      {{/each}}
-    </ol>
-  </div>
-  <br>
-
-  <div class="stat-name bold">{{ localize "PEN.startingEquip"}}</div>
-  {{!-- Starting Equipment --}}
-  <div class="horizontalboxed {{#if isGM}} droppable {{/if}} gear" data-collection = "gear">
-    <ol class="item-list">
-      {{#each gears as |gear|}}
-        <li class="item flexrow" data-item-id="{{gear.uuid}}" data-pid = "{{gear.flags.Pendragon.pidFlag.id}}" data-collection = "gear">
-          <div class="item-name flexrow">
-            {{#if gear.valid}}
-            <div class="stat-name">{{gear.name}}</div>
-            {{else}}
-            <div class="stat-name result-success">{{gear.name}} [{{localize 'PEN.invalid'}}]</div>
             {{/if}}
           </div>
           <div class="item-controls" style="padding-top: 8px;">

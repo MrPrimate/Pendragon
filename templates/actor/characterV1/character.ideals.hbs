@@ -1,0 +1,22 @@
+<section class='character tab ideals {{tab.cssClass}}' data-group='primary' data-tab='ideals'>
+  <div class="ideal-grid">
+    <div class="stat-name bold grid-item-bottom">{{ localize "PEN.ideals" }}</div>
+    <div class="stat-name bold grid-item-bottom centre">{{ localize "PEN.active" }}</div>
+    <div class="stat-name bold grid-item-bottom centre">{{ localize "PEN.joined" }}</div>
+    <div class="grid-item-bottom"></div>
+
+    {{#each ideals as |ideal key|}}
+      <div class="grid-item-bottom stat-name">{{ideal.name}}</div>
+      <div class="grid-item-bottom stat-name centre" data-tooltip="{{ideal.system.reqMsg}}"><a class="{{#if ideal.system.activeIdeal}}darkred{{else}}fade{{/if}}"><i class="fa-solid fa-heart"></i></a></div>
+      <div class="grid-item-bottom stat-name centre"><a class="{{#if ideal.system.promoted}}darkred{{else}}fade{{/if}}"><i class="fa-solid fa-heart"></i></a></div>
+      <div class="item grid-item-bottom centre" data-itemid ="{{ideal._id}}">
+        <a class="item-control large-icon fade" data-action="viewDoc"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
+        {{#unless ../system.lock}}
+          <a class="fade large-icon" data-action="deleteDoc" data-tooltip="{{localize 'PEN.delete'}}"><i class="item-control fas fa-broom-wide"></i></a>
+        {{/unless}}
+      </div>
+    {{/each}}
+  </div>
+
+  <br>
+</section>

@@ -39,7 +39,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "14.365"
+      coreVersion: '14.365'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: 1786881254976
@@ -47,7 +47,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!b5d7Ha8LOeLSNvul.0DpvKuF4Ur2jqNTK"
+    _key: '!journal.pages!b5d7Ha8LOeLSNvul.0DpvKuF4Ur2jqNTK'
   - sort: 400000
     name: Editing a character
     type: text
@@ -81,7 +81,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "14.364"
+      coreVersion: '14.364'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: 1783595587745
@@ -89,7 +89,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!b5d7Ha8LOeLSNvul.FElHOQiryTfX4zxc"
+    _key: '!journal.pages!b5d7Ha8LOeLSNvul.FElHOQiryTfX4zxc'
   - sort: 500000
     name: Combat Tab
     type: text
@@ -139,7 +139,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "14.365"
+      coreVersion: '14.365'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: 1783595713850
@@ -147,7 +147,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!b5d7Ha8LOeLSNvul.0YxsvVe0d1sSzu6F"
+    _key: '!journal.pages!b5d7Ha8LOeLSNvul.0YxsvVe0d1sSzu6F'
   - sort: 600000
     name: Traits Tab
     type: text
@@ -186,7 +186,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: null
@@ -194,7 +194,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!b5d7Ha8LOeLSNvul.PmCNQJ0LXo1AeVVt"
+    _key: '!journal.pages!b5d7Ha8LOeLSNvul.PmCNQJ0LXo1AeVVt'
   - sort: 700000
     name: Passions Tab
     type: text
@@ -232,7 +232,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: null
@@ -240,7 +240,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!b5d7Ha8LOeLSNvul.dY9bwgsZV3XBq1Le"
+    _key: '!journal.pages!b5d7Ha8LOeLSNvul.dY9bwgsZV3XBq1Le'
   - sort: 800000
     name: Skills Tab
     type: text
@@ -274,7 +274,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: null
@@ -282,7 +282,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!b5d7Ha8LOeLSNvul.8v47GsMzyfnsL7qo"
+    _key: '!journal.pages!b5d7Ha8LOeLSNvul.8v47GsMzyfnsL7qo'
   - sort: 900000
     name: Equip Tab
     type: text
@@ -326,7 +326,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "14.365"
+      coreVersion: '14.365'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: 1786881373769
@@ -334,7 +334,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!b5d7Ha8LOeLSNvul.TK3AJJwLFtTGA2mH"
+    _key: '!journal.pages!b5d7Ha8LOeLSNvul.TK3AJJwLFtTGA2mH'
   - sort: 1000000
     name: Squires Tab
     type: text
@@ -377,7 +377,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "14.365"
+      coreVersion: '14.365'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: 1786881435895
@@ -385,7 +385,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!b5d7Ha8LOeLSNvul.sEG9oOq3L4kqF5uB"
+    _key: '!journal.pages!b5d7Ha8LOeLSNvul.sEG9oOq3L4kqF5uB'
   - sort: 1006250
     name: Events Tab
     type: text
@@ -430,7 +430,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "14.365"
+      coreVersion: '14.365'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: 1786881482510
@@ -438,7 +438,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!b5d7Ha8LOeLSNvul.8390AvE66aRvM5fJ"
+    _key: '!journal.pages!b5d7Ha8LOeLSNvul.8390AvE66aRvM5fJ'
   - sort: 1037500
     name: Bio Tab
     type: text
@@ -488,7 +488,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.348"
+      coreVersion: '13.348'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: null
@@ -496,7 +496,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!b5d7Ha8LOeLSNvul.jLkjoTOmE5GIIuJW"
+    _key: '!journal.pages!b5d7Ha8LOeLSNvul.jLkjoTOmE5GIIuJW'
   - sort: 450000
     name: Stats Section
     type: text
@@ -547,7 +547,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "14.364"
+      coreVersion: '14.364'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: 1783595658282
@@ -555,7 +555,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!b5d7Ha8LOeLSNvul.Ra9PK638R24cc31A"
+    _key: '!journal.pages!b5d7Ha8LOeLSNvul.Ra9PK638R24cc31A'
   - sort: 1300000
     name: Winter Tab
     type: text
@@ -581,7 +581,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: null
@@ -589,7 +589,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!b5d7Ha8LOeLSNvul.7IY9RyzovHwzf5jS"
+    _key: '!journal.pages!b5d7Ha8LOeLSNvul.7IY9RyzovHwzf5jS'
   - sort: 1050000
     name: Stats Tab
     type: text
@@ -626,7 +626,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: null
@@ -634,7 +634,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!b5d7Ha8LOeLSNvul.qLYS7miTa5T31GYn"
+    _key: '!journal.pages!b5d7Ha8LOeLSNvul.qLYS7miTa5T31GYn'
   - sort: 1012500
     name: House Tab
     type: text
@@ -669,7 +669,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: null
@@ -677,7 +677,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!b5d7Ha8LOeLSNvul.fRLDTfqAgmiltXyr"
+    _key: '!journal.pages!b5d7Ha8LOeLSNvul.fRLDTfqAgmiltXyr'
   - sort: 1400000
     name: Follower Tab
     type: text
@@ -711,7 +711,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -719,7 +719,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!b5d7Ha8LOeLSNvul.956N6gsBXB5T09Ka"
+    _key: '!journal.pages!b5d7Ha8LOeLSNvul.956N6gsBXB5T09Ka'
   - sort: 1500000
     name: Getting Knighted Later
     type: text
@@ -751,13 +751,13 @@ pages:
     _stats:
       duplicateSource: null
       exportSource: null
-      coreVersion: "13.351"
+      coreVersion: '13.351'
       systemId: Pendragon
       systemVersion: 13.1.53
       createdTime: 1769185801944
       modifiedTime: 1769185986609
       lastModifiedBy: pendragonBuilder
-    _key: "!journal.pages!b5d7Ha8LOeLSNvul.zwhncS51yaecGzfd"
+    _key: '!journal.pages!b5d7Ha8LOeLSNvul.zwhncS51yaecGzfd'
 folder: null
 flags:
   Pendragon:
@@ -769,9 +769,9 @@ flags:
     fixed-adventure-heading: true
 _stats:
   duplicateSource: null
-  coreVersion: "14.364"
+  coreVersion: '14.364'
   systemId: Pendragon
-  systemVersion: "14.1"
+  systemVersion: '14.1'
   createdTime: 1719597783187
   modifiedTime: 1781499153730
   lastModifiedBy: pendragonBuilder
@@ -780,4 +780,4 @@ sort: 25000
 ownership:
   default: 0
 categories: []
-_key: "!journal!b5d7Ha8LOeLSNvul"
+_key: '!journal!b5d7Ha8LOeLSNvul'

@@ -1,11 +1,11 @@
 const { api, sheets } = foundry.applications;
-import { PIDEditor } from "../../pid/pid-editor.mjs";
 import { PendragonActor } from "../actor.mjs";
+import { PendragonActorSheet } from "./actor-sheet.mjs";
 import { PENSelectLists } from "../../apps/select-lists.mjs";
 import { RollType, PENCheck, CardType } from "../../apps/checks.mjs";
 import PENDialog from "../../setup/pen-dialog.mjs";
 
-export class PendragonBattleSheet extends api.HandlebarsApplicationMixin(sheets.ActorSheetV2) {
+export class PendragonBattleSheet extends PendragonActorSheet {
   constructor(options = {}) {
     super(options);
     this.#dragDrop = this._createDragDropHandlers();
@@ -203,33 +203,7 @@ export class PendragonBattleSheet extends api.HandlebarsApplicationMixin(sheets.
     return context;
   }
 
-  async _renderFrame(options) {
-    const frame = await super._renderFrame(options);
-    //define button
-    const sheetPID = this.actor.flags?.Pendragon?.pidFlag;
-    const noId = typeof sheetPID === "undefined" || typeof sheetPID.id === "undefined" || sheetPID.id === "";
-    //add button
-    const label = game.i18n.localize("PEN.PIDFlag.id");
-    const pidEditor = `<button type="button" class="header-control fa-solid fa-fingerprint icon ${noId ? "edit-pid-warning" : "edit-pid-exisiting"}"
-        data-action="editPid" data-tooltip="${label}" aria-label="${label}"></button>`;
-    let el = this.window.close;
-    while (el.previousElementSibling.localName === "button") {
-      el = el.previousElementSibling;
-    }
-    el.insertAdjacentHTML("beforebegin", pidEditor);
-    return frame;
-  }
-
   //------------ACTIONS-------------------
-
-  // Handle editPid action
-  static _onEditPid(event) {
-    event.stopPropagation(); // Don't trigger other events
-    if (event.detail > 1) return; // Ignore repeated clicks
-    new PIDEditor(this.document, {}).render(true, {
-      focus: true,
-    });
-  }
 
   static async _noteView(event) {
     event.preventDefault();

@@ -13,7 +13,7 @@
     </div>
     <br>
 
-  <ol class="items-list trait-point-grid">
+  <ol class="items-list trait-point-grid" style="overflow-y: hidden">
     {{#each traits as |trait key|}}
     <li>
       <div class="bold stat-name">{{trait.name}}{{#if (gt trait.religious 0)}}(R){{/if}}</div>

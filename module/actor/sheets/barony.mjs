@@ -1,12 +1,11 @@
 const { api, sheets } = foundry.applications;
-import { PIDEditor } from "../../pid/pid-editor.mjs";
-import { PendragonActor } from "../actor.mjs";
+import { PendragonActorSheet } from "./actor-sheet.mjs";
 import { PENactorItemDrop } from "../actor-itemDrop.mjs";
 import { PENUtilities } from "../../apps/utilities.mjs";
-import { PID } from "../../pid/pid.mjs";
 import { PENRollType } from "../../cards/rollType.mjs";
+import { PENActiveEffectSheet } from "../../sheets/pen-active-effect-sheet.mjs";
 
-export class PendragonBaronySheet extends api.HandlebarsApplicationMixin(sheets.ActorSheetV2) {
+export class PendragonBaronySheet extends PendragonActorSheet {
   constructor(options = {}) {
     super(options);
     this._dragDrop = this._createDragDropHandlers();
@@ -15,7 +14,7 @@ export class PendragonBaronySheet extends api.HandlebarsApplicationMixin(sheets.
   static DEFAULT_OPTIONS = {
     classes: ["Pendragon", "sheet", "actor2", "barony"],
     position: {
-      width: 600,
+      width: 660,
       height: 710,
     },
     window: {
@@ -35,6 +34,11 @@ export class PendragonBaronySheet extends api.HandlebarsApplicationMixin(sheets.
       itemToggle: this._itemToggle,
       reRollSkills: this._reRollSkills,
       openWiki: this._openWiki,
+      createEffect: this._createEffect,
+      viewActiveEffect: this._viewActiveEffect,
+      toggleEffect: this._toggleEffect,
+      clearEffects: this._clearEffects,
+      deleteActiveEffect: this._deleteActiveEffect,
     },
   };
 
@@ -74,6 +78,10 @@ export class PendragonBaronySheet extends api.HandlebarsApplicationMixin(sheets.
       template: "systems/Pendragon/templates/actor/barony/barony.skills.hbs",
       scrollable: [""],
     },
+    effects: {
+      template: "systems/Pendragon/templates/actor/characterV1/character.effects.hbs",
+      scrollable: [""],
+    },
     gmTab: {
       template: "systems/Pendragon/templates/actor/gmtab.hbs",
       scrollable: [""],
@@ -83,7 +91,18 @@ export class PendragonBaronySheet extends api.HandlebarsApplicationMixin(sheets.
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
     //Common parts to the character - this is the order they are show on the sheet
-    options.parts = ["header", "tabs", "details", "improvements", "mesnie", "folk", "skills", "location", "notes"];
+    options.parts = [
+      "header",
+      "tabs",
+      "details",
+      "improvements",
+      "mesnie",
+      "folk",
+      "skills",
+      "location",
+      "effects",
+      "notes",
+    ];
 
     //GM only tabs
     if (game.user.isGM) {
@@ -116,6 +135,7 @@ export class PendragonBaronySheet extends api.HandlebarsApplicationMixin(sheets.
         case "location":
         case "folk":
         case "skills":
+        case "effects":
         case "mesnie":
         case "improvements":
           tab.id = partId;
@@ -259,37 +279,16 @@ export class PendragonBaronySheet extends api.HandlebarsApplicationMixin(sheets.
       case "improvements":
         context.tab = context.tabs[partId];
         break;
+      case "effects":
+        context.tab = context.tabs[partId];
+        context.effects = await PENActiveEffectSheet.getActorEffectsFromSheet(this.document);
+        context.directEffects = await PENActiveEffectSheet.getDirectEffectsFromSheet(this.document);
+        break;
     }
     return context;
   }
 
-  async _renderFrame(options) {
-    const frame = await super._renderFrame(options);
-    //define button
-    const sheetPID = this.actor.flags?.Pendragon?.pidFlag;
-    const noId = typeof sheetPID === "undefined" || typeof sheetPID.id === "undefined" || sheetPID.id === "";
-    //add button
-    const label = game.i18n.localize("PEN.PIDFlag.id");
-    const pidEditor = `<button type="button" class="header-control fa-solid fa-fingerprint icon ${noId ? "edit-pid-warning" : "edit-pid-exisiting"}"
-        data-action="editPid" data-tooltip="${label}" aria-label="${label}"></button>`;
-    let el = this.window.close;
-    while (el.previousElementSibling.localName === "button") {
-      el = el.previousElementSibling;
-    }
-    el.insertAdjacentHTML("beforebegin", pidEditor);
-    return frame;
-  }
-
   //------------ACTIONS-------------------
-
-  // Handle editPid action
-  static _onEditPid(event) {
-    event.stopPropagation(); // Don't trigger other events
-    if (event.detail > 1) return; // Ignore repeated clicks
-    new PIDEditor({ document: this.document }, {}).render(true, {
-      focus: true,
-    });
-  }
 
   //Toggle Item
   static async _itemToggle(event, target) {
@@ -388,12 +387,6 @@ export class PendragonBaronySheet extends api.HandlebarsApplicationMixin(sheets.
         }),
       );
     }
-  }
-
-  //Open Wiki Help Page
-  static async _openWiki(event, target) {
-    const url = target.dataset.property ?? "https://github.com/cragstone/Pendragon/wiki";
-    window.open(url, "_blank");
   }
 
   // -----------------------------------LISTENERS-----------------------------------------

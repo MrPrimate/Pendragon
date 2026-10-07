@@ -10,6 +10,9 @@
 
     <div class="stat-name left bold">{{localize 'PEN.died'}}</div>
     <div class="stat-name-input centre"><input name="system.died" type="number" value="{{item.system.died}}"/></div>
+
+    <div class="stat-name left bold">{{localize 'PEN.age'}}</div>
+    <div class="stat-name centre bold">{{system.age}}</div>
     <br>
 
     <div class="stat-name left bold new-row">{{localize 'PEN.glory'}}</div>
@@ -24,7 +27,7 @@
   <div class="item-trait-grid">
     <div class="stat-name left bold">{{localize 'PEN.person'}}</div>
     <div class="stat-name centre">
-      <select data-handle-change name="system.relation">
+      <select class="centre" data-handle-change name="system.relation">
         {{selectOptions relationType selected=item.system.relation}}
       </select>
       </div>

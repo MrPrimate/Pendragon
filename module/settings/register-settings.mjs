@@ -2,6 +2,7 @@ import { PENCombatSettings } from "./settings-combatOptions.mjs";
 import { PENXPSettings } from "./settings-xpOptions.mjs";
 import { PENDiceSettings } from "./settings-diceOptions.mjs";
 import { PENDisplaySettings } from "./settings-displayOptions.mjs";
+import { PENCharacterSettings } from "./settings-characterOptions.mjs";
 
 export function registerSettings() {
   let tokenDropModeOptions = {
@@ -19,6 +20,16 @@ export function registerSettings() {
     restricted: true,
   });
   PENCombatSettings.registerSettings();
+
+  //Character Settings Button
+  game.settings.registerMenu("Pendragon", "characterOptions", {
+    name: "PEN.Settings.characterOptionsHint",
+    label: "PEN.Settings.characterOptions",
+    icon: "fas fa-person",
+    type: PENCharacterSettings,
+    restricted: true,
+  });
+  PENCharacterSettings.registerSettings();
 
   //XP Settings Button
   game.settings.registerMenu("Pendragon", "xpOptions", {
@@ -50,44 +61,6 @@ export function registerSettings() {
   });
   PENDisplaySettings.registerSettings();
 
-  //Allow Manual Glory Adj
-  game.settings.register("Pendragon", "manualGlory", {
-    name: "PEN.Settings.manualGlory",
-    hint: "PEN.Settings.manualGloryHint",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: false,
-  });
-
-  game.settings.register("Pendragon", "childMortality", {
-    name: "PEN.Settings.childMortality",
-    hint: "PEN.Settings.childMortalityHint",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: true,
-  });
-
-  game.settings.register("Pendragon", "tokenVision", {
-    name: "PEN.Settings.tokenVision",
-    hint: "PEN.Settings.tokenVisionHint",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: true,
-  });
-
-  game.settings.register("Pendragon", "useRelation", {
-    name: "PEN.Settings.useRelation",
-    hint: "PEN.Settings.useRelationHint",
-    scope: "world",
-    requiresReload: true,
-    config: true,
-    type: Boolean,
-    default: false,
-  });
-
   game.settings.register("Pendragon", "showParty", {
     name: "PEN.Settings.showParty",
     hint: "PEN.Settings.showPartyHint",
@@ -109,8 +82,6 @@ export function registerSettings() {
     type: String,
   });
 
-  //Invisible Game Settings
-
   game.settings.register("Pendragon", "feastDeckUuid", {
     name: "PEN.Settings.feastDeckUuid",
     hint: "PEN.Settings.feastDeckUuidHint",
@@ -120,6 +91,8 @@ export function registerSettings() {
     type: String,
     default: "",
   });
+
+  //Invisible Game Settings
   game.settings.register("Pendragon", "winter", {
     name: "",
     hint: "",
@@ -158,7 +131,7 @@ export function registerSettings() {
     default: "",
   });
 
-  //Game year stopped in v14.5  - can delete in due course.
+  //Game year stopped in v14.5  - can delete in due course when relevant migration removed
   game.settings.register("Pendragon", "gameYear", {
     name: "PEN.Settings.gameYear",
     hint: "PEN.Settings.gameYearHint",

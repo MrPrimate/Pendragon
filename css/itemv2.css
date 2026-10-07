@@ -312,8 +312,19 @@
     margin-bottom: 0px;
   }
 
-  .item-controls, .pad-icon {
+  .item-controls,
+  .pad-icon {
     padding-top: 8px;
   }
 
+  .active-effect-list {
+    display: grid;
+    grid-template-columns: 150px 200px 100px 70px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+  }
+
+  & .greyBack {
+    background-color: var(--pd-dark-row);
+  }
 }

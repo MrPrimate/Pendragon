@@ -1,3 +1,5 @@
+//THIS WHOLE FILE CAN BE DELETED
+
 import { PENUtilities } from "./utilities.mjs";
 import { ItemsSelectDialog } from "./item-selection.mjs";
 import { PassionsSelectDialog } from "./passion-selection.mjs";
@@ -52,7 +54,7 @@ export class PENCharCreate {
         if (!result) {
           return;
         }
-        ui.notifications.warn(actor.name + ": " + game.i18n.localize("PEN.create.step3"));
+        ui.notifications.warn(actor.name + ": " + game.i18n.localize("PEN.create.addArchetype"));
       }
     }
 
@@ -820,6 +822,8 @@ export class PENCharCreate {
   //Get character class - step7-------------------------------------------------------------------------------------------
   static async step7(actor) {
     //Open dialog and select the class  (not optional)
+    let newList = await this.getClassList(actor, "only", true, true);
+    /*
     let mainList = await game.system.api.pid.fromPIDRegexBest({
       pidRegExp: new RegExp("^i." + PENUtilities.quoteRegExp("class") + ".+$"),
       type: "i",
@@ -834,7 +838,7 @@ export class PENCharCreate {
       newList = mainList.map((itm) => {
         return { name: itm.name, pid: itm.flags.Pendragon.pidFlag.id };
       });
-    }
+    }*/
     let itemData = await PENCharCreate.selectItem("list", false, newList, game.i18n.localize("TYPES.Item.class"));
     if (!itemData) {
       return false;
@@ -847,13 +851,15 @@ export class PENCharCreate {
     return true;
   }
 
-  //Get Knightly class - addClass-------------------------------------------------------------------------------------------
+  //Get Archetype class - addClass-------------------------------------------------------------------------------------------
   static async stepAddClass(actor) {
     //Open dialog and select the class  (optional)
     let mainList = await game.system.api.pid.fromPIDRegexBest({
       pidRegExp: new RegExp("^i." + PENUtilities.quoteRegExp("class") + ".+$"),
       type: "i",
     });
+    const archetype = actor.items.find((itm) => itm.type === "archetype");
+    let archetypeList = archetype;
     let newList = mainList
       .filter((i) => !i.system.starter)
       .map((itm) => {
@@ -1103,7 +1109,8 @@ export class PENCharCreate {
   static async step12(actor, points) {
     let skills = await actor.items
       .filter((itm) => itm.type === "skill")
-      .filter((itm) => itm.system.total > 0 && itm.system.total < 15)
+      .filter((itm) => itm.system.total > 0 || itm.system.weaponType != "")
+      .filter((itm) => itm.system.total < 15)
       .map((itm) => {
         return {
           id: itm.id,
@@ -2551,7 +2558,6 @@ export class PENCharCreate {
       let newItems = await actor.createEmbeddedDocuments("Item", itemData);
       archetype = newItems[0];
     }
-    console.log(archetype);
     //Adjust stat formulae & min/max
     await actor.update({
       "system.stats.str.min": archetype.system.stats.str.min,
@@ -2582,9 +2588,22 @@ export class PENCharCreate {
       let thisSkill = actor.items.find((itm) => itm.flags?.Pendragon?.pidFlag?.id === skill.pid);
       if (!thisSkill) {
         let nItm = await game.system.api.pid.fromPIDBest({ pid: skill.pid });
-        console.log(nItm);
         if (nItm.length > 0) {
           newSkills.push(nItm[0]);
+        }
+      }
+    }
+
+    //Add Ideal if not already on character sheet
+    if (archetype.system.ideals.length > 0) {
+      let idealPID = archetype.system.ideals[0].pid;
+      let currentIdeal = await actor.items.find((itm) => itm.flags?.Pendragon?.pidFlag?.id === idealPID);
+      if (!currentIdeal) {
+        let nIdeal = await game.system.api.pid.fromPIDBest({ pid: idealPID });
+        if (nIdeal.length > 0) {
+          let newIdeal = nIdeal[0].toObject();
+          newIdeal.system.source = "archetype";
+          newSkills.push(newIdeal);
         }
       }
     }
@@ -2620,6 +2639,13 @@ export class PENCharCreate {
       .map((itm) => {
         return itm.id;
       });
+    let ideals = actor.items
+      .filter((itm) => itm.type === "ideal")
+      .filter((itm) => itm.system.source === "archetype")
+      .map((itm) => {
+        return itm.id;
+      });
+    archetypes.push(...ideals);
     await Item.deleteDocuments(archetypes, { parent: actor });
     await actor.update({
       "system.stats.str.min": 8,
@@ -2698,5 +2724,45 @@ export class PENCharCreate {
       }
     }
     return { stat, multiplier, modifier };
+  }
+
+  //Get class list
+  //startClassFilter: only = only include Starter Classes
+  //                   exclude = exclude starter classes
+  //                   all = no filter
+  //archetypeFilter: true then filter classes in ator archetype
+  //emptyList: true = return full list if nothing after filters
+  static async getClassList(actor, starterClassFilter, archetypeFilter, emptyList) {
+    let mainList = await game.system.api.pid.fromPIDRegexBest({
+      pidRegExp: new RegExp("^i." + PENUtilities.quoteRegExp("class") + ".+$"),
+      type: "i",
+    });
+    let tempList = mainList.map((itm) => {
+      return { name: itm.name, pid: itm.flags.Pendragon.pidFlag.id };
+    });
+    if (starterClassFilter === "only") {
+      mainList = mainList.filter((i) => i.system.starter);
+    } else if (starterClassFilter === "exclude") {
+      mainList = mainList.filter((i) => !i.system.starter);
+    }
+    mainList = mainList.map((itm) => {
+      return { name: itm.name, pid: itm.flags.Pendragon.pidFlag.id };
+    });
+    if (archetypeFilter) {
+      const archetype = actor.items.find((itm) => itm.type === "archetype");
+      if (archetype) {
+        let archetypeList = archetype.system.classes.map((c) => c.pid);
+        mainList = mainList
+          .filter((i) => archetypeList.includes(i.pid))
+          .map((itm) => {
+            return { name: itm.name, pid: itm.pid };
+          });
+      }
+    }
+    if (mainList.length > 0 || !emptyList) {
+      return mainList;
+    } else {
+      return tempList;
+    }
   }
 }

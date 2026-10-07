@@ -56,7 +56,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -64,7 +64,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!Q8neofTu7Ubvxqzn.4lgxq4ZXogu4FBdz"
+    _key: '!journal.pages!Q8neofTu7Ubvxqzn.4lgxq4ZXogu4FBdz'
   - sort: 200000
     name: Trait Roll
     type: text
@@ -84,7 +84,7 @@ pages:
         you will be asked for a Reflex Modifier.  This will apply to the first
         trait roll and will be deducted from the opposite trait.</p><p>The trait
         name will appear in the chat message.</p>
-      markdown: ""
+      markdown: ''
     video:
       controls: true
       volume: 0.5
@@ -95,7 +95,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -103,7 +103,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!Q8neofTu7Ubvxqzn.IkkN37zhHijlkeY8"
+    _key: '!journal.pages!Q8neofTu7Ubvxqzn.IkkN37zhHijlkeY8'
   - sort: 300000
     name: Passion Roll
     type: text
@@ -130,7 +130,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -138,7 +138,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!Q8neofTu7Ubvxqzn.u26G6bqD3nnJH2j9"
+    _key: '!journal.pages!Q8neofTu7Ubvxqzn.u26G6bqD3nnJH2j9'
   - sort: 400000
     name: Skill Roll
     type: text
@@ -167,7 +167,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -175,7 +175,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!Q8neofTu7Ubvxqzn.k3QFyslCGhLCHAbD"
+    _key: '!journal.pages!Q8neofTu7Ubvxqzn.k3QFyslCGhLCHAbD'
   - sort: 800000
     name: Quick Rolls
     type: text
@@ -203,7 +203,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -211,7 +211,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!Q8neofTu7Ubvxqzn.uKFu8Z9MbgTMr3Lp"
+    _key: '!journal.pages!Q8neofTu7Ubvxqzn.uKFu8Z9MbgTMr3Lp'
   - sort: 900000
     name: Squire Rolls
     type: text
@@ -238,7 +238,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -246,7 +246,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!Q8neofTu7Ubvxqzn.G4jBCfNAtg74xkB5"
+    _key: '!journal.pages!Q8neofTu7Ubvxqzn.G4jBCfNAtg74xkB5'
   - sort: 1000000
     name: Opposed Rolls
     type: text
@@ -282,7 +282,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -290,7 +290,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!Q8neofTu7Ubvxqzn.CK3Ac3BGEddUTVI8"
+    _key: '!journal.pages!Q8neofTu7Ubvxqzn.CK3Ac3BGEddUTVI8'
   - sort: 500000
     name: Glory Roll
     type: text
@@ -320,7 +320,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.351"
+      coreVersion: '13.351'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -328,7 +328,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!Q8neofTu7Ubvxqzn.WGdq8jqB34rBs2ut"
+    _key: '!journal.pages!Q8neofTu7Ubvxqzn.WGdq8jqB34rBs2ut'
   - sort: 1200000
     name: Combat Rolls
     type: text
@@ -395,7 +395,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.351"
+      coreVersion: '13.351'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -403,7 +403,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!Q8neofTu7Ubvxqzn.HTjmDNGz1ZN25LwO"
+    _key: '!journal.pages!Q8neofTu7Ubvxqzn.HTjmDNGz1ZN25LwO'
   - sort: 1100000
     name: Fixed Opposed Rolls
     type: text
@@ -429,7 +429,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -437,7 +437,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!Q8neofTu7Ubvxqzn.XKQF902VAxGuTiUM"
+    _key: '!journal.pages!Q8neofTu7Ubvxqzn.XKQF902VAxGuTiUM'
   - sort: 700000
     name: Move Roll
     type: text
@@ -472,7 +472,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -481,7 +481,7 @@ pages:
       exportSource: null
     _id: 8WfTBPXalEEYbekv
     category: null
-    _key: "!journal.pages!Q8neofTu7Ubvxqzn.8WfTBPXalEEYbekv"
+    _key: '!journal.pages!Q8neofTu7Ubvxqzn.8WfTBPXalEEYbekv'
   - sort: 450000
     name: Weapon Rolls
     type: text
@@ -503,7 +503,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -511,7 +511,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!Q8neofTu7Ubvxqzn.JPOU2h5bwqqkXXwt"
+    _key: '!journal.pages!Q8neofTu7Ubvxqzn.JPOU2h5bwqqkXXwt'
   - sort: 1300000
     name: Crib Sheet
     type: text
@@ -579,7 +579,7 @@ pages:
         default settings. You can reverse this in the game settings
         @UUID[Compendium.Pendragon.instructions.JournalEntry.7U9pKyQCsPrhgwnl.JournalEntryPage.8JRDCc5CePLRMFxN]{SHIFT
         key}</p>
-      markdown: ""
+      markdown: ''
     video:
       controls: true
       volume: 0.5
@@ -590,7 +590,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -598,7 +598,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!Q8neofTu7Ubvxqzn.9ReInXM26NJfQomg"
+    _key: '!journal.pages!Q8neofTu7Ubvxqzn.9ReInXM26NJfQomg'
 flags:
   Pendragon:
     pidFlag:
@@ -609,9 +609,9 @@ flags:
     fixed-adventure-heading: true
 _stats:
   duplicateSource: null
-  coreVersion: "14.364"
+  coreVersion: '14.364'
   systemId: Pendragon
-  systemVersion: "14.1"
+  systemVersion: '14.1'
   createdTime: 1734462613625
   modifiedTime: 1781499208706
   lastModifiedBy: pendragonBuilder
@@ -620,4 +620,4 @@ sort: 97657
 ownership:
   default: 0
 categories: []
-_key: "!journal!Q8neofTu7Ubvxqzn"
+_key: '!journal!Q8neofTu7Ubvxqzn'

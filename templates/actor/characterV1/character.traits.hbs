@@ -1,0 +1,51 @@
+<section class='character tab traits {{tab.cssClass}}' data-group='primary' data-tab='traits'>
+  {{#unless isCreation}}
+    <ol class="item-list">
+      {{#each traits as |trait key|}}
+        <li class="item character-trait-grid" data-drag='true' data-document-class='Item' data-item-id="{{trait._id}}">
+          <div class="centre new-row"><a class="large-icon item-control item-toggle pad3-icon" data-itemid ="{{trait._id}}" data-property="XP" data-tooltip="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if trait.system.XP}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
+          <div class="stat-name centre {{#if (gt trait.system.total 20)}}purple {{/if}}{{#if (gt trait.system.total 15)}}bold italics {{/if}}" data-tooltip="{{trait.system.flavour}}">{{trait.system.total}}</div>
+          <div class="stat-name right rollable trait {{#if (gt trait.system.religious 0)}} underlined {{/if}}" data-tooltip="{{localize 'PEN.rollHint'}}" data-type ="trait" data-itemid="{{trait._id}}">{{trait.name}}</div>
+          <div class="stat-name centre">
+            <a class="large-icon item-control item-toggle rollable decision" data-itemid="{{trait._id}}" data-tooltip="{{localize 'PEN.decisionTrait'}}"><i class="fa-regular fa-scale-balanced"></i></a>
+          </div>
+          <div class="stat-name rollable trait {{#if (lt trait.system.religious 0)}} underlined {{/if}}" data-tooltip="{{localize 'PEN.rollHint'}}" data-type ="opptrait" data-itemid="{{trait._id}}">{{trait.system.oppName}}</div>
+          <div class="stat-name centre {{#if (gt trait.system.oppvalue 20)}}purple {{/if}}{{#if (gt trait.system.oppvalue 15)}}bold italics {{/if}}" data-tooltip="{{trait.system.oppFlavour}}">{{trait.system.oppvalue}}</div>
+          <div class="centre"><a class="large-icon item-control item-toggle pad3-icon" data-itemid ="{{trait._id}}" data-property="oppXP" data-tooltip="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if trait.system.oppXP}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
+          <div class="centre item" data-itemid ="{{trait._id}}">
+            <a class="large-icon item-control fade" data-action="viewDoc"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
+            {{#unless ../system.lock}}
+              <a class="large-icon item-control fade" data-action="deleteDoc"><i data-tooltip="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
+            {{/unless}}
+            </div>
+          <div class="stat-name truncated" data-tooltip="{{localize 'PEN.directed' }}">{{trait.system.directed}}</div>
+          </li>
+        {{/each}}
+    </ol>
+  {{else}}
+    <ol class="skill-dev-list">
+      <div class="skill-dev-listitem">
+        <div class="stat-name bold grid-item-top grid-item-left">{{localize 'PEN.trait'}}</div>
+        <div class="stat-name bold centre grid-item-top">{{localize 'PEN.base'}}</div>
+        <div class="stat-name bold centre grid-item-top">{{localize 'TYPES.Item.archetype'}}</div>
+        <div class="stat-name bold centre grid-item-top">{{localize 'PEN.religion'}}</div>
+        <div class="stat-name bold centre grid-item-top">{{localize 'PEN.winter'}}</div>
+        <div class="stat-name bold centre grid-item-top">{{localize 'PEN.total'}}</div>
+        <div class="stat-name bold centre grid-item-top">{{localize 'PEN.opposing'}}</div>
+        <div class="centre"><a class="large-icon {{#if actor.system.create.traits}}result-fail{{else}}fade{{/if}}" data-action="traitRoll"><i data-tooltip="{{localize 'PEN.roll'}}" class="fas fa-dice"></i></a></div>
+      </div>
+
+      {{#each traits as |trait key|}}
+        <li class="item skill-dev-listitem" data-item-id="{{trait._id}}">
+          <div class="stat-name truncate new-row grid-item-left {{#if (gt trait.system.religious 0)}} underlined {{/if}}" data-tooltip="{{trait.name}}">{{trait.name}}</div>
+          <div class="stat-grid-input item centre grid-item-bottom" data-field="trait" data-att="value" data-itemid ="{{trait._id}}"><input class="inline-edit" name="trait.system.value" type="number" value="{{trait.system.value}}"/></div>
+          <div class="stat-grid-input item centre grid-item-bottom" data-field="trait" data-att="archetype" data-itemid ="{{trait._id}}"><input class="inline-edit" name="trait.system.archetype" type="number" value="{{trait.system.archetype}}"/></div>
+          <div class="stat-grid-input item centre grid-item-bottom" data-field="trait" data-att="religious" data-itemid ="{{trait._id}}"><input class="inline-edit" name="trait.system.religious" type="number" value="{{trait.system.religious}}"/></div>
+          <div class="stat-grid-input item centre grid-item-bottom" data-field="trait" data-att="winter" data-itemid ="{{trait._id}}"><input class="inline-edit" name="trait.system.winter" type="number" value="{{trait.system.winter}}"/></div>
+          <div class="stat-name centre grid-item-bottom {{#if (gt trait.system.total 20)}}purple {{/if}}{{#if (gt trait.system.total 15)}}bold italics {{/if}}">{{trait.system.total}}</div>
+          <div class="stat-name centre grid-item-bottom {{#if (gt trait.system.oppvalue 20)}}purple {{/if}}{{#if (gt trait.system.oppvalue 15)}}bold italics {{/if}}">{{trait.system.oppvalue}}</div>
+        </li>
+      {{/each}}
+    </ol>
+  {{/unless}}
+</section>

@@ -2062,11 +2062,11 @@ export class PENWinter {
     };
     const html = await foundry.applications.handlebars.renderTemplate(destination, data);
     const usage = await PENDialog.input({
-      window: { title: winTitle},
+      window: { title: winTitle },
       content: html,
       ok: {
         label: game.i18n.localize("PEN.confirm"),
-      }
+      },
     });
     return usage;
   }

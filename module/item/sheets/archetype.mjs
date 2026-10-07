@@ -10,23 +10,12 @@ export class PendragonArchetypeSheet extends PendragonItemSheet {
   }
 
   static DEFAULT_OPTIONS = {
-    classes: ["Pendragon", "sheet", "itemV2"],
     position: {
       width: 610,
-      height: 550,
-    },
-    tag: "form",
-    // automatically updates the item
-    form: {
-      submitOnChange: true,
-    },
-    window: {
-      resizable: true,
+      height: 570,
     },
     actions: {
-      editPid: this._onEditPid,
       deleteItem: PendragonArchetypeSheet.#deleteItem,
-      openWiki: this._openWiki,
     },
     dragDrop: [{ dropSelector: ".droppable" }],
   };
@@ -42,8 +31,17 @@ export class PendragonArchetypeSheet extends PendragonItemSheet {
     attributes: {
       template: "systems/Pendragon/templates/item/archetype.attributes.hbs",
     },
+    skills: {
+      template: "systems/Pendragon/templates/item/archetype.skills.hbs",
+    },
+    traits: {
+      template: "systems/Pendragon/templates/item/archetype.traits.hbs",
+    },
     description: {
       template: "systems/Pendragon/templates/item/base.description.hbs",
+    },
+    effects: {
+      template: "systems/Pendragon/templates/item/effects.hbs",
     },
     gmTab: {
       template: "systems/Pendragon/templates/item/gmtab.hbs",
@@ -66,8 +64,49 @@ export class PendragonArchetypeSheet extends PendragonItemSheet {
       }
       skills.push({ name: skill.name, formula: skill.formula, uuid: skill.uuid, pid: skill.pid, valid: valid });
     }
+    const traits = [];
+    for (let trait of itemData.system.bonusTraits) {
+      let valid = true;
+      if ((await game.system.api.pid.fromPIDBest({ pid: trait.pid })).length < 1) {
+        valid = false;
+      }
+      traits.push({
+        name: trait.name,
+        constructed: trait.constructed,
+        formula: trait.formula,
+        uuid: trait.uuid,
+        pid: trait.pid,
+        valid: valid,
+      });
+    }
+    const ideals = [];
+    for (let ideal of itemData.system.ideals) {
+      let valid = true;
+      if ((await game.system.api.pid.fromPIDBest({ pid: ideal.pid })).length < 1) {
+        valid = false;
+      }
+      ideals.push({ name: ideal.name, uuid: ideal.uuid, pid: ideal.pid, valid: valid });
+    }
 
+    const classes = [];
+    for (let thisClass of itemData.system.classes) {
+      let valid = false;
+      let label = thisClass.name;
+      let validClass = await game.system.api.pid.fromPIDBest({ pid: thisClass.pid });
+      let age = 99;
+      if (validClass.length > 0) {
+        valid = true;
+        if (validClass[0].system.age > 0) {
+          age = validClass[0].system.age;
+        }
+        if (age != 99) label = label + " (" + game.i18n.localize("PEN.age") + ": " + age + ")";
+      }
+      classes.push({ name: label, uuid: thisClass.uuid, pid: thisClass.pid, valid: valid, age: age });
+    }
     sheetData.skills = skills.sort(PENUtilities.sortByNameKey);
+    sheetData.traits = traits.sort(PENUtilities.sortByNameKey);
+    sheetData.ideals = ideals;
+    sheetData.classes = classes.sort((a, b) => a.age - b.age);
 
     // these two values could be set during _preparePartContext
     sheetData.enrichedDescriptionValue = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
@@ -85,7 +124,7 @@ export class PendragonArchetypeSheet extends PendragonItemSheet {
         secrets: sheetData.editable,
       },
     );
-    let parts = ["attributes", "description"];
+    let parts = ["attributes", "skills", "traits", "description", "effects"];
     if (game.user.isGM) {
       parts.push("gmTab");
     }
@@ -98,22 +137,47 @@ export class PendragonArchetypeSheet extends PendragonItemSheet {
   async _preparePartContext(partId, context) {
     switch (partId) {
       case "attributes":
+      case "skills":
+      case "traits":
       case "description":
+      case "effects":
       case "gmTab":
         context.tab = context.tabs[partId];
         break;
+
       default:
     }
     return context;
   }
 
+  /* -------------------------------------------- */
   /**
    * Activate event listeners using the prepared sheet HTML
    * @param html {HTML}   The prepared HTML object ready to be rendered into the DOM
    */
   _onRender(context, _options) {
+    // Everything below here is only needed if the sheet is editable
+    if (!context.editable) return;
     this.#dragDrop.forEach((d) => d.bind(this.element));
+    this.element
+      .querySelectorAll(".item-toggle")
+      .forEach((n) => n.addEventListener("click", this.#onItemToggle.bind(this)));
   }
+
+  //Handle toggle states
+  async #onItemToggle(event) {
+    event.preventDefault();
+    const prop = event.currentTarget.closest(".item-toggle").dataset.property;
+    let checkProp = "";
+    if (["startertrait"].includes(prop)) {
+      checkProp = { [`system.${prop}`]: !this.item.system[prop] };
+    } else {
+      return;
+    }
+    await this.item.update(checkProp);
+    return;
+  }
+
   #createDragDropHandlers() {
     return this.options.dragDrop.map((d) => {
       d.permissions = {
@@ -136,8 +200,18 @@ export class PendragonArchetypeSheet extends PendragonItemSheet {
   async _onDrop(event) {
     event.preventDefault();
     event.stopPropagation();
-    const type = "skill";
+    let type = "skill";
     const collectionName = event.currentTarget.dataset.collection ?? "skills";
+    if (collectionName === "classes") {
+      type = "class";
+    }
+    if (collectionName === "ideals") {
+      type = "ideal";
+    }
+    if (collectionName === "bonusTraits") {
+      type = "trait";
+    }
+
     const dataList = await PENUtilities.getDataFromDropEvent(event, "Item");
     const collection = this.item.system[collectionName]
       ? foundry.utils.duplicate(this.item.system[collectionName])
@@ -161,19 +235,63 @@ export class PendragonArchetypeSheet extends PendragonItemSheet {
         continue;
       }
 
-      let inpVal = await PENDialog.input({
-        window: { title: game.i18n.localize("PEN.startingFormula") },
-        content: `<input class="centre" type="text" name="inpvalue">`,
-      });
-      let start = "0";
-      if (inpVal.inpvalue != "") start = inpVal.inpvalue;
-      //Add item to collection
-      collection.push({
-        name: item.name,
-        formula: start,
-        uuid: item.uuid,
-        pid: item.flags.Pendragon.pidFlag.id,
-      });
+      //Only allow one ideal
+      if (collectionName === "ideals") {
+        if (collection.length > 0) {
+          ui.notifications.warn(
+            game.i18n.format("PEN.oneItem", {
+              child: game.i18n.localize("TYPES.Item." + `${item.type}`),
+              parent: game.i18n.localize("TYPES.Item." + `${this.document.type}`),
+            }),
+          );
+          continue;
+        }
+      }
+
+      if (["skill"].includes(collectionName)) {
+        let inpVal = await PENDialog.input({
+          window: { title: game.i18n.localize("PEN.startingFormula") },
+          content: `<div><input class="centre" type="text" name="inpvalue"/></div>`,
+        });
+        let start = "0";
+        if (inpVal.inpvalue != "") start = inpVal.inpvalue;
+        //Add item to collection
+        collection.push({
+          name: item.name,
+          formula: start,
+          uuid: item.uuid,
+          pid: item.flags.Pendragon.pidFlag.id,
+        });
+      } else if (["bonusTraits"].includes(collectionName)) {
+        let inpVal = await PENDialog.input({
+          window: { title: game.i18n.localize("PEN.startingValues") },
+          content:
+            "<div style='gap:0px;'><p class='stat-name bold'>" +
+            game.i18n.localize("PEN.fixedValue") +
+            "</p><p><input class='stat-name bold centre' type='number' name='fixedvalue'/></p>" +
+            "<br>" +
+            "<p class='stat-name bold'>" +
+            game.i18n.localize("PEN.rolledValue") +
+            "</p><p><input class='stat-name bold centre' type='text' name='inpvalue'/></p></div>",
+        });
+        let start = "0";
+        let fixedVal = 0;
+        if (inpVal.inpvalue != "") start = inpVal.inpvalue;
+        if (inpVal.fixedvalue) fixedVal = inpVal.fixedvalue;
+        collection.push({
+          name: item.name,
+          formula: start,
+          constructed: fixedVal,
+          uuid: item.uuid,
+          pid: item.flags.Pendragon.pidFlag.id,
+        });
+      } else {
+        collection.push({
+          name: item.name,
+          uuid: item.uuid,
+          pid: item.flags.Pendragon.pidFlag.id,
+        });
+      }
     }
     await this.item.update({ [`system.${collectionName}`]: collection });
   }

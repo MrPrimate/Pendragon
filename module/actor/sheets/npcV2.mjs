@@ -77,7 +77,7 @@ export class PendragonNPCSheetv2 extends api.HandlebarsApplicationMixin(sheets.A
       system: this.actor.system,
       isLocked: this.actor.system.lock,
       displayNotes: this.actor.system.noteView && game.user.isGM,
-      displayPlayerNotes: this.actor.system.playerNotesView && (this.actor.permission > 2),
+      displayPlayerNotes: this.actor.system.playerNotesView && this.actor.permission > 2,
       ownershipLevel: this.actor.permission,
     };
 

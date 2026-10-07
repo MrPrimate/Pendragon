@@ -30,7 +30,7 @@ const SETTINGS = {
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 export class PENDiceSettings extends HandlebarsApplicationMixin(ApplicationV2) {
   static DEFAULT_OPTIONS = {
-    classes: ["Pendragon", "sheet", "settings"],
+    classes: ["pen", "sheet", "settings"],
     id: "dice-settings",
     actions: {
       reset: PENDiceSettings.onResetDefaults,

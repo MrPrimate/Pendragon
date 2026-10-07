@@ -1,9 +1,9 @@
 const { api, sheets } = foundry.applications;
-import { PIDEditor } from "../../pid/pid-editor.mjs";
 import { PendragonActor } from "../actor.mjs";
+import { PendragonActorSheet } from "./actor-sheet.mjs";
 import PENDialog from "../../setup/pen-dialog.mjs";
 
-export class PendragonEncounterSheet extends api.HandlebarsApplicationMixin(sheets.ActorSheetV2) {
+export class PendragonEncounterSheet extends PendragonActorSheet {
   constructor(options = {}) {
     super(options);
     this.#dragDrop = this._createDragDropHandlers();
@@ -154,33 +154,7 @@ export class PendragonEncounterSheet extends api.HandlebarsApplicationMixin(shee
     return context;
   }
 
-  async _renderFrame(options) {
-    const frame = await super._renderFrame(options);
-    //define button
-    const sheetPID = this.actor.flags?.Pendragon?.pidFlag;
-    const noId = typeof sheetPID === "undefined" || typeof sheetPID.id === "undefined" || sheetPID.id === "";
-    //add button
-    const label = game.i18n.localize("PEN.PIDFlag.id");
-    const pidEditor = `<button type="button" class="header-control fa-solid fa-fingerprint icon ${noId ? "edit-pid-warning" : "edit-pid-exisiting"}"
-        data-action="editPid" data-tooltip="${label}" aria-label="${label}"></button>`;
-    let el = this.window.close;
-    while (el.previousElementSibling.localName === "button") {
-      el = el.previousElementSibling;
-    }
-    el.insertAdjacentHTML("beforebegin", pidEditor);
-    return frame;
-  }
-
   //------------ACTIONS-------------------
-
-  // Handle editPid action
-  static _onEditPid(event) {
-    event.stopPropagation(); // Don't trigger other events
-    if (event.detail > 1) return; // Ignore repeated clicks
-    new PIDEditor(this.document, {}).render(true, {
-      focus: true,
-    });
-  }
 
   static async _noteView(event) {
     event.preventDefault();
@@ -272,7 +246,7 @@ export class PendragonEncounterSheet extends api.HandlebarsApplicationMixin(shee
     let newTokens = [];
     let current = (await game.canvas.scene.tokens.filter((t) => t.actorId === actor.id)).length;
     let placeY = 800;
-    for (let yc = 800; yc <= 2000; yc = yc + 200) {
+    for (let yc = 1540; yc <= 2940; yc = yc + 280) {
       let occupied = (await game.canvas.scene.tokens.filter((t) => t.y === yc)).length;
       if (occupied === 0) {
         placeY = yc;
@@ -288,7 +262,7 @@ export class PendragonEncounterSheet extends api.HandlebarsApplicationMixin(shee
       const tokenData = {
         name: tokenName,
         actorId: actor.id,
-        x: 900 + 200 * ctr, // X position in pixels
+        x: 1260 + 280 * ctr, // X position in pixels
         y: placeY, // Y position in pixels
         disposition: CONST.TOKEN_DISPOSITIONS.HOSTILE, // Hostile, Neutral, Friendly
         displayName: CONST.TOKEN_DISPLAY_MODES.ALWAYS,

@@ -2,7 +2,7 @@
   font-family: Messiri;
   font-size: var(--font-size-20);
   overflow: visible;
-  width:max-content;
+  width: max-content;
   .window-content {
     overflow-y: auto;
     scrollbar-width: thin;
@@ -23,7 +23,6 @@
     background-image: var(--item-background-image);
     background-size: auto;
   }
-
 
   & .stat-name {
     font-family: Messiri;
@@ -193,8 +192,7 @@
   }
 
   .targetIcon {
-  font-size: 20px;
-  text-align: center;
-}
-
+    font-size: 20px;
+    text-align: center;
+  }
 }

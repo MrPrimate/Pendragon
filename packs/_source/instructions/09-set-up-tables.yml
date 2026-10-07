@@ -12,9 +12,9 @@ flags:
     fixed-adventure-heading: true
 _stats:
   duplicateSource: null
-  coreVersion: "14.364"
+  coreVersion: '14.364'
   systemId: Pendragon
-  systemVersion: "14.1"
+  systemVersion: '14.1'
   createdTime: 1734462613625
   modifiedTime: 1781499194775
   lastModifiedBy: pendragonBuilder
@@ -23,4 +23,4 @@ sort: 95313
 ownership:
   default: 0
 categories: []
-_key: "!journal!LSzSRMsMuqWLo0gG"
+_key: '!journal!LSzSRMsMuqWLo0gG'

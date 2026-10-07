@@ -43,4 +43,72 @@ export class PendragonActorSheet extends api.HandlebarsApplicationMixin(sheets.A
     });
     return tabs;
   }
+
+  //Open Wiki Help Page
+  static async _openWiki(event, target) {
+    const url = target.dataset.property ?? "https://github.com/cragstone/Pendragon/wiki";
+    window.open(url, "_blank");
+  }
+
+  //Create a Direct Active Effect
+  static async _createEffect(event, target) {
+    this.document.createEmbeddedDocuments("ActiveEffect", [
+      { name: ActiveEffect.defaultName({ parent: this.document }) },
+    ]);
+  }
+
+  //Clear All Direct Effects
+  static async _clearEffects(event, target) {
+    if (event.detail === 2) {
+      //Only perform on double click
+      const docs = this.document.effects.map((itm) => {
+        return itm.id;
+      });
+      await ActiveEffect.deleteDocuments(docs, { parent: this.document });
+    }
+  }
+
+  //Toggle Active Effect
+  static async _toggleEffect(event, target) {
+    const id = target.closest(".item-edit")?.dataset?.effectId;
+    if (id) {
+      const doc = this.document.effects.get(id);
+      if (doc) {
+        if (doc.isSuppressed) {
+          doc.update({
+            disabled: false,
+            "duration.expired": false,
+          });
+        } else {
+          doc.update({
+            disabled: !doc.disabled,
+          });
+        }
+      }
+    }
+  }
+
+  //View Active Effect
+  static async _viewActiveEffect(event, target) {
+    const id = target.closest(".item-edit")?.dataset?.effectId;
+    if (id) {
+      const doc = this.document.effects.get(id);
+      if (doc) {
+        doc.sheet.render({ force: true });
+      }
+    }
+  }
+
+  //Delete Active Effect
+  static async _deleteActiveEffect(event, target) {
+    if (event.detail === 2) {
+      const id = target.closest(".item-edit")?.dataset?.effectId;
+      if (id) {
+        const doc = this.document.effects.get(id);
+        if (doc) {
+          await doc.delete();
+        }
+      }
+    }
+  }
 }

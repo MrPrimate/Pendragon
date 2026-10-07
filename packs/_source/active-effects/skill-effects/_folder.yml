@@ -1,0 +1,19 @@
+type: ActiveEffect
+folder: null
+name: Skill Effects
+color: null
+sorting: a
+_id: Kun1NCTQSxVA2W08
+description: ''
+sort: 200000
+flags: {}
+_stats:
+  coreVersion: '14.368'
+  systemId: Pendragon
+  systemVersion: '14.20'
+  createdTime: 1791376947816
+  modifiedTime: 1791376947825
+  lastModifiedBy: pendragonBuilder
+  duplicateSource: null
+  exportSource: null
+_key: '!folders!Kun1NCTQSxVA2W08'

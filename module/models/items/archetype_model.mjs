@@ -41,6 +41,10 @@ export class ArchetypeData extends foundry.abstract.TypeDataModel {
         }),
       }),
       skills: new ArrayField(new DataField(), { initial: [] }),
+      classes: new ArrayField(new DataField(), { initial: [] }),
+      ideals: new ArrayField(new DataField(), { initial: [] }),
+      bonusTraits: new ArrayField(new DataField(), { initial: [] }),
+      startertrait: new BooleanField({ initial: false }),
     };
   }
 }

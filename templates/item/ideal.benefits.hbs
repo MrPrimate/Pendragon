@@ -1,0 +1,64 @@
+
+<section class="tab benefits {{tab.cssClass}}" data-group="primary" data-tab="benefits">
+  <br>
+  <div class="stat-name bold">{{ localize "PEN.benefits"}}</div>
+  <div class="item-trait-grid">
+    {{#if isGM}}
+      <div class="stat-name left bold">{{localize 'PEN.passive'}}</div>
+      <div class="stat-name-input "><input class="centre" name="system.glory" type="number" value="{{item.system.glory}}"/></div>
+      <div class="stat-name left bold" data-tooltip="{{localize 'PEN.armourVirtue'}}">{{localize 'PEN.armourPoints'}}</div>
+      <div class="stat-name-input "><input class="centre" name="system.armour" type="number" value="{{item.system.armour}}"/></div>
+      <div class="stat-name left bold">{{localize 'PEN.hp'}}</div>
+      <div class="stat-name-input "><input class="centre" name="system.hp" type="number" value="{{item.system.hp}}"/></div>
+      <div class="stat-name left bold">{{localize 'PEN.healRate'}}</div>
+      <div class="stat-name-input "><input class="centre" name="system.hr" type="number" value="{{item.system.hr}}"/></div>
+      <div class="stat-name left bold">{{localize 'PEN.damageBonus'}}</div>
+      <div class="stat-name-input "><input class="centre" name="system.dam" type="text" value="{{item.system.dam}}"/></div>
+      <div class="stat-name left bold">{{localize 'PEN.move'}}</div>
+      <div class="stat-name-input "><input class="centre" name="system.move" type="number" value="{{item.system.move}}"/></div>
+      <div class="stat-name left bold" data-tooltip="{{localize 'PEN.magicProt'}}">{{localize 'PEN.magicProtShort'}}</div>
+      <div class="stat-name centre"><a class="item-control item-toggle large-icon" data-property = "protect" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if item.system.protect}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
+    {{else}}
+      <div class="stat-name left bold">{{localize 'PEN.passive'}}</div>
+      <div class="stat-name centre">{{item.system.glory}}</div>
+      <div class="stat-name left bold" data-tooltip="{{localize 'PEN.armourVirtue'}}">{{localize 'PEN.armourPoints'}}</div>
+      <div class="stat-name centre">{{item.system.armour}}</div>
+      <div class="stat-name left bold">{{localize 'PEN.hp'}}</div>
+      <div class="stat-name centre">{{item.system.hp}}</div>
+      <div class="stat-name left bold">{{localize 'PEN.healRate'}}</div>
+      <div class="stat-name centre">{{item.system.hr}}</div>
+      <div class="stat-name left bold">{{localize 'PEN.damageBonus'}}</div>
+      <div class="stat-name centre">{{item.system.dam}}</div>
+      <div class="stat-name left bold">{{localize 'PEN.move'}}</div>
+      <div class="stat-name centre">{{item.system.move}}</div>
+      <div class="stat-name left bold" data-tooltip="{{localize 'PEN.magicProt'}}">{{localize 'PEN.magicProtShort'}}</div>
+      <div class="stat-name centre"><a class="large-icon"><i class="{{#if item.system.protect}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
+
+    {{/if}}
+  </div>
+  <br>
+  {{!-- Luck Benefit --}}
+    <div class="stat-name bold">{{ localize "PEN.luckBen"}}</div>
+    <div class="horizontalboxed {{#if isGM}} droppable {{/if}} " data-collection = "luck">
+    <ol class="item-list">
+      {{#each luckTables as |luckTable|}}
+        <li class="item flexrow" data-item-id="{{luckTable.uuid}}" data-pid = "{{luckTable.pid}}" >
+          <div class="item-name flexrow">
+            {{#if luckTable.valid}}
+              <div class="stat-name" data-tooltip="{{luckTable.pid}}">{{luckTable.name}}</div>
+            {{else}}
+              <div class="stat-name result-success" data-tooltip="{{luckTable.pid}}">{{luckTable.name}} [{{localize 'PEN.invalid'}}]</div>
+            {{/if}}
+          </div>
+          <div class="item-controls">
+            {{#if ../isGM}}
+              <a class="item-control item-delete" data-collection = "luck" title="{{localize 'PEN.deleteItem'}}" data-action="deleteItem"><i class="fas fa-trash"></i></a>
+            {{/if}}
+          </div>
+        </li>
+      {{else}}
+        <div class="centre italics" style="height:60px; padding-top: 20px;">{{localize 'PEN.emptyList'}}</td>
+      {{/each}}
+    </ol>
+  </div>
+</section>

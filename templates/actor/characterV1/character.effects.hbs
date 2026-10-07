@@ -1,0 +1,67 @@
+<section class='character tab effects {{tab.cssClass}}' data-group='primary' data-tab='effects'>
+  {{!-- All Active Effects --}}
+  <ol class="gear-list">
+    <li class="effects-grid greyBack bold">
+      <div class="diff-label left">{{localize 'PEN.sourceItem'}}</div>
+      <div class="diff-label left">{{localize 'PEN.effectName'}}</div>
+      <div class="diff-label centre">{{localize 'PEN.effect'}}</div>
+      <div class="diff-label centre">{{localize 'PEN.type'}}</div>
+      <div class="diff-label centre">{{localize 'PEN.amount'}}</div>
+      <div class="diff-label truncate centre">{{localize 'PEN.active'}}</div>
+    </li>
+
+    {{#each effects as |effect|}}
+      <li class="item item-edit effects-grid" data-itemid = "{{effect.id}}" data-eff-uuid="{{effect.effUuid}}" data-counter="{{effect.counter}}" {{#if effect.sourceItem}} data-document-class='Item'{{/if}}>
+        <div class="effect-source left truncate {{#if effect.sourceItem}}rollable{{/if}}" {{#if effect.sourceItem}} data-tooltip="{{localize 'PEN.view'}}" data-action="viewDoc"{{/if}}>{{effect.sourceName}}</div>
+        <div class="effect-source left truncate">{{effect.effectName}}</div>
+        <div class="centre truncate" data-tooltip="{{effect.name}}">{{effect.name}}</div>
+        <div class="centre truncate">{{effect.type}}</div>
+        <div class="centre">{{effect.value}}</div>
+        {{#if effect.isActive}}
+          <div class="centre" data-tooltip="{{localize 'PEN.active'}}">
+            <img class="aura-img"  height="18" width="18" />
+          </div>
+        {{else}}
+          <div class="centre" data-tooltip="{{localize 'PEN.inactive'}}">
+            <img class="aura-img fade"  height="18" width="18" />
+          </div>
+        {{/if}}
+      </li>
+    {{/each}}
+  </ol>
+
+  {{!-- Active Effect Items on Actor --}}
+    <br>
+    <ol class="gear-list">
+      <li class="effects-grid greyBack bold ">
+        <div class="diff-label left" data-tooltip="{{localize 'PEN.effectActorHint'}}">{{localize 'PEN.effectActor'}}</div>
+        <div class="diff-label centre">{{localize 'PEN.active'}}</div>
+        <div class="centre">
+          <a class="item-control item-create" data-tooltip="{{localize 'SIDEBAR.ACTIONS.CREATE.ActiveEffect'}}" data-action="createEffect">
+            <i class="fas fa-plus"></i>
+          </a>
+        </div>
+        <div class="centre">
+          <a class="" data-tooltip="{{localize 'PEN.clearEffects'}}" data-action="clearEffects">
+            <i class="fas fa-broom"></i>
+          </a>
+        </div>
+      </li>
+      {{#each directEffects as |effect|}}
+        <li class="item item-edit effects-grid" data-effect-id="{{effect.id}}">
+          <div class="effect-source left">{{effect.name}}</div>
+          <div class="centre" data-tooltip="{{#if effect.active}}{{localize 'PEN.active'}}{{else}}{{localize 'PEN.inactive'}}{{/if}}">
+            <a class="item-control item-create" data-action="toggleEffect">
+              <img class="aura-img{{#unless effect.active}} fade{{/unless}}" height="18" width="18" />
+            </a>
+          </div>
+          <div class="centre">
+             <a class="large-icon item-control fade" data-action="viewActiveEffect"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
+                {{#unless ../system.lock}}
+                  <a class="item-control fade" data-action="deleteActiveEffect"><i data-tooltip="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
+                {{/unless}}
+          </div>     
+        </li>
+      {{/each}}
+    </ol>
+</section>

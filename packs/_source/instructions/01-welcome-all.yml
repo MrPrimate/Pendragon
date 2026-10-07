@@ -39,7 +39,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "14.364"
+      coreVersion: '14.364'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: 1783593820032
@@ -47,7 +47,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!QfE8fkB7i9zIDSZm.nVEgrKj235qjFDdC"
+    _key: '!journal.pages!QfE8fkB7i9zIDSZm.nVEgrKj235qjFDdC'
   - sort: 200000
     name: Create a Scene
     type: text
@@ -74,7 +74,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "14.364"
+      coreVersion: '14.364'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: 1783593913632
@@ -82,7 +82,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!QfE8fkB7i9zIDSZm.7U2cpRdGqXCfEXuE"
+    _key: '!journal.pages!QfE8fkB7i9zIDSZm.7U2cpRdGqXCfEXuE'
 folder: null
 flags:
   Pendragon:
@@ -94,9 +94,9 @@ flags:
     fixed-adventure-heading: true
 _stats:
   duplicateSource: null
-  coreVersion: "14.364"
+  coreVersion: '14.364'
   systemId: Pendragon
-  systemVersion: "14.1"
+  systemVersion: '14.1'
   createdTime: 1719597783187
   modifiedTime: 1781499003160
   lastModifiedBy: pendragonBuilder
@@ -106,4 +106,4 @@ sort: -100000
 ownership:
   default: 0
 categories: []
-_key: "!journal!QfE8fkB7i9zIDSZm"
+_key: '!journal!QfE8fkB7i9zIDSZm'

@@ -1,0 +1,19 @@
+type: ActiveEffect
+folder: null
+name: Ideal Effects
+color: null
+sorting: a
+_id: uFCkhRus1bdJEhE3
+description: ''
+sort: 100000
+flags: {}
+_stats:
+  coreVersion: '14.368'
+  systemId: Pendragon
+  systemVersion: '14.20'
+  createdTime: 1791376946465
+  modifiedTime: 1791376946482
+  lastModifiedBy: pendragonBuilder
+  duplicateSource: null
+  exportSource: null
+_key: '!folders!uFCkhRus1bdJEhE3'

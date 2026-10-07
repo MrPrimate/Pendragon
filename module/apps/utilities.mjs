@@ -197,7 +197,6 @@ export class PENUtilities {
     let count = 0;
     for (let award of awards.gloryAward) {
       if (award != 0) {
-        console.log(chars[count].id);
         let actor = await game.actors.get(chars[count].id);
         //Create the event
         const itemData = {

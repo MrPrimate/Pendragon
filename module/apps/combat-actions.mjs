@@ -163,7 +163,13 @@ export class CombatAction {
       currentWeapon.skillId = actor.getItemByPid("i.skill.charge")?.id;
       // effective charge skill is lower of charge or weapon skill
       const chargeSkillTotal = actor.getSkillTotal("i.skill.charge");
-      currentWeapon.total = Math.min(chargeSkillTotal, weapon.system.total);
+      //If using a weapon other than Lance or Spear then restrict the Charge Skill
+      if (
+        !(weapon.flags?.Pendragon?.pidFlag?.id).includes[("lance", "spear")] ||
+        (weapon.flags?.Pendragon?.pidFlag?.id).includes["spear-thrown"]
+      ) {
+        currentWeapon.total = Math.min(chargeSkillTotal, weapon.system.total);
+      }
       // if dmgChar = "h" use the horse's charge damage
       // TODO: special case spear as lance
       if (weapon && weapon.system.damageChar == "h") {

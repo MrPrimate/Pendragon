@@ -1,0 +1,41 @@
+<section class="tab traits {{tab.cssClass}}" data-group="primary" data-tab="traits">
+  <div class="helpicon">
+    {{#if showHelp}}
+      <a class="" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Archetype" data-tooltip='{{localize "PEN.openWiki"}}'>
+        <i class="fas fa-circle-question"></i>
+      </a>
+    {{/if}}
+  </div>
+
+  <div class="item-armour-grid">
+    <div class="stat-name left bold">{{localize 'PEN.startingTrait'}}</div>
+    <div class="pad-icon"><a class="item-control item-toggle large-icon" data-property = "startertrait" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if item.system.startertrait}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
+  </div>
+  <br>
+
+  {{!-- Traits --}}
+  <div class="stat-name bold">{{ localize "PEN.traits"}}</div>
+  <div class="horizontalboxed {{#if isGM}} droppable {{/if}} virtues" style="min-height: 20px;" data-collection = "bonusTraits">
+    <ol class="item-list">
+      {{#each traits as |trait|}}
+        <li class="item flexrow" data-item-id="{{trait.uuid}}" >
+          <div class="item-name flexrow">
+            {{#if trait.valid}}
+              <div class="stat-name">{{trait.name}}</div>
+            {{else}}
+              <div class="stat-name result-success">{{trait.name}} [{{localize 'PEN.invalid'}}]</div>
+            {{/if}}
+          </div>
+          <div class="stat-name centre">{{trait.constructed}} / {{trait.formula}}</div>
+          <div class="item-controls">
+            {{#if ../isGM}}
+              <a class="item-control item-delete" title="{{localize 'PEN.deleteItem'}}" data-action="deleteItem"><i class="fas fa-trash" style="padding-top: 5px;"></i></a>
+            {{/if}}
+          </div>
+        </li>
+      {{else}}
+        <div class="centre italics" style="height:60px; padding-top: 20px;">{{localize 'PEN.emptyList'}}</td>
+      {{/each}}
+    </ol>
+  </div>
+</section>

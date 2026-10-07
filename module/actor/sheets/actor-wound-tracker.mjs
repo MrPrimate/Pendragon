@@ -2,6 +2,7 @@ import { PENCombat } from "../../apps/combat.mjs";
 import { PENUtilities } from "../../apps/utilities.mjs";
 import { PendragonStatusEffects } from "../../apps/status-effects.mjs";
 import { HealingCard } from "../../cards/healing-card.mjs";
+import PENDialog from "../../setup/pen-dialog.mjs";
 
 const { api } = foundry.applications;
 
@@ -69,25 +70,25 @@ export class WoundTrackerDialog extends api.HandlebarsApplicationMixin(api.Docum
   static async #applyFirstAid(event, target) {
     const { itemid } = target.closest("[data-itemid]")?.dataset ?? {};
     const wound = this.actor.items.get(itemid);
-    const result = await api.DialogV2.wait({
-      window: { title: "Treat Wound" },
-      content: "<p>What is the result of the First Aid check?</p>",
+    const result = await PENDialog.wait({
+      window: { title: game.i18n.localize("PEN.treatWoundTitle") },
+      content: "<p class='stat-name bold'>" + game.i18n.localize("PEN.firstAidCheck") + "</p>",
       buttons: [
         {
-          label: "Critical",
+          label: game.i18n.localize("PEN.resultLevel.3"),
           action: "critical",
         },
         {
-          label: "Success",
+          label: game.i18n.localize("PEN.resultLevel.2"),
           action: "success",
         },
         {
-          label: "Failure",
+          label: game.i18n.localize("PEN.resultLevel.1"),
           action: "fail",
           default: true,
         },
         {
-          label: "Fumble",
+          label: game.i18n.localize("PEN.resultLevel.0"),
           action: "fumble",
         },
       ],

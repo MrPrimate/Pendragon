@@ -1,4 +1,5 @@
 import { PENCharCreate } from "../apps/charCreate.mjs";
+import { PENCharCreateV2 } from "../apps/charCreateV2.mjs";
 import { PENUtilities } from "../apps/utilities.mjs";
 import PENDialog from "../setup/pen-dialog.mjs";
 
@@ -122,7 +123,7 @@ export class PENactorItemDrop {
         }
 
         //Test for a duplicate named item for certain types
-        if (["skill", "trait", "passion"].includes(dropItm.type)) {
+        if (["skill", "trait", "passion", "ideal"].includes(dropItm.type)) {
           if (["manor", "barony"].includes(actor.type) && dropItm.type === "skill") {
             if (
               actor.items
@@ -143,15 +144,6 @@ export class PENactorItemDrop {
                 type: game.i18n.localize("PEN.Entities." + `${dropItm.type.capitalize()}`),
               });
             }
-          }
-        }
-
-        //If an Ideal then check if requirements met
-        if (["ideal"].includes(dropItm.type)) {
-          let success = await PENactorItemDrop.checkIdeal(actor, dropItm);
-          if (!success.outcome) {
-            reqResult = 0;
-            errMsg = success.msg;
           }
         }
       }
@@ -206,54 +198,21 @@ export class PENactorItemDrop {
         }
 
         newItemData.push(dropItm);
-        //If succesfully pushed are there any special rules needed to be applied
+        //If successfully pushed are there any special rules needed to be applied
         if (dropItm.type === "culture") {
-          await PENCharCreate.addCulture(actor, dropItm);
+          await PENCharCreateV2.addCulture(actor, dropItm);
         } else if (dropItm.type === "homeland") {
-          await PENCharCreate.addHomeland(actor, dropItm);
+          await PENCharCreateV2.addHomeland(actor, dropItm);
         } else if (dropItm.type === "class") {
-          await PENCharCreate.addClass(actor, dropItm, true, true);
+          await PENCharCreateV2.addClass(actor, dropItm, true, true, true);
         } else if (dropItm.type === "religion") {
-          await PENCharCreate.addReligion(actor, dropItm);
+          await PENCharCreateV2.addReligion(actor, dropItm);
         } else if (dropItm.type === "archetype") {
-          await PENCharCreate.addArchetype(actor, dropItm);
+          await PENCharCreateV2.addArchetype(actor, dropItm);
         }
       }
     }
     return newItemData;
-  }
-
-  //Check if Ideal requirements are met
-  static async checkIdeal(actor, ideal) {
-    //Test Trait Group total
-    let traitTotal = 0;
-    let traits = await ideal.system.traitGroup.map((itm) => itm.pid);
-    let scores = await actor.items
-      .filter((itm) => traits.includes(itm.flags?.Pendragon?.pidFlag?.id))
-      .map((itm) => itm.system.total);
-    for (let score of scores) {
-      traitTotal = traitTotal + Number(score);
-    }
-    if (traitTotal < ideal.system.traitGroupScore) {
-      return { outcome: false, msg: game.i18n.format("PEN.notEnoughTrait", { name: ideal.name }) };
-    }
-    //Test requirements
-    for (let rItm of ideal.system.require) {
-      let actItm = actor.items.filter((itm) => itm.flags?.Pendragon?.pidFlag?.id === rItm.pid)[0];
-      if (!actItm) {
-        return { outcome: false, msg: game.i18n.format("PEN.notEnoughReq", { name: ideal.name }) };
-      }
-      if (rItm.score < 0) {
-        if (actItm.system.total > 20 + rItm.score) {
-          return { outcome: false, msg: game.i18n.format("PEN.notEnoughReq", { name: ideal.name }) };
-        }
-      } else {
-        if (actItm.system.total < rItm.score) {
-          return { outcome: false, msg: game.i18n.format("PEN.notEnoughReq", { name: ideal.name }) };
-        }
-      }
-    }
-    return { outcome: true, msg: "" };
   }
 
   static async _getSpecialism(newSkill) {

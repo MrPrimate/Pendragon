@@ -1,23 +1,52 @@
-<div class="tab effects {{tab.cssClass}}" data-group="primary" data-tab="effects">
+<div class="tab effects {{tab.cssClass}} droppable" style="min-height:400px;" data-group="primary" data-tab="effects">
     <br>
-    <ul class="conditions effects">
-    <li class="stat-name bold button">{{localize 'PEN.activeEffects'}} <button class="inline-control icon fa-regular fa-square-plus" data-action="addEffect"></button></li>
-    {{#each effects}}
-      <li data-effect-id="{{ id }}">
-        {{#if effMain}}
-          <span style="padding-top: 3px;">{{ name }} {{#if origin}}{{ sourceName }}{{/if}}</span>
-          <div class="centre" data-action="toggleEffect" data-tooltip="{{#if disabled}}{{localize 'PEN.inactive'}}{{else}}{{localize 'PEN.active'}}{{/if}}">
-            <img class="aura-img {{#if disabled}}fade{{/if}}" style="margin-top: 8px;"  height="18" width="18" />
-          </div>
-          <button class="inline-control icon fa-regular fa-pen-to-square"  style="margin-top: 5px;" data-action="editEffect"></button>
-          <button class="inline-control icon fa-regular fa-trash"  style="margin-top: 5px;" data-action="removeEffect"></button>
+    <div class="greyBack active-effect-list">
+      <div class="truncate bold">{{localize 'PEN.effectName'}}</div>
+      <div class="truncate bold">{{localize 'PEN.effect'}}</div>
+      <div class="truncate bold centre">{{localize 'PEN.type'}}</div>
+      <div class="centre truncate bold">{{localize 'PEN.amount'}}</div>
+    </div>
+    {{#each effectChanges as |effect|}}
+      <div class="active-effect-list" style="align-items: center;" data-key="{{effect.key}}">
+        <div class="truncate">{{localize effect.source}}</div>
+        <div class="truncate" data-tooltip="{{effect.name}}">{{effect.name}}</div>
+        <div class="truncate centre" data-tooltip="{{effect.type}}">{{localize effect.type}}</div>
+        {{#if effect.negative}}
+          <div class="centre">-{{effect.value}}</div>
         {{else}}
-          <span style="padding-left:20px;">{{ key }} : {{type}} {{ value }}</span>
-          <div class="centre" data-tooltip="{{#if effect.disabled}}{{localize 'PEN.inactive'}}{{else}}{{localize 'PEN.active'}}{{/if}}">
-            <img class="aura-img {{#if effect.disabled}}fade{{/if}}" style="margin-top: 8px;"  height="18" width="18" />
-          </div>          
+          <div class="centre">{{effect.value}}</div>
         {{/if}}
-      </li>
+      </div>
     {{/each}}
-    </ul>
+    <br>
+
+    <div class="greyBack active-effect-list">
+     <div class="truncate bold">{{localize 'PEN.effectActor'}}</div>
+     <div></div>
+      <a class="centre item-control item-create" style="flex: 0 0 auto;" data-tooltip="{{localize 'SIDEBAR.ACTIONS.CREATE.ActiveEffect'}}" data-action="addEffect">
+        <i class="fas fa-plus"></i>
+      </a>
+    </div>
+
+      {{#each effects as |effect|}}
+        <li class="item item-edit active-effect-list" draggable="true" data-drag="true" data-effect-id="{{effect.id}}">
+          <div class="effect-source left rollable" style="grid-column: 1 / span 2;" data-tooltip="{{localize 'PEN.viewDoc' type=(localize 'DOCUMENT.ActiveEffect')}}" data-action="openActiveEffect" data-uuid="{{effect.uuid}}">
+
+            {{effect.name}}
+          </div>
+          <div class="centre" data-tooltip="{{#if effect.isActive}}{{localize 'PEN.active'}}{{else}}{{localize 'PEN.inactive'}}{{/if}}">
+            <a class="item-control item-create" data-action="toggleEffect">
+              <img class="aura-img {{#unless effect.isActive}}fade{{/unless}}" height="18" width="18" />
+            </a>
+          </div>
+          <div class="centre item">
+            <a class="large-icon item-control fade" data-action="editEffect"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
+              <a class="item-control fade" data-action="removeEffect"><i data-tooltip="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
+          </div>
+        </li>
+      {{/each}}
+
+  <br>
+
+
 </div>

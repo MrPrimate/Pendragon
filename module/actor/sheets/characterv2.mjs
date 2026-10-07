@@ -1,6 +1,6 @@
 import { PENCombat } from "../../apps/combat.mjs";
-import { PENWinter } from "../../apps/winterPhase.mjs";
-import { PENCharCreate } from "../../apps/charCreate.mjs";
+//import { PENWinter } from "../../apps/winterPhase.mjs";
+//import { PENCharCreate } from "../../apps/charCreate.mjs";
 import { PENactorItemDrop } from "../actor-itemDrop.mjs";
 import { PENSelectLists } from "../../apps/select-lists.mjs";
 import { PENUtilities } from "../../apps/utilities.mjs";
@@ -207,6 +207,12 @@ export class PendragonCharacterSheetv2 extends PendragonActorSheet {
         i.system.cleanDesc = i.system.description.replace(/<[^>]+>/g, "");
         gears.push(i);
       } else if (i.type === "trait") {
+        //Don't show Chaste/Lustful if age is under 13
+        if (
+          ["i.trait.chaste", "i.trait.lustful"].includes(i.flags?.Pendragon?.pidFlag?.id) &&
+          this.actor.system.age < game.settings.get("Pendragon", "youthAge")
+        )
+          continue;
         traits.push(i);
       } else if (i.type === "wound" && i.system.value > 0) {
         wounds.push(i);
@@ -420,7 +426,12 @@ export class PendragonCharacterSheetv2 extends PendragonActorSheet {
     for (const e of effectList) {
       // TODO: should be based on id, not name, may be some leftover
       // migration shenanigans...
-      if (!conditionIds.includes(e.name)) effects.push(e);
+      if (!conditionIds.includes(e.name)) {
+        if (e.item) {
+          e.sourceLabel = e.item.name + "-" + game.i18n.localize(`TYPES.Item.${e.item.type}`);
+        }
+        effects.push(e);
+      }
     }
     context.effects = effects;
     context.conditions = CONFIG.statusEffects
@@ -692,13 +703,17 @@ export class PendragonCharacterSheetv2 extends PendragonActorSheet {
     cls.createDialog({}, { parent: this.document });
   }
   static async #onEditActiveEffect(event, target) {
-    const { effectId } = target.closest("[data-effect-id]")?.dataset ?? {};
-    const effect = this.actor.effects.get(effectId);
+    //const { effectId } = target.closest("[data-effect-id]")?.dataset ?? {};
+    const { effectUuid } = target.closest("[data-effect-uuid]")?.dataset ?? {};
+    //const effect = this.actor.effects.get(effectId);
+    const effect = await fromUuid(effectUuid);
     effect.sheet.render(true);
   }
-  static #onDeleteActiveEffect(event, target) {
-    const { effectId } = target.closest("[data-effect-id]")?.dataset ?? {};
-    const effect = this.actor.effects.get(effectId);
+  static async #onDeleteActiveEffect(event, target) {
+    //const { effectId } = target.closest("[data-effect-id]")?.dataset ?? {};
+    const { effectUuid } = target.closest("[data-effect-uuid]")?.dataset ?? {};
+    //const effect = this.actor.effects.get(effectId);
+    const effect = await fromUuid(effectUuid);
     effect.delete();
   }
   static #onCreateItem(event, target) {

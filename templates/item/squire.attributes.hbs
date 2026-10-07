@@ -1,7 +1,14 @@
 <section class="tab attributes {{tab.cssClass}}" data-group="primary" data-tab="attributes">
   <div class="item-trait-grid">
+    <div class="stat-name left bold">{{localize 'PEN.gender'}}</div>
+    <div class="stat-name-input centre"><input name="system.gender" type="text" value="{{item.system.gender}}"/></div>
+    <br>
+    <div class="stat-name left bold new-row">{{localize 'PEN.born'}}</div>
+    <div class="stat-name-input centre"><input name="system.born" type="number" value="{{item.system.born}}"/></div>
+    <div class="stat-name left bold">{{localize 'PEN.died'}}</div>
+    <div class="stat-name-input centre"><input name="system.died" type="number" value="{{item.system.died}}"/></div>
     <div class="stat-name left bold">{{localize 'PEN.age'}}</div>
-    <div class="stat-name-input centre"><input name="system.age" type="number" value="{{item.system.age}}" placeholder=10/></div>
+    <div class="stat-name centre bold">{{system.newAge}}</div>
     <div class="stat-name left bold">{{localize 'PEN.type'}}</div>
     <div class="stat-name">
       <select class="centre" data-handle-change name="system.category">
@@ -9,7 +16,8 @@
       </select>
     </div>
     {{#if (eq item.system.category 'squire')}}
-      <div class="stat-name left bold">{{localize 'PEN.skill'}}</div>
+      <br>
+      <div class="stat-name left bold new-row">{{localize 'PEN.skill'}}</div>
       <div class="stat-name-input centre"><input name="system.skill" type="number" value="{{item.system.skill}}" placeholder=15/></div>
       <div class="stat-name left bold">{{localize 'PEN.knightlyMod'}}</div>
       <div class="stat-name-input centre"><input name="system.knightMod" type="number" value="{{item.system.knightMod}}" placeholder=0/></div>

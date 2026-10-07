@@ -48,6 +48,9 @@
       "src": "css/rolltable.css"
     },
     {
+      "src": "css/charv1.css"
+    },
+    {
       "src": "css/charv2.css"
     },
     {
@@ -55,6 +58,9 @@
     },
     {
       "src": "css/actorv2.css"
+    },
+    {
+      "src": "css/dialogv2.css"
     }
   ],
   "packFolders": [
@@ -103,6 +109,19 @@
       "flags": {},
       "ownership": {
         "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "label": "Active Effects",
+      "type": "ActiveEffect",
+      "name": "active-effects",
+      "path": "packs/active-effects",
+      "system": "Pendragon",
+      "private": false,
+      "flags": {},
+      "ownership": {
+        "PLAYER": "NONE",
         "ASSISTANT": "OWNER"
       }
     }

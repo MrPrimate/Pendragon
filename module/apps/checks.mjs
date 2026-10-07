@@ -135,6 +135,7 @@ export class PENCheck {
       damCrit: options.damCrit ?? false,
       damShield: options.damShield ?? false,
       damMod: options.damMod ?? "0",
+      damBonus: particActor.system.damBonus ?? "0",
       fixedOpp: options.fixedOpp ?? 0,
       inquiry: options.inquiry ?? "no",
       action: options.action ?? "attack",
@@ -189,7 +190,7 @@ export class PENCheck {
             config.rawScore = tempItem.system.skill ?? 0;
           } else if (config.subType === "squireAge") {
             config.label = tempItem.name + "[" + game.i18n.localize("PEN.age") + "]";
-            config.rawScore = tempItem.system.age - 9 ?? 0;
+            config.rawScore = tempItem.system.newAge - 9 ?? 0;
           } else if (config.subType === "followerSquire") {
             config.label = tempItem.system.person1Name + "[" + game.i18n.localize("PEN.squire") + "]";
             config.rawScore = tempItem.system.squire ?? 0;
@@ -449,6 +450,20 @@ export class PENCheck {
       }
     }
 
+    //If Damage Roll then adjust formula for DamBonus if there is one
+    if (config.rollType === RollType.DAMAGE && config.damBonus != "0" && config.damBonus != "") {
+      if (!Roll.validate(config.damBonus)) {
+        ui.notifications.warn(game.i18n.localize("PEN.invalidDamageFormula"));
+        config.damBonus = "0";
+      } else {
+        if (["+", "-"].includes(config.damBonus.charAt(0))) {
+          config.rollFormula = config.rollFormula + config.damBonus.toUpperCase();
+        } else {
+          config.rollFormula = config.rollFormula + "+" + config.damBonus.toUpperCase();
+        }
+      }
+    }
+
     await PENCheck.makeRoll(config);
 
     //If this is an unopposed Combat Roll then set outcomes
@@ -512,6 +527,7 @@ export class PENCheck {
           damCrit: config.damCrit,
           damShield: config.damShield,
           damMod: config.damMod,
+          damBonus: config.damBonus,
           subType: config.subType,
           fixedOpp: config.fixedOpp,
           action: config.action,

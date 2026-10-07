@@ -15,7 +15,7 @@
             </div>
           {{else}}
           {{#if (or (ne passion.system.total 0) (not ../system.lock))}}
-            <div class="centre new-row"><a class="item-control item-toggle large-icon" data-itemid ="{{passion._id}}" data-property="XP" data-tooltip="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if passion.system.XP}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
+            <div class="centre new-row"><a class="large-icon item-control item-toggle " data-itemid ="{{passion._id}}" data-property="XP" data-tooltip="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if passion.system.XP}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
             <div class="stat-name rollable passion-name" data-tooltip="{{localize 'PEN.rollHint'}}" data-itemid="{{passion._id}}">{{passion.name}}
               {{#if (ne passion.system.dishonour 0)}}
                 [{{passion.system.dishonour}}]
@@ -23,9 +23,9 @@
             </div>
             <div class="stat-name centre" data-tooltip="{{passion.system.flavour}}">{{passion.system.total}}</div>
             <div class="centre item" data-itemid ="{{passion._id}}">
-              <a class="item-control large-icon fade" data-action="viewDoc"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
+              <a class="large-icon item-control  fade" data-action="viewDoc"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
               {{#unless ../system.lock}}
-                <a class="item-control large-icon fade" data-action="deleteDoc"><i data-tooltip="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
+                <a class="large-icon item-control  fade" data-action="deleteDoc"><i data-tooltip="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
               {{/unless}}
             </div>
             {{/if}}
@@ -49,13 +49,13 @@
         {{#unless (eq passion.system.level 0)}}
         <li class="item skill-dev-listitem" data-item-id="{{passion._id}}">
           <div class="stat-name truncate new-row grid-item-left" data-tooltip="{{passion.name}}">{{passion.name}}</div>
-          <div class="stat-name-input item centre grid-item-bottom" data-field="passion" data-att="value" data-itemid ="{{passion._id}}"><input class="inline-edit" name="passion.system.value" type="number" value="{{passion.system.value}}"/></div>
-          <div class="stat-name-input item centre grid-item-bottom" data-field="passion" data-att="inherit" data-itemid ="{{passion._id}}"><input class="inline-edit" name="passion.system.inherit" type="number" value="{{passion.system.inherit}}"/></div>
-          <div class="stat-name-input item centre grid-item-bottom" data-field="passion" data-att="homeland" data-itemid ="{{passion._id}}"><input class="inline-edit" name="passion.system.homeland" type="number" value="{{passion.system.homeland}}"/></div>
-          <div class="stat-name-input item centre grid-item-bottom" data-field="passion" data-att="winter" data-itemid ="{{passion._id}}"><input class="inline-edit" name="passion.system.winter" type="number" value="{{passion.system.winter}}"/></div>
+          <div class="stat-grid-input item centre grid-item-bottom" data-field="passion" data-att="value" data-itemid ="{{passion._id}}"><input class="inline-edit" name="passion.system.value" type="number" value="{{passion.system.value}}"/></div>
+          <div class="stat-grid-input item centre grid-item-bottom" data-field="passion" data-att="inherit" data-itemid ="{{passion._id}}"><input class="inline-edit" name="passion.system.inherit" type="number" value="{{passion.system.inherit}}"/></div>
+          <div class="stat-grid-input item centre grid-item-bottom" data-field="passion" data-att="homeland" data-itemid ="{{passion._id}}"><input class="inline-edit" name="passion.system.homeland" type="number" value="{{passion.system.homeland}}"/></div>
+          <div class="stat-grid-input item centre grid-item-bottom" data-field="passion" data-att="winter" data-itemid ="{{passion._id}}"><input class="inline-edit" name="passion.system.winter" type="number" value="{{passion.system.winter}}"/></div>
           <div class="stat-name centre grid-item-bottom">{{passion.system.total}}</div>
           {{#if passion.system.isHonour}}
-            <div class="stat-name-input item centre grid-item-top" data-field="passion" data-att="dishonour" data-itemid ="{{passion._id}}"><input class="inline-edit" name="passion.system.dishonour" type="number" value="{{passion.system.dishonour}}"/></div>
+            <div class="stat-grid-input item centre grid-item-top" data-field="passion" data-att="dishonour" data-itemid ="{{passion._id}}"><input class="inline-edit" name="passion.system.dishonour" type="number" value="{{passion.system.dishonour}}"/></div>
           {{/if}}
         </li>
         {{/unless}}
