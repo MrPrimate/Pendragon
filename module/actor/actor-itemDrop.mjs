@@ -208,7 +208,7 @@ export class PENactorItemDrop {
         } else if (dropItm.type === "religion") {
           await PENCharCreateV2.addReligion(actor, dropItm);
         } else if (dropItm.type === "archetype") {
-          await PENCharCreateV2.addArchetype(actor, dropItm);
+          await PENCharCreateV2.addArchetype(actor, dropItm, true);
         }
       }
     }
