@@ -812,7 +812,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
   static async _onUndoClass(event, target) {
     if (event.detail === 2) {
       //Only perform on double click
-      await PENCharCreateV2.undoClass(this.actor, false);
+      await PENCharCreateV2.resetClass(this.actor, false);
     }
   }
 
@@ -1114,7 +1114,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     if (!archetype) {
       return { pass: false, label: game.i18n.localize("PEN.archetypeMissing") };
     }
-    let idealPID = archetype.system?.ideals[0].pid;
+    let idealPID = archetype.system?.ideals?.[0]?.pid;
     let ideal = await actor.items.find((itm) => itm.flags?.Pendragon?.pidFlag?.id === idealPID);
     if (!ideal) {
       return { pass: false, label: game.i18n.localize("PEN.idealMissing") };

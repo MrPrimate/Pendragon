@@ -254,18 +254,30 @@ export class PENCharCreateV2 {
             "system.archetype": thisTrait.system.archetype,
           });
           let rollStr = "";
-          for (let dCount = 0; dCount < roll.dice[0].results.length; dCount++)
-            if (dCount === 0) {
-              rollStr = roll.dice[0].results[dCount].result;
-            } else {
-              rollStr = rollStr + "+" + roll.dice[0].results[dCount].result;
+          //If a fixed value that doesn't roll a dice
+          if (roll.dice.length<1) {
+
+            results.push({
+              name: thisTrait.name,
+              rollVal: Number(formula),
+              form: formula,
+              dice: formula,
+            });
+          } else {
+            for (let dCount = 0; dCount < roll.dice[0].results.length; dCount++) {
+              if (dCount === 0) {
+                rollStr = roll.dice[0].results[dCount].result;
+              } else {
+                rollStr = rollStr + "+" + roll.dice[0].results[dCount].result;
+              }
+              results.push({
+                name: thisTrait.name,
+                rollVal: roll.total,
+                form: roll.formula,
+                dice: rollStr,
+              });
             }
-          results.push({
-            name: thisTrait.name,
-            rollVal: roll.total,
-            form: roll.formula,
-            dice: rollStr,
-          });
+          }
         }
         //Call Chat Card
         const html = await this.charGenRollChatCard(results, game.i18n.localize("PEN.traits"), actor.name);
@@ -276,6 +288,7 @@ export class PENCharCreateV2 {
       //If Constructed Method
       for (let trt of archetype.system.bonusTraits) {
         let thisTrait = await actor.items.find((itm) => itm.flags?.Pendragon?.pidFlag?.id === trt.pid);
+        if (!thisTrait) continue;
         await thisTrait.update({ "system.archetype": trt.constructed - thisTrait.system.value });
       }
       //Increase one trait to 16 if allowed
@@ -314,17 +327,22 @@ export class PENCharCreateV2 {
       let sPID = archetype.system.skills.find((sItm) => sItm.pid === itm.flags?.Pendragon?.pidFlag?.id);
       if (sPID) {
         let results = await this.skillParse(sPID.formula);
-        updateSkills.push({ _id: itm.id, "system.base.mod": results.modifier });
-        updateSkills.push({ _id: itm.id, "system.base.multi": results.multiplier });
-        updateSkills.push({ _id: itm.id, "system.base.stat": results.stat });
+        updateSkills.push({ _id: itm.id,
+          "system.base.mod": results.modifier,
+          "system.base.multi": results.multiplier,
+          "system.base.stat": results.stat
+        });
       } else {
-        updateSkills.push({ _id: itm.id, "system.base.mod": 0 });
-        updateSkills.push({ _id: itm.id, "system.base.multi": 0 });
-        updateSkills.push({ _id: itm.id, "system.base.stat": "none" });
+        updateSkills.push({ _id: itm.id,
+          "system.base.mod": 0,
+          "system.base.multi": 0,
+          "system.base.stat": "none"
+        });
       }
     }
     await Item.updateDocuments(updateSkills, { parent: actor });
     await this.baseSkillScore(actor);
+    return true;
   }
 
   //Remove an Archetype
@@ -1573,7 +1591,7 @@ export class PENCharCreateV2 {
     if (age >= 14) {
       let expYears = age - 14;
       let changes = [];
-      //Reset any winter training (for prevoius partially failed)
+      //Reset any winter training (for previous partially failed)
       await this.undoTraining(actor);
 
       if (expYears > 0) {
@@ -1738,7 +1756,7 @@ export class PENCharCreateV2 {
               }
               const chosen = await ItemsSelectDialog.create(stats, 1, true, game.i18n.localize("PEN.characteristic"));
               if (!chosen) {
-                await PENCharCreate.undoTraining(actor);
+                await this.undoTraining(actor);
                 return false;
               }
               for (let selected of chosen) {
@@ -2266,8 +2284,8 @@ export class PENCharCreateV2 {
     if (!isNaN(formula) && !isNaN(parseFloat(formula))) {
       modifier = Number(formula);
     } else {
-      stat = formula.match(/str|dex|con|siz|app/gi)[0] ?? "none";
-      let operators = formula.match(/[+\-*/][0-9]/g);
+      stat = formula.match(/str|dex|con|siz|app/gi)?.[0] ?? "none";
+      let operators = formula.match(/[+\-*/]\d+/g);
       if (operators) {
         for (let operator of operators) {
           let op = operator.charAt(0);

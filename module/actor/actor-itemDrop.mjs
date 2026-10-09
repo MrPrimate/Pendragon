@@ -1,4 +1,4 @@
-import { PENCharCreate } from "../apps/charCreate.mjs";
+//import { PENCharCreate } from "../apps/charCreate.mjs";
 import { PENCharCreateV2 } from "../apps/charCreateV2.mjs";
 import { PENUtilities } from "../apps/utilities.mjs";
 import PENDialog from "../setup/pen-dialog.mjs";

@@ -135,7 +135,7 @@ export class PENCheck {
       damCrit: options.damCrit ?? false,
       damShield: options.damShield ?? false,
       damMod: options.damMod ?? "0",
-      damBonus: particActor.system.damBonus ?? "0",
+      damBonus: particActor?.system?.damBonus ?? "0",
       fixedOpp: options.fixedOpp ?? 0,
       inquiry: options.inquiry ?? "no",
       action: options.action ?? "attack",

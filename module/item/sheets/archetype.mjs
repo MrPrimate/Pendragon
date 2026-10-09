@@ -248,7 +248,7 @@ export class PendragonArchetypeSheet extends PendragonItemSheet {
         }
       }
 
-      if (["skill"].includes(collectionName)) {
+      if (["skills"].includes(collectionName)) {
         let inpVal = await PENDialog.input({
           window: { title: game.i18n.localize("PEN.startingFormula") },
           content: `<div><input class="centre" type="text" name="inpvalue"/></div>`,
