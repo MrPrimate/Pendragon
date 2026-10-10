@@ -255,6 +255,8 @@ export class PendragonArchetypeSheet extends PendragonItemSheet {
         });
         if (!inpVal) continue;
         let start = "0";
+        if (!inpVal) continue;
+        let start = "0";
         if (inpVal.inpvalue != "") start = inpVal.inpvalue;
         //Add item to collection
         collection.push({
