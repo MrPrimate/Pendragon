@@ -177,7 +177,7 @@ export class PENCharCreateV2 {
   static async addArchetype(actor, archetype, ask) {
     if (!archetype) {
       const itemData = await this.selectItem("archetype", false);
-      if (!itemData) {
+      if (!itemData || itemData === "xxx") {
         ui.notifications.error(game.i18n.localize("PEN.noArchetypes"));
         return false;
       }
@@ -1834,12 +1834,25 @@ export class PENCharCreateV2 {
   //Meet the ideal requirements?
   static async meetIdeal(actor) {
     let archetype = await actor.items.find((itm) => itm.type === "archetype");
-    if (!archetype) return false;
+    if (!archetype) {
+      ui.notifications.warn(actor.name + ": " + game.i18n.format("PEN.noItem", {child: game.i18n.localize('TYPES.Item.archetype'), parent: game.i18n.localize('TYPES.Actor.character')}));
+      return false;
+    }
     let idealPID = archetype.system.ideals[0].pid;
-    if (!idealPID) return false;
+    if (!idealPID) {
+      ui.notifications.warn(actor.name + ": " + game.i18n.format("PEN.noItem", {child: game.i18n.localize('TYPES.Item.ideal'), parent: game.i18n.localize('TYPES.Item.archetype')}));
+      return false;
+    }
     let ideal = await actor.items.find((itm) => itm.flags?.Pendragon?.pidFlag?.id === idealPID);
-    if (!ideal) return false;
-    if (!ideal.system.activeIdeal) return false;
+    if (!ideal) {
+      ui.notifications.warn(actor.name + ": " + game.i18n.localize("PEN.idealMissing"));
+      return false;
+    }
+    if (!ideal.system.activeIdeal) {
+      ui.notifications.warn(actor.name + ": " + game.i18n.format("PEN.notEnoughReq", {name: ideal.name}));
+      return false;
+
+    }
 
     let data = {
       msg: game.i18n.format("PEN.beKnighted", { type: ideal.name }),
@@ -1855,6 +1868,7 @@ export class PENCharCreateV2 {
     //Knight Specific Action
     if (idealPID === "i.ideal.knight") {
       let lord = await this.inpValue(game.i18n.localize("PEN.lordsGlory"));
+      if (!lord) return false;
       lord = Number(lord.age);
       let glory = 1000 + Math.min(Math.round(lord / 100), 1000);
 
@@ -2185,18 +2199,40 @@ export class PENCharCreateV2 {
     return;
   }
 
+
+  //----------------------------------------------ADD LUCK BENEFIT----------------------------------------------
+  //
+  //
   static async addLuckBenefit(actor) {
     let results = [];
     let archetype = await actor.items.find((itm) => itm.type === "archetype");
-    let idealPID = archetype.system.ideals[0].pid;
-    if (!idealPID) return false;
+    if (!archetype) {
+      ui.notifications.warn(actor.name + ": " + game.i18n.format("PEN.noItem", {child: game.i18n.localize('TYPES.Item.archetype'), parent: game.i18n.localize('TYPES.Actor.character')}));
+      return false;
+    }
+    let idealPID = archetype.system.ideals?.[0]?.pid;
+    if (!idealPID) {
+      ui.notifications.warn(actor.name + ": " + game.i18n.format("PEN.noItem", {child: game.i18n.localize('TYPES.Item.ideal'), parent: game.i18n.localize('TYPES.Item.archetype')}));
+      return false;
+    }
     let ideal = await actor.items.find((itm) => itm.flags?.Pendragon?.pidFlag?.id === idealPID);
-    if (!ideal) return false;
-    if (!ideal.system.activeIdeal) return false;
-    let tablePID = ideal.system.luck[0].pid;
-    if (!tablePID) return false;
+    if (!ideal) {
+      ui.notifications.warn(actor.name + ": " + game.i18n.localize("PEN.idealMissing"));
+      return false;
+    }
+    if (!ideal.system.activeIdeal) {
+      ui.notifications.warn(actor.name + ": " + game.i18n.format("PEN.notEnoughReq", {name: ideal.name}));
+      return false;
+
+    }
+    let tablePID = ideal.system.luck?.[0]?.pid;
+    if (!tablePID) {
+      ui.notifications.warn(actor.name + ": " + game.i18n.localize("PEN.noLuckBenefit"));
+      return false;
+    }
     let table = (await game.system.api.pid.fromPIDBest({ pid: tablePID }))[0];
     if (!table) {
+      ui.notifications.warn(actor.name + ": " + game.i18n.format("PEN.noNamedTable", {name: tablePID}));
       return false;
     }
     const luckResults = await PENUtilities.tableDiceRoll(table);
@@ -2277,15 +2313,18 @@ export class PENCharCreateV2 {
 
   //Parse Archetype Formaule in to skill base components
   static async skillParse(formula) {
-    formula = formula.toLowerCase();
+    formula = String(formula ?? "0").toLowerCase().replace(/\s+/g, "");
     let stat = "none";
     let multiplier = 0;
     let modifier = 0;
     if (!isNaN(formula) && !isNaN(parseFloat(formula))) {
       modifier = Number(formula);
     } else {
-      stat = formula.match(/str|dex|con|siz|app/gi)?.[0] ?? "none";
-      let operators = formula.match(/[+\-*/]\d+/g);
+      stat = formula.match(/str|dex|con|siz|app/)?.[0] ?? "none";
+      if (stat !== "none") multiplier = 1;
+      const lead = formula.match(/^(\d+(?:\.\d+)?)\s*\*?\s*(?=str|dex|con|siz|app)/);
+      if (lead) multiplier = Number(lead[1]);
+      let operators = formula.replace(/^\d+(?:\.\d+)?\*/, "").match(/[+\-*/]\d+/g);
       if (operators) {
         for (let operator of operators) {
           let op = operator.charAt(0);

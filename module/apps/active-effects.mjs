@@ -10,4 +10,23 @@ export class PendragonActiveEffect extends ActiveEffect {
     }
     return super.active;
   }
+
+  /**
+   * Apply ActiveEffect change to Actor
+   * @param {Document} targetDoc
+   * @param {ActiveEffectChangeData} change
+   * @param {object} options
+   * @returns {object}
+   */
+  static applyChange(targetDoc, change, options) {
+    if (change.key === "system.damBonus" && (change.type === "add")) {
+      let val = change.value.toString();
+      if (!["+","-"].includes(val.charAt(0))) {
+        change.value = "+" + val
+      }
+    }
+    const changes = super.applyChange(targetDoc, change, options);
+    return changes;
+  }
+
 }

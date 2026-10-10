@@ -67,6 +67,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
       toggleEffect: this._toggleEffect,
       clearEffects: this._clearEffects,
       deleteActiveEffect: this._deleteActiveEffect,
+      openWiki: this._openWiki,
     },
     window: {
       resizable: true,
@@ -256,6 +257,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     context.hasPSP = false;
     context.hasEquip = false;
     context.hasLuck = false;
+    context.showHelp = game.settings.get("Pendragon", "showHelp");
     let archetype = this.actor.items.find((itm) => itm.type === "archetype");
     if (archetype) {
       context.archetypeName = archetype.name;
@@ -1350,5 +1352,19 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
       };
       return new foundry.applications.ux.DragDrop(d);
     });
+  }
+
+    //Get Embedded Document
+  _getEmbeddedDocument(target) {
+    const docRow = target.closest("li[data-document-class]");
+    if (docRow.dataset.documentClass === "Item") {
+      return this.actor.items.get(docRow.dataset.itemId);
+    } else if (docRow.dataset.documentClass === "ActiveEffect") {
+      const parent =
+        docRow.dataset.parentId === this.actor.id
+          ? this.actor
+          : this.actor.items.get(docRow?.dataset.parentId);
+      return parent.effects.get(docRow?.dataset.effectId);
+    } else return console.warn("Could not find document class");
   }
 }

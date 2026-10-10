@@ -54,7 +54,7 @@ const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 export class PENCharacterSettings extends HandlebarsApplicationMixin(ApplicationV2) {
   static DEFAULT_OPTIONS = {
     classes: ["pen", "sheet", "settings"],
-    id: "combat-settings",
+    id: "character-settings",
     actions: {
       reset: PENCharacterSettings.onResetDefaults,
     },

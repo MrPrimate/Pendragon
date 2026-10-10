@@ -1,5 +1,5 @@
 //THIS WHOLE FILE CAN BE DELETED
-
+/*
 import { PENUtilities } from "./utilities.mjs";
 import { ItemsSelectDialog } from "./item-selection.mjs";
 import { PassionsSelectDialog } from "./passion-selection.mjs";
@@ -823,22 +823,22 @@ export class PENCharCreate {
   static async step7(actor) {
     //Open dialog and select the class  (not optional)
     let newList = await this.getClassList(actor, "only", true, true);
-    /*
-    let mainList = await game.system.api.pid.fromPIDRegexBest({
-      pidRegExp: new RegExp("^i." + PENUtilities.quoteRegExp("class") + ".+$"),
-      type: "i",
-    });
-    let newList = mainList
-      .filter((i) => i.system.starter)
-      .map((itm) => {
-        return { name: itm.name, pid: itm.flags.Pendragon.pidFlag.id };
-      });
-    //If there are no "starter" classes then use all classes
-    if (newList.length === 0) {
-      newList = mainList.map((itm) => {
-        return { name: itm.name, pid: itm.flags.Pendragon.pidFlag.id };
-      });
-    }*/
+
+//    let mainList = await game.system.api.pid.fromPIDRegexBest({
+//      pidRegExp: new RegExp("^i." + PENUtilities.quoteRegExp("class") + ".+$"),
+//      type: "i",
+//    });
+//    let newList = mainList
+//      .filter((i) => i.system.starter)
+//      .map((itm) => {
+//        return { name: itm.name, pid: itm.flags.Pendragon.pidFlag.id };
+//      });
+//    //If there are no "starter" classes then use all classes
+//    if (newList.length === 0) {
+//      newList = mainList.map((itm) => {
+//        return { name: itm.name, pid: itm.flags.Pendragon.pidFlag.id };
+//      });
+//    }
     let itemData = await PENCharCreate.selectItem("list", false, newList, game.i18n.localize("TYPES.Item.class"));
     if (!itemData) {
       return false;
@@ -2699,7 +2699,7 @@ export class PENCharCreate {
       modifier = Number(formula);
     } else {
       stat = formula.match(/str|dex|con|siz|app/gi)[0] ?? "none";
-      let operators = formula.match(/[+\-*/][0-9]/g);
+      let operators = formula.match(/[+\-* /][0-9]/g);
       if (operators) {
         for (let operator of operators) {
           let op = operator.charAt(0);
@@ -2766,3 +2766,4 @@ export class PENCharCreate {
     }
   }
 }
+*/

@@ -123,6 +123,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       deterDam: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
       beauty: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
       prestige: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
+      damage: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
       damAdj: new NumberField({ ...requiredInteger, initial: 0 }), //To be Deleted
       damEffects: new NumberField({ ...requiredInteger, initial: 0 }),
       damBonus: new StringField({ required: true, blank: true, initial: "" }),
@@ -308,8 +309,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       this.archetypeID = archetype._id;
       this.archetypeName = archetype.name;
     }
-
-    this.damage = this.damage + this.damEffects;
+    this.damage = Math.round((this.stats.str.total + this.stats.siz.total) / 6) + this.damEffects;
     this.move = this.move + this.moveEffects;
     this.armour = this.armour + this.armourEffects;
     this.healRate = Math.round(this.stats.con.total / 5) + this.healRateEffects;

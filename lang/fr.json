@@ -791,6 +791,8 @@
     "noHomelands": "Aucun Pays natal trouvé dans le monde ou le Compendium",
     "noImprove": "Pas d'amélioration",
     "noImprovements": "Pas de compétence, de trait, etc. nécessitant un test d'XP",
+    "noItem": "Aucun(e) {child} n'existe sur ce {parent}",
+    "noLuckBenefit": "Pas de tableau d'avantages de chance sur l'idéal",
     "noMacroItemFound": "Objet {itemName} non trouvé. Vous devriez supprimer et recréer cette macro.",
     "noMacroItemOwner": "Vous ne pouvez créer des boutons de macro que pour les Objets possédés",
     "noNamedTable": "Aucune table {name} dans le monde ou le Compendium",

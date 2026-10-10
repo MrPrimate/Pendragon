@@ -7,7 +7,15 @@
         <div class="charname-input" style="grid-column: 1 / span 2"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></div>
         <div class="right">
         <button type="button" data-action="switchSheet" data-tooltip="Click to preview v2 sheet" style="display:inline-flex;">v2</button>
-        <a class="large-icon" data-action="toggleActor" data-property="lock" data-tooltip='{{localize "PEN.lock"}}'><i class="fas {{#if isLocked}}fa-lock{{else}}fa-lock-open{{/if}}"></i></a></div>
+        <a class="large-icon" data-action="toggleActor" data-property="lock" data-tooltip='{{localize "PEN.lock"}}'><i class="fas {{#if isLocked}}fa-lock{{else}}fa-lock-open{{/if}}"></i></a>
+        {{#if showHelp}}
+          <a class="helpicon" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Character-V1:-Header-section" data-tooltip='{{localize "PEN.openWiki"}}'>
+            <i class="fas fa-circle-question"></i>
+          </a>
+        {{/if}}
+        </div>
+
+
         <div class="new-row">
           <img class="profile-img" src="{{actor.system.coatOfArms}}" data-action="editImage" data-edit="system.coatOfArms" data-tooltip="{{actor.system.heraldry}}" height="140" width="140"/>
         </div>
