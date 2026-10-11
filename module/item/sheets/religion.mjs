@@ -11,7 +11,7 @@ export class PendragonReligionSheet extends PendragonItemSheet {
   static DEFAULT_OPTIONS = {
     position: {
       width: 560,
-      height: 570,
+      height: 620,
     },
     actions: {
       deleteItem: PendragonReligionSheet.#deleteItem,

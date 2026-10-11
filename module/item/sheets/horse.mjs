@@ -9,7 +9,7 @@ export class PendragonHorseSheet extends PendragonItemSheet {
   static DEFAULT_OPTIONS = {
     position: {
       width: 560,
-      height: 650,
+      height: 680,
     },
   };
 

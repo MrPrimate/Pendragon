@@ -1,5 +1,11 @@
 <section class="tab attributes {{tab.cssClass}}" data-group="primary" data-tab="attributes">
-
+   <div class="helpicon">
+    {{#if showHelp}}
+      <a class="" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Horse" data-tooltip='{{localize "PEN.openWiki"}}'>
+        <i class="fas fa-circle-question"></i>
+      </a>
+    {{/if}}
+  </div>
         {{#if hasOwner}}
           <div class="item-horse-grid">
             <div class="stat-name left bold new-row">{{localize 'PEN.name'}}</div>

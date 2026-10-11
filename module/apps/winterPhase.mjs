@@ -154,9 +154,7 @@ export class PENWinter {
         outstanding.push(game.i18n.localize("PEN.prestigeAward") + " (" + actr.system.gloryPrestige + ")");
       }
       if (outstanding.length > 0) {
-        incomplete.push(
-          "<li><b>" + foundry.utils.escapeHTML(actr.name) + "</b>: " + outstanding.join(", ") + "</li>",
-        );
+        incomplete.push("<li><b>" + foundry.utils.escapeHTML(actr.name) + "</b>: " + outstanding.join(", ") + "</li>");
       }
     }
     if (incomplete.length < 1) {
@@ -1558,7 +1556,9 @@ export class PENWinter {
           //If there is a death then check for a Midwife roll
           if (childDies || motherDies) {
             //Get midwife score
-            let midwifScore = Number((await PENCharCreateV2.inpValue(game.i18n.localize("PEN.midwifeScore")))?.age ?? 0);
+            let midwifScore = Number(
+              (await PENCharCreateV2.inpValue(game.i18n.localize("PEN.midwifeScore")))?.age ?? 0,
+            );
             if (midwifScore > 0) {
               //If score entered then make check roll
               midResult = await PENUtilities.simpleDiceRoll("1D20");
@@ -2090,6 +2090,17 @@ export class PENWinter {
     }
     const year = game.time.components.year + Number(value);
     await game.time.set({ year: year });
+    await game.Pendragon.ui?.calendar.updateDate();
+    return;
+  }
+
+  //Set the game year
+  static async setYear(event) {
+    let newYear = Number((await PENCharCreateV2.inpValue(game.i18n.localize("PEN.enterYear")))?.age ?? 0);
+    if (!newYear) {
+      return;
+    }
+    await game.time.set({ year: newYear });
     await game.Pendragon.ui?.calendar.updateDate();
     return;
   }

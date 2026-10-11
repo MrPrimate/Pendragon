@@ -151,6 +151,8 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     } else if (this.tabGroups.primary === "winter") {
       //Winter tab has been removed (e.g. Individual Winter Phase ended) so move off it
       this.tabGroups.primary = "combat";
+      //Rerender winter tab to remove it, otherwise it shows at bottom of Combat
+      this.render["winter"];
     }
     if (game.settings.get("Pendragon", "creation")) {
       options.parts.push("charcreate");
@@ -1367,16 +1369,14 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     });
   }
 
-    //Get Embedded Document
+  //Get Embedded Document
   _getEmbeddedDocument(target) {
     const docRow = target.closest("li[data-document-class]");
     if (docRow.dataset.documentClass === "Item") {
       return this.actor.items.get(docRow.dataset.itemId);
     } else if (docRow.dataset.documentClass === "ActiveEffect") {
       const parent =
-        docRow.dataset.parentId === this.actor.id
-          ? this.actor
-          : this.actor.items.get(docRow?.dataset.parentId);
+        docRow.dataset.parentId === this.actor.id ? this.actor : this.actor.items.get(docRow?.dataset.parentId);
       return parent.effects.get(docRow?.dataset.effectId);
     } else return console.warn("Could not find document class");
   }

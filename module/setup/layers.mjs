@@ -141,6 +141,17 @@ export class PENLayer extends foundry.canvas.layers.InteractionLayer {
             if (active) await PENWinter.changeYear(-1);
           },
         },
+        setYear: {
+          name: "setYear",
+          order: 9,
+          icon: "fas fa-calendar-lines",
+          title: "PEN.setYear",
+          button: true,
+          visible: true,
+          onChange: async (event, active) => {
+            if (active) await PENWinter.setYear(event);
+          },
+        },
       },
     };
   }

@@ -502,7 +502,6 @@
     border-left: 1px gray solid;
   }
 
-
   & .combat-grid {
     display: grid;
     grid-template-columns: 310px 501px;

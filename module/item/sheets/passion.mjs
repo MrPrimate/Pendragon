@@ -9,7 +9,7 @@ export class PendragonPassionSheet extends PendragonItemSheet {
   static DEFAULT_OPTIONS = {
     position: {
       width: 560,
-      height: 550,
+      height: 590,
     },
   };
 

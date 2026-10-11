@@ -327,11 +327,8 @@ export class PendragonActor extends Actor {
     let glory = 0;
     //During an individual Winter Phase (run after the year has advanced) only Glory up to the previous year counts for Prestige
     const winterYear =
-      systemData.status?.winter && !game.settings.get("Pendragon", "winter")
-        ? game.time.components.year - 1
-        : Infinity;
+      systemData.status?.winter && !game.settings.get("Pendragon", "winter") ? game.time.components.year - 1 : Infinity;
     let winterGlory = 0;
-    let armour = 0;
     let armour = systemData.armourEffects;
     let shield = 0;
     for (let i of actorData.items) {

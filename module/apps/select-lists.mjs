@@ -150,6 +150,11 @@ export class PENSelectLists {
       parent: game.i18n.localize("PEN.parent"),
       spouse: game.i18n.localize("PEN.spouse"),
       child: game.i18n.localize("PEN.child"),
+      sibling: game.i18n.localize("PEN.sibling"),
+      grandparent: game.i18n.localize("PEN.grandparent"),
+      grandchild: game.i18n.localize("PEN.grandchild"),
+      cousin: game.i18n.localize("PEN.cousin"),
+      pibling: game.i18n.localize("PEN.pibling"),
       other: game.i18n.localize("PEN.other"),
     };
     return options;

@@ -1,4 +1,11 @@
 <section class="tab attributes {{tab.cssClass}}" data-group="primary" data-tab="attributes">
+   <div class="helpicon">
+    {{#if showHelp}}
+      <a class="" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Gear" data-tooltip='{{localize "PEN.openWiki"}}'>
+        <i class="fas fa-circle-question"></i>
+      </a>
+    {{/if}}
+  </div>
   <div class="money-grid">
     <div class="stat-name left bold">{{localize 'PEN.quantity'}}</div>
     <div class="stat-name-input left"><input  class="centre" name="system.quantity" type="number" value="{{item.system.quantity}}"/></div>

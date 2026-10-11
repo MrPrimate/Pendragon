@@ -1,6 +1,11 @@
 <section class="tab attributes {{tab.cssClass}}" data-group="primary" data-tab="attributes">
-
-  <br>
+   <div class="helpicon">
+    {{#if showHelp}}
+      <a class="" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Homeland" data-tooltip='{{localize "PEN.openWiki"}}'>
+        <i class="fas fa-circle-question"></i>
+      </a>
+    {{/if}}
+  </div>
   <div class="stat-name bold">{{ localize "PEN.passions"}}</div>
   <div class="horizontalboxed {{#if isGM}} droppable {{/if}} virtues" data-collection = "passions">
   <ol class="item-list">

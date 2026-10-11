@@ -255,8 +255,7 @@ export class PENCharCreateV2 {
           });
           let rollStr = "";
           //If a fixed value that doesn't roll a dice
-          if (roll.dice.length<1) {
-
+          if (roll.dice.length < 1) {
             results.push({
               name: thisTrait.name,
               rollVal: Number(formula),
@@ -327,17 +326,14 @@ export class PENCharCreateV2 {
       let sPID = archetype.system.skills.find((sItm) => sItm.pid === itm.flags?.Pendragon?.pidFlag?.id);
       if (sPID) {
         let results = await this.skillParse(sPID.formula);
-        updateSkills.push({ _id: itm.id,
+        updateSkills.push({
+          _id: itm.id,
           "system.base.mod": results.modifier,
           "system.base.multi": results.multiplier,
-          "system.base.stat": results.stat
+          "system.base.stat": results.stat,
         });
       } else {
-        updateSkills.push({ _id: itm.id,
-          "system.base.mod": 0,
-          "system.base.multi": 0,
-          "system.base.stat": "none"
-        });
+        updateSkills.push({ _id: itm.id, "system.base.mod": 0, "system.base.multi": 0, "system.base.stat": "none" });
       }
     }
     await Item.updateDocuments(updateSkills, { parent: actor });
@@ -1835,12 +1831,26 @@ export class PENCharCreateV2 {
   static async meetIdeal(actor) {
     let archetype = await actor.items.find((itm) => itm.type === "archetype");
     if (!archetype) {
-      ui.notifications.warn(actor.name + ": " + game.i18n.format("PEN.noItem", {child: game.i18n.localize('TYPES.Item.archetype'), parent: game.i18n.localize('TYPES.Actor.character')}));
+      ui.notifications.warn(
+        actor.name +
+          ": " +
+          game.i18n.format("PEN.noItem", {
+            child: game.i18n.localize("TYPES.Item.archetype"),
+            parent: game.i18n.localize("TYPES.Actor.character"),
+          }),
+      );
       return false;
     }
     let idealPID = archetype.system.ideals[0].pid;
     if (!idealPID) {
-      ui.notifications.warn(actor.name + ": " + game.i18n.format("PEN.noItem", {child: game.i18n.localize('TYPES.Item.ideal'), parent: game.i18n.localize('TYPES.Item.archetype')}));
+      ui.notifications.warn(
+        actor.name +
+          ": " +
+          game.i18n.format("PEN.noItem", {
+            child: game.i18n.localize("TYPES.Item.ideal"),
+            parent: game.i18n.localize("TYPES.Item.archetype"),
+          }),
+      );
       return false;
     }
     let ideal = await actor.items.find((itm) => itm.flags?.Pendragon?.pidFlag?.id === idealPID);
@@ -1849,9 +1859,8 @@ export class PENCharCreateV2 {
       return false;
     }
     if (!ideal.system.activeIdeal) {
-      ui.notifications.warn(actor.name + ": " + game.i18n.format("PEN.notEnoughReq", {name: ideal.name}));
+      ui.notifications.warn(actor.name + ": " + game.i18n.format("PEN.notEnoughReq", { name: ideal.name }));
       return false;
-
     }
 
     let data = {
@@ -2199,7 +2208,6 @@ export class PENCharCreateV2 {
     return;
   }
 
-
   //----------------------------------------------ADD LUCK BENEFIT----------------------------------------------
   //
   //
@@ -2207,12 +2215,26 @@ export class PENCharCreateV2 {
     let results = [];
     let archetype = await actor.items.find((itm) => itm.type === "archetype");
     if (!archetype) {
-      ui.notifications.warn(actor.name + ": " + game.i18n.format("PEN.noItem", {child: game.i18n.localize('TYPES.Item.archetype'), parent: game.i18n.localize('TYPES.Actor.character')}));
+      ui.notifications.warn(
+        actor.name +
+          ": " +
+          game.i18n.format("PEN.noItem", {
+            child: game.i18n.localize("TYPES.Item.archetype"),
+            parent: game.i18n.localize("TYPES.Actor.character"),
+          }),
+      );
       return false;
     }
     let idealPID = archetype.system.ideals?.[0]?.pid;
     if (!idealPID) {
-      ui.notifications.warn(actor.name + ": " + game.i18n.format("PEN.noItem", {child: game.i18n.localize('TYPES.Item.ideal'), parent: game.i18n.localize('TYPES.Item.archetype')}));
+      ui.notifications.warn(
+        actor.name +
+          ": " +
+          game.i18n.format("PEN.noItem", {
+            child: game.i18n.localize("TYPES.Item.ideal"),
+            parent: game.i18n.localize("TYPES.Item.archetype"),
+          }),
+      );
       return false;
     }
     let ideal = await actor.items.find((itm) => itm.flags?.Pendragon?.pidFlag?.id === idealPID);
@@ -2221,9 +2243,8 @@ export class PENCharCreateV2 {
       return false;
     }
     if (!ideal.system.activeIdeal) {
-      ui.notifications.warn(actor.name + ": " + game.i18n.format("PEN.notEnoughReq", {name: ideal.name}));
+      ui.notifications.warn(actor.name + ": " + game.i18n.format("PEN.notEnoughReq", { name: ideal.name }));
       return false;
-
     }
     let tablePID = ideal.system.luck?.[0]?.pid;
     if (!tablePID) {
@@ -2232,7 +2253,7 @@ export class PENCharCreateV2 {
     }
     let table = (await game.system.api.pid.fromPIDBest({ pid: tablePID }))[0];
     if (!table) {
-      ui.notifications.warn(actor.name + ": " + game.i18n.format("PEN.noNamedTable", {name: tablePID}));
+      ui.notifications.warn(actor.name + ": " + game.i18n.format("PEN.noNamedTable", { name: tablePID }));
       return false;
     }
     const luckResults = await PENUtilities.tableDiceRoll(table);
@@ -2313,7 +2334,9 @@ export class PENCharCreateV2 {
 
   //Parse Archetype Formaule in to skill base components
   static async skillParse(formula) {
-    formula = String(formula ?? "0").toLowerCase().replace(/\s+/g, "");
+    formula = String(formula ?? "0")
+      .toLowerCase()
+      .replace(/\s+/g, "");
     let stat = "none";
     let multiplier = 0;
     let modifier = 0;

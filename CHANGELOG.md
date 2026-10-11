@@ -1,12 +1,13 @@
 # CHANGELOG
 
 ## 14.21
+
 - Archetype added - for characters only - https://github.com/cragstone/Pendragon/wiki/Archetype
 - Archetype Holds base stats and starting values for skills, bonus trait (Valorous for Knight) and starting trait (one starts at 16 if constructed)
 - Archetype has an "ideal" - to test for becoming a Knight or a Lady.
 - Char stats in Constructed mode limited by min/max from Archetype
 - Culture has stat dice and max removed, leaving stat bonuses and skills
-- Characters and Followers now have their stats reduced where age is <13 and Chaste/Lustful trait hidden.  There is a game setting to alter the age/turn it off.
+- Characters and Followers now have their stats reduced where age is <13 and Chaste/Lustful trait hidden. There is a game setting to alter the age/turn it off.
 - Followers have a died entry to record year of death
 - Dialog box now use Light/Dark mode and follow the general colour theme
 - All items now use Light/Dark mode and follow the general colour theme
@@ -29,7 +30,12 @@
 - There are some pre-defined keys for Active Effects and a small library of AE are included in the system
 - Localized the Character V2 Treat Wounds dialog box
 - Adjusted Mounted Charge attack so Charge skill not reduced if using a Lance or Spear (not thrown)
+- Added a new GM tool to allow you to set the year (rather than having to increase/decrease lots of times)
+- Some additional family relationship options added (Sibling, Grandparent, Grandchild, Aunt/Uncle, Cousin)
+- Migrated some more of the Game Instructions over to the wiki - https://github.com/cragstone/Pendragon/wiki
 - Big thank you to MrPrimate for testing/fixing all of the above
+- Thank you to Tontione for French translations
+- Thank you to JBowtie for doing the work on CharacterV2 colour scheme that I've used in Character V1, Items and Dialogs
 - Winter Phase (MrPrimate)
   - A dialog will popup if all non-deceased characters that are Owned by players have not completed their winter phase to let the GM know what is outstanding.
   - A GM only button on the character sheet to run an individual winter phase for the previous year, that does not add passive glory. (Useful if players were missing)
@@ -41,8 +47,6 @@
   - Quantity / stacks A stack (quantity > 1) has no hand states. Choosing a hand state draws exactly one unit out of the stack as a new quantity-1 item; the remainder keeps its carried/dropped state.
   - Identical weapons resting in the same no-hand state merge back into one stack.
   - Damage - a two-handed grip sets 2D6, never less than the weapon's own damageMod; for two-handed-capable weapons damageMod only counts while actually gripped, so legacy "2H" spears calculate correctly one- or two-handed. Weapons that cannot be used two-handed always add their own value.
-
-
 
 ## 14.20
 

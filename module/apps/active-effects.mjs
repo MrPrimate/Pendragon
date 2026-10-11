@@ -19,14 +19,13 @@ export class PendragonActiveEffect extends ActiveEffect {
    * @returns {object}
    */
   static applyChange(targetDoc, change, options) {
-    if (change.key === "system.damBonus" && (change.type === "add")) {
+    if (change.key === "system.damBonus" && change.type === "add") {
       let val = change.value.toString();
-      if (!["+","-"].includes(val.charAt(0))) {
-        change.value = "+" + val
+      if (!["+", "-"].includes(val.charAt(0))) {
+        change.value = "+" + val;
       }
     }
     const changes = super.applyChange(targetDoc, change, options);
     return changes;
   }
-
 }

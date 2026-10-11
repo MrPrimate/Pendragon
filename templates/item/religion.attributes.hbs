@@ -1,6 +1,11 @@
 <section class="tab attributes {{tab.cssClass}}" data-group="primary" data-tab="attributes">
-  <br>
-
+  <div class="helpicon">
+    {{#if showHelp}}
+      <a class="" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Religion" data-tooltip='{{localize "PEN.openWiki"}}'>
+        <i class="fas fa-circle-question"></i>
+      </a>
+    {{/if}}
+  </div>
   {{!-- Related Religion Skill --}}
     <div class="stat-name bold">{{ localize "PEN.religiousSkill"}}</div>
     <div class="horizontalboxed {{#if isGM}} droppable {{/if}} deities" data-collection = "deity">
@@ -66,6 +71,8 @@
             {{/if}}
           </div>
         </li>
+      {{else}}
+        <div class="centre italics" style="height:60px; padding-top: 20px;">{{localize 'PEN.emptyList'}}</td>
       {{/each}}
     </ol>
   </div>

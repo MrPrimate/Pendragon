@@ -126,7 +126,12 @@
           <div class="stat-name-input centre"><input name="system.quantity" type="number" value="{{item.system.quantity}}"/></div>
         </div>
       {{/if}}
-
-</div>
-
+  </div>
+    <div class="tabHelpIcon">
+      {{#if showHelp}}
+        <a class="helpicon" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Weapon" data-tooltip='{{localize "PEN.openWiki"}}'>
+          <i class="fas fa-circle-question"></i>
+        </a>
+      {{/if}}
+    </div>
 </section>

@@ -7,4 +7,11 @@
       <div class="stat-name bold">{{localize 'PEN.description'}}</div>
       <div class="stat-name-input centre"><input name="system.description" type="text" value="{{item.system.description}}"/></div>
     </div>
+    <div class="tabHelpIcon">
+      {{#if showHelp}}
+        <a class="helpicon" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Wound" data-tooltip='{{localize "PEN.openWiki"}}'>
+          <i class="fas fa-circle-question"></i>
+        </a>
+      {{/if}}
+    </div>
   </section>

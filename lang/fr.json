@@ -260,6 +260,7 @@
     "CopyToClipboard": "Copier dans le presse-papier",
     "cost": "Coût",
     "court": "Court",
+    "cousin": "Cousin",
     "createTokens": "Créer des jetons",
     "createWound": "Créer une blessure",
     "creation": "Création de personnage",
@@ -503,6 +504,9 @@
     "gmTab": "Info MJ",
     "GMTools": "Outils MJ",
     "good": "Bon",
+    "grandchild": "Petit-enfant",
+    "grandparent": "Grand-parent",
+
     "guarantee": "Garantie",
 
     "hafted": "Haches & Masses",
@@ -897,6 +901,7 @@
     "personal": "Détails personnels",
     "personalEvents": "Événements personnels",
     "personality": "Personnalité",
+    "pibling": "Tante ou Oncle",
     "pid": "Pendragon ID",
     "plate": "Armure de Plates",
     "plateMod": "Bonus D6 vs Plate",
@@ -994,8 +999,10 @@
     "selectTrait": "Choisir un Trait pour le porter à 16",
     "self": "Soi-même",
     "senesence": "{senes} tests de perte de caractéristique",
+    "setYear": "Définir l'année du jeu",
     "shield": "Bouclier",
     "short": "Court",
+    "sibling": "Frère ou sœur",
     "sizInc": {
       "0": "",
       "1": "Lourd",

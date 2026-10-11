@@ -1,4 +1,11 @@
   <section class="tab attributes {{tab.cssClass}}" data-group="primary" data-tab="attributes">
+   <div class="helpicon">
+    {{#if showHelp}}
+      <a class="" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Armor" data-tooltip='{{localize "PEN.openWiki"}}'>
+        <i class="fas fa-circle-question"></i>
+      </a>
+    {{/if}}
+  </div>
     <div class="item-armour-grid">
       {{#if isGM}}
         <div class="stat-name left bold">{{localize 'PEN.armourPoints'}}</div>

@@ -1,4 +1,3 @@
-
 <section class="tab attributes {{tab.cssClass}}" data-group="primary" data-tab="attributes">
 
   {{#if hasOwner}}
@@ -130,4 +129,11 @@
       {{/each}}
     </ol>
   </div>
+    <div class="tabHelpIcon">
+      {{#if showHelp}}
+        <a class="helpicon" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Ideal" data-tooltip='{{localize "PEN.openWiki"}}'>
+          <i class="fas fa-circle-question"></i>
+        </a>
+      {{/if}}
+    </div>
 </section>

@@ -1,5 +1,11 @@
 <section class="tab attributes {{tab.cssClass}}" data-group="primary" data-tab="attributes">
-
+   <div class="helpicon">
+    {{#if showHelp}}
+      <a class="" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Family" data-tooltip='{{localize "PEN.openWiki"}}'>
+        <i class="fas fa-circle-question"></i>
+      </a>
+    {{/if}}
+  </div>
   <div class="item-trait-grid">
     <div class="stat-name left bold new-row">{{localize 'PEN.gender'}}</div>
     <div class="stat-name-input centre"><input name="system.gender" type="text" value="{{item.system.gender}}"/></div>

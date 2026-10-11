@@ -327,4 +327,10 @@
   & .greyBack {
     background-color: var(--pd-dark-row);
   }
+
+  & .tabHelpIcon {
+    position: absolute;
+    top: 156px;
+    right: 26px;
+  }
 }
