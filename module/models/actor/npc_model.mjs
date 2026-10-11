@@ -103,6 +103,7 @@ export class NpcData extends foundry.abstract.TypeDataModel {
       manDmg: new NumberField({ ...requiredInteger, initial: 0 }),
       manHealRate: new NumberField({ ...requiredInteger, initial: 0 }),
       manUnconscious: new NumberField({ ...requiredInteger, initial: 0 }),
+      damEffects: new NumberField({ ...requiredInteger, initial: 0 }),
       damage: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
       damBonus: new StringField({ required: true, blank: true, initial: "" }),
       healRate: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),

@@ -106,6 +106,7 @@ export class FollowerData extends foundry.abstract.TypeDataModel {
       healRateEffects: new NumberField({ ...requiredInteger, initial: 0 }),
       moveEffects: new NumberField({ ...requiredInteger, initial: 0 }),
       armourEffects: new NumberField({ ...requiredInteger, initial: 0 }),
+      damEffects: new NumberField({ ...requiredInteger, initial: 0 }),
       damage: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
       damBonus: new StringField({ required: true, blank: true, initial: "" }),
       genialityAdj: new NumberField({ ...requiredInteger, initial: 0 }),

@@ -332,6 +332,21 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
         secrets: context.editable,
       },
     );
+    // Used wherever we need to show a particular status
+    context.statuses = CONFIG.statusEffects
+      .map((c) => {
+        const hasCondition = this.actor.statuses.has(c.id);
+        return {
+          id: c.id,
+          name: game.i18n.localize(`PEN.${c.name}`),
+          img: c.img,
+          active: hasCondition,
+        };
+      })
+      .reduce((acc, o, index) => {
+        acc[o.id] = o;
+        return acc;
+      }, {});
 
     const estates = [];
     for (let a of this.document.system.estates) {
@@ -685,10 +700,8 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
   /* --------------------------------ACTIONS--------------------- */
 
   static async _onActorToggle(event, target) {
-    //Only perform on double click
     const prop = target.dataset.property;
     let checkProp = {};
-
     if (["lock", "heir"].includes(prop)) {
       checkProp = { [`system.${prop}`]: !this.actor.system[prop] };
     } else if (["chirurgery", "barren"].includes(prop)) {

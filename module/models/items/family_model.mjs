@@ -24,8 +24,8 @@ export class FamilyData extends foundry.abstract.TypeDataModel {
   prepareDerivedData() {
     super.prepareDerivedData();
     this.age = game.time.components.year - this.born;
-    if (this.died > 0) {
-      this.age = this.died - this.born;
+    if (Number(this.died) > 0) {
+      this.age = Number(this.died) - this.born;
     }
   }
 }

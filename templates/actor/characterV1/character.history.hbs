@@ -16,7 +16,7 @@
 
     {{#each history as |historical key|}}
       <div class="grid-item-bottom stat-name centre">{{historical.system.year}}</div>
-      <div class="grid-item-bottom stat-name">{{historical.name}}</div>
+      <div class="grid-item-bottom stat-name" data-tooltip="{{{historical.system.description}}}">{{historical.name}}</div>
       <div class="grid-item-bottom stat-name centre">{{historical.system.glory}}</div>
       <div class="item grid-item-bottom centre" data-itemid ="{{historical._id}}">
         <a class="item-control large-icon fade" data-action="viewDoc"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
@@ -58,12 +58,17 @@
     <div class="stat-name grid-item-bottom centre">{{system.tap}}</div>
     <div class="stat-name grid-item-bottom ">{{localize 'PEN.estate'}}</div>
     <div class="armour-grid-input event-input grid-item-bottom centre"><input name="system.passglory.estate" type="number" value="{{system.passglory.estate}}"/></div>
-    <div class="stat-name grid-item-bottom ">{{localize 'PEN.inyear'}}</div>
-    <div class="armour-grid-input event-input grid-item-bottom centre"><input name="system.passglory.inyear" type="number" value="{{system.passglory.inyear}}"/></div>
     <div class="stat-name grid-item-bottom ">{{localize 'PEN.other'}}</div>
     <div class="armour-grid-input event-input grid-item-bottom centre"><input name="system.passglory.other" type="number" value="{{system.passglory.other}}"/></div>
     <div class="stat-name grid-item-bottom bold">{{localize 'PEN.totalG'}}</div>
     <div class="stat-name grid-item-bottom bold centre">{{system.passive}}</div>
   </div>
   <br>
+  <div class="tabHelpIcon">
+    {{#if showHelp}}
+      <a class="helpicon" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Character-V1:-History-Tab" data-tooltip='{{localize "PEN.openWiki"}}'>
+        <i class="fas fa-circle-question"></i>
+      </a>
+    {{/if}}
+  </div>
 </section>

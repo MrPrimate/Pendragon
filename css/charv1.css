@@ -296,7 +296,7 @@
 
   & .character-trait-grid {
     display: grid;
-    grid-template-columns: 30px 50px 150px 70px 150px 50px 30px 60px 230px;
+    grid-template-columns: 30px 50px 150px 70px 150px 50px 30px 60px 230px 50px;
     gap: 0px;
     margin-top: 0px;
     margin-bottom: 0px;
@@ -500,5 +500,39 @@
     margin-bottom: 0px;
     border-top: 1px gray solid;
     border-left: 1px gray solid;
+  }
+
+
+  & .combat-grid {
+    display: grid;
+    grid-template-columns: 310px 501px;
+    column-gap: 10px;
+  }
+
+  & .trait-tab {
+    display: grid;
+    grid-template-columns: 831px 30px;
+  }
+
+  & .purple {
+    color: var(--exalted-color);
+  }
+
+  & .skill-list {
+    display: flex;
+    max-width: 830px;
+    list-style: none;
+    flex-direction: column;
+    flex-wrap: wrap;
+    column-gap: 10px;
+    padding: 0;
+    margin: 0px;
+    height: 100%;
+  }
+
+  & .tabHelpIcon {
+    position: absolute;
+    top: 275px;
+    right: 30px;
   }
 }

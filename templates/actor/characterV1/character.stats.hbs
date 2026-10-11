@@ -1,4 +1,5 @@
 <section class='character tab stats {{tab.cssClass}}' data-group='primary' data-tab='stats'>
+  <p style="margin: 4px"></p>
   <ol class="stats-list">
     <div class="stats-tab-grid">
       <div class="stat-item bold centre grid-item-left grid-item-top" data-tooltip="{{localize 'PEN.statistic'}}">{{ localize 'PEN.statAbbr'}}</div>
@@ -39,7 +40,7 @@
           <div class="stat-item centre grid-item-bottom">{{stat.effects}}</div>
         {{else}}
           <div class="stat-item centre grid-item-bottom">{{stat.value}}</div>
-          <div class="stat-itemt centre grid-item-bottom">{{stat.culture}}</div>
+          <div class="stat-item centre grid-item-bottom">{{stat.culture}}</div>
           <div class="stat-item centre grid-item-bottom">{{stat.create}}</div>
           {{#if (eq key 'con')}}
             <div class="stat-item-input centre grid-item-bottom"><input name="system.stats.{{key}}.poison" type="number" value="{{stat.poison}}"/></div>
@@ -51,7 +52,11 @@
           <div class="stat-item centre grid-item-bottom">{{stat.major}}</div>
           <div class="stat-item centre grid-item-bottom">{{stat.age}}</div>
           <div class="stat-item centre grid-item-bottom">{{stat.youth}}</div>
+          {{#isOr ../isWinter ../isDevelopment}}
+            <div class="stat-item-input centre grid-item-bottom"><input name="system.stats.{{key}}.winter" type="number" value="{{stat.winter}}"/></div>
+          {{else}}
           <div class="stat-item centre grid-item-bottom">{{stat.winter}}</div>
+          {{/isOr}}
           <div class="stat-item centre grid-item-bottom">{{stat.effects}}</div>
         {{/isOr}}
         <div class ="stat-item centre bold grid-item-bottom" title="{{stat.labelShort}}">{{stat.total}}</div>
@@ -76,4 +81,11 @@
         <div class="stat-item">{{system.stats.siz.growth}}</div>
     </div>
   <br>
+  <div class="tabHelpIcon">
+    {{#if showHelp}}
+      <a class="helpicon" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Character-V1:-Stats-Tab" data-tooltip='{{localize "PEN.openWiki"}}'>
+        <i class="fas fa-circle-question"></i>
+      </a>
+    {{/if}}
+  </div>
 </section>

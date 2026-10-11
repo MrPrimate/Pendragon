@@ -324,12 +324,6 @@
   column-gap: 10px;
 }
 
-.Pendragon .combat-grid {
-  display: grid;
-  grid-template-columns: 310px 501px;
-  column-gap: 10px;
-}
-
 .Pendragon .stat-grid {
   display: grid;
   grid-template-columns: 50px 50px;

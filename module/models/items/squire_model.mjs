@@ -22,7 +22,7 @@ export class SquireData extends foundry.abstract.TypeDataModel {
 
   static migrateData(source) {
     if (source.born === 0) {
-      source.born = game.time.components.year - source.age;
+      source.born = Number(game.time.components.year) - Number(source.age);
     }
     return source;
   }

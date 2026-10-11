@@ -1,15 +1,12 @@
 # CHANGELOG
 
-## Unreleased
-
+## 14.21
 - Archetype added - for characters only - https://github.com/cragstone/Pendragon/wiki/Archetype
-- Archetype Holds base stats and starting values for skills
-- Archetype now holds bonus trait (Valorous for Knight) and starting trait (one starts at 16 if constructed)
+- Archetype Holds base stats and starting values for skills, bonus trait (Valorous for Knight) and starting trait (one starts at 16 if constructed)
 - Archetype has an "ideal" - to test for becoming a Knight or a Lady.
-- Can add Archetype via drag/drop and character creation
 - Char stats in Constructed mode limited by min/max from Archetype
-- Culture has stats and max removed, leaving bonus and skills
-- Characters and Followers now have their stats reduced where age is <13
+- Culture has stat dice and max removed, leaving stat bonuses and skills
+- Characters and Followers now have their stats reduced where age is <13 and Chaste/Lustful trait hidden.  There is a game setting to alter the age/turn it off.
 - Followers have a died entry to record year of death
 - Dialog box now use Light/Dark mode and follow the general colour theme
 - All items now use Light/Dark mode and follow the general colour theme
@@ -18,23 +15,34 @@
   (leave blank for knights and ladies where there is no age limit)
 - In character creation the second class step has been absorbed in to the Meet Ideal (what was Knighted) step
 - Some Game Settings have been moved to Character Options game settings
-- A "Youth" age setting added, change the default age (13) or set to 0 to turn it off.
-- Characters and Followers under Youth age have their stats reduced and Chaste/Lustful trait hidden
 - In V1 any ideal can be added to character - no longer checks that requirements are met on drop
 - When spending Personal Skill Points in character creation you can increase Weapon Skill scores even if they are at zero
 - Ideals expanded to have an Age requirement, and Skill Group requirement (e.g. two skills of this group with score 10+)
 - Ideals also have space for a Luck Benefit table to be dropped. This is used in character creation.
 - Ideals, if on a character, have an additional toggle flag "Joined". You need to meet the requirements of the ideal to join.
-- Active Effects on an Ideal are only active if the Ideal has been set to "Joined"
 - Squires now have born and died values, with Age being calculated rather than input
 - Active Effects added to Character V1
 - Old adjustments on Character Stats tab no longer effective but shown for now to allow replacement with Active Effects
 - All items except Wounds now have Active Effects
 - Active Effects for Skills, Traits and Passions can be added by using the key 'pidItems.i-<itemtype>-<itemPid>.system.effects' e.g. pidItems.i-skill-compose.system.effects Because the list of pidItems is only created in the actor and not on the item the skill total can't be calculated in the item data model so these calcs have come back to the actor.mjs file
 - Active Effects on an Ideal are only active if the Ideal has been set to "Joined"
-- There are some pre-defined keys for Active Effects and a small library of AE are included in the system (may remove these to Core Rulebook module perhaps)
+- There are some pre-defined keys for Active Effects and a small library of AE are included in the system
 - Localized the Character V2 Treat Wounds dialog box
 - Adjusted Mounted Charge attack so Charge skill not reduced if using a Lance or Spear (not thrown)
+- Big thank you to MrPrimate for testing/fixing all of the above
+- Winter Phase (MrPrimate)
+  - A dialog will popup if all non-deceased characters that are Owned by players have not completed their winter phase to let the GM know what is outstanding.
+  - A GM only button on the character sheet to run an individual winter phase for the previous year, that does not add passive glory. (Useful if players were missing)
+- V2 Character Sheet (ryak2)
+  - Hand rules - Shields occupy the secondary hand; equipping one is refused while a two-handed weapon is gripped (the shield is automatically un-equipped again).
+  - Wielding two-handed displaces whatever else was in hand, including an equipped shield, so shield AP stops applying.
+  - Anything displaced from a hand is dropped; picking it up again takes a combat action.
+  - Lances may be wielded one-handed, so they can pair with a shield; two-handed hafted weapons may not.
+  - Quantity / stacks A stack (quantity > 1) has no hand states. Choosing a hand state draws exactly one unit out of the stack as a new quantity-1 item; the remainder keeps its carried/dropped state.
+  - Identical weapons resting in the same no-hand state merge back into one stack.
+  - Damage - a two-handed grip sets 2D6, never less than the weapon's own damageMod; for two-handed-capable weapons damageMod only counts while actually gripped, so legacy "2H" spears calculate correctly one- or two-handed. Weapons that cannot be used two-handed always add their own value.
+
+
 
 ## 14.20
 
