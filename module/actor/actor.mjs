@@ -331,7 +331,6 @@ export class PendragonActor extends Actor {
         ? game.time.components.year - 1
         : Infinity;
     let winterGlory = 0;
-    let armour = 0;
     let armour = systemData.armourEffects;
     let shield = 0;
     for (let i of actorData.items) {
