@@ -14,6 +14,9 @@ import { migrateWorld } from "./setup/migrations.mjs";
 import { PendragonCombatTracker } from "./apps/combat-tracker.mjs";
 import { PendragonStatusEffects } from "./apps/status-effects.mjs";
 import { PIDEditor } from "./pid/pid-editor.mjs";
+import { PendragonActiveEffect } from "./apps/active-effects.mjs";
+import RenderActiveEffectConfig from "./hooks/render-active-effect-config.mjs";
+
 import {
   CharacterData,
   NpcData,
@@ -44,6 +47,7 @@ import {
   IdealData,
   RelationshipData,
   BackgroundData,
+  ArchetypeData,
 } from "./models/items/index.mjs";
 import drawNote from "./hooks/draw-note.mjs";
 import RenderNoteConfig from "./hooks/render-note-config.mjs";
@@ -119,12 +123,14 @@ Hooks.once("init", async function () {
   CONFIG.Item.dataModels.ideal = IdealData;
   CONFIG.Item.dataModels.relationship = RelationshipData;
   CONFIG.Item.dataModels.background = BackgroundData;
+  CONFIG.Item.dataModels.archetype = ArchetypeData;
 
   // Define custom Document classes
   CONFIG.Actor.documentClass = PendragonActor;
   CONFIG.Item.documentClass = PendragonItem;
   CONFIG.Combat.documentClass = PendragonCombat;
   CONFIG.Combatant.documentClass = PendragonCombatant;
+  CONFIG.ActiveEffect.documentClass = PendragonActiveEffect;
 
   CONFIG.statusEffects = PendragonStatusEffects.allStatusEffects;
   CONFIG.ui.combat = PendragonCombatTracker;
@@ -176,19 +182,20 @@ Hooks.on("renderJournalEntryPageTextSheet", RenderJournalEntryPageTextSheet);
 Hooks.on("renderJournalEntrySheet", RenderJournalEntrySheet);
 Hooks.on("renderRollTableSheet", RenderRollTableSheet);
 Hooks.on("createToken", createToken);
-Hooks.on('updateWorldTime', (worldTime, dt, options, userId) => {
+Hooks.on("updateWorldTime", (worldTime, dt, options, userId) => {
   for (const doc of game.actors) {
-    doc._initialize()
+    doc._initialize();
   }
-  foundry.applications.instances.forEach(sheet => {
-    if (sheet instanceof CONFIG.Actor.sheetClasses.character['Pendragon.PendragonCharacterSheet'].cls ||
-        sheet instanceof CONFIG.Actor.sheetClasses.character['Pendragon.PendragonCharacterSheetv2'].cls
+  foundry.applications.instances.forEach((sheet) => {
+    if (
+      sheet instanceof CONFIG.Actor.sheetClasses.character["Pendragon.PendragonCharacterSheet"].cls ||
+      sheet instanceof CONFIG.Actor.sheetClasses.character["Pendragon.PendragonCharacterSheetv2"].cls ||
+      sheet instanceof CONFIG.Actor.sheetClasses.follower["Pendragon.PendragonFollowerSheet"].cls
     ) {
-      sheet.render({ force: true })
+      sheet.render({ force: true });
     }
-  })
-})
-
+  });
+});
 
 PendragonHooks.listen();
 
@@ -199,6 +206,9 @@ Hooks.on("renderRollTableSheet", (application, element) => PIDEditor.addPIDSheet
 Hooks.on("renderCombatTracker", async (combatTracker, html, combatData) =>
   combatTracker.renderTracker(html instanceof HTMLElement ? html : html[0]),
 );
+
+//Render Active Effect Sheet
+Hooks.on("renderActiveEffectConfig", RenderActiveEffectConfig);
 
 /* -------------------------------------------- */
 /*  Ready Hook                                  */

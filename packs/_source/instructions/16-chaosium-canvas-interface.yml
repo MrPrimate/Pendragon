@@ -62,15 +62,15 @@ pages:
     _stats:
       duplicateSource: null
       exportSource: null
-      coreVersion: "14.365"
+      coreVersion: '14.365'
       systemId: Pendragon
       systemVersion: 13.1.40
       createdTime: 1761023334245
       modifiedTime: 1785910635571
       lastModifiedBy: pendragonBuilder
-    _key: "!journal.pages!YIOXEE3VeZemUzVc.gBj2YxqJaneb1F9r"
+    _key: '!journal.pages!YIOXEE3VeZemUzVc.gBj2YxqJaneb1F9r'
   - sort: 200000
-    name: "CCI: Open Document"
+    name: 'CCI: Open Document'
     type: text
     _id: eK6nvn2IndkckRJK
     system: {}
@@ -105,15 +105,15 @@ pages:
     _stats:
       duplicateSource: null
       exportSource: null
-      coreVersion: "13.350"
+      coreVersion: '13.350'
       systemId: Pendragon
       systemVersion: 13.1.40
       createdTime: 1761023351783
       modifiedTime: 1761023365909
       lastModifiedBy: pendragonBuilder
-    _key: "!journal.pages!YIOXEE3VeZemUzVc.eK6nvn2IndkckRJK"
+    _key: '!journal.pages!YIOXEE3VeZemUzVc.eK6nvn2IndkckRJK'
   - sort: 300000
-    name: "CCI: Drawing Toggle"
+    name: 'CCI: Drawing Toggle'
     type: text
     _id: ObOSbX8C45S5H1rV
     system: {}
@@ -135,15 +135,15 @@ pages:
     _stats:
       duplicateSource: null
       exportSource: null
-      coreVersion: "13.350"
+      coreVersion: '13.350'
       systemId: Pendragon
       systemVersion: 13.1.40
       createdTime: 1761023375319
       modifiedTime: 1761023389502
       lastModifiedBy: pendragonBuilder
-    _key: "!journal.pages!YIOXEE3VeZemUzVc.ObOSbX8C45S5H1rV"
+    _key: '!journal.pages!YIOXEE3VeZemUzVc.ObOSbX8C45S5H1rV'
   - sort: 400000
-    name: "CCI: Tile Toggle"
+    name: 'CCI: Tile Toggle'
     type: text
     _id: 47TGEJqzg1JbeUip
     system: {}
@@ -165,15 +165,15 @@ pages:
     _stats:
       duplicateSource: null
       exportSource: null
-      coreVersion: "13.350"
+      coreVersion: '13.350'
       systemId: Pendragon
       systemVersion: 13.1.40
       createdTime: 1761023405513
       modifiedTime: 1761023411991
       lastModifiedBy: pendragonBuilder
-    _key: "!journal.pages!YIOXEE3VeZemUzVc.47TGEJqzg1JbeUip"
+    _key: '!journal.pages!YIOXEE3VeZemUzVc.47TGEJqzg1JbeUip'
   - sort: 350000
-    name: "CCI: Map Pin Toggle"
+    name: 'CCI: Map Pin Toggle'
     type: text
     _id: dHWBhwsRzdDuc2N8
     system: {}
@@ -213,15 +213,15 @@ pages:
     _stats:
       duplicateSource: null
       exportSource: null
-      coreVersion: "13.350"
+      coreVersion: '13.350'
       systemId: Pendragon
       systemVersion: 13.1.40
       createdTime: 1761023433769
       modifiedTime: 1761023448546
       lastModifiedBy: pendragonBuilder
-    _key: "!journal.pages!YIOXEE3VeZemUzVc.dHWBhwsRzdDuc2N8"
+    _key: '!journal.pages!YIOXEE3VeZemUzVc.dHWBhwsRzdDuc2N8'
   - sort: 500000
-    name: "CCI: Play Sound"
+    name: 'CCI: Play Sound'
     type: text
     _id: xQuMWZdTuze0V2sh
     system: {}
@@ -256,15 +256,15 @@ pages:
     _stats:
       duplicateSource: null
       exportSource: null
-      coreVersion: "13.350"
+      coreVersion: '13.350'
       systemId: Pendragon
       systemVersion: 13.1.40
       createdTime: 1761023456361
       modifiedTime: 1761023470542
       lastModifiedBy: pendragonBuilder
-    _key: "!journal.pages!YIOXEE3VeZemUzVc.xQuMWZdTuze0V2sh"
+    _key: '!journal.pages!YIOXEE3VeZemUzVc.xQuMWZdTuze0V2sh'
   - sort: 600000
-    name: "CCI: To Scene"
+    name: 'CCI: To Scene'
     type: text
     _id: ZUyOPBM4Ntq4xdE2
     system: {}
@@ -286,13 +286,13 @@ pages:
     _stats:
       duplicateSource: null
       exportSource: null
-      coreVersion: "13.350"
+      coreVersion: '13.350'
       systemId: Pendragon
       systemVersion: 13.1.40
       createdTime: 1761023479738
       modifiedTime: 1761023490639
       lastModifiedBy: pendragonBuilder
-    _key: "!journal.pages!YIOXEE3VeZemUzVc.ZUyOPBM4Ntq4xdE2"
+    _key: '!journal.pages!YIOXEE3VeZemUzVc.ZUyOPBM4Ntq4xdE2'
 folder: null
 categories: []
 sort: 0
@@ -309,10 +309,10 @@ flags:
 _stats:
   duplicateSource: null
   exportSource: null
-  coreVersion: "14.364"
+  coreVersion: '14.364'
   systemId: Pendragon
-  systemVersion: "14.1"
+  systemVersion: '14.1'
   createdTime: 1761023308053
   modifiedTime: 1781499266294
   lastModifiedBy: pendragonBuilder
-_key: "!journal!YIOXEE3VeZemUzVc"
+_key: '!journal!YIOXEE3VeZemUzVc'

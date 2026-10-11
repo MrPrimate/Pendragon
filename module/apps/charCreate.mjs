@@ -1,3 +1,5 @@
+//THIS WHOLE FILE CAN BE DELETED
+/*
 import { PENUtilities } from "./utilities.mjs";
 import { ItemsSelectDialog } from "./item-selection.mjs";
 import { PassionsSelectDialog } from "./passion-selection.mjs";
@@ -39,6 +41,21 @@ export class PENCharCreate {
     let confirm = await PENCharCreate.validate();
     if (!confirm) {
       return;
+    }
+
+    //Add Archetype
+    if (step === "addArchetype") {
+      //If actor has an Archetype then stop
+      if (actor.system.archetypeID != "") {
+        return false;
+      } else {
+        // Call addArchetype
+        let result = await PENCharCreate.addArchetype(actor, false);
+        if (!result) {
+          return;
+        }
+        ui.notifications.warn(actor.name + ": " + game.i18n.localize("PEN.create.addArchetype"));
+      }
     }
 
     //Add Name -  Get the character name
@@ -271,6 +288,11 @@ export class PENCharCreate {
 
     switch (step) {
       //Reset character name
+      case "addArchetype":
+        await PENCharCreate.removeArchetype(actor);
+        ui.notifications.warn(actor.name + ": " + game.i18n.localize("PEN.undo.addArchetype"));
+        break;
+
       case "addName":
         await PENCharCreate.undoName(actor);
         ui.notifications.warn(actor.name + ": " + game.i18n.localize("PEN.undo.addName"));
@@ -648,11 +670,11 @@ export class PENCharCreate {
   //Create Stats - step 4--------------------------------------------------------------
   static async step4(actor) {
     //If not culture then revert progress to previous step
-    if (actor.system.cultureID === "") {
-      await actor.update({ "system.create.step": 3 });
-      ui.notifications.error(actor.name + ": " + game.i18n.localize("PEN.noCulture"));
-      return false;
-    }
+    //if (actor.system.cultureID === "") {
+    //  await actor.update({ "system.create.step": 3 });
+    //  ui.notifications.error(actor.name + ": " + game.i18n.localize("PEN.noCulture"));
+    //  return false;
+    //}
     let culture = actor.items.get(actor.system.cultureID);
     let stats = [];
     //If creation method is random then roll stats
@@ -661,7 +683,7 @@ export class PENCharCreate {
 
       //If creation method is constructed then choose stats
     } else {
-      stats = await StatsSelectDialog.create(culture);
+      stats = await StatsSelectDialog.create(actor);
       if (!stats) {
         return false;
       }
@@ -800,21 +822,23 @@ export class PENCharCreate {
   //Get character class - step7-------------------------------------------------------------------------------------------
   static async step7(actor) {
     //Open dialog and select the class  (not optional)
-    let mainList = await game.system.api.pid.fromPIDRegexBest({
-      pidRegExp: new RegExp("^i." + PENUtilities.quoteRegExp("class") + ".+$"),
-      type: "i",
-    });
-    let newList = mainList
-      .filter((i) => i.system.starter)
-      .map((itm) => {
-        return { name: itm.name, pid: itm.flags.Pendragon.pidFlag.id };
-      });
-    //If there are no "starter" classes then use all classes
-    if (newList.length === 0) {
-      newList = mainList.map((itm) => {
-        return { name: itm.name, pid: itm.flags.Pendragon.pidFlag.id };
-      });
-    }
+    let newList = await this.getClassList(actor, "only", true, true);
+
+//    let mainList = await game.system.api.pid.fromPIDRegexBest({
+//      pidRegExp: new RegExp("^i." + PENUtilities.quoteRegExp("class") + ".+$"),
+//      type: "i",
+//    });
+//    let newList = mainList
+//      .filter((i) => i.system.starter)
+//      .map((itm) => {
+//        return { name: itm.name, pid: itm.flags.Pendragon.pidFlag.id };
+//      });
+//    //If there are no "starter" classes then use all classes
+//    if (newList.length === 0) {
+//      newList = mainList.map((itm) => {
+//        return { name: itm.name, pid: itm.flags.Pendragon.pidFlag.id };
+//      });
+//    }
     let itemData = await PENCharCreate.selectItem("list", false, newList, game.i18n.localize("TYPES.Item.class"));
     if (!itemData) {
       return false;
@@ -827,13 +851,15 @@ export class PENCharCreate {
     return true;
   }
 
-  //Get Knightly class - addClass-------------------------------------------------------------------------------------------
+  //Get Archetype class - addClass-------------------------------------------------------------------------------------------
   static async stepAddClass(actor) {
     //Open dialog and select the class  (optional)
     let mainList = await game.system.api.pid.fromPIDRegexBest({
       pidRegExp: new RegExp("^i." + PENUtilities.quoteRegExp("class") + ".+$"),
       type: "i",
     });
+    const archetype = actor.items.find((itm) => itm.type === "archetype");
+    let archetypeList = archetype;
     let newList = mainList
       .filter((i) => !i.system.starter)
       .map((itm) => {
@@ -1083,7 +1109,8 @@ export class PENCharCreate {
   static async step12(actor, points) {
     let skills = await actor.items
       .filter((itm) => itm.type === "skill")
-      .filter((itm) => itm.system.total > 0 && itm.system.total < 15)
+      .filter((itm) => itm.system.total > 0 || itm.system.weaponType != "")
+      .filter((itm) => itm.system.total < 15)
       .map((itm) => {
         return {
           id: itm.id,
@@ -1484,7 +1511,7 @@ export class PENCharCreate {
     return itemData;
   }
 
-  //Choose Item Dialog
+  //Choose Item Dialog -  TODO Is this being used anywhere>  Redundant?
   static async selectActorItem(actor, type, title) {
     //Get list of items
     let newList = await actor.items
@@ -2476,19 +2503,12 @@ export class PENCharCreate {
 
   //Roll Characteristics
   static async rollStats(actor) {
-    //Calculate distrinctive features
+    //Calculate distinctive features
     let results = [];
     for (let [key, stat] of Object.entries(actor.system.stats)) {
       //Set default formula and adjust if there is a culture
-      let formula = "2D6+5";
-      if (actor.system.cultureID != "") {
-        formula = actor.items.get(actor.system.cultureID).system.stats[key].formula;
-      }
+      let formula = stat.formula;
       let roll = await PENUtilities.complexDiceRoll(formula);
-      //let roll = await new Roll(formula).evaluate({ async: true})
-      //if (game.modules.get('dice-so-nice')?.active) {
-      //  game.dice3d.showForRoll(roll)
-      //}
       let target = "system.stats." + key + ".value";
       let rollStr = "";
       for (let dCount = 0; dCount < roll.dice[0].results.length; dCount++)
@@ -2526,4 +2546,224 @@ export class PENCharCreate {
     }
     return await fromUuid(uuid);
   }
+
+  //Add an Archetype
+  static async addArchetype(actor, archetype) {
+    if (!archetype) {
+      const itemData = await PENCharCreate.selectItem("archetype", false);
+      if (!itemData) {
+        ui.notifications.error(game.i18n.localize("PEN.noArchetypes"));
+        return false;
+      }
+      let newItems = await actor.createEmbeddedDocuments("Item", itemData);
+      archetype = newItems[0];
+    }
+    //Adjust stat formulae & min/max
+    await actor.update({
+      "system.stats.str.min": archetype.system.stats.str.min,
+      "system.stats.dex.min": archetype.system.stats.dex.min,
+      "system.stats.con.min": archetype.system.stats.con.min,
+      "system.stats.app.min": archetype.system.stats.app.min,
+      "system.stats.siz.min": archetype.system.stats.siz.min,
+      "system.stats.str.max": archetype.system.stats.str.max,
+      "system.stats.dex.max": archetype.system.stats.dex.max,
+      "system.stats.con.max": archetype.system.stats.con.max,
+      "system.stats.app.max": archetype.system.stats.app.max,
+      "system.stats.siz.max": archetype.system.stats.siz.max,
+      "system.stats.str.cMax": archetype.system.stats.str.culturalMax,
+      "system.stats.dex.cMax": archetype.system.stats.dex.culturalMax,
+      "system.stats.con.cMax": archetype.system.stats.con.culturalMax,
+      "system.stats.app.cMax": archetype.system.stats.app.culturalMax,
+      "system.stats.siz.cMax": archetype.system.stats.siz.culturalMax,
+      "system.stats.str.formula": archetype.system.stats.str.formula,
+      "system.stats.dex.formula": archetype.system.stats.dex.formula,
+      "system.stats.con.formula": archetype.system.stats.con.formula,
+      "system.stats.app.formula": archetype.system.stats.app.formula,
+      "system.stats.siz.formula": archetype.system.stats.siz.formula,
+    });
+
+    //Add anew skills on the Archetype not on the character
+    let newSkills = [];
+    for (let skill of archetype.system.skills) {
+      let thisSkill = actor.items.find((itm) => itm.flags?.Pendragon?.pidFlag?.id === skill.pid);
+      if (!thisSkill) {
+        let nItm = await game.system.api.pid.fromPIDBest({ pid: skill.pid });
+        if (nItm.length > 0) {
+          newSkills.push(nItm[0]);
+        }
+      }
+    }
+
+    //Add Ideal if not already on character sheet
+    if (archetype.system.ideals.length > 0) {
+      let idealPID = archetype.system.ideals[0].pid;
+      let currentIdeal = await actor.items.find((itm) => itm.flags?.Pendragon?.pidFlag?.id === idealPID);
+      if (!currentIdeal) {
+        let nIdeal = await game.system.api.pid.fromPIDBest({ pid: idealPID });
+        if (nIdeal.length > 0) {
+          let newIdeal = nIdeal[0].toObject();
+          newIdeal.system.source = "archetype";
+          newSkills.push(newIdeal);
+        }
+      }
+    }
+    if (newSkills.length > 0) {
+      await Item.createDocuments(newSkills, { parent: actor });
+    }
+
+    //Adjust base score formula on all skills
+    let updateSkills = [];
+    for (let itm of actor.items) {
+      if (itm.type != "skill") continue;
+      let sPID = archetype.system.skills.find((sItm) => sItm.pid === itm.flags?.Pendragon?.pidFlag?.id);
+      if (sPID) {
+        let results = await PENCharCreate.skillParse(sPID.formula);
+        updateSkills.push({ _id: itm.id, "system.base.mod": results.modifier });
+        updateSkills.push({ _id: itm.id, "system.base.multi": results.multiplier });
+        updateSkills.push({ _id: itm.id, "system.base.stat": results.stat });
+      } else {
+        updateSkills.push({ _id: itm.id, "system.base.mod": 0 });
+        updateSkills.push({ _id: itm.id, "system.base.multi": 0 });
+        updateSkills.push({ _id: itm.id, "system.base.stat": "none" });
+      }
+    }
+    await Item.updateDocuments(updateSkills, { parent: actor });
+    await PENCharCreate.baseSkillScore(actor);
+  }
+
+  //Remove an Archetype
+  static async removeArchetype(actor) {
+    //Reset stat formulae & min/max t default
+    let archetypes = actor.items
+      .filter((itm) => itm.type === "archetype")
+      .map((itm) => {
+        return itm.id;
+      });
+    let ideals = actor.items
+      .filter((itm) => itm.type === "ideal")
+      .filter((itm) => itm.system.source === "archetype")
+      .map((itm) => {
+        return itm.id;
+      });
+    archetypes.push(...ideals);
+    await Item.deleteDocuments(archetypes, { parent: actor });
+    await actor.update({
+      "system.stats.str.min": 8,
+      "system.stats.dex.min": 8,
+      "system.stats.con.min": 8,
+      "system.stats.app.min": 8,
+      "system.stats.siz.min": 8,
+      "system.stats.str.max": 15,
+      "system.stats.dex.max": 15,
+      "system.stats.con.max": 15,
+      "system.stats.app.max": 15,
+      "system.stats.siz.max": 15,
+      "system.stats.str.cMax": 18,
+      "system.stats.dex.cMax": 18,
+      "system.stats.con.cMax": 18,
+      "system.stats.app.cMax": 18,
+      "system.stats.siz.cMax": 18,
+      "system.stats.str.formula": "2D6+5",
+      "system.stats.dex.formula": "2D6+5",
+      "system.stats.con.formula": "2D6+5",
+      "system.stats.app.formula": "2D6+5",
+      "system.stats.siz.formula": "2D6+5",
+    });
+
+    //Update Skill Base Stats to defaults
+    let updateSkills = [];
+    for (let itm of actor.items) {
+      if (itm.type != "skill") continue;
+      let baseSkill = await game.system.api.pid.fromPIDBest({ pid: itm.flags?.Pendragon?.pidFlag?.id });
+      if (baseSkill.length > 0) {
+        updateSkills.push({ _id: itm.id, "system.base.mod": baseSkill[0].system.base.mod });
+        updateSkills.push({ _id: itm.id, "system.base.multi": baseSkill[0].system.base.multi });
+        updateSkills.push({ _id: itm.id, "system.base.stat": baseSkill[0].system.base.stat });
+      } else {
+        updateSkills.push({ _id: itm.id, "system.base.mod": 0 });
+        updateSkills.push({ _id: itm.id, "system.base.multi": 0 });
+        updateSkills.push({ _id: itm.id, "system.base.stat": "none" });
+      }
+    }
+    await Item.updateDocuments(updateSkills, { parent: actor });
+    await PENCharCreate.baseSkillScore(actor);
+  }
+
+  //Parse Archetype Formaule in to skill base components
+  static async skillParse(formula) {
+    formula = formula.toLowerCase();
+    let stat = "none";
+    let multiplier = 0;
+    let modifier = 0;
+    if (!isNaN(formula) && !isNaN(parseFloat(formula))) {
+      modifier = Number(formula);
+    } else {
+      stat = formula.match(/str|dex|con|siz|app/gi)[0] ?? "none";
+      let operators = formula.match(/[+\-* /][0-9]/g);
+      if (operators) {
+        for (let operator of operators) {
+          let op = operator.charAt(0);
+          let value = Number(operator.slice(1));
+          switch (op) {
+            case "+":
+              modifier = value;
+              break;
+            case "-":
+              modifier = -value;
+              break;
+            case "*":
+              multiplier = value;
+              break;
+            case "/":
+              if (value != 0) {
+                multiplier = 1 / value;
+              }
+              break;
+          }
+        }
+      }
+    }
+    return { stat, multiplier, modifier };
+  }
+
+  //Get class list
+  //startClassFilter: only = only include Starter Classes
+  //                   exclude = exclude starter classes
+  //                   all = no filter
+  //archetypeFilter: true then filter classes in ator archetype
+  //emptyList: true = return full list if nothing after filters
+  static async getClassList(actor, starterClassFilter, archetypeFilter, emptyList) {
+    let mainList = await game.system.api.pid.fromPIDRegexBest({
+      pidRegExp: new RegExp("^i." + PENUtilities.quoteRegExp("class") + ".+$"),
+      type: "i",
+    });
+    let tempList = mainList.map((itm) => {
+      return { name: itm.name, pid: itm.flags.Pendragon.pidFlag.id };
+    });
+    if (starterClassFilter === "only") {
+      mainList = mainList.filter((i) => i.system.starter);
+    } else if (starterClassFilter === "exclude") {
+      mainList = mainList.filter((i) => !i.system.starter);
+    }
+    mainList = mainList.map((itm) => {
+      return { name: itm.name, pid: itm.flags.Pendragon.pidFlag.id };
+    });
+    if (archetypeFilter) {
+      const archetype = actor.items.find((itm) => itm.type === "archetype");
+      if (archetype) {
+        let archetypeList = archetype.system.classes.map((c) => c.pid);
+        mainList = mainList
+          .filter((i) => archetypeList.includes(i.pid))
+          .map((itm) => {
+            return { name: itm.name, pid: itm.pid };
+          });
+      }
+    }
+    if (mainList.length > 0 || !emptyList) {
+      return mainList;
+    } else {
+      return tempList;
+    }
+  }
 }
+*/

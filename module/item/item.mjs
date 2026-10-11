@@ -38,6 +38,10 @@ export class PendragonItem extends Item {
         data.img = "systems/Pendragon/assets/Icons/anvil-impact.svg";
       } else if (data.type === "background") {
         data.img = "systems/Pendragon/assets/Icons/default_actor_dark.webp";
+      } else if (data.type === "archetype") {
+        data.img = "systems/Pendragon/assets/Icons/tarot-13-death.svg";
+      } else if (data.type === "wound") {
+        data.img = "systems/Pendragon/assets/Icons/drop.svg";
       }
     }
     super(data, context);
@@ -45,7 +49,7 @@ export class PendragonItem extends Item {
 
   static async createDialog(data = {}, createOptions = {}, { types, ...options } = {}) {
     //Enter the document types you want to remove from the side bar create option - 'base' is removed in the super
-    const invalid = ["wound", "family", "squire", "relationship","history"]; //
+    const invalid = ["wound", "family", "squire", "relationship", "history"]; //
     if (!types) types = this.TYPES.filter((type) => !invalid.includes(type));
     else types = types.filter((type) => !invalid.includes(type));
     return super.createDialog(data, createOptions, { types, ...options });

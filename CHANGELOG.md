@@ -1,10 +1,56 @@
 # CHANGELOG
 
+## 14.21
+- Archetype added - for characters only - https://github.com/cragstone/Pendragon/wiki/Archetype
+- Archetype Holds base stats and starting values for skills, bonus trait (Valorous for Knight) and starting trait (one starts at 16 if constructed)
+- Archetype has an "ideal" - to test for becoming a Knight or a Lady.
+- Char stats in Constructed mode limited by min/max from Archetype
+- Culture has stat dice and max removed, leaving stat bonuses and skills
+- Characters and Followers now have their stats reduced where age is <13 and Chaste/Lustful trait hidden.  There is a game setting to alter the age/turn it off.
+- Followers have a died entry to record year of death
+- Dialog box now use Light/Dark mode and follow the general colour theme
+- All items now use Light/Dark mode and follow the general colour theme
+- Character v1 now use Light/Dark mode and follow the general colour theme and has had a bit of a tab update/rejig
+- Classes now have an "Age" entry - it's the usual upper age limit for a class. Used to order the classes on an Archetype
+  (leave blank for knights and ladies where there is no age limit)
+- In character creation the second class step has been absorbed in to the Meet Ideal (what was Knighted) step
+- Some Game Settings have been moved to Character Options game settings
+- In V1 any ideal can be added to character - no longer checks that requirements are met on drop
+- When spending Personal Skill Points in character creation you can increase Weapon Skill scores even if they are at zero
+- Ideals expanded to have an Age requirement, and Skill Group requirement (e.g. two skills of this group with score 10+)
+- Ideals also have space for a Luck Benefit table to be dropped. This is used in character creation.
+- Ideals, if on a character, have an additional toggle flag "Joined". You need to meet the requirements of the ideal to join.
+- Squires now have born and died values, with Age being calculated rather than input
+- Active Effects added to Character V1
+- Old adjustments on Character Stats tab no longer effective but shown for now to allow replacement with Active Effects
+- All items except Wounds now have Active Effects
+- Active Effects for Skills, Traits and Passions can be added by using the key 'pidItems.i-<itemtype>-<itemPid>.system.effects' e.g. pidItems.i-skill-compose.system.effects Because the list of pidItems is only created in the actor and not on the item the skill total can't be calculated in the item data model so these calcs have come back to the actor.mjs file
+- Active Effects on an Ideal are only active if the Ideal has been set to "Joined"
+- There are some pre-defined keys for Active Effects and a small library of AE are included in the system
+- Localized the Character V2 Treat Wounds dialog box
+- Adjusted Mounted Charge attack so Charge skill not reduced if using a Lance or Spear (not thrown)
+- Big thank you to MrPrimate for testing/fixing all of the above
+- Winter Phase (MrPrimate)
+  - A dialog will popup if all non-deceased characters that are Owned by players have not completed their winter phase to let the GM know what is outstanding.
+  - A GM only button on the character sheet to run an individual winter phase for the previous year, that does not add passive glory. (Useful if players were missing)
+- V2 Character Sheet (ryak2)
+  - Hand rules - Shields occupy the secondary hand; equipping one is refused while a two-handed weapon is gripped (the shield is automatically un-equipped again).
+  - Wielding two-handed displaces whatever else was in hand, including an equipped shield, so shield AP stops applying.
+  - Anything displaced from a hand is dropped; picking it up again takes a combat action.
+  - Lances may be wielded one-handed, so they can pair with a shield; two-handed hafted weapons may not.
+  - Quantity / stacks A stack (quantity > 1) has no hand states. Choosing a hand state draws exactly one unit out of the stack as a new quantity-1 item; the remainder keeps its carried/dropped state.
+  - Identical weapons resting in the same no-hand state merge back into one stack.
+  - Damage - a two-handed grip sets 2D6, never less than the weapon's own damageMod; for two-handed-capable weapons damageMod only counts while actually gripped, so legacy "2H" spears calculate correctly one- or two-handed. Weapons that cannot be used two-handed always add their own value.
+
+
+
 ## 14.20
+
 - "Event (History)" can't be created as an item from the Item Directory - you only do this from the character sheet
 - Minor CSS tweaks
 
 ## 14.19
+
 - Localized Skill Categories pills on CharV2 skill tab
 - Fixed an issue with Starting Skill scores not calculating when dropping an skill on a character sheet.
 - Character ages will automatically update when game year is changed via GM menu
@@ -12,6 +58,7 @@
 - Follower autocalc of derived stats fixed
 
 ## 14.18
+
 - Additional Combat Actions Implemented disarm, evade, zigzag, dodge, set spear (ryak2)
 
 ## 14.17
@@ -29,22 +76,22 @@
 
 - Functionality for the Nobles Handbook is being implemented in stages. A premium module will hopefully be out in due course with all the content already created for you.
 - But for now Manors, Baronies, Background Characters and Estate Improvements have been added to the game.
-- Manors and Baroniess are Actors but you can drop them on to a character sheet https://github.com/cragstone/Pendragon/wiki/Manor https://github.com/cragstone/Pendragon/wiki/Barony
-- Background Characters are actually Items - they are the court/retinue for Manors and Baroniess - https://github.com/cragstone/Pendragon/wiki/Background-Character
+- Manors and Baronies are Actors but you can drop them on to a character sheet https://github.com/cragstone/Pendragon/wiki/Manor https://github.com/cragstone/Pendragon/wiki/Barony
+- Background Characters are actually Items - they are the court/retinue for Manors and Baronies - https://github.com/cragstone/Pendragon/wiki/Background-Character
 - Estate Improvements are Items used to improve a Manor or Barony
 - The sheets are trying to follow the colour and feel of the V2 Character Sheet but there are a few style differences. Your feedback would be appreciated on look, feel, content etc.
 - Migration of Game Instructions to the Github wiki has started. This should make it easier/quicker to update game instructions - https://github.com/cragstone/Pendragon/wiki
 - You will start to see an orange icon with a question mark on some part of Actor/Item sheets - clicking on it will open a browser window taking you to the relevant wiki page
 - There is a game setting (under Display Options) so users can turn this help icon off so it won't be displayed
 - NPCs have a new "Player Notes" section. If you give Limited ownership of NPCs to players they will see the name, icons and player notes only (read only). Owners and Observers see everything except GM Notes
-- NPC Notes have been remaned NPC GM Notes
+- NPC Notes have been renamed NPC GM Notes
 - Thank you to Tontione for updating the French language translations
 - Fixed an issue with ideals where the relevant skill, trait etc isn't on the character sheet
 - GM Tabs on Items hidden once again from players
 
 ## 14.15
 
-- The Feast Deck automation enhancements areall the hardwork of Ryak2
+- The Feast Deck automation enhancements are all the hard work of Ryak2
 - Updated English and French translations and tooltips for the feast tracker and other related strings (ryak2)
 - Added support for drawing Feast Deck event cards (GMH pp. 41-42): players draw cards up to their Total APP limit (GMH Tables 3.4/3.5), posting card faces to chat, with Play/Draw Again buttons and Host cards ending the Round. This requires a valid Feast Deck (see next point) otherwise the deck controls are hidden without it (ryak2)
 - Added Game setting where GM can enter the UUID of their custom Feast Deck. If this is left blank or the UUID is invalid the game will look for the Feast Deck from the GM Handbook premium module.

@@ -77,13 +77,13 @@ pages:
     _stats:
       duplicateSource: null
       exportSource: null
-      coreVersion: "13.351"
+      coreVersion: '13.351'
       systemId: Pendragon
       systemVersion: 13.1.44
       createdTime: 1764088710235
       modifiedTime: 1765957460553
       lastModifiedBy: pendragonBuilder
-    _key: "!journal.pages!kL2SCATAJc30P2G0.Xkf4GjkxiPTeEDu9"
+    _key: '!journal.pages!kL2SCATAJc30P2G0.Xkf4GjkxiPTeEDu9'
   - sort: 200000
     name: Battle Scene
     type: text
@@ -123,13 +123,13 @@ pages:
     _stats:
       duplicateSource: null
       exportSource: null
-      coreVersion: "13.351"
+      coreVersion: '13.351'
       systemId: Pendragon
       systemVersion: 13.1.44
       createdTime: 1764089505962
       modifiedTime: 1764089732519
       lastModifiedBy: pendragonBuilder
-    _key: "!journal.pages!kL2SCATAJc30P2G0.XfCh4hPHxKWLfuWZ"
+    _key: '!journal.pages!kL2SCATAJc30P2G0.XfCh4hPHxKWLfuWZ'
 folder: null
 categories: []
 sort: 0
@@ -146,10 +146,10 @@ flags:
 _stats:
   duplicateSource: null
   exportSource: null
-  coreVersion: "14.364"
+  coreVersion: '14.364'
   systemId: Pendragon
-  systemVersion: "14.1"
+  systemVersion: '14.1'
   createdTime: 1764088694529
   modifiedTime: 1781499282199
   lastModifiedBy: pendragonBuilder
-_key: "!journal!kL2SCATAJc30P2G0"
+_key: '!journal!kL2SCATAJc30P2G0'

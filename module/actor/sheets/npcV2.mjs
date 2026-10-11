@@ -23,7 +23,6 @@ export class PendragonNPCSheetv2 extends api.HandlebarsApplicationMixin(sheets.A
       submitOnChange: true,
     },
     actions: {
-      onEditImage: this._onEditImage,
       editPid: this._onEditPid,
       noteView: this._noteView,
       playerNotesView: this._playerNotesView,
@@ -77,8 +76,8 @@ export class PendragonNPCSheetv2 extends api.HandlebarsApplicationMixin(sheets.A
       isGM: game.user.isGM,
       system: this.actor.system,
       isLocked: this.actor.system.lock,
-      displayNotes: this.actor.system.noteView,
-      displayPlayerNotes: this.actor.system.playerNotesView,
+      displayNotes: this.actor.system.noteView && game.user.isGM,
+      displayPlayerNotes: this.actor.system.playerNotesView && this.actor.permission > 2,
       ownershipLevel: this.actor.permission,
     };
 
@@ -369,23 +368,6 @@ export class PendragonNPCSheetv2 extends api.HandlebarsApplicationMixin(sheets.A
     } else return console.warn("Could not find document class");
   }
 
-  static async _onEditImage(event, target) {
-    const attr = target.dataset.edit;
-    const current = foundry.utils.getProperty(this.document, attr);
-    const { img } = this.document.constructor.getDefaultArtwork?.(this.document.toObject()) ?? {};
-    const fp = new foundry.applications.apps.FilePicker.implementation({
-      current,
-      type: "image",
-      redirectToRoot: img ? [img] : [],
-      callback: (path) => {
-        this.document.update({ [attr]: path });
-      },
-      top: this.position.top + 40,
-      left: this.position.left + 10,
-    });
-    return fp.browse();
-  }
-
   // Handle editPid action
   static _onEditPid(event) {
     event.stopPropagation(); // Don't trigger other events
@@ -430,8 +412,11 @@ export class PendragonNPCSheetv2 extends api.HandlebarsApplicationMixin(sheets.A
       "system.manMjrWnd": this.actor.system.hp.majorWnd,
       "system.manDmg": this.actor.system.damage,
       "system.manHealRate": this.actor.system.healRate,
-      "system.manMaxHP": this.actor.system.stats.siz.total + this.actor.system.stats.con.total + this.actor.system.hp.adj,
-      "system.manUnconscious": Math.round((this.actor.system.stats.siz.total + this.actor.system.stats.con.total + this.actor.system.hp.adj) / 4),
+      "system.manMaxHP":
+        this.actor.system.stats.siz.total + this.actor.system.stats.con.total + this.actor.system.hp.adj,
+      "system.manUnconscious": Math.round(
+        (this.actor.system.stats.siz.total + this.actor.system.stats.con.total + this.actor.system.hp.adj) / 4,
+      ),
     });
   }
 

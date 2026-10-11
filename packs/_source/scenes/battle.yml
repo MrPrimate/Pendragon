@@ -7,14 +7,14 @@ height: 2000
 padding: 0.25
 initial:
   x: 3166
-  "y": 1447
+  'y': 1447
   scale: 0.52
 grid:
   type: 1
   size: 100
   style: solidLines
   thickness: 1
-  color: "#000000"
+  color: '#000000'
   alpha: 0.2
   distance: 1
   units: yd
@@ -65,7 +65,7 @@ playlist: null
 playlistSound: null
 journal: null
 journalEntryPage: null
-weather: ""
+weather: ''
 folder: null
 ownership:
   default: 0
@@ -73,13 +73,13 @@ flags: {}
 _stats:
   duplicateSource: null
   exportSource: null
-  coreVersion: "14.365"
+  coreVersion: '14.365'
   systemId: Pendragon
-  systemVersion: "14.6"
+  systemVersion: '14.6'
   createdTime: 1786091009634
   modifiedTime: 1786091009634
   lastModifiedBy: pendragonBuilder
-navName: ""
+navName: ''
 _id: lj6Clvg2O6aOcjzJ
 active: false
 sort: 0
@@ -88,15 +88,15 @@ levels:
     name: Level
     background:
       src: systems/Pendragon/assets/battle_field.webp
-      color: "#999999"
-      tint: "#ffffff"
+      color: '#999999'
+      tint: '#ffffff'
       alphaThreshold: 0.75
     elevation:
       bottom: 0
       top: 20
     foreground:
       src: null
-      tint: "#ffffff"
+      tint: '#ffffff'
       alphaThreshold: 0.75
     fog:
       src: null
@@ -113,7 +113,7 @@ levels:
       levels: []
     sort: 0
     flags: {}
-    _key: "!scenes.levels!lj6Clvg2O6aOcjzJ.defaultLevel0000"
+    _key: '!scenes.levels!lj6Clvg2O6aOcjzJ.defaultLevel0000'
 shiftX: 0
 shiftY: 0
 initialLevel: defaultLevel0000
@@ -121,5 +121,5 @@ transition:
   type: null
   duration: 1500
   activeOnly: false
-_key: "!scenes!lj6Clvg2O6aOcjzJ"
+_key: '!scenes!lj6Clvg2O6aOcjzJ'
 templates: []

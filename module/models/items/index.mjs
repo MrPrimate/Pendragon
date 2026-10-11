@@ -17,3 +17,4 @@ export { IdealData } from "./ideal_model.mjs";
 export { RelationshipData } from "./relationship_model.mjs";
 export { ManorImprovementData } from "./manorImprovement_model.mjs";
 export { BackgroundData } from "./background_model.mjs";
+export { ArchetypeData } from "./archetype_model.mjs";

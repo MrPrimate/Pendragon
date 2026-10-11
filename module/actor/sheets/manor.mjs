@@ -1,12 +1,11 @@
 const { api, sheets } = foundry.applications;
-import { PIDEditor } from "../../pid/pid-editor.mjs";
-import { PendragonActor } from "../actor.mjs";
+import { PendragonActorSheet } from "./actor-sheet.mjs";
 import { PENactorItemDrop } from "../actor-itemDrop.mjs";
 import { PENUtilities } from "../../apps/utilities.mjs";
-import { PID } from "../../pid/pid.mjs";
 import { PENRollType } from "../../cards/rollType.mjs";
+import { PENActiveEffectSheet } from "../../sheets/pen-active-effect-sheet.mjs";
 
-export class PendragonManorSheet extends api.HandlebarsApplicationMixin(sheets.ActorSheetV2) {
+export class PendragonManorSheet extends PendragonActorSheet {
   constructor(options = {}) {
     super(options);
     this._dragDrop = this._createDragDropHandlers();
@@ -15,7 +14,7 @@ export class PendragonManorSheet extends api.HandlebarsApplicationMixin(sheets.A
   static DEFAULT_OPTIONS = {
     classes: ["Pendragon", "sheet", "actor2", "manor"],
     position: {
-      width: 600,
+      width: 660,
       height: 710,
     },
     window: {
@@ -28,13 +27,17 @@ export class PendragonManorSheet extends api.HandlebarsApplicationMixin(sheets.A
     },
     actions: {
       editPid: this._onEditPid,
-      onEditImage: this._onEditImage,
       viewDoc: this._viewDoc,
       deleteDoc: this._deleteDoc,
       viewEnf: this._viewEnf,
       deleteEnf: this._deleteEnf,
       itemToggle: this._itemToggle,
       openWiki: this._openWiki,
+      createEffect: this._createEffect,
+      viewActiveEffect: this._viewActiveEffect,
+      toggleEffect: this._toggleEffect,
+      clearEffects: this._clearEffects,
+      deleteActiveEffect: this._deleteActiveEffect,
     },
   };
 
@@ -74,6 +77,10 @@ export class PendragonManorSheet extends api.HandlebarsApplicationMixin(sheets.A
       template: "systems/Pendragon/templates/actor/manor/manor.skills.hbs",
       scrollable: [""],
     },
+    effects: {
+      template: "systems/Pendragon/templates/actor/characterV1/character.effects.hbs",
+      scrollable: [""],
+    },
     gmTab: {
       template: "systems/Pendragon/templates/actor/gmtab.hbs",
       scrollable: [""],
@@ -83,7 +90,18 @@ export class PendragonManorSheet extends api.HandlebarsApplicationMixin(sheets.A
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
     //Common parts to the character - this is the order they are show on the sheet
-    options.parts = ["header", "tabs", "details", "improvements", "mesnie", "folk", "skills", "location", "notes"];
+    options.parts = [
+      "header",
+      "tabs",
+      "details",
+      "improvements",
+      "mesnie",
+      "folk",
+      "skills",
+      "location",
+      "effects",
+      "notes",
+    ];
 
     //GM only tabs
     if (game.user.isGM) {
@@ -116,6 +134,7 @@ export class PendragonManorSheet extends api.HandlebarsApplicationMixin(sheets.A
         case "location":
         case "skills":
         case "folk":
+        case "effects":
         case "mesnie":
         case "improvements":
           tab.id = partId;
@@ -258,37 +277,16 @@ export class PendragonManorSheet extends api.HandlebarsApplicationMixin(sheets.A
       case "improvements":
         context.tab = context.tabs[partId];
         break;
+      case "effects":
+        context.tab = context.tabs[partId];
+        context.effects = await PENActiveEffectSheet.getActorEffectsFromSheet(this.document);
+        context.directEffects = await PENActiveEffectSheet.getDirectEffectsFromSheet(this.document);
+        break;
     }
     return context;
   }
 
-  async _renderFrame(options) {
-    const frame = await super._renderFrame(options);
-    //define button
-    const sheetPID = this.actor.flags?.Pendragon?.pidFlag;
-    const noId = typeof sheetPID === "undefined" || typeof sheetPID.id === "undefined" || sheetPID.id === "";
-    //add button
-    const label = game.i18n.localize("PEN.PIDFlag.id");
-    const pidEditor = `<button type="button" class="header-control fa-solid fa-fingerprint icon ${noId ? "edit-pid-warning" : "edit-pid-exisiting"}"
-        data-action="editPid" data-tooltip="${label}" aria-label="${label}"></button>`;
-    let el = this.window.close;
-    while (el.previousElementSibling.localName === "button") {
-      el = el.previousElementSibling;
-    }
-    el.insertAdjacentHTML("beforebegin", pidEditor);
-    return frame;
-  }
-
   //------------ACTIONS-------------------
-
-  // Handle editPid action
-  static _onEditPid(event) {
-    event.stopPropagation(); // Don't trigger other events
-    if (event.detail > 1) return; // Ignore repeated clicks
-    new PIDEditor({ document: this.document }, {}).render(true, {
-      focus: true,
-    });
-  }
 
   //Toggle Item
   static async _itemToggle(event, target) {
@@ -301,24 +299,6 @@ export class PendragonManorSheet extends api.HandlebarsApplicationMixin(sheets.A
       await item.update(checkProp);
     }
     return;
-  }
-
-  // Handle edit Image action
-  static async _onEditImage(event, target) {
-    const attr = target.dataset.edit;
-    const current = foundry.utils.getProperty(this.document, attr);
-    const { img } = this.document.constructor.getDefaultArtwork?.(this.document.toObject()) ?? {};
-    const fp = new foundry.applications.apps.FilePicker.implementation({
-      current,
-      type: "image",
-      redirectToRoot: img ? [img] : [],
-      callback: (path) => {
-        this.document.update({ [attr]: path });
-      },
-      top: this.position.top + 40,
-      left: this.position.left + 10,
-    });
-    return fp.browse();
   }
 
   //View an Embedded Document
@@ -371,12 +351,6 @@ export class PendragonManorSheet extends api.HandlebarsApplicationMixin(sheets.A
         "system.enfeoffed.npc": "",
       });
     }
-  }
-
-  //Open Wiki Help Page
-  static async _openWiki(event, target) {
-    const url = target.dataset.property ?? "https://github.com/cragstone/Pendragon/wiki";
-    window.open(url, "_blank");
   }
 
   // -----------------------------------LISTENERS-----------------------------------------

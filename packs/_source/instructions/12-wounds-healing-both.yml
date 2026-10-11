@@ -59,7 +59,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "14.364"
+      coreVersion: '14.364'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: 1783595992114
@@ -67,7 +67,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!nK2HPwEm6y15GqKh.F6sWns3Q5TtIXhy6"
+    _key: '!journal.pages!nK2HPwEm6y15GqKh.F6sWns3Q5TtIXhy6'
   - sort: 200000
     name: Healing a Wound
     type: text
@@ -93,7 +93,7 @@ pages:
         that the "Healing Hand" icon has now disappeared.</p><p>To uncheck the
         "Td" box simply double click it.</p><p></p><p>The third option is to
         wait and allow @UUID[.Rh5w3CHEaLoAfkOf] to take its course.</p>
-      markdown: ""
+      markdown: ''
     video:
       controls: true
       volume: 0.5
@@ -104,7 +104,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -112,7 +112,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!nK2HPwEm6y15GqKh.BS5YMZSWPPVKLcfe"
+    _key: '!journal.pages!nK2HPwEm6y15GqKh.BS5YMZSWPPVKLcfe'
   - sort: 300000
     name: Current/Max Hit Points
     type: text
@@ -137,7 +137,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -145,7 +145,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!nK2HPwEm6y15GqKh.1GI8c1HYAY3LbJ6e"
+    _key: '!journal.pages!nK2HPwEm6y15GqKh.1GI8c1HYAY3LbJ6e'
   - sort: 212500
     name: Aggravation/Deterioration
     type: text
@@ -177,7 +177,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -185,7 +185,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!nK2HPwEm6y15GqKh.61qIjPqLkhCzqyh8"
+    _key: '!journal.pages!nK2HPwEm6y15GqKh.61qIjPqLkhCzqyh8'
   - sort: 400000
     name: NPCs
     type: text
@@ -210,7 +210,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -218,7 +218,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!nK2HPwEm6y15GqKh.NU3YsSRQLX62qowk"
+    _key: '!journal.pages!nK2HPwEm6y15GqKh.NU3YsSRQLX62qowk'
   - sort: 350000
     name: Natural Healing
     type: text
@@ -249,7 +249,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -257,7 +257,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!nK2HPwEm6y15GqKh.Rh5w3CHEaLoAfkOf"
+    _key: '!journal.pages!nK2HPwEm6y15GqKh.Rh5w3CHEaLoAfkOf'
   - sort: 206250
     name: Weekly Healing
     type: text
@@ -287,7 +287,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -295,7 +295,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!nK2HPwEm6y15GqKh.WF4c84I29uynbesi"
+    _key: '!journal.pages!nK2HPwEm6y15GqKh.WF4c84I29uynbesi'
 flags:
   Pendragon:
     pidFlag:
@@ -306,9 +306,9 @@ flags:
     fixed-adventure-heading: true
 _stats:
   duplicateSource: null
-  coreVersion: "14.364"
+  coreVersion: '14.364'
   systemId: Pendragon
-  systemVersion: "14.1"
+  systemVersion: '14.1'
   createdTime: 1734462613625
   modifiedTime: 1781499224593
   lastModifiedBy: pendragonBuilder
@@ -317,4 +317,4 @@ sort: 99415
 ownership:
   default: 0
 categories: []
-_key: "!journal!nK2HPwEm6y15GqKh"
+_key: '!journal!nK2HPwEm6y15GqKh'

@@ -1,11 +1,36 @@
 import { yearToPeriodName } from "../../apps/chronology.mjs";
 import { PIDEditor } from "../../pid/pid-editor.mjs";
+import { PENActiveEffectSheet } from "../../sheets/pen-active-effect-sheet.mjs";
 const { api, sheets } = foundry.applications;
 
 export class PendragonItemSheet extends api.HandlebarsApplicationMixin(sheets.ItemSheetV2) {
   constructor(options = {}) {
     super(options);
   }
+
+  static DEFAULT_OPTIONS = {
+    classes: ["Pendragon", "sheet", "itemV2"],
+    position: {
+      width: 610,
+      height: 570,
+    },
+    tag: "form",
+    // automatically updates the item
+    form: {
+      submitOnChange: true,
+    },
+    window: {
+      resizable: true,
+    },
+    actions: {
+      editPid: this._onEditPid,
+      openWiki: this._openWiki,
+      addEffect: this._onCreateActiveEffect,
+      editEffect: this._onEditActiveEffect,
+      removeEffect: this._onDeleteActiveEffect,
+      toggleEffect: this._onToggleActiveEffect,
+    },
+  };
 
   async _renderFrame(options) {
     const frame = await super._renderFrame(options);
@@ -25,6 +50,9 @@ export class PendragonItemSheet extends api.HandlebarsApplicationMixin(sheets.It
   }
 
   async _prepareContext(options) {
+    let effects = await PENActiveEffectSheet.getItemEffectsFromSheet(this.document);
+    const changesActiveEffects = await PENActiveEffectSheet.getEffectChangesFromSheet(this.document);
+    let effectChanges = changesActiveEffects.effectChanges;
     return {
       editable: this.isEditable,
       owner: this.document.isOwner,
@@ -36,6 +64,9 @@ export class PendragonItemSheet extends api.HandlebarsApplicationMixin(sheets.It
       fields: this.document.schema.fields,
       period: yearToPeriodName(this.item.system.yearAvailable),
       showHelp: game.settings.get("Pendragon", "showHelp"),
+      effects: effects,
+      changesActiveEffects: changesActiveEffects,
+      effectChanges: effectChanges,
     };
   }
 
@@ -48,23 +79,6 @@ export class PendragonItemSheet extends api.HandlebarsApplicationMixin(sheets.It
    * @returns {Promise}
    * @protected
    */
-  static async _onEditImage(event, target) {
-    const attr = target.dataset.edit;
-    const current = foundry.utils.getProperty(this.document, attr);
-    const { img } = this.document.constructor.getDefaultArtwork?.(this.document.toObject()) ?? {};
-    const fp = new FilePicker({
-      current,
-      type: "image",
-      redirectToRoot: img ? [img] : [],
-      callback: (path) => {
-        this.document.update({ [attr]: path });
-      },
-      top: this.position.top + 39,
-      left: this.position.left + 9,
-    });
-    return fp.browse();
-  }
-
   // handle editPid action
   static _onEditPid(event) {
     event.stopPropagation(); // Don't trigger other events
@@ -101,10 +115,13 @@ export class PendragonItemSheet extends api.HandlebarsApplicationMixin(sheets.It
   }
 
   static _onDeleteActiveEffect(event, target) {
-    const { effectId } = target.closest("[data-effect-id]")?.dataset ?? {};
-    const effect = this.item.effects.get(effectId);
-    if (!effect) return;
-    effect.delete();
+    if (event.detail === 2) {
+      //Only perform on double click
+      const { effectId } = target.closest("[data-effect-id]")?.dataset ?? {};
+      const effect = this.item.effects.get(effectId);
+      if (!effect) return;
+      effect.delete();
+    }
   }
 
   static _onToggleActiveEffect(event, target) {

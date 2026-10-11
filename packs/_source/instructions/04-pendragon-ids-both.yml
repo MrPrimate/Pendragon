@@ -43,7 +43,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: null
@@ -51,7 +51,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!gOCGw5hx6CoGK3h1.9XSOOqLUjc6FpTzQ"
+    _key: '!journal.pages!gOCGw5hx6CoGK3h1.9XSOOqLUjc6FpTzQ'
   - sort: 200000
     name: Reserved PIDs
     type: text
@@ -101,7 +101,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: null
@@ -109,7 +109,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!gOCGw5hx6CoGK3h1.s6yqhRtdJKHS7g3p"
+    _key: '!journal.pages!gOCGw5hx6CoGK3h1.s6yqhRtdJKHS7g3p'
 flags:
   Pendragon:
     pidFlag:
@@ -120,9 +120,9 @@ flags:
     fixed-adventure-heading: true
 _stats:
   duplicateSource: null
-  coreVersion: "14.364"
+  coreVersion: '14.364'
   systemId: Pendragon
-  systemVersion: "14.1"
+  systemVersion: '14.1'
   createdTime: 1719597783187
   modifiedTime: 1781499145264
   lastModifiedBy: pendragonBuilder
@@ -131,4 +131,4 @@ sort: 12500
 ownership:
   default: 0
 categories: []
-_key: "!journal!gOCGw5hx6CoGK3h1"
+_key: '!journal!gOCGw5hx6CoGK3h1'

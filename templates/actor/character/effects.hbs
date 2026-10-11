@@ -14,8 +14,8 @@
     <h2>{{localize 'PEN.activeEffects'}} <button class="inline-control icon fa-regular fa-square-plus" data-action="addEffect"></button></h2>
     <ul class="effects">
     {{#each effects}}
-      <li data-effect-id="{{ id }}">
-        <span>{{ name }} {{#if origin}}{{ sourceName }}{{/if}}</span>
+      <li data-effect-id="{{ id }}" data-effect-uuid="{{ uuid }}">
+        <span>{{ name }} {{#if item}}[{{ sourceLabel }}]{{/if}}</span>
         <button class="inline-control icon fa-regular fa-pen-to-square" data-action="editEffect"></button>
         <button class="inline-control icon fa-regular fa-trash" data-action="removeEffect"></button>
       </li>

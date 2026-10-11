@@ -114,6 +114,8 @@ export class ManorData extends PENActorData {
       income: new SchemaField({
         libra: new NumberField({ ...requiredInteger, min: 0, initial: 0, persisted: false }),
         denarii: new NumberField({ ...requiredInteger, min: 0, initial: 0, persisted: false }),
+        libraBonus: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
+        denariiBonus: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
       }),
       folkCost: new SchemaField({
         libra: new NumberField({ ...requiredInteger, min: 0, initial: 0, persisted: false }),
@@ -263,7 +265,7 @@ export class ManorData extends PENActorData {
       .filter((i) => i.type === "manorImp")
       .filter((i) => ["maintained", "unmaintained", "ruined"].includes(i.system.status));
 
-    let incVal = 240; //Include Basic £1 income
+    let incVal = 240 + this.income.libraBonus * 240 + this.income.denariiBonus; //Include Basic £1 income
     let costVal = 0;
     for (let itm of costManorImp) {
       //Income only includes those built after assized year and not ruined, but cost includes all

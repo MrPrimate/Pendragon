@@ -8,7 +8,7 @@ folder: null
 flags: {}
 _stats:
   duplicateSource: null
-  coreVersion: "13.351"
+  coreVersion: '13.351'
   systemId: Pendragon
   systemVersion: 12.1.11
   createdTime: 1720071577612
@@ -19,4 +19,4 @@ _id: DXuLeg6NtvzVTX9D
 sort: 100000
 ownership:
   default: 0
-_key: "!macros!DXuLeg6NtvzVTX9D"
+_key: '!macros!DXuLeg6NtvzVTX9D'

@@ -77,7 +77,7 @@ export class FeastDeck {
       "systems/Pendragon/templates/dialog/feast-geniality.hbs",
       { hint: game.i18n.localize(hintKey) },
     );
-    const result = await foundry.applications.api.DialogV2.input({
+    const result = await PENDialog.input({
       window: {
         title: game.i18n.localize(titleKey),
       },

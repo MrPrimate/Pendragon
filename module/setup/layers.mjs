@@ -1,5 +1,5 @@
 import { PENWinter } from "../apps/winterPhase.mjs";
-import { PENCharCreate } from "../apps/charCreate.mjs";
+import { PENCharCreateV2 } from "../apps/charCreateV2.mjs";
 import { PENRollType } from "../cards/rollType.mjs";
 import { PendragonBattleSheet } from "../actor/sheets/battle.mjs";
 import { ActorImport } from "../apps/actor-import.mjs";
@@ -94,7 +94,7 @@ export class PENLayer extends foundry.canvas.layers.InteractionLayer {
           active: game.settings.get("Pendragon", "creation"),
           toggle: true,
           onChange: async (event, toggle) => {
-            await PENCharCreate.creationPhase(toggle);
+            await PENCharCreateV2.creationPhase(toggle);
           },
         },
         gmRoll: {

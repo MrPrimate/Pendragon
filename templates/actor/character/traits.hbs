@@ -21,7 +21,7 @@
       {{#each ideals as |ideal key|}}
           <details class="ideal" open>
               <summary>{{ideal.name}}</summary>
-              {{#if ideal.system.active}}
+              {{#if ideal.system.activeIdeal}}
               <h3 class="active">Active</h3>
               {{else}}
               <h3 class="inactive">Inactive</h3>

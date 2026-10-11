@@ -1,0 +1,29 @@
+<section class="tab gear {{tab.cssClass}}" data-group="primary" data-tab="gear">
+  <br>
+
+  <div class="stat-name bold">{{ localize "PEN.startingEquip"}}</div>
+  {{!-- Starting Equipment --}}
+  <div class="horizontalboxed {{#if isGM}} droppable {{/if}} gear" data-collection = "gear">
+    <ol class="item-list">
+      {{#each gears as |gear|}}
+        <li class="item flexrow" data-item-id="{{gear.uuid}}" data-pid = "{{gear.flags.Pendragon.pidFlag.id}}" data-collection = "gear">
+          <div class="item-name flexrow">
+            {{#if gear.valid}}
+            <div class="stat-name">{{gear.name}}</div>
+            {{else}}
+            <div class="stat-name result-success">{{gear.name}} [{{localize 'PEN.invalid'}}]</div>
+            {{/if}}
+          </div>
+          <div class="item-controls" style="padding-top: 8px;">
+            {{#if ../isGM}}
+              <a class="item-control item-delete" title="{{localize 'PEN.deleteItem'}}" data-action="deleteItem"><i class="fas fa-trash"></i></a>
+            {{/if}}
+          </div>
+        </li>
+      {{else}}
+          <div class="centre stat-name italics">{{localize 'PEN.emptyList'}}</div>
+      {{/each}}
+    </ol>
+  </div>
+
+</section>

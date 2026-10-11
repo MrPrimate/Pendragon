@@ -1,12 +1,11 @@
-<header>
  <section class="tab attributes {{tab.cssClass}}" data-group="primary" data-tab="attributes">
   <div class="helpicon">
     {{#if showHelp}}
       <a class="" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Estate-Improvements" data-tooltip='{{localize "PEN.openWiki"}}'>
         <i class="fas fa-circle-question"></i>
-      </a>  
+      </a>
     {{/if}}
-  </div> 
+  </div>
     <div class="item-improv-grid">
       <div class="stat-name left indent new-row">{{localize 'PEN.manor.impType'}}</div>
       {{#if canEdit}}
@@ -17,60 +16,60 @@
         </div>
       {{else}}
         <div class="stat-name centre">{{subLabel}}</div>
-      {{/if}}  
+      {{/if}}
       <div class="stat-name left indent new-row">{{localize 'PEN.yearAvailable'}}</div>
-      <div class="stat-name-input  centre"><input name="system.yearAvailable" type="number" value="{{item.system.yearAvailable}}"/></div>      
-      <div class="stat-name left indent new-row"></div>      
-      <div class="stat-name centre" >{{period}}</div>                             
+      <div class="stat-name-input  centre"><input name="system.yearAvailable" type="number" value="{{item.system.yearAvailable}}"/></div>
+      <div class="stat-name left indent new-row"></div>
+      <div class="stat-name centre" >{{period}}</div>
       <div class="stat-name left indent new-row">{{localize 'PEN.manor.cost'}}{{localize 'PEN.manor.ld'}}</div>
       <div class="cost-grid">
-        <div class="stat-name-input"><input class="centre" name="system.cost.libra" type="number" value="{{item.system.cost.libra}}"/></div>    
+        <div class="stat-name-input"><input class="centre" name="system.cost.libra" type="number" value="{{item.system.cost.libra}}"/></div>
         <div class="stat-name centre" style="padding-top: 3px;">/</div>
-        <div class="stat-name-input  centre"><input class="centre" name="system.cost.denarii" type="number" value="{{item.system.cost.denarii}}"/></div>      
+        <div class="stat-name-input  centre"><input class="centre" name="system.cost.denarii" type="number" value="{{item.system.cost.denarii}}"/></div>
       </div>
       {{#if hasOwner}}
         <div class="stat-name left indent new-row">{{localize 'PEN.manor.paidCost'}}</div>
         <div class="cost-grid">
-          <div class="stat-name-input"><input class="centre" name="system.paid.libra" type="number" value="{{item.system.paid.libra}}"/></div>    
+          <div class="stat-name-input"><input class="centre" name="system.paid.libra" type="number" value="{{item.system.paid.libra}}"/></div>
           <div class="stat-name centre" style="padding-top: 3px;">/</div>
-          <div class="stat-name-input  centre"><input class="centre" name="system.paid.denarii" type="number" value="{{item.system.paid.denarii}}"/></div>      
+          <div class="stat-name-input  centre"><input class="centre" name="system.paid.denarii" type="number" value="{{item.system.paid.denarii}}"/></div>
         </div>
       {{/if}}
 
       <div class="stat-name left indent new-row">{{localize 'PEN.manor.repairCost'}}</div>
       <div class="cost-grid">
-        <div class="stat-name-input"><input class="centre" name="system.repairCost.libra" type="number" value="{{item.system.repairCost.libra}}"/></div>    
+        <div class="stat-name-input"><input class="centre" name="system.repairCost.libra" type="number" value="{{item.system.repairCost.libra}}"/></div>
         <div class="stat-name centre" style="padding-top: 3px;">/</div>
-        <div class="stat-name-input  centre"><input class="centre" name="system.repairCost.denarii" type="number" value="{{item.system.repairCost.denarii}}"/></div>      
+        <div class="stat-name-input  centre"><input class="centre" name="system.repairCost.denarii" type="number" value="{{item.system.repairCost.denarii}}"/></div>
       </div>
       <div class="stat-name left indent new-row">{{localize 'PEN.manor.income'}}{{localize 'PEN.manor.ld'}}</div>
       <div class="cost-grid">
-        <div class="stat-name-input"><input class="centre" name="system.income.libra" type="number" value="{{item.system.income.libra}}"/></div>    
+        <div class="stat-name-input"><input class="centre" name="system.income.libra" type="number" value="{{item.system.income.libra}}"/></div>
         <div class="stat-name centre" style="padding-top: 3px;">/</div>
-        <div class="stat-name-input  centre"><input class="centre" name="system.income.denarii" type="number" value="{{item.system.income.denarii}}"/></div>      
+        <div class="stat-name-input  centre"><input class="centre" name="system.income.denarii" type="number" value="{{item.system.income.denarii}}"/></div>
       </div>
       <div class="stat-name left indent new-row">{{localize 'PEN.manor.annualCost'}}{{localize 'PEN.manor.ld'}}</div>
       <div class="cost-grid">
-        <div class="stat-name-input"><input class="centre" name="system.annualCost.libra" type="number" value="{{item.system.annualCost.libra}}"/></div>    
+        <div class="stat-name-input"><input class="centre" name="system.annualCost.libra" type="number" value="{{item.system.annualCost.libra}}"/></div>
         <div class="stat-name centre" style="padding-top: 3px;">/</div>
-        <div class="stat-name-input  centre"><input class="centre" name="system.annualCost.denarii" type="number" value="{{item.system.annualCost.denarii}}"/></div>      
+        <div class="stat-name-input  centre"><input class="centre" name="system.annualCost.denarii" type="number" value="{{item.system.annualCost.denarii}}"/></div>
       </div>
 
       {{#if (eq item.system.subtype 'def')}}
         <div class="stat-name left indent new-row">{{localize 'PEN.manor.dv'}}</div>
         <div class="stat-name-input  centre"><input name="system.dv.value" type="number" value="{{item.system.dv.value}}"/></div>
-        <div class="stat-name left indent new-row"></div>  
+        <div class="stat-name left indent new-row"></div>
         <div class="stat-name centre">
           <select class="centre" data-handle-change name="system.dv.pos">
             {{selectOptions dvType selected=item.system.dv.pos}}
           </select>
-        </div>      
+        </div>
       {{/if}}
 
       {{#unless (eq system.subtype 'barInv')}}
         <div class="stat-name left indent">{{localize 'PEN.manor.starterImp'}}</div>
         <div class="stat-name centre"><a class="item-control item-toggle large-icon" data-property = "starter"><i class="{{#if item.system.starter}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
-      {{/unless}}  
+      {{/unless}}
 
       {{#if showCheck}}
         <div class="stat-name left indent">{{localize 'PEN.manor.drawFunds'}}</div>
@@ -80,8 +79,8 @@
       {{#if hasOwner}}
         <br>
         <div class="stat-name left indent new-row">{{localize 'PEN.manor.yearAcquired'}}</div>
-        <div class="stat-name-input  centre"><input name="system.yearAcquired" type="number" value="{{item.system.yearAcquired}}"/></div>   
-        <div class="stat-name left indent new-row">{{localize 'PEN.status'}}</div>  
+        <div class="stat-name-input  centre"><input name="system.yearAcquired" type="number" value="{{item.system.yearAcquired}}"/></div>
+        <div class="stat-name left indent new-row">{{localize 'PEN.status'}}</div>
         <div class="stat-name centre">
           <select class="centre" data-handle-change name="system.status">
             {{selectOptions maintList selected=item.system.status}}
@@ -110,10 +109,10 @@
               </div>
             </li>
           {{else}}
-            <div class="centre stat-name italics" style="height:60px;">{{localize 'PEN.emptyList'}}</div>              
+            <div class="centre stat-name italics" style="height:60px;">{{localize 'PEN.emptyList'}}</div>
           {{/each}}
         </ol>
-      </div>      
+      </div>
       <br>
       <div class="horizontalboxed {{#if isGM}} droppable {{/if}}" data-collection = "optchecks" >
         <div class="stat-name indent">{{ localize "PEN.manor.optChecks"}}</div>
@@ -134,7 +133,7 @@
                 </div>
               </li>
           {{else}}
-            <div class="centre stat-name italics" style="height:60px;">{{localize 'PEN.emptyList'}}</div>    
+            <div class="centre stat-name italics" style="height:60px;">{{localize 'PEN.emptyList'}}</div>
           {{/each}}
         </ol>
       </div>
@@ -158,7 +157,7 @@
                 </div>
               </li>
           {{else}}
-            <div class="centre stat-name italics" style="height:60px;">{{localize 'PEN.emptyList'}}</div>    
+            <div class="centre stat-name italics" style="height:60px;">{{localize 'PEN.emptyList'}}</div>
           {{/each}}
         </ol>
       </div>
@@ -182,7 +181,7 @@
                 </div>
               </li>
           {{else}}
-            <div class="centre stat-name italics" style="height:60px;">{{localize 'PEN.emptyList'}}</div>    
+            <div class="centre stat-name italics" style="height:60px;">{{localize 'PEN.emptyList'}}</div>
           {{/each}}
         </ol>
       </div>
@@ -207,11 +206,10 @@
               </div>
             </li>
           {{else}}
-            <div class="centre stat-name italics" style="height:60px;">{{localize 'PEN.emptyList'}}</div>              
+            <div class="centre stat-name italics" style="height:60px;">{{localize 'PEN.emptyList'}}</div>
           {{/each}}
         </ol>
-      </div>      
+      </div>
       <br>
     {{/if}}
   </section>
-</header>

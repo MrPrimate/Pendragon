@@ -10,6 +10,7 @@ export class FollowerData extends foundry.abstract.TypeDataModel {
         min: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
         max: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
         adj: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
+        effects: new NumberField({ ...requiredInteger, initial: 0 }),
       }),
       stats: new SchemaField({
         siz: new SchemaField({
@@ -20,6 +21,8 @@ export class FollowerData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          effects: new NumberField({ ...requiredInteger, initial: 0 }),
+          youth: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
           growth: new NumberField({ ...requiredInteger, initial: 0 }),
@@ -33,6 +36,8 @@ export class FollowerData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          effects: new NumberField({ ...requiredInteger, initial: 0 }),
+          youth: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
           growth: new NumberField({ ...requiredInteger, initial: 0 }),
@@ -46,6 +51,8 @@ export class FollowerData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          effects: new NumberField({ ...requiredInteger, initial: 0 }),
+          youth: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
           growth: new NumberField({ ...requiredInteger, initial: 0 }),
@@ -59,6 +66,8 @@ export class FollowerData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          effects: new NumberField({ ...requiredInteger, initial: 0 }),
+          youth: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
           growth: new NumberField({ ...requiredInteger, initial: 0 }),
@@ -72,6 +81,8 @@ export class FollowerData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          effects: new NumberField({ ...requiredInteger, initial: 0 }),
+          youth: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
           growth: new NumberField({ ...requiredInteger, initial: 0 }),
@@ -91,8 +102,17 @@ export class FollowerData extends foundry.abstract.TypeDataModel {
       manDmg: new NumberField({ ...requiredInteger, initial: 0 }),
       manHealRate: new NumberField({ ...requiredInteger, initial: 0 }),
       manUnconscious: new NumberField({ ...requiredInteger, initial: 0 }),
+      healRate: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
+      healRateEffects: new NumberField({ ...requiredInteger, initial: 0 }),
+      moveEffects: new NumberField({ ...requiredInteger, initial: 0 }),
+      armourEffects: new NumberField({ ...requiredInteger, initial: 0 }),
+      damEffects: new NumberField({ ...requiredInteger, initial: 0 }),
+      damage: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
+      damBonus: new StringField({ required: true, blank: true, initial: "" }),
+      genialityAdj: new NumberField({ ...requiredInteger, initial: 0 }),
       squire: new NumberField({ ...requiredInteger, initial: 0 }),
       born: new NumberField({ ...requiredInteger, initial: 487 }),
+      died: new NumberField({ ...requiredInteger, initial: 0 }),
       culture: new StringField({ required: true, blank: true, initial: "" }),
       religion: new StringField({ required: true, blank: true, initial: "" }),
       homeland: new StringField({ required: true, blank: true, initial: "" }),
@@ -103,5 +123,42 @@ export class FollowerData extends foundry.abstract.TypeDataModel {
       barren: new BooleanField({ initial: false }),
       view: new BooleanField({ initial: false }),
     };
+  }
+
+  prepareDerivedData() {
+    super.prepareDerivedData();
+    this.age = game.time.components.year - this.born;
+    if (this.died > 0) {
+      this.age = this.died - this.born;
+    }
+    // Handle stats scores, adding labels to stats
+    for (let [key, stat] of Object.entries(this.stats)) {
+      stat.label = game.i18n.localize(CONFIG.PENDRAGON.stats[key]) ?? key;
+      stat.labelShort = game.i18n.localize(CONFIG.PENDRAGON.statsAbbreviations[key]) ?? key;
+      stat.youth = 0;
+      //For "young" followers reduce stats
+      if (this.age < game.settings.get("Pendragon", "youthAge")) {
+        stat.youth = Math.round(
+          (Number(stat.value) + Number(stat.culture)) *
+            ((game.settings.get("Pendragon", "youthAge") - Math.max(7, this.age)) /
+              -(game.settings.get("Pendragon", "youthAge") - 1)),
+        );
+      }
+      stat.total =
+        stat.value +
+        stat.culture +
+        stat.create +
+        stat.poison +
+        stat.disease +
+        stat.sol +
+        stat.age +
+        stat.effects +
+        stat.youth +
+        stat.major +
+        stat.winter;
+    }
+    this.healRate = Math.round(this.stats.con.total / 5) + this.healRateEffects;
+    this.move = Math.round((this.stats.str.total + this.stats.dex.total) / 2) + 5 + this.moveEffects;
+    this.damage = Math.round((this.stats.str.total + this.stats.siz.total) / 6) + this.damEffects;
   }
 }

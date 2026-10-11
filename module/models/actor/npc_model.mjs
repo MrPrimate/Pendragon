@@ -10,6 +10,7 @@ export class NpcData extends foundry.abstract.TypeDataModel {
         min: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
         max: new NumberField({ ...requiredInteger, min: 0, initial: 10 }),
         adj: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
+        effects: new NumberField({ ...requiredInteger, initial: 0 }),
       }),
       stats: new SchemaField({
         siz: new SchemaField({
@@ -20,6 +21,7 @@ export class NpcData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          effects: new NumberField({ ...requiredInteger, initial: 0 }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
           growth: new NumberField({ ...requiredInteger, initial: 0 }),
@@ -33,6 +35,7 @@ export class NpcData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          effects: new NumberField({ ...requiredInteger, initial: 0 }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
           growth: new NumberField({ ...requiredInteger, initial: 0 }),
@@ -46,6 +49,7 @@ export class NpcData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          effects: new NumberField({ ...requiredInteger, initial: 0 }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
           growth: new NumberField({ ...requiredInteger, initial: 0 }),
@@ -59,6 +63,7 @@ export class NpcData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          effects: new NumberField({ ...requiredInteger, initial: 0 }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
           growth: new NumberField({ ...requiredInteger, initial: 0 }),
@@ -72,6 +77,7 @@ export class NpcData extends foundry.abstract.TypeDataModel {
           disease: new NumberField({ ...requiredInteger, initial: 0 }),
           sol: new NumberField({ ...requiredInteger, initial: 0 }),
           age: new NumberField({ ...requiredInteger, initial: 0 }),
+          effects: new NumberField({ ...requiredInteger, initial: 0 }),
           major: new NumberField({ ...requiredInteger, initial: 0 }),
           winter: new NumberField({ ...requiredInteger, initial: 0 }),
           growth: new NumberField({ ...requiredInteger, initial: 0 }),
@@ -97,6 +103,14 @@ export class NpcData extends foundry.abstract.TypeDataModel {
       manDmg: new NumberField({ ...requiredInteger, initial: 0 }),
       manHealRate: new NumberField({ ...requiredInteger, initial: 0 }),
       manUnconscious: new NumberField({ ...requiredInteger, initial: 0 }),
+      damEffects: new NumberField({ ...requiredInteger, initial: 0 }),
+      damage: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
+      damBonus: new StringField({ required: true, blank: true, initial: "" }),
+      healRate: new NumberField({ ...requiredInteger, initial: 0, persisted: false }),
+      healRateEffects: new NumberField({ ...requiredInteger, initial: 0 }),
+      armourEffects: new NumberField({ ...requiredInteger, initial: 0 }),
+      moveEffects: new NumberField({ ...requiredInteger, initial: 0 }),
+      genialityAdj: new NumberField({ ...requiredInteger, initial: 0 }),
       lock: new BooleanField({ initial: false }),
       weaponExp: new BooleanField({ initial: true }),
       armorExp: new BooleanField({ initial: true }),
@@ -115,5 +129,28 @@ export class NpcData extends foundry.abstract.TypeDataModel {
       kv: new StringField({ initial: "" }),
       random: new ArrayField(new ObjectField()),
     };
+  }
+
+  prepareDerivedData() {
+    super.prepareDerivedData();
+    // Handle stats scores, adding labels to stats
+    for (let [key, stat] of Object.entries(this.stats)) {
+      stat.label = game.i18n.localize(CONFIG.PENDRAGON.stats[key]) ?? key;
+      stat.labelShort = game.i18n.localize(CONFIG.PENDRAGON.statsAbbreviations[key]) ?? key;
+      stat.total =
+        stat.value +
+        stat.culture +
+        stat.create +
+        stat.poison +
+        stat.disease +
+        stat.sol +
+        stat.age +
+        stat.effects +
+        stat.major +
+        stat.winter;
+    }
+    this.healRate = Math.round(this.stats.con.total / 5) + this.healRateEffects;
+    this.move = Math.round((this.stats.str.total + this.stats.dex.total) / 2) + 5 + this.moveEffects;
+    this.damage = Math.round((this.stats.str.total + this.stats.siz.total) / 6) + this.damEffects;
   }
 }

@@ -1,8 +1,7 @@
-import { PIDEditor } from "../../pid/pid-editor.mjs";
-import { PENactorItemDrop } from "../actor-itemDrop.mjs";
+import { PendragonActorSheet } from "./actor-sheet.mjs";
 const { api, sheets } = foundry.applications;
 
-export class PendragonPartySheet extends api.HandlebarsApplicationMixin(sheets.ActorSheetV2) {
+export class PendragonPartySheet extends PendragonActorSheet {
   constructor(options = {}) {
     super(options);
     this.#dragDrop = this._createDragDropHandlers();

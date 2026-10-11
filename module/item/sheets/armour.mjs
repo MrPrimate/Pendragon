@@ -7,23 +7,10 @@ export class PendragonArmourSheet extends PendragonItemSheet {
   }
 
   static DEFAULT_OPTIONS = {
-    classes: ["Pendragon", "sheet", "item", "theme-light"],
+    classes: ["Pendragon", "sheet", "itemV2"],
     position: {
       width: 600,
       height: 520,
-    },
-    tag: "form",
-    // automatically updates the item
-    form: {
-      submitOnChange: true,
-    },
-    window: {
-      resizable: true,
-    },
-    actions: {
-      // probably should be implemented on a base class
-      onEditImage: this._onEditImage,
-      editPid: this._onEditPid,
     },
   };
 
@@ -37,6 +24,9 @@ export class PendragonArmourSheet extends PendragonItemSheet {
     // each tab gets its own template
     attributes: {
       template: "systems/Pendragon/templates/item/armour.attributes.hbs",
+    },
+    effects: {
+      template: "systems/Pendragon/templates/item/effects.hbs",
     },
     description: {
       template: "systems/Pendragon/templates/item/armour.description.hbs",
@@ -73,7 +63,7 @@ export class PendragonArmourSheet extends PendragonItemSheet {
         secrets: sheetData.editable,
       },
     );
-    let parts = ["attributes", "description"];
+    let parts = ["attributes", "description", "effects"];
     if (game.user.isGM) {
       parts.push("gmTab");
     }
@@ -87,6 +77,7 @@ export class PendragonArmourSheet extends PendragonItemSheet {
     switch (partId) {
       case "attributes":
       case "description":
+      case "effects":
       case "gmTab":
         context.tab = context.tabs[partId];
         break;

@@ -31,7 +31,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "14.365"
+      coreVersion: '14.365'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: 1783594487601
@@ -39,7 +39,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!7U9pKyQCsPrhgwnl.sIDjhqsdi0cmQUm9"
+    _key: '!journal.pages!7U9pKyQCsPrhgwnl.sIDjhqsdi0cmQUm9'
   - sort: 100000
     name: Game Year (GM only)
     type: text
@@ -73,7 +73,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "14.365"
+      coreVersion: '14.365'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: 1783594007288
@@ -81,7 +81,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!7U9pKyQCsPrhgwnl.ty31IeGwbI6DR5cM"
+    _key: '!journal.pages!7U9pKyQCsPrhgwnl.ty31IeGwbI6DR5cM'
   - sort: 200000
     name: XP Check Options
     type: text
@@ -126,7 +126,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "14.364"
+      coreVersion: '14.364'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: 1783594571266
@@ -134,7 +134,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!7U9pKyQCsPrhgwnl.WyR6m6LOKiF3HVmB"
+    _key: '!journal.pages!7U9pKyQCsPrhgwnl.WyR6m6LOKiF3HVmB'
   - sort: 300000
     name: Dice Roll Options
     type: text
@@ -177,7 +177,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "14.365"
+      coreVersion: '14.365'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: 1783594605989
@@ -185,7 +185,7 @@ pages:
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
-    _key: "!journal.pages!7U9pKyQCsPrhgwnl.8JRDCc5CePLRMFxN"
+    _key: '!journal.pages!7U9pKyQCsPrhgwnl.8JRDCc5CePLRMFxN'
   - sort: 500000
     name: Tooltip Delay (GM only)
     type: text
@@ -210,7 +210,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: null
@@ -218,7 +218,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!7U9pKyQCsPrhgwnl.yCbdGRto5p6ReXOg"
+    _key: '!journal.pages!7U9pKyQCsPrhgwnl.yCbdGRto5p6ReXOg'
   - sort: 600000
     name: Character Token Vision (GM only)
     type: text
@@ -242,7 +242,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.11
       createdTime: null
@@ -250,7 +250,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!7U9pKyQCsPrhgwnl.DSedYGFfcELhYENQ"
+    _key: '!journal.pages!7U9pKyQCsPrhgwnl.DSedYGFfcELhYENQ'
   - sort: 700000
     name: Use Relationships
     type: text
@@ -275,7 +275,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -283,7 +283,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!7U9pKyQCsPrhgwnl.bfXTt8IYHlChzhqc"
+    _key: '!journal.pages!7U9pKyQCsPrhgwnl.bfXTt8IYHlChzhqc'
   - sort: 450000
     name: Child Mortality
     type: text
@@ -309,13 +309,13 @@ pages:
     _stats:
       duplicateSource: null
       exportSource: null
-      coreVersion: "13.350"
+      coreVersion: '13.350'
       systemId: Pendragon
       systemVersion: 13.1.42
       createdTime: 1762881879063
       modifiedTime: 1762882237421
       lastModifiedBy: pendragonBuilder
-    _key: "!journal.pages!7U9pKyQCsPrhgwnl.qEZbHtdNgLaa37pV"
+    _key: '!journal.pages!7U9pKyQCsPrhgwnl.qEZbHtdNgLaa37pV'
   - sort: 800000
     name: Show Party Details
     type: text
@@ -347,13 +347,13 @@ pages:
     _stats:
       duplicateSource: null
       exportSource: null
-      coreVersion: "13.350"
+      coreVersion: '13.350'
       systemId: Pendragon
       systemVersion: 13.1.42
       createdTime: 1762881949343
       modifiedTime: 1762882231445
       lastModifiedBy: pendragonBuilder
-    _key: "!journal.pages!7U9pKyQCsPrhgwnl.BGPNYU1lP7NF3mmV"
+    _key: '!journal.pages!7U9pKyQCsPrhgwnl.BGPNYU1lP7NF3mmV'
   - sort: 900000
     name: When Creating NPC (GM)
     type: text
@@ -384,13 +384,13 @@ pages:
     _stats:
       duplicateSource: null
       exportSource: null
-      coreVersion: "13.351"
+      coreVersion: '13.351'
       systemId: Pendragon
       systemVersion: 13.1.46
       createdTime: 1765438314866
       modifiedTime: 1765438447476
       lastModifiedBy: pendragonBuilder
-    _key: "!journal.pages!7U9pKyQCsPrhgwnl.EG80uuwz8hOXkuUN"
+    _key: '!journal.pages!7U9pKyQCsPrhgwnl.EG80uuwz8hOXkuUN'
   - sort: 150000
     name: Combat/Damage Options
     type: text
@@ -423,15 +423,15 @@ pages:
       default: -1
     flags: {}
     _stats:
-      coreVersion: "14.364"
+      coreVersion: '14.364'
       systemId: Pendragon
-      systemVersion: "14.5"
+      systemVersion: '14.5'
       createdTime: 1783594218406
       modifiedTime: 1783594540037
       lastModifiedBy: pendragonBuilder
       duplicateSource: null
       exportSource: null
-    _key: "!journal.pages!7U9pKyQCsPrhgwnl.k4EAubcSwrqtCWCs"
+    _key: '!journal.pages!7U9pKyQCsPrhgwnl.k4EAubcSwrqtCWCs'
   - sort: 375000
     name: Manual Glory
     type: text
@@ -458,15 +458,15 @@ pages:
       default: -1
     flags: {}
     _stats:
-      coreVersion: "14.365"
+      coreVersion: '14.365'
       systemId: Pendragon
-      systemVersion: "14.7"
+      systemVersion: '14.7'
       createdTime: 1786880881426
       modifiedTime: 1786880969927
       lastModifiedBy: pendragonBuilder
       duplicateSource: null
       exportSource: null
-    _key: "!journal.pages!7U9pKyQCsPrhgwnl.ioJEGkzKwjKh9mR6"
+    _key: '!journal.pages!7U9pKyQCsPrhgwnl.ioJEGkzKwjKh9mR6'
 folder: null
 flags:
   Pendragon:
@@ -478,9 +478,9 @@ flags:
     fixed-adventure-heading: true
 _stats:
   duplicateSource: null
-  coreVersion: "14.364"
+  coreVersion: '14.364'
   systemId: Pendragon
-  systemVersion: "14.1"
+  systemVersion: '14.1'
   createdTime: 1719597783187
   modifiedTime: 1781499123913
   lastModifiedBy: pendragonBuilder
@@ -489,4 +489,4 @@ sort: -50000
 ownership:
   default: 0
 categories: []
-_key: "!journal!7U9pKyQCsPrhgwnl"
+_key: '!journal!7U9pKyQCsPrhgwnl'

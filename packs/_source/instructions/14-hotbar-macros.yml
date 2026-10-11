@@ -27,7 +27,7 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: "13.345"
+      coreVersion: '13.345'
       systemId: Pendragon
       systemVersion: 12.1.16
       createdTime: null
@@ -35,7 +35,7 @@ pages:
       lastModifiedBy: null
       exportSource: null
     category: null
-    _key: "!journal.pages!5yLFpjPADXj1VqOi.8Lg8NH0h4ejhtp8I"
+    _key: '!journal.pages!5yLFpjPADXj1VqOi.8Lg8NH0h4ejhtp8I'
 flags:
   Pendragon:
     pidFlag:
@@ -46,9 +46,9 @@ flags:
     fixed-adventure-heading: true
 _stats:
   duplicateSource: null
-  coreVersion: "14.364"
+  coreVersion: '14.364'
   systemId: Pendragon
-  systemVersion: "14.1"
+  systemVersion: '14.1'
   createdTime: 1734462613625
   modifiedTime: 1781499239088
   lastModifiedBy: pendragonBuilder
@@ -57,4 +57,4 @@ sort: 100000
 ownership:
   default: 0
 categories: []
-_key: "!journal!5yLFpjPADXj1VqOi"
+_key: '!journal!5yLFpjPADXj1VqOi'

@@ -1,27 +1,25 @@
 import { PENRollType } from "../../cards/rollType.mjs";
 import { PENCombat } from "../../apps/combat.mjs";
 import { PENWinter } from "../../apps/winterPhase.mjs";
-import { PENCharCreate } from "../../apps/charCreate.mjs";
-import { addPIDSheetHeaderButton } from "../../pid/pid-button.mjs";
+import { PENCharCreateV2 } from "../../apps/charCreateV2.mjs";
 import { PENactorItemDrop } from "../actor-itemDrop.mjs";
 import { PENUtilities } from "../../apps/utilities.mjs";
-import { PendragonStatusEffects } from "../../apps/status-effects.mjs";
 import { PENSelectLists } from "../../apps/select-lists.mjs";
-import { PIDEditor } from "../../pid/pid-editor.mjs";
-import { isCtrlKey } from "../../apps/helper.mjs";
+import { PENActiveEffectSheet } from "../../sheets/pen-active-effect-sheet.mjs";
+import { PendragonActorSheet } from "./actor-sheet.mjs";
 const { api, sheets } = foundry.applications;
 
-export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(sheets.ActorSheetV2) {
+export class PendragonCharacterSheet extends PendragonActorSheet {
   constructor(options = {}) {
     super(options);
     this._dragDrop = this._createDragDropHandlers();
   }
 
   static DEFAULT_OPTIONS = {
-    classes: ["Pendragon", "sheet", "actor", "character", "theme-light"],
+    classes: ["Pendragon", "sheet", "characterV1"],
     position: {
-      width: 855,
-      height: 655,
+      width: 900,
+      height: 685,
     },
     tag: "form",
     dragDrop: [{ dragSelector: "[data-drag]", dropSelector: null }],
@@ -29,13 +27,13 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
       submitOnChange: true,
     },
     actions: {
-      onEditImage: this._onEditImage,
       editPid: this._onEditPid,
       individualWinter: this._individualWinter,
       toggleActor: this._onActorToggle,
       createDoc: this._createDoc,
       viewDoc: this._viewDoc,
       deleteDoc: this._deleteDoc,
+      resetArchetype: this._onUndoArchetype,
       resetCulture: this._onUndoCulture,
       resetReligion: this._onUndoReligion,
       resetHomeland: this._onUndoHomeland,
@@ -64,6 +62,12 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
       toggleHorse: this._toggleHorse,
       viewEstate: this._viewEstate,
       deleteEstate: this._deleteEstate,
+      createEffect: this._createEffect,
+      viewActiveEffect: this._viewActiveEffect,
+      toggleEffect: this._toggleEffect,
+      clearEffects: this._clearEffects,
+      deleteActiveEffect: this._deleteActiveEffect,
+      openWiki: this._openWiki,
     },
     window: {
       resizable: true,
@@ -72,81 +76,63 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
 
   static PARTS = {
     header: {
-      template: "systems/Pendragon/templates/actor/character.header.hbs",
+      template: "systems/Pendragon/templates/actor/characterV1/character.header.hbs",
       scrollable: [""],
     },
     tabs: { template: "templates/generic/tab-navigation.hbs" },
     combat: {
-      template: "systems/Pendragon/templates/actor/character.combat.hbs",
+      template: "systems/Pendragon/templates/actor/characterV1/character.combat.hbs",
       scrollable: [""],
     },
     skills: {
-      template: "systems/Pendragon/templates/actor/character.skills.hbs",
+      template: "systems/Pendragon/templates/actor/characterV1/character.skills.hbs",
       scrollable: [""],
     },
     traits: {
-      template: "systems/Pendragon/templates/actor/character.traits.hbs",
+      template: "systems/Pendragon/templates/actor/characterV1/character.traits.hbs",
       scrollable: [""],
     },
     passions: {
-      template: "systems/Pendragon/templates/actor/character.passions.hbs",
+      template: "systems/Pendragon/templates/actor/characterV1/character.passions.hbs",
       scrollable: [""],
     },
     gear: {
-      template: "systems/Pendragon/templates/actor/character.gear.hbs",
-      scrollable: [""],
-    },
-    companions: {
-      template: "systems/Pendragon/templates/actor/character.companions.hbs",
+      template: "systems/Pendragon/templates/actor/characterV1/character.gear.hbs",
       scrollable: [""],
     },
     history: {
-      template: "systems/Pendragon/templates/actor/character.history.hbs",
+      template: "systems/Pendragon/templates/actor/characterV1/character.history.hbs",
+      scrollable: [""],
+    },
+    ideals: {
+      template: "systems/Pendragon/templates/actor/characterV1/character.ideals.hbs",
       scrollable: [""],
     },
     house: {
-      template: "systems/Pendragon/templates/actor/character.house.hbs",
-      scrollable: [""],
-    },
-    follower: {
-      template: "systems/Pendragon/templates/actor/character.follower.hbs",
+      template: "systems/Pendragon/templates/actor/characterV1/character.house.hbs",
       scrollable: [""],
     },
     biography: {
-      template: "systems/Pendragon/templates/actor/character.biography.hbs",
+      template: "systems/Pendragon/templates/actor/characterV1/character.biography.hbs",
       scrollable: [""],
     },
     stats: {
-      template: "systems/Pendragon/templates/actor/character.stats.hbs",
+      template: "systems/Pendragon/templates/actor/characterV1/character.stats.hbs",
+      scrollable: [""],
+    },
+    effects: {
+      template: "systems/Pendragon/templates/actor/characterV1/character.effects.hbs",
       scrollable: [""],
     },
     charcreate: {
-      template: "systems/Pendragon/templates/actor/character.charcreate.hbs",
+      template: "systems/Pendragon/templates/actor/characterV1/character.charcreate.hbs",
       scrollable: [""],
     },
     winter: {
-      template: "systems/Pendragon/templates/actor/character.winter.hbs",
+      template: "systems/Pendragon/templates/actor/characterV1/character.winter.hbs",
       scrollable: [""],
     },
   };
-
-  // adds the PID editor to the sheet frame
-  async _renderFrame(options) {
-    const frame = await super._renderFrame(options);
-    //define button
-    const sheetPID = this.actor.flags?.Pendragon?.pidFlag;
-    const noId = typeof sheetPID === "undefined" || typeof sheetPID.id === "undefined" || sheetPID.id === "";
-    //add button
-    const label = game.i18n.localize("PEN.PIDFlag.id");
-    const pidEditor = `<button type="button" class="header-control fa-solid fa-fingerprint icon ${noId ? "edit-pid-warning" : "edit-pid-exisiting"}"
-      data-action="editPid" data-tooltip="${label}" aria-label="${label}"></button>`;
-    let el = this.window.close;
-    while (el.previousElementSibling.localName === "button") {
-      el = el.previousElementSibling;
-    }
-    el.insertAdjacentHTML("beforebegin", pidEditor);
-    return frame;
-  }
 
   // adds the GM only Individual Winter Phase option to the header controls menu
   _getHeaderControls() {
@@ -158,11 +144,8 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
     //Common parts to the character - this is the order they are show on the sheet
     options.parts = ["header", "tabs"];
     //First tab is at the left of the list on the character sheet
-    options.parts.push("combat", "traits", "passions", "skills", "gear", "companions", "history", "house");
-    if (game.settings.get("Pendragon", "useRelation")) {
-      options.parts.push("follower");
-    }
-    options.parts.push("biography", "stats");
+    options.parts.push("combat", "traits", "passions", "skills", "gear", "house", "ideals", "history");
+    options.parts.push("biography", "effects", "stats");
     if (PENWinter.showWinterTab(this.actor)) {
       options.parts.push("winter");
     } else if (this.tabGroups.primary === "winter") {
@@ -203,12 +186,12 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
         case "traits":
         case "passions":
         case "gear":
-        case "companions":
         case "history":
+        case "ideals":
         case "house":
-        case "follower":
         case "biography":
         case "stats":
+        case "effects":
         case "charcreate":
         case "winter":
           tab.id = partId;
@@ -228,15 +211,20 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
       case "traits":
       case "passions":
       case "gear":
-      case "companions":
-      case "history":
       case "house":
+      case "history":
+      case "ideals":
       case "follower":
       case "biography":
       case "stats":
       case "charcreate":
       case "winter":
         context.tab = context.tabs[partId];
+        break;
+      case "effects":
+        context.tab = context.tabs[partId];
+        context.effects = await PENActiveEffectSheet.getActorEffectsFromSheet(this.document);
+        context.directEffects = await PENActiveEffectSheet.getDirectEffectsFromSheet(this.document);
         break;
     }
     return context;
@@ -262,12 +250,20 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
     context.hasClass = false;
     context.hasKnightClass = false;
     context.hasReligion = false;
+    context.hasArchetype = false;
     context.hasFamily = false;
     context.hasTraits = false;
     context.hasParentPassion = false;
     context.hasPSP = false;
     context.hasEquip = false;
     context.hasLuck = false;
+    context.showHelp = game.settings.get("Pendragon", "showHelp");
+    let archetype = this.actor.items.find((itm) => itm.type === "archetype");
+    if (archetype) {
+      context.archetypeName = archetype.name;
+    } else {
+      context.archetypeName = "";
+    }
     let equip = await this.actor.items.filter((i) => i.type != "class").filter((i) => i.system.source === "class");
     if (equip.length > 0) {
       context.hasEquip = true;
@@ -287,6 +283,7 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
     if (this.actor.name.toUpperCase() === game.i18n.localize("TYPES.Actor.character").toUpperCase()) {
       context.hasName = false;
     }
+    //No longer strictly knightly - it's the archetype ideal npw
     let knightly = await PendragonCharacterSheet.testKnightly(this.actor);
     context.knightly = knightly.pass;
     context.knightlyLabel = knightly.label;
@@ -299,10 +296,11 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
     if (this.actor.system.homelandID != "") {
       context.hasHomeland = true;
     }
+    if (this.actor.system.archetypeID != "") {
+      context.hasArchetype = true;
+    }
     if (this.actor.system.classID != "") {
       context.hasClass = true;
-      //let tempClass = await this.actor.items.get(actorData.system.classID);
-      //if (!tempClass.system.starter) {context.hasKnightClass = true}
       context.hasKnightClass = true;
     }
     if (this.actor.system.religionID != "") {
@@ -334,6 +332,21 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
         secrets: context.editable,
       },
     );
+    // Used wherever we need to show a particular status
+    context.statuses = CONFIG.statusEffects
+      .map((c) => {
+        const hasCondition = this.actor.statuses.has(c.id);
+        return {
+          id: c.id,
+          name: game.i18n.localize(`PEN.${c.name}`),
+          img: c.img,
+          active: hasCondition,
+        };
+      })
+      .reduce((acc, o, index) => {
+        acc[o.id] = o;
+        return acc;
+      }, {});
 
     const estates = [];
     for (let a of this.document.system.estates) {
@@ -345,6 +358,8 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
           typeLabel: game.i18n.localize("TYPES.Actor." + tempActor.type),
           dvLabel: tempActor.dvLabel,
           dvLabelHint: tempActor.dvLabelHint,
+          armyTotal: tempActor.system.armyTotal,
+          privyInc: tempActor.system.privyInc.libra + "/" + tempActor.system.privyInc.denarii,
         });
       } else {
         estates.push({
@@ -353,14 +368,15 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
           typeLabel: "",
           dvLabel: "",
           dvLabelHint: "",
+          armyTotal: 0,
+          privyInc: 0,
         });
       }
     }
     context.estates = estates.sort(function (a, b) {
       return a.name.localeCompare(b.name);
     });
-    this._prepareItems(context);
-    this._prepareEffects(context);
+    await this._prepareItems(context);
 
     // Add roll data for TinyMCE editors.
     context.rollData = context.actor.getRollData();
@@ -373,15 +389,6 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
     return context;
   }
 
-  //Organize and classify active effects for Character sheets.
-  _prepareEffects(context) {
-    const status = {};
-    for (let s of PendragonStatusEffects.allStatusEffects) {
-      status[s.id] = this.actor.statuses.has(s.id);
-    }
-    context.statuses = status;
-  }
-
   async _prepareItems(context) {
     // Initialize containers.
     const gears = [];
@@ -389,13 +396,13 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
     const skills = [];
     const wounds = [];
     const history = [];
+    const ideals = [];
     const passions = [];
     const horses = [];
     const squires = [];
     const armours = [];
     const weapons = [];
     const families = [];
-    const ideals = [];
     const household = [];
     const followers = [];
 
@@ -406,6 +413,12 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
         i.system.cleanDesc = i.system.description.replace(/<[^>]+>/g, "");
         gears.push(i);
       } else if (i.type === "trait") {
+        //Don't show Chaste/Lustful if age is under 13
+        if (
+          ["i.trait.chaste", "i.trait.lustful"].includes(i.flags?.Pendragon?.pidFlag?.id) &&
+          this.actor.system.age < game.settings.get("Pendragon", "youthAge")
+        )
+          continue;
         traits.push(i);
         if (i.system.value != 10) {
           context.hasTraits = true;
@@ -535,32 +548,6 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
         },
       },
     );
-
-    // Sort Gears
-    gears.sort(function (a, b) {
-      let x = a.name;
-      let y = b.name;
-      if (x < y) {
-        return -1;
-      }
-      if (x > y) {
-        return 1;
-      }
-      return 0;
-    });
-
-    // Sort Traits
-    traits.sort(function (a, b) {
-      let x = a.name;
-      let y = b.name;
-      if (x < y) {
-        return -1;
-      }
-      if (x > y) {
-        return 1;
-      }
-      return 0;
-    });
 
     // Sort Skills
     skills.sort(function (a, b) {
@@ -693,22 +680,9 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
       return 0;
     });
 
-    // Sort Ideals
-    ideals.sort(function (a, b) {
-      let x = a.name;
-      let y = b.name;
-      if (x < y) {
-        return -1;
-      }
-      if (x > y) {
-        return 1;
-      }
-      return 0;
-    });
-
     // Assign and return
-    context.gears = gears;
-    context.traits = traits;
+    context.gears = gears.sort((a, b) => a.name.localeCompare(b.name));
+    context.traits = traits.sort((a, b) => a.name.localeCompare(b.name));
     context.skills = skills;
     context.wounds = wounds;
     context.history = history;
@@ -718,44 +692,16 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
     context.armours = armours;
     context.weapons = weapons;
     context.families = families;
-    context.ideals = ideals;
+    context.ideals = ideals.sort((a, b) => a.name.localeCompare(b.name));
     context.household = household;
     context.followers = followers;
   }
 
   /* --------------------------------ACTIONS--------------------- */
-  // Handle edit Image action
-  static async _onEditImage(event, target) {
-    const attr = target.dataset.edit;
-    const current = foundry.utils.getProperty(this.document, attr);
-    const { img } = this.document.constructor.getDefaultArtwork?.(this.document.toObject()) ?? {};
-    const fp = new foundry.applications.apps.FilePicker.implementation({
-      current,
-      type: "image",
-      redirectToRoot: img ? [img] : [],
-      callback: (path) => {
-        this.document.update({ [attr]: path });
-      },
-      top: this.position.top + 40,
-      left: this.position.left + 10,
-    });
-    return fp.browse();
-  }
-
-  // Handle editPid action
-  static _onEditPid(event, target) {
-    event.stopPropagation(); // Don't trigger other events
-    if (event.detail > 1) return; // Ignore repeated clicks
-    new PIDEditor(this.document, {}).render(true, {
-      focus: true,
-    });
-  }
 
   static async _onActorToggle(event, target) {
-    //Only perform on double click
     const prop = target.dataset.property;
     let checkProp = {};
-
     if (["lock", "heir"].includes(prop)) {
       checkProp = { [`system.${prop}`]: !this.actor.system[prop] };
     } else if (["chirurgery", "barren"].includes(prop)) {
@@ -854,10 +800,18 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
   }
 
   //Trigger Culture Deletion
+  static async _onUndoArchetype(event, target) {
+    if (event.detail === 2) {
+      //Only perform on double click
+      await PENCharCreateV2.removeArchetype(this.actor);
+    }
+  }
+
+  //Trigger Culture Deletion
   static async _onUndoCulture(event, target) {
     if (event.detail === 2) {
       //Only perform on double click
-      await PENCharCreate.undoCulture(this.actor);
+      await PENCharCreateV2.undoCulture(this.actor);
     }
   }
 
@@ -865,7 +819,7 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
   static async _onUndoHomeland(event, target) {
     if (event.detail === 2) {
       //Only perform on double click
-      await PENCharCreate.undoHomeland(this.actor);
+      await PENCharCreateV2.undoHomeland(this.actor);
     }
   }
 
@@ -873,7 +827,7 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
   static async _onUndoClass(event, target) {
     if (event.detail === 2) {
       //Only perform on double click
-      await PENCharCreate.undoClass(this.actor, false);
+      await PENCharCreateV2.resetClass(this.actor, false);
     }
   }
 
@@ -881,7 +835,7 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
   static async _onUndoReligion(event, target) {
     if (event.detail === 2) {
       //Only perform on double click
-      await PENCharCreate.undoReligion(this.actor);
+      await PENCharCreateV2.undoReligion(this.actor);
     }
   }
 
@@ -897,7 +851,7 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
   //Character Creation Step
   static async _charCreate(event, target) {
     const step = target.closest("li").dataset.step;
-    await PENCharCreate.startCreate(this.actor, step, false);
+    await PENCharCreateV2.startCreate(this.actor, step, false);
   }
 
   //Character Creation Step Reset
@@ -905,14 +859,14 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
     if (event.detail === 2) {
       //Only perform on double click
       const step = target.closest("li").dataset.step;
-      await PENCharCreate.startCreate(this.actor, step, true);
+      await PENCharCreateV2.startCreate(this.actor, step, true);
     }
   }
 
   //Trigger a Stat Creation Roll
   static async _statRoll(event, target) {
     if (this.actor.system.create.stats) {
-      await PENCharCreate.rollStats(this.actor);
+      await PENCharCreateV2.rollStats(this.actor);
       await this.actor.update({ "system.create.stats": false });
     } else if (game.user.isGM) {
       await this.actor.update({ "system.create.stats": true });
@@ -922,7 +876,7 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
   //Trigger Trait Rolls
   static async _traitRoll(event, target) {
     if (this.actor.system.create.traits) {
-      await PENCharCreate.rollTraits(this.actor);
+      await PENCharCreateV2.rollTraits(this.actor);
       await this.actor.update({ "system.create.traits": false });
     } else if (game.user.isGM) {
       await this.actor.update({ "system.create.traits": true });
@@ -931,7 +885,7 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
 
   //Trigger Skills Base Score Calculation
   static async _genSkills(event) {
-    await PENCharCreate.baseSkillScore(this.actor);
+    await PENCharCreateV2.baseSkillScore(this.actor);
   }
 
   //Individual Winter Phase (GM only)
@@ -1171,68 +1125,20 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
 
   //Does the Character qualify for Knighthood
   static async testKnightly(actor) {
-    let pass = game.i18n.localize("PEN.knightly.pass");
-    let skillCount = game.i18n.localize("PEN.knightly.pass");
-    let swordCheck = game.i18n.localize("PEN.knightly.pass");
-    let chargeCheck = game.i18n.localize("PEN.knightly.pass");
-    let brawlingCheck = game.i18n.localize("PEN.knightly.pass");
-    let honorCheck = game.i18n.localize("PEN.knightly.pass");
-    let knightly = game.i18n.localize("PEN.knightly.pass");
-    let skills = await actor.items
-      .filter((i) => i.type === "skill")
-      .filter((j) => j.system.total >= 10 && j.system.weaponType === "")
-      .filter((k) => k.system.categories.find((m) => m === "knightly"));
-    if (skills.length < 2) {
-      skillCount = game.i18n.localize("PEN.knightly.fail");
-      knightly = false;
+    let archetype = await actor.items.get(actor.system.archetypeID);
+    if (!archetype) {
+      return { pass: false, label: game.i18n.localize("PEN.archetypeMissing") };
     }
-    let sword = await actor.items.filter((i) => i.flags.Pendragon?.pidFlag?.id === "i.skill.sword");
-    if (sword.length === 0 || sword[0].system.total < 10) {
-      swordCheck = game.i18n.localize("PEN.knightly.fail");
-      knightly = false;
+    let idealPID = archetype.system?.ideals?.[0]?.pid;
+    let ideal = await actor.items.find((itm) => itm.flags?.Pendragon?.pidFlag?.id === idealPID);
+    if (!ideal) {
+      return { pass: false, label: game.i18n.localize("PEN.idealMissing") };
     }
-    let charge = await actor.items.filter((i) => i.flags.Pendragon?.pidFlag?.id === "i.skill.charge");
-    if (charge.length === 0 || charge[0].system.total < 10) {
-      chargeCheck = game.i18n.localize("PEN.knightly.fail");
-      knightly = false;
-    }
-    let brawling = await actor.items.filter((i) => i.flags.Pendragon?.pidFlag?.id === "i.skill.brawling");
-    if (brawling.length === 0 || brawling[0].system.total < 10) {
-      brawlingCheck = game.i18n.localize("PEN.knightly.fail");
-      knightly = false;
-    }
-    let honor = await actor.items.filter((i) => i.flags.Pendragon?.pidFlag?.id === "i.passion.honor");
-    if (honor.length === 0 || honor[0].system.total < 5) {
-      honorCheck = game.i18n.localize("PEN.knightly.fail");
-      knightly = false;
-    }
-    let knightlyLabel =
-      "<p>" +
-      game.i18n.localize("PEN.knightly.knightlySkills") +
-      ": " +
-      skillCount +
-      "</p><p>" +
-      game.i18n.localize("PEN.knightly.sword") +
-      ": " +
-      swordCheck +
-      "</p><p>" +
-      game.i18n.localize("PEN.knightly.charge") +
-      ": " +
-      chargeCheck +
-      "</p><p>" +
-      game.i18n.localize("PEN.knightly.brawling") +
-      ": " +
-      brawlingCheck +
-      "</p><p>" +
-      game.i18n.localize("PEN.knightly.honor") +
-      ": " +
-      honorCheck +
-      "</p>";
-    return { pass: knightly, label: knightlyLabel };
+    return { pass: ideal.system.activeIdeal, label: ideal.system.reqMsg };
   }
 
   //Get Embedded Document
-  _getEmbeddedDocument(target) {
+  Document(target) {
     const docRow = target.closest("li[data-document-class]");
     if (docRow.dataset.documentClass === "Item") {
       return this.actor.items.get(docRow.dataset.itemId);
@@ -1308,7 +1214,10 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
 
   //Handle the dropping of ActiveEffect data onto an Actor Sheet
   async _onDropActiveEffect(event, data) {
-    return false;
+    const aeCls = getDocumentClass("ActiveEffect");
+    const effect = await aeCls.fromDropData(data);
+    if (!this.actor.isOwner || !effect) return false;
+    return aeCls.create(effect, { parent: this.actor });
   }
 
   //Dropping an actor on to character
@@ -1456,5 +1365,19 @@ export class PendragonCharacterSheet extends api.HandlebarsApplicationMixin(shee
       };
       return new foundry.applications.ux.DragDrop(d);
     });
+  }
+
+    //Get Embedded Document
+  _getEmbeddedDocument(target) {
+    const docRow = target.closest("li[data-document-class]");
+    if (docRow.dataset.documentClass === "Item") {
+      return this.actor.items.get(docRow.dataset.itemId);
+    } else if (docRow.dataset.documentClass === "ActiveEffect") {
+      const parent =
+        docRow.dataset.parentId === this.actor.id
+          ? this.actor
+          : this.actor.items.get(docRow?.dataset.parentId);
+      return parent.effects.get(docRow?.dataset.effectId);
+    } else return console.warn("Could not find document class");
   }
 }

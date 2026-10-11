@@ -3,7 +3,8 @@ import { TraitsSelectDialog } from "./trait-selection.mjs";
 import { PassionsSelectDialog } from "./passion-selection.mjs";
 import { PENSelectLists } from "./select-lists.mjs";
 import { PENCheck } from "../apps/checks.mjs";
-import { PENCharCreate } from "./charCreate.mjs";
+//import { PENCharCreate } from "./charCreate.mjs";
+import { PENCharCreateV2 } from "./charCreateV2.mjs";
 import { SkillTrainingDialog } from "./skill-training-selection.mjs";
 import PENDialog from "../setup/pen-dialog.mjs";
 
@@ -1410,7 +1411,7 @@ export class PENWinter {
     if (spouse > 0) {
       list.unshift({ name: game.i18n.localize("PEN.spouse"), pid: "spouse" });
     }
-    let decision = await PENCharCreate.selectFromRadio("list", true, list, game.i18n.localize("PEN.childBirth"));
+    let decision = await PENCharCreateV2.selectFromRadio("list", true, list, game.i18n.localize("PEN.childBirth"));
     let prestige = "none";
     //Unless 'none' has been chosen
     if (decision != "none") {
@@ -1427,7 +1428,7 @@ export class PENWinter {
         if (heir < 1) {
           prestList.unshift({ name: game.i18n.localize("PEN.heir"), pid: "heir" });
         }
-        prestige = await PENCharCreate.selectFromRadio(
+        prestige = await PENCharCreateV2.selectFromRadio(
           "list",
           true,
           prestList,
@@ -1557,7 +1558,7 @@ export class PENWinter {
           //If there is a death then check for a Midwife roll
           if (childDies || motherDies) {
             //Get midwife score
-            let midwifScore = Number(await PENCharCreate.inpValue(game.i18n.localize("PEN.midwifeScore")).age);
+            let midwifScore = Number((await PENCharCreateV2.inpValue(game.i18n.localize("PEN.midwifeScore")))?.age ?? 0);
             if (midwifScore > 0) {
               //If score entered then make check roll
               midResult = await PENUtilities.simpleDiceRoll("1D20");
@@ -1568,7 +1569,7 @@ export class PENWinter {
                     { name: game.i18n.localize("PEN.child"), pid: "child" },
                     { name: game.i18n.localize("PEN.mother"), pid: "mother" },
                   ];
-                  let midDecision = await PENCharCreate.selectFromRadio(
+                  let midDecision = await PENCharCreateV2.selectFromRadio(
                     "list",
                     false,
                     midwifeList,
@@ -2077,7 +2078,7 @@ export class PENWinter {
       { name: game.i18n.localize("PEN.male"), pid: "male" },
       { name: game.i18n.localize("PEN.female"), pid: "female" },
     ];
-    let gender = await PENCharCreate.selectFromRadio("list", false, aspect, game.i18n.localize("PEN.childGender"));
+    let gender = await PENCharCreateV2.selectFromRadio("list", false, aspect, game.i18n.localize("PEN.childGender"));
     return gender;
   }
 

@@ -1,12 +1,12 @@
 <section class="tab attributes {{tab.cssClass}}" data-group="primary" data-tab="attributes">
   <div class="item-trait-grid">
     <div class="stat-name left bold">{{localize 'PEN.melee'}}</div>
-    <div class="centre"><a class="item-control {{#if isGM}}item-toggle{{/if}} large-icon" data-property = "melee" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if item.system.melee}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
+    <div class="centre pad-icon"><a class="item-control {{#if isGM}}item-toggle{{/if}} large-icon" data-property = "melee" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if item.system.melee}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
     <div class="stat-name left bold">{{localize 'PEN.improvised'}}</div>
-    <div class="centre"><a class="item-control {{#if isGM}}item-toggle{{/if}} large-icon" data-property = "improv" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if item.system.improv}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
+    <div class="centre pad-icon"><a class="item-control {{#if isGM}}item-toggle{{/if}} large-icon" data-property = "improv" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if item.system.improv}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
     {{#if npcOwner}}
       <div class="stat-name left bold">{{localize 'PEN.special'}}</div>
-      <div class="centre"><a class="item-control {{#if isGM}}item-toggle{{/if}} large-icon" data-property = "special" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if item.system.special}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
+      <div class="centre pad-icon"><a class="item-control {{#if isGM}}item-toggle{{/if}} large-icon" data-property = "special" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if item.system.special}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
     {{/if}}
 
   </div>
@@ -41,27 +41,27 @@
         <br>
         <div></div>
         <div class="stat-name left bold">{{localize 'PEN.damageMod'}}</div>
-        <div class="stat-name-input  {{#if (eq item.system.damageMod '')}} input-border {{/if}} centre"><input name="system.damageMod" type="number" value="{{item.system.damageMod}}"/></div>
+        <div class="stat-name-input centre"><input name="system.damageMod" type="number" value="{{item.system.damageMod}}"/></div>
         <div class="stat-name left bold">{{localize 'PEN.unarmouredMod'}}</div>
-        <div class="stat-name-input  {{#if (eq item.system.unarmoured '')}} input-border {{/if}} centre"><input name="system.unarmoured" type="number" value="{{item.system.unarmoured}}"/></div>
+        <div class="stat-name-input centre"><input name="system.unarmoured" type="number" value="{{item.system.unarmoured}}"/></div>
         <div class="stat-name left bold">{{localize 'PEN.mailMod'}}</div>
-        <div class="stat-name-input  {{#if (eq item.system.mail '')}} input-border {{/if}} centre"><input name="system.mail" type="number" value="{{item.system.mail}}"/></div>
+        <div class="stat-name-input centre"><input name="system.mail" type="number" value="{{item.system.mail}}"/></div>
         <div class="stat-name left bold">{{localize 'PEN.plateMod'}}</div>
-        <div class="stat-name-input  {{#if (eq item.system.plate '')}} input-border {{/if}} centre"><input name="system.plate" type="number" value="{{item.system.plate}}"/></div>
+        <div class="stat-name-input centre"><input name="system.plate" type="number" value="{{item.system.plate}}"/></div>
         <div class="stat-name left bold">{{localize 'PEN.damageBonus'}}</div>
-        <div class="stat-name-input  {{#if (eq item.system.damageBonus '')}} input-border {{/if}} centre"><input name="system.damageBonus" type="number" value="{{item.system.damageBonus}}"/></div>
+        <div class="stat-name-input centre"><input name="system.damageBonus" type="number" value="{{item.system.damageBonus}}"/></div>
         <div class="stat-name left bold">{{localize 'PEN.damageMax'}}</div>
-        <div class="stat-name-input  {{#if (eq item.system.damageMax '')}} input-border {{/if}} centre"><input name="system.damageMax" type="number" value="{{item.system.damageMax}}"/></div>
+        <div class="stat-name-input centre"><input name="system.damageMax" type="number" value="{{item.system.damageMax}}"/></div>
         <div class="stat-name left bold">{{localize 'PEN.parry'}}</div>
-        <div class="stat-name-input  {{#if (eq item.system.parry '')}} input-border {{/if}} centre"><input name="system.parry" type="number" value="{{item.system.parry}}"/></div>
+        <div class="stat-name-input centre"><input name="system.parry" type="number" value="{{item.system.parry}}"/></div>
       </div>
       <br>
       {{#if item.system.melee}}
         <div class="stat-name left bold">{{localize 'PEN.advantage'}}</div>
-        <div class="stat-name-input  {{#if (eq item.system.advantage '')}} input-border {{/if}} centre"><input name="system.advantage" type="text" value="{{item.system.advantage}}"/></div>
+        <div class="stat-name-input centre"><input name="system.advantage" type="text" value="{{item.system.advantage}}"/></div>
       {{/if}}
       <div class="stat-name left bold">{{localize 'PEN.disadvantage'}}</div>
-      <div class="stat-name-input  {{#if (eq item.system.disadvantage '')}} input-border {{/if}} centre"><input name="system.disadvantage" type="text" value="{{item.system.disadvantage}}"/></div>
+      <div class="stat-name-input centre"><input name="system.disadvantage" type="text" value="{{item.system.disadvantage}}"/></div>
       {{#unless item.system.melee}}
       <br>
       <div class="item-trait-grid">
@@ -74,7 +74,7 @@
           <div></div>
           <br>
           <div class="stat-name left bold">{{localize 'PEN.rate'}}</div>
-          <div class="stat-name-input {{#if (eq item.system.rate '')}} input-border {{/if}} centre"><input name="system.rate" type="text" value="{{item.system.rate}}"/></div>
+          <div class="stat-name-input centre"><input name="system.rate" type="text" value="{{item.system.rate}}"/></div>
         </div>
       {{/unless}}
 
@@ -123,7 +123,7 @@
         <br>
         <div class="item-trait-grid">
           <div class="stat-name left bold">{{localize 'PEN.quantity'}}</div>
-          <div class="stat-name-input {{#if (eq item.system.quantity '')}} input-border {{/if}} centre"><input name="system.quantity" type="number" value="{{item.system.quantity}}"/></div>
+          <div class="stat-name-input centre"><input name="system.quantity" type="number" value="{{item.system.quantity}}"/></div>
         </div>
       {{/if}}
 

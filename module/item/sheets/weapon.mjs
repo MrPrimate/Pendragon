@@ -7,22 +7,9 @@ export class PendragonWeaponSheet extends PendragonItemSheet {
   }
 
   static DEFAULT_OPTIONS = {
-    classes: ["Pendragon", "sheet", "item"],
     position: {
-      width: 520,
-      height: 760,
-    },
-    tag: "form",
-    // automatically updates the item
-    form: {
-      submitOnChange: true,
-    },
-    window: {
-      resizable: true,
-    },
-    actions: {
-      onEditImage: this._onEditImage,
-      editPid: this._onEditPid,
+      width: 560,
+      height: 800,
     },
   };
 
@@ -39,6 +26,9 @@ export class PendragonWeaponSheet extends PendragonItemSheet {
     },
     description: {
       template: "systems/Pendragon/templates/item/weapon.description.hbs",
+    },
+    effects: {
+      template: "systems/Pendragon/templates/item/effects.hbs",
     },
     gmTab: {
       template: "systems/Pendragon/templates/item/gmtab.hbs",
@@ -80,7 +70,7 @@ export class PendragonWeaponSheet extends PendragonItemSheet {
         secrets: sheetData.editable,
       },
     );
-    let parts = ["attributes", "description"];
+    let parts = ["attributes", "description", "effects"];
     if (game.user.isGM) {
       parts.push("gmTab");
     }
@@ -94,6 +84,7 @@ export class PendragonWeaponSheet extends PendragonItemSheet {
     switch (partId) {
       case "attributes":
       case "description":
+      case "effects":
       case "gmTab":
         context.tab = context.tabs[partId];
         break;

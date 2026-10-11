@@ -1,4 +1,4 @@
-.Pendragon.item2 {
+.Pendragon.itemV2 {
   font-family: Messiri;
   font-size: var(--font-size-16);
   overflow: visible;
@@ -109,6 +109,7 @@
   & section.tab {
     overflow: hidden auto;
     scrollbar-gutter: stable;
+    height: 100%;
   }
 
   & .sheet-header {
@@ -170,7 +171,7 @@
   & .charname-input input {
     font-family: "Messiri";
     font-weight: bold;
-    font-size: 2.5em;
+    font-size: 2em;
     height: fit-content;
     color: var(--pendragon-secondary-text);
     border: 0px;
@@ -288,5 +289,42 @@
     gap: 0px;
     margin-top: 0px;
     margin-bottom: 0px;
+  }
+
+  .item-archetype-grid {
+    display: grid;
+    grid-template-columns: 150px 100px 75px 75px 75px;
+    column-gap: 20px;
+    row-gap: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  .icon-img {
+    filter: var(--icon-img-filter, none);
+  }
+
+  .item-culture-grid {
+    display: grid;
+    grid-template-columns: 150px 100px;
+    gap: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  .item-controls,
+  .pad-icon {
+    padding-top: 8px;
+  }
+
+  .active-effect-list {
+    display: grid;
+    grid-template-columns: 150px 200px 100px 70px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+  }
+
+  & .greyBack {
+    background-color: var(--pd-dark-row);
   }
 }

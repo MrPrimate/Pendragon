@@ -10,22 +10,11 @@ export class PendragonClassSheet extends PendragonItemSheet {
   }
 
   static DEFAULT_OPTIONS = {
-    classes: ["Pendragon", "sheet", "item", "theme-light"],
     position: {
-      width: 520,
+      width: 560,
       height: 570,
     },
-    tag: "form",
-    // automatically updates the item
-    form: {
-      submitOnChange: true,
-    },
-    window: {
-      resizable: true,
-    },
     actions: {
-      onEditImage: this._onEditImage,
-      editPid: this._onEditPid,
       deleteItem: PendragonClassSheet.#deleteItem,
     },
     dragDrop: [{ dropSelector: ".droppable" }],
@@ -41,6 +30,12 @@ export class PendragonClassSheet extends PendragonItemSheet {
     // each tab gets its own template
     attributes: {
       template: "systems/Pendragon/templates/item/class.attributes.hbs",
+    },
+    gear: {
+      template: "systems/Pendragon/templates/item/class.gear.hbs",
+    },
+    effects: {
+      template: "systems/Pendragon/templates/item/effects.hbs",
     },
     description: {
       template: "systems/Pendragon/templates/item/base.description.hbs",
@@ -127,7 +122,7 @@ export class PendragonClassSheet extends PendragonItemSheet {
         secrets: sheetData.editable,
       },
     );
-    let parts = ["attributes", "description"];
+    let parts = ["attributes", "gear", "description", "effects"];
     if (game.user.isGM) {
       parts.push("gmTab");
     }
@@ -140,7 +135,9 @@ export class PendragonClassSheet extends PendragonItemSheet {
   async _preparePartContext(partId, context) {
     switch (partId) {
       case "attributes":
+      case "gear":
       case "description":
+      case "effects":
       case "gmTab":
         context.tab = context.tabs[partId];
         break;

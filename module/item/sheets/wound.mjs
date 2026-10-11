@@ -6,22 +6,9 @@ export class PendragonWoundSheet extends PendragonItemSheet {
   }
 
   static DEFAULT_OPTIONS = {
-    classes: ["Pendragon", "sheet", "item"],
     position: {
-      width: 520,
+      width: 560,
       height: 240,
-    },
-    tag: "form",
-    // automatically updates the item
-    form: {
-      submitOnChange: true,
-    },
-    window: {
-      resizable: true,
-    },
-    actions: {
-      onEditImage: this._onEditImage,
-      editPid: this._onEditPid,
     },
   };
 
