@@ -61,7 +61,7 @@ export class PENWinter {
     }
     await game.settings.set("Pendragon", "winter", toggle);
 
-    //If Winter Phase toggled off - toggle Winter status off for all characters and increase game year
+    //If Winter Phase toggled off - toggle Winter status off for all characters and ask if increase game year
     if (!toggle) {
       for (const actr of game.actors.contents) {
         if (actr.type === "character") {
@@ -74,26 +74,32 @@ export class PENWinter {
             "system.status.familyRoll": false,
             "system.status.xp": false,
             "system.status.winter": false,
+            "system.status.passiveGlory": false,
             "system.passglory.inyear": 0,
           });
         }
-        if (!PENWinter.isWinterParticipant(actr)) continue;
-        let squires = await actr.items
-          .filter((itm) => itm.type === "squire")
-          .map((itm) => {
-            return { _id: itm.id, "system.age": itm.system.age + 1 };
-          });
-        await Item.updateDocuments(squires, { parent: actr });
-      }
-      //Update the game year by one
-      await PENWinter.changeYear(1);
 
+        if (!PENWinter.isWinterParticipant(actr)) continue;
+        //No longer required as squires age calculated
+        //let squires = await actr.items
+        //  .filter((itm) => itm.type === "squire")
+        //  .map((itm) => {
+        //    return { _id: itm.id, "system.age": itm.system.age + 1 };
+        //  });
+        //await Item.updateDocuments(squires, { parent: actr });
+      }
+      //Update the game year by one if GM confirms
+      let title = game.i18n.localize('PEN.incYear') + "?"
+      let confirmation = await PENUtilities.confirmation(title)
+      if (confirmation) {
+        await PENWinter.changeYear(1);
+      }
       ui.notifications.warn(game.i18n.localize("PEN.winterPhaseEnd"));
       return;
     }
 
     //If Winter Phase toggled on
-    //Turn winter phase off and training on for Characters and create history
+    //Turn winter phase off and training on for Characters
     for (const a of game.actors.contents) {
       if (PENWinter.isWinterParticipant(a)) {
         await a.update({
@@ -104,27 +110,7 @@ export class PENWinter {
           "system.status.horseSurv": true,
           "system.status.familyRoll": true,
           "system.status.xp": true,
-        });
-
-        //Create a history event for each character with this year's passive glory
-        const type = "history";
-        const name = game.i18n.localize("PEN.winterPhasePassiveGlory");
-        const itemData = {
-          name: name,
-          type: type,
-          system: {
-            description: game.i18n.localize("PEN.winterPhase"),
-            source: "winter",
-            year: game.time.components.year,
-            glory: a.system.passive,
-          },
-        };
-        let item = await Item.create(itemData, { parent: a });
-        let key = await game.system.api.pid.guessId(item);
-        await item.update({
-          "flags.Pendragon.pidFlag.id": key,
-          "flags.Pendragon.pidFlag.lang": game.i18n.lang,
-          "flags.Pendragon.pidFlag.priority": 0,
+          "system.status.passiveGlory": true,
         });
       }
     }
@@ -143,6 +129,7 @@ export class PENWinter {
       horseSurv: "PEN.horseSurvival",
       train: "PEN.training",
       familyRoll: "PEN.familyRolls",
+      passiveGlory: "PEN.passive",
     };
     let incomplete = [];
     for (const actr of game.actors.contents) {
@@ -203,6 +190,7 @@ export class PENWinter {
       "system.status.squireAge": toggle,
       "system.status.horseSurv": toggle,
       "system.status.familyRoll": toggle,
+      "system,status.passiveGlory": toggle,
       "system.status.xp": toggle,
     });
     ui.notifications.warn(message);
@@ -2104,4 +2092,33 @@ export class PENWinter {
     await game.Pendragon.ui?.calendar.updateDate();
     return;
   }
+
+  //ward Passive Glory and create history event
+  static async awardPassiveGlory (actor){
+    if (!actor.system.status.passiveGlory) {
+      return;
+    }
+    //Create a history event for each character with this year's passive glory
+    const type = "history";
+    const name = game.i18n.localize("PEN.winterPhasePassiveGlory");
+    const itemData = {
+      name: name,
+      type: type,
+      system: {
+        description: game.i18n.localize("PEN.winterPhase"),
+        source: "winter",
+        year: game.time.components.year,
+        glory: actor.system.passive,
+      },
+    };
+    let item = await Item.create(itemData, { parent: actor });
+    let key = await game.system.api.pid.guessId(item);
+    await item.update({
+      "flags.Pendragon.pidFlag.id": key,
+      "flags.Pendragon.pidFlag.lang": game.i18n.lang,
+      "flags.Pendragon.pidFlag.priority": 0,
+    });
+    await actor.update({ "system.status.passiveGlory": false });
+  }
+
 }

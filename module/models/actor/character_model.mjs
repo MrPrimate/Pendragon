@@ -199,6 +199,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         squireAge: new BooleanField({ initial: false }),
         horseSurv: new BooleanField({ initial: false }),
         familyRoll: new BooleanField({ initial: false }),
+        passiveGlory: new BooleanField({ initial: false }),
         xp: new BooleanField({ initial: false }),
         barren: new BooleanField({ initial: false }),
       }),

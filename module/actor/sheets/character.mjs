@@ -58,6 +58,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
       prestigeSkill: this._prestigeSkill,
       prestigePassion: this._prestigePassion,
       familyRoll: this._familyRoll,
+      passiveGlory: this._passiveGlory,
       switchSheet: this._onSwitchSheet,
       toggleHorse: this._toggleHorse,
       viewEstate: this._viewEstate,
@@ -150,12 +151,19 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
       options.parts.push("winter");
     } else if (this.tabGroups.primary === "winter") {
       //Winter tab has been removed (e.g. Individual Winter Phase ended) so move off it
+      //Remove active cssClass from winter classList as it still persists in this.parts
       this.tabGroups.primary = "combat";
-      //Rerender winter tab to remove it, otherwise it shows at bottom of Combat
-      this.render["winter"];
+      let classList = this.parts.winter.classList
+      classList.remove("active")
     }
     if (game.settings.get("Pendragon", "creation")) {
       options.parts.push("charcreate");
+    } else if (this.tabGroups.primary === "charcreate") {
+      //Winter tab has been removed (e.g. Individual Winter Phase ended) so move off it
+      //Remove active cssClass from winter classList as it still persists in this.parts
+      this.tabGroups.primary = "combat";
+      let classList = this.parts.charcreate.classList
+      classList.remove("active")
     }
   }
 
@@ -965,6 +973,10 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     await PENWinter.familyRoll(this.actor);
   }
 
+  static async _passiveGlory(event,target) {
+    await PENWinter.awardPassiveGlory(this.actor)
+  }
+
   //Mount/dismount horse
   static async _toggleHorse(event, target) {
     const li = target.closest(".item");
@@ -1140,6 +1152,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
   }
 
   //Get Embedded Document
+  //TO DO  - repeat of getEmbeddedDocument below.  Get rid of it???
   Document(target) {
     const docRow = target.closest("li[data-document-class]");
     if (docRow.dataset.documentClass === "Item") {

@@ -69,7 +69,6 @@
       </li>
       </ul>
     </li>
-    <li><div class="stat-name left">{{localize 'PEN.tallyGlory'}} <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a></div></li>
     <li>
       <div class="stat-name left">{{localize 'PEN.prestigeAward'}} ({{system.gloryPrestige}})
         {{#if (eq system.gloryPrestige 0)}}
@@ -117,6 +116,13 @@
     <li>
       <div class="stat-name left bold clickable" data-action="familyRoll">{{localize 'PEN.familyRolls'}}
         {{#unless system.status.familyRoll}}
+          <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+        {{/unless}}
+      </div>
+    </li>
+        <li>
+      <div class="stat-name left bold clickable" data-action="passiveGlory">{{localize 'PEN.passive'}}
+        {{#unless system.status.passiveGlory}}
           <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
         {{/unless}}
       </div>
