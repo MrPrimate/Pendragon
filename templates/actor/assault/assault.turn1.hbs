@@ -1,0 +1,35 @@
+<section class="tab assault-turn turn1 {{tab.cssClass}}" data-group="primary" data-tab="turn1">
+  {{!Assault Turn}}
+  <div class="centre bold">{{localize 'PEN.assault.turn1'}}</div>
+      <ol class="enc-list">
+      <div class="battle-enc">
+        <div class="horizontalboxed" style="padding-bottom:5px">
+          <div class="enc-display bold" style="margin-top: 8px;">{{localize 'PEN.assault.foesTable'}}</div>
+          {{#each assaults as |assault id|}}
+            <li class="partic-grid partic-item" data-property="{{assault.uuid}}" data-pid="{{assault.pid}}" data-coll="assault" data-index="{{@index}}">
+              <div class="partic-cell truncate" data-action="viewTable" >{{assault.name}}</div>
+            {{#if ../isGM}}
+              {{#if ../isLocked}}
+                <div></div>
+              {{else}}
+                <div class="partic-cellcentre" data-tooltip="{{localize 'PEN.deleteEnc'}}"><a data-action="deleteTable"><i class="fas fa-broom"></i></a></div>
+              {{/if}}
+            {{else}}
+              <div></div>
+            {{/if}}
+            </li>
+          {{else}}
+              <div class="centre italics" style="height:40px; padding-top: 20px;">{{localize 'PEN.emptyList'}}</td>
+          {{/each}}
+        </div>
+        {{#if showDice}}
+          <br>
+          <div class="bold">{{localize 'PEN.assault.rollChar'}}
+            <a style="float:right;" data-action="rollAssault">
+              <i class="fas fa-dice"></i>
+            </a>
+          </div>
+        {{/if}}
+      </div>
+    </ol>
+</section>

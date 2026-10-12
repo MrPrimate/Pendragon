@@ -116,6 +116,25 @@
     "armourPoints": "Points d'armure",
     "armourShield": "Armure / Bouclier",
     "armourVirtue": "Armure de Vertu",
+    "assault": {
+      "castleDefenders": "Défenseurs du château",
+      "floors": "étages ",
+      "foesTable": "Table des ennemis d'assaut",
+      "gateAP": "Porte du portail AP",
+      "gateHP": "Porte du portail PV",
+      "gateSTR": "Porte du portail FOR",
+      "noAttackers": "Aucun attaquant trouvé",
+      "rollChar": "Lance pour tous les personnages",
+      "rollRounds": "Lancer des tours",
+      "timeLeft": "Tours restants",
+      "towerAP": "Porte AP",
+      "towerHP": "Porte PV",
+      "towerSTR": "Porte FOR",
+      "turn1": "Tournée d'assaut",
+      "turn2": "Prendre les murs",
+      "turn3": "Capture une tour",
+      "turn4": "Ouvre le portail"
+    },
     "attack": "Attaque",
     "attributes": "Attributs",
     "available": "Disponible",
@@ -832,6 +851,7 @@
     "openWiki": "Ouvrir les pages d’aides",
     "oppAbbr": "Adv",
     "oppName": "Nom du Trait opposé",
+    "opportunities": "Opportunités",
     "opposedRoll": "Test opposé",
     "opposing": "Opposant",
     "opposingTrait": "Trait opposé",
@@ -1088,6 +1108,7 @@
     "sword": "Épée",
 
     "tableMod": "Entrez le modificateur de jet de la table",
+    "tableNotFound": "Table de lancer {type} introuvable",
     "tallyGlory": "Totaliser la gloire",
     "tap": "Trait/Passion",
     "td": "Td",
@@ -1175,6 +1196,7 @@
       "zigzagFumble": "Aucun modificateur à la Compétence de l’adversaire ; le personnage trébuche et perd toute sa Vitesse de Mouvement ce tour."
     },
     "walk": "Marche",
+    "wallHeight": "Hauteur du mur",
     "wield": {
       "label": "Maniement",
       "notWielded": "Non maniée",
@@ -1208,6 +1230,7 @@
     "weapons": "Armes",
     "weaponType": "Type d'arme",
     "wins": "Victoires",
+    "winsNeeded": "Nécessaire",
     "winter": "Hiver",
     "winterAbbr": "Hiver",
     "individualWinter": "Phase d'hiver individuelle",
@@ -1858,6 +1881,7 @@
   },
   "TYPES": {
     "Actor": {
+      "assault": "Assaut",
       "backgroundnpc": "Personnage de fond",
       "barony": "Baronnie",
       "battle": "Bataille",

@@ -575,6 +575,16 @@ export class PendragonActor extends Actor {
           },
         ],
       });
+    } else if (data.type === "assault") {
+      data.img = "systems/Pendragon/assets/Icons/tower-fall.svg";
+      data.prototypeToken = foundry.utils.mergeObject({
+        actorLink: true,
+        detectionModes: [
+          {
+            enabled: false,
+          },
+        ],
+      });
     }
 
     let actor = await super.create(data, options);
@@ -994,7 +1004,7 @@ export class PendragonActor extends Actor {
         (actr) =>
           actr.type === "battle" &&
           actr.sheet.rendered &&
-          actr.system.encounters.find((m) => m.uuid === actorData.uuid),
+          actr.system.encounters.find((m) => m.uuid === actorData.uuid || m.pid === actorData.flags?.Pendragon?.pidFlag?.id),
       );
       for (const party of parties) {
         await party.render();
@@ -1003,6 +1013,24 @@ export class PendragonActor extends Actor {
       // Called before sheet is ready
     }
   }
+
+  //Rerender Assault Sheet if actor is in it
+  async _updateAssault(actorData) {
+    try {
+      const parties = game.actors.filter(
+        (actr) =>
+          actr.type === "assault" &&
+          actr.sheet.rendered &&
+          actr.system.encounters.find((m) => m.uuid === actorData.uuid || m.pid === actorData.flags?.Pendragon?.pidFlag?.id),
+      );
+      for (const party of parties) {
+        await party.render();
+      }
+    } catch (e) {
+      // Called before sheet is ready
+    }
+  }
+
 
   getSkillTotal(pid) {
     const skill = this.items.find((citm) => citm.flags?.Pendragon?.pidFlag?.id === pid);

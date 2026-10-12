@@ -1,0 +1,85 @@
+<header class='assault'>
+  <section class="main-sheet">
+    <div class="assault-main-sheet">
+      <img class="img-centre encline">
+      <div class="assaultBack enc-back">
+        {{#if isLocked}}
+          <div class="enc-title">{{actor.name}}
+        {{else}}
+          <div class="enc-title"><input name='name' type='text' value='{{actor.name}}' />
+        {{/if}}
+          <a class="enc-result-icon" title="{{ localize 'PEN.toggleResults' }}" data-action="resultsView"><i class="fas fa-feather-pointed"></i></a>
+        {{#if isGM}}
+          <a class="enc-notes-icon" title="{{ localize 'PEN.toggleNotes' }}" data-action="noteView"><i class="fas fa-scroll-old"></i></a>
+          <a></a>
+          <a class="enc-clear-icon" title="{{ localize 'PEN.clearBattleField' }}" data-action="clearBattle"><i class="fas fa-person-walking-arrow-right"></i></a>
+          <a class="enc-combat-icon" title="{{ localize 'PEN.addToCombat' }}" data-action="addTokensCombat"><i class="fas fa-swords"></i></a>
+          <a class="enc-lock-icon" title="{{ localize 'PEN.lock' }}" data-action="toggleActor" data-property="lock">
+            {{#if isLocked}}
+              <i class="fas fa-lock"></i></a></div>
+            {{else}}
+              <i class="fas fa-lock-open"></i></a></div>
+            {{/if}}
+        {{else}}
+          </div>
+        {{/if}}
+      {{#if isLocked}}
+        <div class="enc-shortDesc">{{actor.system.shortDesc}}</div>
+      {{else}}
+        <textarea class="enc-shortDesc assaultBack" name='system.shortDesc'>{{actor.system.shortDesc}}</textarea>
+      {{/if}}
+    </div>
+    <img class="img-centre encline">
+
+    <div class="assault-turns">
+      {{#if isGM}}
+        <div class="enc-display"> {{localize 'PEN.dv.title'}}</div>
+        <div class="enc-input"><input class="centre" name='system.dv' type='number' value='{{actor.system.dv}}' /></div>
+        <div></div>
+        <div></div>
+        <div class="enc-display"> {{localize 'PEN.knightVal'}}</div>
+        <div class="enc-input"><input class="centre" name='system.kv' type='number' value='{{actor.system.kv}}' /></div>
+        <div class="enc-display"> {{localize 'PEN.wallHeight'}}</div>
+        <div class="enc-input"><input class="centre" name='system.wallHeight' type='number' value='{{actor.system.wallHeight}}' /></div>
+      {{else}}
+        <div class="enc-display">{{localize 'PEN.dv.title'}}</div>
+        <div class="enc-display centre">{{system.dv}}</div>
+        <div></div>
+        <div></div>
+        <div class="enc-display">{{localize 'PEN.knightVal'}}</div>
+        <div class="enc-display centre">{{system.kv}}</div>
+        <div class="enc-display">{{localize 'PEN.wallHeight'}}</div>
+        <div class="enc-display centre">{{system.wallHeight}}</div>
+
+      {{/if}}
+    </div>
+
+
+  <div class="knights-grid">
+    {{#each knights as |knight id|}}
+      <div class="knight-item partic-item"  data-property="{{knight.id}}" data-pid="{{knight.pid}}" data-coll="knights">
+        <img class="" data-action="viewKnight" data-tooltip="{{knight.name}}" src="{{knight.actr.img}}" width="60"/>
+        <div class="knight-stat">
+          {{#if ../isGM}}
+            {{#unless ../isLocked}}
+              <div class="centre" data-tooltip="{{localize 'PEN.deleteKnight'}}"><a data-action="deleteActr"><i class="fas fa-broom"></i></a></div>
+            {{else}}
+              <div></div>
+            {{/unless}}
+          {{else}}
+              <div></div>
+          {{/if}}
+        </div>
+      </div>
+    {{/each}}
+  </div>
+  </div>
+  </section>
+    <div class="assaultHelpIcon">
+    {{#if showHelp}}
+      <a class="helpicon" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Assault" data-tooltip='{{localize "PEN.openWiki"}}'>
+        <i class="fas fa-circle-question"></i>
+      </a>
+    {{/if}}
+  </div>
+</header>

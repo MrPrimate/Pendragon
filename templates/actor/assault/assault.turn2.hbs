@@ -1,0 +1,68 @@
+<section class="tab turn2 {{tab.cssClass}}" data-group="primary" data-tab="turn2">
+  {{!Taking the Walls Turn}}
+  <div class="centre bold">{{localize 'PEN.assault.turn2'}}</div>
+    <div class="assault-turns">
+      {{#if isGM}}
+        <div class="enc-display"> {{localize 'PEN.wins'}}</div>
+        <div class="enc-input"><input class="centre" name='system.wins' type='number' value='{{actor.system.wins}}' /></div>
+        <div class="enc-display"> {{localize 'PEN.winsNeeded'}}</div>
+        <div class="enc-display centre">{{actor.system.needed}}</div>
+      {{else}}
+        <div class="enc-display"> {{localize 'PEN.wins'}}</div>
+        <div class="enc-display centre">{{actor.system.wins}}</div>
+        <div class="enc-display"> {{localize 'PEN.winsNeeded'}}</div>
+        <div class="enc-display centre">{{actor.system.needed}}</div>
+      {{/if}}
+  {{#if showEncounterDice}}
+    <div class="bold" style="grid-column: 1 / span 3;">{{localize 'PEN.assault.rollChar'}}</div>
+    <div class="centre">
+      <a data-action="rollEncounters">
+        <i class="fas fa-dice"></i>
+      </a>
+    </div>
+  {{/if}}
+  </div>
+  <ol class="enc-list">
+    <div class="battle-enc">
+      <div class="horizontalboxed" style="padding-bottom:5px" data-coll="encounters">
+        <div class="enc-display bold" style="margin-top: 8px;">{{localize 'PEN.encounters'}}</div>
+          {{#each encounters as |enc id|}}
+            <li class="partic-grid partic-item" data-property="{{enc.uuid}}" data-pid="{{enc.pid}}" data-coll="encounters" data-index="{{@index}}">
+              <div class="partic-cell truncate {{#if enc.actr.system.used}}strikethrough{{/if}}" data-action="viewEnc" data-tooltip="{{enc.actr.system.shortDesc}}">{{enc.name}}</div>
+              {{#if ../isGM}}
+                {{#if ../isLocked}}
+                  <div></div>
+                {{else}}
+                  <div class="partic-cell centre" data-tooltip="{{localize 'PEN.deleteEnc'}}"><a data-action="deleteActr"><i class="fas fa-broom"></i></a></div>
+                {{/if}}
+              {{else}}
+                <div></div>
+              {{/if}}
+            </li>
+          {{else}}
+            <div class="centre italics partic-item" data-coll="encounters" style="height:30px; padding-top: 10px;">{{localize 'PEN.emptyList'}}</div>
+          {{/each}}
+        </div>
+        <br>
+        <div class="horizontalboxed" style="padding-bottom:5px" data-coll="encounters">
+          <div class="enc-display bold" style="margin-top: 8px;">{{localize 'PEN.opportunities'}}</div>
+          {{#each opportunities as |enc id|}}
+            <li class="partic-grid partic-item" data-property="{{enc.uuid}}" data-pid="{{enc.pid}}" data-coll="encounters" data-index="{{@index}}">
+              <div class="partic-cell truncate {{#if enc.actr.system.used}}strikethrough{{/if}}" data-action="viewEnc" data-tooltip="{{enc.actr.system.shortDesc}}">{{enc.name}}</div>
+              {{#if ../isGM}}
+                {{#if ../isLocked}}
+                  <div></div>
+                {{else}}
+                  <div class="partic-cell centre" data-tooltip="{{localize 'PEN.deleteEnc'}}"><a data-action="deleteActr"><i class="fas fa-broom"></i></a></div>
+                {{/if}}
+              {{else}}
+                <div></div>
+              {{/if}}
+            </li>
+          {{else}}
+            <div class="centre italics partic-item" data-coll="encounters" style="height:30px; padding-top: 10px;">{{localize 'PEN.emptyList'}}</div>
+          {{/each}}
+        </div>
+    </div>
+  </ol>
+</section>

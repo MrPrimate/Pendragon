@@ -1,0 +1,67 @@
+<section class="tab turn3 {{tab.cssClass}}" data-group="primary" data-tab="turn3">
+  {{!Capture the Tower Turn}}
+  <div class="centre bold">{{localize 'PEN.assault.turn3'}}</div>
+    <div class="assault-turns">
+      {{#if isGM}}
+        <div class="enc-display"> {{localize 'PEN.assault.towerAP'}}</div>
+        <div class="enc-input"><input class="centre" name='system.towerDoorAP' type='number' value='{{actor.system.towerDoorAP}}' /></div>
+        <div class="enc-display"> {{localize 'PEN.assault.towerHP'}}</div>
+        <div class="enc-input"><input class="centre" name='system.towerDoorHP' type='number' value='{{actor.system.towerDoorHP}}' /></div>
+        <div class="enc-display"> {{localize 'PEN.assault.towerSTR'}}</div>
+        <div class="enc-input"><input class="centre" name='system.towerDoorSTR' type='number' value='{{actor.system.towerDoorSTR}}' /></div>
+      {{else}}
+        <div class="enc-display"> {{localize 'PEN.assault.towerAP'}}</div>
+        <div class="enc-display centre">{{actor.system.towerDoorAP}}</div>
+        <div class="enc-display"> {{localize 'PEN.assault.towerHP'}}</div>
+        <div class="enc-display centre">{{actor.system.towerDoorHP}}</div>
+        <div class="enc-display"> {{localize 'PEN.assault.towerSTR'}}</div>
+        <div class="enc-display centre">{{actor.system.towerDoorSTR}}</div>
+      {{/if}}
+        <div class="enc-display new-row"> {{localize 'PEN.assault.floors'}}</div>
+        <div class="enc-display centre">{{actor.system.floors}}</div>
+    </div>
+    <br>
+  <ol class="enc-list">
+    <div class="battle-enc">
+      <div class="horizontalboxed" data-coll="defenders" style="padding-bottom:5px">
+        <div class="enc-display bold" style="margin-top: 8px;">{{localize 'PEN.assault.castleDefenders'}}</div>
+          {{#each defenders as |enc id|}}
+            <li class="partic-grid partic-item" data-property="{{enc.uuid}}" data-pid="{{enc.pid}}" data-coll="defenders" data-index="{{@index}}">
+              <div class="partic-cell truncate {{#if enc.actr.system.used}}strikethrough{{/if}}" data-action="viewEnc" data-tooltip="{{enc.actr.system.shortDesc}}">{{enc.name}}</div>
+              {{#if ../isGM}}
+                {{#if ../isLocked}}
+                  <div></div>
+                {{else}}
+                  <div class="partic-cell centre" data-tooltip="{{localize 'PEN.deleteEnc'}}"><a data-action="deleteActr"><i class="fas fa-broom"></i></a></div>
+                {{/if}}
+              {{else}}
+                <div></div>
+              {{/if}}
+            </li>
+          {{else}}
+            <div class="centre italics partic-item" data-coll="defenders" style="height:30px; padding-top: 10px;">{{localize 'PEN.emptyList'}}</div>
+          {{/each}}
+        </div>
+        <br>
+      <div class="horizontalboxed" data-coll="defenders" style="padding-bottom:5px">
+        <div class="enc-display bold" style="margin-top: 8px;">{{localize 'PEN.opportunities'}}</div>
+          {{#each defOpportunities as |enc id|}}
+            <li class="partic-grid partic-item" data-property="{{enc.uuid}}" data-pid="{{enc.pid}}" data-coll="defenders" data-index="{{@index}}">
+              <div class="partic-cell truncate {{#if enc.actr.system.used}}strikethrough{{/if}}" data-action="viewEnc" data-tooltip="{{enc.actr.system.shortDesc}}">{{enc.name}}</div>
+              {{#if ../isGM}}
+                {{#if ../isLocked}}
+                  <div></div>
+                {{else}}
+                  <div class="partic-cell centre" data-tooltip="{{localize 'PEN.deleteEnc'}}"><a data-action="deleteActr"><i class="fas fa-broom"></i></a></div>
+                {{/if}}
+              {{else}}
+                <div></div>
+              {{/if}}
+            </li>
+          {{else}}
+            <div class="centre italics partic-item" data-coll="defenders" style="height:30px; padding-top: 10px;">{{localize 'PEN.emptyList'}}</div>
+          {{/each}}
+        </div>
+     </div>
+  </ol>
+</section>

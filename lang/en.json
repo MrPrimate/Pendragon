@@ -120,6 +120,25 @@
     "armourShield": "Armor / Shield",
     "armourVirtue": "Armor of Virtue",
     "armySize": "Army Size",
+    "assault": {
+      "castleDefenders": "Castle Defenders",
+      "floors": "Floors",
+      "foesTable": "Assault Foes Table",
+      "gateAP": "Gate Door AP",
+      "gateHP": "Gate Door HP",
+      "gateSTR": "Gate Door STR",
+      "noAttackers": "No attackers found",
+      "rollChar": "Roll for all characters",
+      "rollRounds": "Roll Rounds",
+      "timeLeft": "Rounds left",
+      "towerAP": "Tower Door AP",
+      "towerHP": "Tower Door HP",
+      "towerSTR": "Tower Door STR",
+      "turn1": "Assault Turn",
+      "turn2": "Taking the Walls",
+      "turn3": "Capture a Tower",
+      "turn4": "Open the Gate"
+    },
     "attack": "Attack",
     "attributes": "Attributes",
     "available": "Available",
@@ -833,6 +852,7 @@
     "openWiki": "Open Wiki Help Pages",
     "oppAbbr": "Opp",
     "oppName": "Opposing Trait Name",
+    "opportunities": "Opportunities",
     "opposedRoll": "Opposed Roll",
     "opposing": "Opposing",
     "opposingTrait": "Opposing Trait",
@@ -1089,6 +1109,7 @@
     "sword": "Sword",
 
     "tableMod": "Please enter table roll modifier",
+    "tableNotFound": "Roll Table {type} not found",
     "tallyGlory": "Tally Glory",
     "tap": "Trait/Passion",
     "td": "Td",
@@ -1176,6 +1197,7 @@
       "zigzagFumble": "No modifier to the opponent's Skill; the character stumbles and loses all Movement Rate this round."
     },
     "walk": "Walk",
+    "wallHeight": "Wall Height",
     "wield": {
       "label": "Wield",
       "carried": "Carried",
@@ -1207,6 +1229,7 @@
     "weapons": "Weapons",
     "weaponType": "Weapon Type",
     "wins": "Wins",
+    "winsNeeded": "Needed",
     "winter": "Winter Phase",
     "winterAbbr": "Winter",
     "individualWinter": "Individual Winter Phase",
@@ -1892,12 +1915,17 @@
       "skills": "Skills",
       "stats": "Stats",
       "traits": "Traits",
+      "turn1": "Assault",
+      "turn2": "The Walls",
+      "turn3": "Tower",
+      "turn4": "Gate",
       "winter": "Winter"
     }
   },
 
   "TYPES": {
     "Actor": {
+      "assault": "Assault",
       "backgroundnpc": "Background Character",
       "barony": "Barony",
       "battle": "Battle",
