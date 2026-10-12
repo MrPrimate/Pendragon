@@ -190,6 +190,9 @@
       },
       "battle": {
         "htmlFields": ["description", "notes"]
+      },
+      "assault": {
+        "htmlFields": ["description", "notes"]
       }
     },
     "Item": {
