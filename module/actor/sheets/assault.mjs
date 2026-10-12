@@ -515,7 +515,7 @@ export class PendragonAssaultSheet extends PendragonActorSheet {
       thisTable = await fromUuid(assaultTable.uuid);
     }
     if (!thisTable) {
-      ui.notifications.warn(game.i18n.format("PEN.tableNotFound", { type: pid || uuid }));
+      ui.notifications.warn(game.i18n.format("PEN.tableNotFound", { type: assaultTable.pid || assaultTable.uuid }));
       return
     }
 
