@@ -299,9 +299,9 @@ export class PendragonAssaultSheet extends PendragonActorSheet {
         });
       } else {
         assaults.push({
-          name: thisTable.name + " [" + game.i18n.localize("PEN.invalid") + "]",
-          uuid: thisTable.uuid,
-          pid: thisTable.pid,
+          name: assaultTable.name + " [" + game.i18n.localize("PEN.invalid") + "]",
+          uuid: assaultTable.uuid,
+          pid: assaultTable.pid,
           table: false,
         });
       }
@@ -702,9 +702,9 @@ export class PendragonAssaultSheet extends PendragonActorSheet {
     if (newActor.type == "encounter") {
       const collectionName = event.target.closest("[data-coll]")?.dataset?.coll;
       if (!["encounters", "defenders", "gatedefenders"].includes(collectionName)) {
-    ui.notifications.warn(game.i18n.localize("PEN.cantDropActor"));
-    return;
-  }
+        ui.notifications.warn(game.i18n.localize("PEN.cantDropActor"));
+        return;
+      }
       if (!collectionName || collectionName === "") {return}
       if (["encounter"].includes(newActor.type)) {
         const collection = this.actor.system[collectionName] ? foundry.utils.duplicate(this.actor.system[collectionName]) : [];
