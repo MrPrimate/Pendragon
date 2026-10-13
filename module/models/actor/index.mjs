@@ -6,3 +6,4 @@ export { EncounterData } from "./encounter_model.mjs";
 export { BattleData } from "./battle_model.mjs";
 export { ManorData } from "./manor_model.mjs";
 export { BaronyData } from "./barony_model.mjs";
+export { AssaultData } from "./assault_model.mjs";

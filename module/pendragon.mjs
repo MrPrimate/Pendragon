@@ -26,6 +26,7 @@ import {
   BattleData,
   ManorData,
   BaronyData,
+  AssaultData,
 } from "./models/actor/index.mjs";
 import {
   WoundData,
@@ -102,6 +103,7 @@ Hooks.once("init", async function () {
   CONFIG.Actor.dataModels.party = PartyData;
   CONFIG.Actor.dataModels.encounter = EncounterData;
   CONFIG.Actor.dataModels.battle = BattleData;
+  CONFIG.Actor.dataModels.assault = AssaultData;
   // item data models
   CONFIG.Item.dataModels.wound = WoundData;
   CONFIG.Item.dataModels.gear = GearData;

@@ -1722,7 +1722,7 @@
   margin-bottom: -2px;
   height: 20px;
   & i {
-    color: var(--help-icon-colur);
+    color: var(--help-icon-colour);
   }
 }
 

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+unreleased
+- Battle Cards should update again to show when Encounters are marked as used
+- Added Assault actor - much like Battles but for the Nobles Handbook assault rules
+
 ## 14.21
 
 - Archetype added - for characters only - https://github.com/cragstone/Pendragon/wiki/Archetype

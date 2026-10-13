@@ -5,5 +5,6 @@ export function listen() {
   Hooks.on("updateActor", async (actor, changes, options, userId) => {
     await actor._updateParty(actor);
     await actor._updateBattle(actor);
+    await actor._updateAssault(actor);
   });
 }
