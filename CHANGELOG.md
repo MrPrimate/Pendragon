@@ -1,8 +1,8 @@
 # CHANGELOG
 
-unreleased
+## 14.22
 - Battle Cards should update again to show when Encounters are marked as used
-- Added Assault actor - much like Battles but for the Nobles Handbook assault rules
+- Added Assault actor - much like Battles but for the Nobles Handbook assault rules - https://github.com/cragstone/Pendragon/wiki/Assault
 
 ## 14.21
 
