@@ -5,7 +5,6 @@ export default class ChaosiumCanvasInterfaceOpenDocument extends ChaosiumCanvasI
     return {
       ALWAYS: "PEN.ChaosiumCanvasInterface.Permission.Always",
       DOCUMENT: "PEN.ChaosiumCanvasInterface.Permission.Document",
-      SEE_TILE: "PEN.ChaosiumCanvasInterface.Permission.SeeTile",
       GM: "PEN.ChaosiumCanvasInterface.Permission.GM",
     };
   }
@@ -17,12 +16,6 @@ export default class ChaosiumCanvasInterfaceOpenDocument extends ChaosiumCanvasI
   static defineSchema() {
     const fields = foundry.data.fields;
     return {
-      triggerButton: new fields.NumberField({
-        choices: ChaosiumCanvasInterface.triggerButtons,
-        initial: ChaosiumCanvasInterface.triggerButton.Left,
-        label: "PEN.ChaosiumCanvasInterface.OpenDocument.Button.Title",
-        hint: "PEN.ChaosiumCanvasInterface.OpenDocument.Button.Hint",
-      }),
       permission: new fields.StringField({
         blank: false,
         choices: Object.keys(ChaosiumCanvasInterfaceOpenDocument.PERMISSIONS).reduce((c, k) => {
@@ -38,14 +31,15 @@ export default class ChaosiumCanvasInterfaceOpenDocument extends ChaosiumCanvasI
         label: "PEN.ChaosiumCanvasInterface.OpenDocument.Document.Title",
         hint: "PEN.ChaosiumCanvasInterface.OpenDocument.Document.Hint",
       }),
+      pageId: new fields.DocumentIdField({
+        initial: undefined,
+        label: "PEN.ChaosiumCanvasInterface.OpenDocument.Page.Title",
+        hint: "PEN.ChaosiumCanvasInterface.OpenDocument.Page.Hint",
+      }),
       anchor: new fields.StringField({
+        initial: "",
         label: "PEN.ChaosiumCanvasInterface.OpenDocument.Anchor.Title",
         hint: "PEN.ChaosiumCanvasInterface.OpenDocument.Anchor.Hint",
-      }),
-      tileUuid: new fields.DocumentUUIDField({
-        label: "PEN.ChaosiumCanvasInterface.OpenDocument.Tile.Title",
-        hint: "PEN.ChaosiumCanvasInterface.OpenDocument.Tile.Hint",
-        type: "Tile",
       }),
     };
   }
@@ -64,52 +58,32 @@ export default class ChaosiumCanvasInterfaceOpenDocument extends ChaosiumCanvasI
           return (
             (await fromUuid(this.documentUuid)).testUserPermission(
               game.user,
-              CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED,
+              CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER,
             ) ?? false
           );
         }
-        break;
-      case "SEE_TILE":
-        if (game.user.isGM) {
-          return true;
-        }
-        if (this.tileUuid && this.documentUuid) {
-          return (
-            !(await fromUuid(this.tileUuid)).hidden &&
-            ((await fromUuid(this.documentUuid)).testUserPermission(
-              game.user,
-              CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED,
-            ) ??
-              false)
-          );
-        }
-        break;
     }
     return false;
   }
 
-  async #handleClickEvent() {
-    const doc = await fromUuid(this.documentUuid);
-    if (doc?.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED)) {
-      if (doc instanceof JournalEntryPage) {
-        doc.parent.sheet.render({ force: true, pageId: doc.id, anchor: this.anchor });
-      } else {
-        doc.sheet.render({ force: true });
-      }
-    } else {
-      console.error("Document " + this.documentUuid + " not loaded");
-    }
-  }
-
   async _handleLeftClickEvent() {
-    if (this.documentUuid && this.triggerButton === ChaosiumCanvasInterface.triggerButton.Left) {
-      this.#handleClickEvent();
-    }
-  }
-
-  async _handleRightClickEvent() {
-    if (this.documentUuid && this.triggerButton === ChaosiumCanvasInterface.triggerButton.Right) {
-      this.#handleClickEvent();
+    if (this.documentUuid) {
+      let doc = await fromUuid(this.documentUuid);
+      if (this.pageId) {
+        const page = doc.pages.get(this.pageId);
+        if (page) {
+          doc = page;
+        }
+      }
+      if (doc?.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)) {
+        if (doc instanceof JournalEntryPage) {
+          doc.parent.sheet.render({ force: true, pageId: doc.id, anchor: this.anchor });
+        } else {
+          doc.sheet.render({ force: true });
+        }
+      } else {
+        console.error("Document " + this.documentUuid + " not loaded");
+      }
     }
   }
 }
