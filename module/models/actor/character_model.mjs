@@ -193,6 +193,8 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         melancholy: new BooleanField({ initial: false }),
         misery: new BooleanField({ initial: false }),
         winter: new BooleanField({ initial: false }),
+        //Year an Individual Winter Phase belongs to - 0 uses the last group Winter Phase year
+        winterYear: new NumberField({ ...requiredInteger, initial: 0 }),
         train: new BooleanField({ initial: false }),
         economic: new BooleanField({ initial: false }),
         aging: new BooleanField({ initial: false }),

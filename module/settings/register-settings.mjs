@@ -103,6 +103,17 @@ export function registerSettings() {
     default: false,
   });
 
+  //Game year of the last group Winter Phase - used by Individual Winter Phases
+  game.settings.register("Pendragon", "lastWinterYear", {
+    name: "",
+    hint: "",
+    scope: "world",
+    requiresReload: false,
+    config: false,
+    type: Number,
+    default: 0,
+  });
+
   game.settings.register("Pendragon", "development", {
     name: "",
     hint: "",

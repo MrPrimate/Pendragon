@@ -288,7 +288,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     }
     context.isWinter = game.settings.get("Pendragon", "winter");
     context.isDevelopment = game.settings.get("Pendragon", "development");
-    context.isIndividualWinter = PENWinter.yearOffset(this.actor) > 0;
+    context.isIndividualWinter = PENWinter.isIndividualWinter(this.actor);
     context.winterYear = PENWinter.winterYear(this.actor);
     context.isCreation = game.settings.get("Pendragon", "creation");
     context.useRelation = game.settings.get("Pendragon", "useRelation");

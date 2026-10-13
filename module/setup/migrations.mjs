@@ -69,6 +69,11 @@ export async function migrateWorld({ bypassVersionCheck = false } = {}) {
     await equippedHandsUpdate();
   }
 
+  //Migrate if current system is less than Version 14.23
+  if (foundry.utils.isNewerVersion("14.23", currentVersion ?? "0")) {
+    await squireBornUpdate();
+  }
+
   await game.settings.set("Pendragon", "systemMigrationVersion", targetVersion);
   return;
 }
@@ -96,6 +101,42 @@ export async function equippedHandsUpdate() {
     }
   }
   console.log("Migration to 14.21 completed");
+}
+
+//Save the birth year of squires - their age is now calculated from it rather than increased each Winter Phase
+//Squires saved before the birth year existed have it calculated from their stored age on each load, so it
+//moves with the game year (and the squire never ages) until it is saved
+export async function squireBornUpdate() {
+  console.log("Migration to 14.23 started");
+  for (const actor of game.actors) {
+    if (actor.type !== "character") continue;
+    await squireBornUpdateItems(actor, actor.items);
+  }
+  // Migrate squires held on unlinked Scene Tokens
+  for (const scene of game.scenes) {
+    for (const token of scene.tokens) {
+      if (token.actorLink) continue;
+      const actor = token.actor;
+      if (!actor || actor.type !== "character") continue;
+      //Only squires stored on the token itself - the rest come from the already migrated base actor
+      const deltaIds = new Set((token.delta?._source.items ?? []).map((itm) => itm._id));
+      await squireBornUpdateItems(
+        actor,
+        actor.items.filter((itm) => deltaIds.has(itm.id)),
+      );
+    }
+  }
+  console.log("Migration to 14.23 completed");
+}
+
+async function squireBornUpdateItems(actor, items) {
+  const updates = items
+    .filter((itm) => itm.type === "squire")
+    .map((itm) => ({ _id: itm.id, "system.born": itm.system.born }));
+  if (updates.length > 0) {
+    //The birth year already holds the calculated value in memory, so without diff: false the update is skipped as unchanged
+    await Item.updateDocuments(updates, { parent: actor, diff: false });
+  }
 }
 
 //populate equippedHands from the equipped shield and currentWeapon flag, then retire the

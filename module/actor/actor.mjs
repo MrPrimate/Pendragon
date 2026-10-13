@@ -1,6 +1,7 @@
 import { PENSelectLists } from "../apps/select-lists.mjs";
 import { PendragonStatusEffects } from "../apps/status-effects.mjs";
 import { PENUtilities } from "../apps/utilities.mjs";
+import { PENWinter } from "../apps/winterPhase.mjs";
 import { PENactorItemDrop } from "./actor-itemDrop.mjs";
 import { WieldState } from "../models/items/weapon_model.mjs";
 
@@ -325,9 +326,8 @@ export class PendragonActor extends Actor {
     //Loop through all items to see if they have impact
     systemData.totalWounds = 0;
     let glory = 0;
-    //During an individual Winter Phase (run after the year has advanced) only Glory up to the previous year counts for Prestige
-    const winterYear =
-      systemData.status?.winter && !game.settings.get("Pendragon", "winter") ? game.time.components.year - 1 : Infinity;
+    //During an individual Winter Phase only Glory up to that Winter Phase's year counts for Prestige
+    const winterYear = PENWinter.isIndividualWinter(actorData) ? PENWinter.winterYear(actorData) : Infinity;
     let winterGlory = 0;
     let armour = systemData.armourEffects;
     let shield = 0;
