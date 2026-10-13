@@ -1235,7 +1235,7 @@
     "individualWinter": "Individual Winter Phase",
     "individualWinterStop": "End Individual Winter Phase",
     "individualWinterGlory": "Glory counted for Prestige: {glory} (history up to {year})",
-    "individualWinterStart": "Start an individual Winter Phase for {name}? The game year will not change and no passive glory will be awarded.",
+    "individualWinterStart": "Start an individual Winter Phase for {name}? The game year will not change. Passive Glory can be claimed as a Winter Phase step.",
     "individualWinterEnd": "End the individual Winter Phase for {name}?",
     "individualWinterActive": "Individual Winter Phase for {year} (game year not advanced)",
     "winterIncomplete": "These player characters have not finished the Winter Phase:",

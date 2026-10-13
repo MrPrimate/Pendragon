@@ -294,7 +294,7 @@ export class PendragonCharacterSheetv2 extends PendragonActorSheet {
     horses.sort((a, b) => a.system.chargeDmg - b.system.chargeDmg);
 
     // Sort Squires by age
-    squires.sort((a, b) => a.system.age - b.system.age);
+    squires.sort((a, b) => a.system.newAge - b.system.newAge);
 
     // Sort Wounds by damage, low first
     wounds.sort((a, b) => a.system.value - b.system.value);
@@ -373,8 +373,6 @@ export class PendragonCharacterSheetv2 extends PendragonActorSheet {
       }
     }
     for (const s of squires) {
-      // why do we store age instead of born?
-      s.system.born = game.time.components.year - s.system.age;
       const person = {
         name: s.name,
         died: Number(s.system.died ?? 0),

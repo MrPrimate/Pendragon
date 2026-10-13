@@ -78,19 +78,11 @@ export class PENWinter {
             "system.passglory.inyear": 0,
           });
         }
-
-        if (!PENWinter.isWinterParticipant(actr)) continue;
-        //No longer required as squires age calculated
-        //let squires = await actr.items
-        //  .filter((itm) => itm.type === "squire")
-        //  .map((itm) => {
-        //    return { _id: itm.id, "system.age": itm.system.age + 1 };
-        //  });
-        //await Item.updateDocuments(squires, { parent: actr });
       }
+      //Squire ages are calculated from the year they were born so no longer need increasing here
       //Update the game year by one if GM confirms
-      let title = game.i18n.localize('PEN.incYear') + "?"
-      let confirmation = await PENUtilities.confirmation(title)
+      const title = game.i18n.localize("PEN.incYear") + "?";
+      const confirmation = await PENUtilities.confirmation(title);
       if (confirmation) {
         await PENWinter.changeYear(1);
       }
@@ -162,7 +154,7 @@ export class PENWinter {
 
   //
   //Individual Winter Phase (GM only) - for a character who missed the group Winter Phase
-  //Passive glory, squire ageing and the year change have already happened so none are repeated here
+  //The year change has already happened so is not repeated here, but Passive Glory can still be claimed
   //
   static async individualWinter(actor) {
     if (!game.user.isGM || actor.type !== "character") {
@@ -190,7 +182,7 @@ export class PENWinter {
       "system.status.squireAge": toggle,
       "system.status.horseSurv": toggle,
       "system.status.familyRoll": toggle,
-      "system,status.passiveGlory": toggle,
+      "system.status.passiveGlory": toggle,
       "system.status.xp": toggle,
     });
     ui.notifications.warn(message);
@@ -998,7 +990,7 @@ export class PENWinter {
     //Check each retainer (squire, maiden, other) for leaving
     const offset = PENWinter.yearOffset(actor);
     for (const sqr of squires) {
-      const sqrAge = sqr.system.age - offset;
+      const sqrAge = sqr.system.newAge - offset;
       if (
         (sqr.system.category === "squire" && sqrAge > 20) ||
         (sqr.system.category === "maiden" && sqrAge > 16) ||
@@ -2093,12 +2085,21 @@ export class PENWinter {
     return;
   }
 
-  //ward Passive Glory and create history event
-  static async awardPassiveGlory (actor){
-    if (!actor.system.status.passiveGlory) {
+  //Actors with a Passive Glory award in progress - stops a double click awarding it twice
+  static #awardingGlory = new Set();
+
+  //Award Passive Glory and create history event
+  static async awardPassiveGlory(actor) {
+    if (!actor.system.status.passiveGlory || PENWinter.#awardingGlory.has(actor.id)) {
       return;
     }
-    //Create a history event for each character with this year's passive glory
+    PENWinter.#awardingGlory.add(actor.id);
+    try {
+      await actor.update({ "system.status.passiveGlory": false });
+    } finally {
+      PENWinter.#awardingGlory.delete(actor.id);
+    }
+    //Create a history event for the character with this year's passive glory
     const type = "history";
     const name = game.i18n.localize("PEN.winterPhasePassiveGlory");
     const itemData = {
@@ -2107,18 +2108,17 @@ export class PENWinter {
       system: {
         description: game.i18n.localize("PEN.winterPhase"),
         source: "winter",
-        year: game.time.components.year,
+        //Use the Winter Phase year so an Individual Winter Phase records it against the previous year
+        year: PENWinter.winterYear(actor),
         glory: actor.system.passive,
       },
     };
-    let item = await Item.create(itemData, { parent: actor });
-    let key = await game.system.api.pid.guessId(item);
+    const item = await Item.create(itemData, { parent: actor });
+    const key = await game.system.api.pid.guessId(item);
     await item.update({
       "flags.Pendragon.pidFlag.id": key,
       "flags.Pendragon.pidFlag.lang": game.i18n.lang,
       "flags.Pendragon.pidFlag.priority": 0,
     });
-    await actor.update({ "system.status.passiveGlory": false });
   }
-
 }

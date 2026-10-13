@@ -1236,7 +1236,7 @@
     "individualWinter": "Phase d'hiver individuelle",
     "individualWinterStop": "Terminer la phase d'hiver individuelle",
     "individualWinterGlory": "Gloire comptée pour le Prestige : {glory} (historique jusqu'à {year})",
-    "individualWinterStart": "Démarrer une phase d'hiver individuelle pour {name} ? L'année de jeu ne changera pas et aucune gloire passive ne sera attribuée.",
+    "individualWinterStart": "Démarrer une phase d'hiver individuelle pour {name} ? L'année de jeu ne changera pas. La gloire passive peut être réclamée comme étape de la phase d'hiver.",
     "individualWinterEnd": "Terminer la phase d'hiver individuelle pour {name} ?",
     "individualWinterActive": "Phase d'hiver individuelle pour {year} (année de jeu inchangée)",
     "winterIncomplete": "Ces personnages joueurs n'ont pas terminé la phase d'hiver :",
