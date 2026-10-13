@@ -151,19 +151,23 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
       options.parts.push("winter");
     } else if (this.tabGroups.primary === "winter") {
       //Winter tab has been removed (e.g. Individual Winter Phase ended) so move off it
-      //Remove active cssClass from winter classList as it still persists in this.parts
       this.tabGroups.primary = "combat";
-      let classList = this.parts.winter.classList
-      classList.remove("active")
     }
     if (game.settings.get("Pendragon", "creation")) {
       options.parts.push("charcreate");
     } else if (this.tabGroups.primary === "charcreate") {
-      //Winter tab has been removed (e.g. Individual Winter Phase ended) so move off it
-      //Remove active cssClass from winter classList as it still persists in this.parts
+      //Character Creation tab has been removed (creation setting turned off) so move off it
       this.tabGroups.primary = "combat";
-      let classList = this.parts.charcreate.classList
-      classList.remove("active")
+    }
+  }
+
+  _replaceHTML(result, content, options) {
+    super._replaceHTML(result, content, options);
+    //Parts dropped from options.parts are left in the DOM by Foundry, so remove stale optional tabs
+    for (const partId of ["winter", "charcreate"]) {
+      if (!options.parts.includes(partId)) {
+        content.querySelector(`[data-application-part="${partId}"]`)?.remove();
+      }
     }
   }
 
@@ -284,7 +288,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     }
     context.isWinter = game.settings.get("Pendragon", "winter");
     context.isDevelopment = game.settings.get("Pendragon", "development");
-    context.isIndividualWinter = PENWinter.yearOffset(this.actor) > 0;
+    context.isIndividualWinter = PENWinter.isIndividualWinter(this.actor);
     context.winterYear = PENWinter.winterYear(this.actor);
     context.isCreation = game.settings.get("Pendragon", "creation");
     context.useRelation = game.settings.get("Pendragon", "useRelation");
@@ -645,8 +649,8 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
 
     // Sort Squires by age
     squires.sort(function (a, b) {
-      let x = a.system.age;
-      let y = b.system.age;
+      let x = a.system.newAge;
+      let y = b.system.newAge;
       if (x < y) {
         return 1;
       }
@@ -973,8 +977,8 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     await PENWinter.familyRoll(this.actor);
   }
 
-  static async _passiveGlory(event,target) {
-    await PENWinter.awardPassiveGlory(this.actor)
+  static async _passiveGlory(event, target) {
+    await PENWinter.awardPassiveGlory(this.actor);
   }
 
   //Mount/dismount horse
