@@ -220,9 +220,11 @@ export class PENWinter {
   //
   //Game year of the last group Winter Phase
   //Worlds that ended a Winter Phase before this was recorded always advanced the year, so use the previous year
+  //A saved year after the current year means the calendar was rolled back, so don't suggest a year in the future
   //
   static lastWinterYear() {
-    return game.settings.get("Pendragon", "lastWinterYear") || game.time.components.year - 1;
+    const year = game.time.components.year;
+    return Math.min(game.settings.get("Pendragon", "lastWinterYear") || year - 1, year);
   }
 
   //
