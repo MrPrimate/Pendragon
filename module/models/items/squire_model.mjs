@@ -27,6 +27,14 @@ export class SquireData extends foundry.abstract.TypeDataModel {
     return source;
   }
 
+  //Save the birth year when a squire is created
+  async _preCreate(data, options, user) {
+    if ((await super._preCreate(data, options, user)) === false) return false;
+    if (!this.born) {
+      this.parent.updateSource({ "system.born": Number(game.time.components.year) - Number(this.age) });
+    }
+  }
+
   prepareDerivedData() {
     super.prepareDerivedData();
     this.newAge = game.time.components.year - this.born;

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+- Ending the Winter Phase will give you a dialog box asking if you want to increase the game year, rather than it happening automatically.
+- Winter Phase doesn't automatically add Passive Glory anymore, it is a step in the process you need to trigger.
+
 ## 14.22
 - Battle Cards should update again to show when Encounters are marked as used
 - Added Assault actor - much like Battles but for the Nobles Handbook assault rules - https://github.com/cragstone/Pendragon/wiki/Assault

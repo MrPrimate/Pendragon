@@ -61,7 +61,7 @@ export class PENWinter {
     }
     await game.settings.set("Pendragon", "winter", toggle);
 
-    //If Winter Phase toggled off - toggle Winter status off for all characters and increase game year
+    //If Winter Phase toggled off - toggle Winter status off for all characters and ask if increase game year
     if (!toggle) {
       for (const actr of game.actors.contents) {
         if (actr.type === "character") {
@@ -74,26 +74,27 @@ export class PENWinter {
             "system.status.familyRoll": false,
             "system.status.xp": false,
             "system.status.winter": false,
+            "system.status.winterYear": 0,
+            "system.status.passiveGlory": false,
             "system.passglory.inyear": 0,
           });
         }
-        if (!PENWinter.isWinterParticipant(actr)) continue;
-        let squires = await actr.items
-          .filter((itm) => itm.type === "squire")
-          .map((itm) => {
-            return { _id: itm.id, "system.age": itm.system.age + 1 };
-          });
-        await Item.updateDocuments(squires, { parent: actr });
       }
-      //Update the game year by one
-      await PENWinter.changeYear(1);
-
+      //Squire ages are calculated from the year they were born so no longer need increasing here
+      //Record the Winter Phase year before any year change so Individual Winter Phases use the right year
+      await game.settings.set("Pendragon", "lastWinterYear", game.time.components.year);
+      //Update the game year by one if GM confirms
+      const title = game.i18n.localize("PEN.incYear") + "?";
+      const confirmation = await PENUtilities.confirmation(title);
+      if (confirmation) {
+        await PENWinter.changeYear(1);
+      }
       ui.notifications.warn(game.i18n.localize("PEN.winterPhaseEnd"));
       return;
     }
 
     //If Winter Phase toggled on
-    //Turn winter phase off and training on for Characters and create history
+    //Turn winter phase off and training on for Characters
     for (const a of game.actors.contents) {
       if (PENWinter.isWinterParticipant(a)) {
         await a.update({
@@ -104,27 +105,7 @@ export class PENWinter {
           "system.status.horseSurv": true,
           "system.status.familyRoll": true,
           "system.status.xp": true,
-        });
-
-        //Create a history event for each character with this year's passive glory
-        const type = "history";
-        const name = game.i18n.localize("PEN.winterPhasePassiveGlory");
-        const itemData = {
-          name: name,
-          type: type,
-          system: {
-            description: game.i18n.localize("PEN.winterPhase"),
-            source: "winter",
-            year: game.time.components.year,
-            glory: a.system.passive,
-          },
-        };
-        let item = await Item.create(itemData, { parent: a });
-        let key = await game.system.api.pid.guessId(item);
-        await item.update({
-          "flags.Pendragon.pidFlag.id": key,
-          "flags.Pendragon.pidFlag.lang": game.i18n.lang,
-          "flags.Pendragon.pidFlag.priority": 0,
+          "system.status.passiveGlory": true,
         });
       }
     }
@@ -143,6 +124,7 @@ export class PENWinter {
       horseSurv: "PEN.horseSurvival",
       train: "PEN.training",
       familyRoll: "PEN.familyRolls",
+      passiveGlory: "PEN.passive",
     };
     let incomplete = [];
     for (const actr of game.actors.contents) {
@@ -175,7 +157,7 @@ export class PENWinter {
 
   //
   //Individual Winter Phase (GM only) - for a character who missed the group Winter Phase
-  //Passive glory, squire ageing and the year change have already happened so none are repeated here
+  //The game year is not changed - the GM picks the year the Winter Phase belongs to (default the last group Winter Phase)
   //
   static async individualWinter(actor) {
     if (!game.user.isGM || actor.type !== "character") {
@@ -188,38 +170,78 @@ export class PENWinter {
     const message = game.i18n.format(toggle ? "PEN.individualWinterStart" : "PEN.individualWinterEnd", {
       name: actor.name,
     });
+    const currentYear = game.time.components.year;
+    let content = '<div class="stat-name left bold">' + message + "</div>";
+    if (toggle) {
+      content +=
+        '<div class="form-group"><label>' +
+        game.i18n.localize("PEN.individualWinterYear") +
+        '</label><input type="number" name="winterYear" step="1" max="' +
+        currentYear +
+        '" value="' +
+        PENWinter.lastWinterYear() +
+        '"/></div>';
+    }
     const confirmation = await PENDialog.confirm({
       window: { title: game.i18n.localize("PEN.individualWinter") },
-      content: '<div class="stat-name left bold">' + message + "</div><br>",
+      content: content + "<br>",
+      yes: { callback: (event, button) => (toggle ? button.form.elements.winterYear.valueAsNumber : true) },
     });
     if (!confirmation) {
       return;
     }
+    //The Winter Phase year can't be later than the current game year
+    if (toggle && (!Number.isInteger(confirmation) || confirmation > currentYear)) {
+      ui.notifications.warn(game.i18n.format("PEN.individualWinterYearInvalid", { year: currentYear }));
+      return;
+    }
     await actor.update({
       "system.status.winter": toggle,
+      "system.status.winterYear": toggle ? confirmation : 0,
       "system.status.train": toggle,
       "system.status.economic": toggle,
       "system.status.aging": toggle,
       "system.status.squireAge": toggle,
       "system.status.horseSurv": toggle,
       "system.status.familyRoll": toggle,
+      "system.status.passiveGlory": toggle,
       "system.status.xp": toggle,
     });
     ui.notifications.warn(message);
   }
 
   //
-  //Years to step back when running an individual Winter Phase after the game year has already advanced
+  //Is the actor in an Individual Winter Phase (rather than the group Winter Phase)
   //
-  static yearOffset(actor) {
-    return actor?.system.status?.winter && !game.settings.get("Pendragon", "winter") ? 1 : 0;
+  static isIndividualWinter(actor) {
+    return !!actor?.system.status?.winter && !game.settings.get("Pendragon", "winter");
+  }
+
+  //
+  //Game year of the last group Winter Phase
+  //Worlds that ended a Winter Phase before this was recorded always advanced the year, so use the previous year
+  //A saved year after the current year means the calendar was rolled back, so don't suggest a year in the future
+  //
+  static lastWinterYear() {
+    const year = game.time.components.year;
+    return Math.min(game.settings.get("Pendragon", "lastWinterYear") || year - 1, year);
   }
 
   //
   //The year the actor's Winter Phase belongs to
   //
   static winterYear(actor) {
-    return game.time.components.year - PENWinter.yearOffset(actor);
+    if (!PENWinter.isIndividualWinter(actor)) {
+      return game.time.components.year;
+    }
+    return actor.system.status.winterYear || PENWinter.lastWinterYear();
+  }
+
+  //
+  //Years to step back from the game year to reach the actor's Winter Phase year
+  //
+  static yearOffset(actor) {
+    return game.time.components.year - PENWinter.winterYear(actor);
   }
 
   //
@@ -892,7 +914,7 @@ export class PENWinter {
     if (!actor.system.status.aging) {
       return;
     }
-    //Age is increased at end of winter phase so current age check is 34 or more gor agin
+    //Age is calculated from the game year, so use the age in the Winter Phase year - aging starts at 34
     if (actor.system.age - PENWinter.yearOffset(actor) < 34) {
       await actor.update({ "system.status.aging": false });
       return;
@@ -1010,7 +1032,7 @@ export class PENWinter {
     //Check each retainer (squire, maiden, other) for leaving
     const offset = PENWinter.yearOffset(actor);
     for (const sqr of squires) {
-      const sqrAge = sqr.system.age - offset;
+      const sqrAge = sqr.system.newAge - offset;
       if (
         (sqr.system.category === "squire" && sqrAge > 20) ||
         (sqr.system.category === "maiden" && sqrAge > 16) ||
@@ -2103,5 +2125,42 @@ export class PENWinter {
     await game.time.set({ year: newYear });
     await game.Pendragon.ui?.calendar.updateDate();
     return;
+  }
+
+  //Actors with a Passive Glory award in progress - stops a double click awarding it twice
+  static #awardingGlory = new Set();
+
+  //Award Passive Glory and create history event
+  static async awardPassiveGlory(actor) {
+    if (!actor.system.status.passiveGlory || PENWinter.#awardingGlory.has(actor.id)) {
+      return;
+    }
+    PENWinter.#awardingGlory.add(actor.id);
+    try {
+      await actor.update({ "system.status.passiveGlory": false });
+    } finally {
+      PENWinter.#awardingGlory.delete(actor.id);
+    }
+    //Create a history event for the character with this year's passive glory
+    const type = "history";
+    const name = game.i18n.localize("PEN.winterPhasePassiveGlory");
+    const itemData = {
+      name: name,
+      type: type,
+      system: {
+        description: game.i18n.localize("PEN.winterPhase"),
+        source: "winter",
+        //Use the Winter Phase year so an Individual Winter Phase records it against the previous year
+        year: PENWinter.winterYear(actor),
+        glory: actor.system.passive,
+      },
+    };
+    const item = await Item.create(itemData, { parent: actor });
+    const key = await game.system.api.pid.guessId(item);
+    await item.update({
+      "flags.Pendragon.pidFlag.id": key,
+      "flags.Pendragon.pidFlag.lang": game.i18n.lang,
+      "flags.Pendragon.pidFlag.priority": 0,
+    });
   }
 }
