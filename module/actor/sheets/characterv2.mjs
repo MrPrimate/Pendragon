@@ -266,7 +266,7 @@ export class PendragonCharacterSheetv2 extends PendragonActorSheet {
           }));
         weapons.push(i);
       } else if (i.type === "family") {
-        i.system.typeName = game.i18n.localize("PEN." + i.system.relation);
+        i.system.typeName = game.i18n.localize("PEN.familyRelationship." + i.system.relation);
         families.push(i);
       } else if (i.type === "ideal") {
         ideals.push(i);

@@ -305,7 +305,7 @@
     font-style: italic;
   }
 
-    & .assaultHelpIcon {
+  & .assaultHelpIcon {
     position: absolute;
     top: 205px;
     right: 10px;

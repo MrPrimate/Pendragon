@@ -30,32 +30,6 @@
   <div class="squire-grid"></div>
   <br>
 
-  <div class="family-grid">
-    <div class="stat-name grid-item-bottom greyBack bold">{{localize 'PEN.family'}}</div>
-    <div class="stat-name grid-item-bottom greyBack bold centre">{{localize 'PEN.gender'}}</div>
-    <div class="stat-name grid-item-bottom greyBack bold centre">{{localize 'PEN.type'}}</div>
-    <div class="stat-name grid-item-bottom greyBack bold centre">{{localize 'PEN.age'}}</div>
-    <div class="stat-name grid-item-bottom greyBack bold centre">{{localize 'PEN.glory'}}</div>
-    <div class="stat-name bold grid-item-bottom greyBack centre" data-action="createDoc" data-document-class='Item' data-type="family">
-      <a class="large-icon" data-tooltip="{{localize 'PEN.addFamily'}}"><i class="item-control fas fa-plus"></i></a>
-    </div>
-
-    {{#each families as |family key|}}
-      <div class="stat-name grid-item-bottom">{{family.name}} {{#if (gt family.system.died 0)}} &nbsp({{localize 'PEN.deceased'}}) {{/if}}</div>
-      <div class="stat-name centre grid-item-bottom">{{family.system.gender}}</div>
-      <div class="stat-name centre grid-item-bottom">{{family.system.typeName}}</div>
-      <div class="stat-name centre grid-item-bottom">{{family.system.age}}</div>
-      <div class="stat-name centre grid-item-bottom">{{family.system.glory}}</div>
-      <div class="centre item grid-item-bottom" data-itemid ="{{family._id}}">
-        <a class="item-control large-icon fade" data-action="viewDoc"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
-        {{#unless ../system.lock}}
-          <a class="item-control large-icon fade" data-action="deleteDoc"><i data-tooltip="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
-        {{/unless}}
-      </div>
-    {{/each}}
-  </div>
-  <br>
-
   <div class="retainer-grid">
     <div class="stat-name grid-item-bottom greyBack bold">{{localize 'PEN.retainers'}}</div>
     <div class="stat-name grid-item-bottom greyBack bold centre">{{localize 'PEN.gender'}}</div>
@@ -136,6 +110,33 @@
     {{/each}}
   </div>
   <br>
+
+  <div class="family-grid">
+    <div class="stat-name grid-item-bottom greyBack bold" data-tooltip="{{localize 'PEN.familyCreate.maternalHint'}}">{{localize 'PEN.family'}}</div>
+    <div class="stat-name grid-item-bottom greyBack bold centre">{{localize 'PEN.gender'}}</div>
+    <div class="stat-name grid-item-bottom greyBack bold centre">{{localize 'PEN.type'}}</div>
+    <div class="stat-name grid-item-bottom greyBack bold centre">{{localize 'PEN.age'}}</div>
+    <div class="stat-name grid-item-bottom greyBack bold centre">{{localize 'PEN.glory'}}</div>
+    <div class="stat-name bold grid-item-bottom greyBack centre" data-action="createDoc" data-document-class='Item' data-type="family">
+      <a class="large-icon" data-tooltip="{{localize 'PEN.addFamily'}}"><i class="item-control fas fa-plus"></i></a>
+    </div>
+
+    {{#each families as |family key|}}
+      <div class="stat-name grid-item-bottom {{#if family.system.maternal}}italics{{/if}}">{{family.name}} {{#if (gt family.system.died 0)}} &nbsp({{localize 'PEN.deceased'}}) {{/if}}</div>
+      <div class="stat-name centre grid-item-bottom">{{family.system.gender}}</div>
+      <div class="stat-name centre grid-item-bottom">{{family.system.typeName}}</div>
+      <div class="stat-name centre grid-item-bottom">{{family.system.age}}</div>
+      <div class="stat-name centre grid-item-bottom">{{family.system.glory}}</div>
+      <div class="centre item grid-item-bottom" data-itemid ="{{family._id}}">
+        <a class="item-control large-icon fade" data-action="viewDoc"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
+        {{#unless ../system.lock}}
+          <a class="item-control large-icon fade" data-action="deleteDoc"><i data-tooltip="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
+        {{/unless}}
+      </div>
+    {{/each}}
+  </div>
+  <br>
+
   <div class="tabHelpIcon">
     {{#if showHelp}}
       <a class="helpicon" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Character-V1:-House-Tab" data-tooltip='{{localize "PEN.openWiki"}}'>

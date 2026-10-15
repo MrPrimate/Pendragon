@@ -71,7 +71,10 @@ export async function migrateWorld({ bypassVersionCheck = false } = {}) {
 
   //Migrate if current system is less than Version 14.23
   if (foundry.utils.isNewerVersion("14.23", currentVersion ?? "0")) {
+    console.log("Migration to 14.23 started");
     await squireBornUpdate();
+    await familyRelationUpdate();
+    console.log("Migration to 14.23 completed");
   }
 
   await game.settings.set("Pendragon", "systemMigrationVersion", targetVersion);
@@ -107,7 +110,7 @@ export async function equippedHandsUpdate() {
 //Squires saved before the birth year existed have it calculated from their stored age on each load, so it
 //moves with the game year (and the squire never ages) until it is saved
 export async function squireBornUpdate() {
-  console.log("Migration to 14.23 started");
+  console.log("Squire update started");
   for (const actor of game.actors) {
     if (actor.type !== "character") continue;
     await squireBornUpdateItems(actor, actor.items);
@@ -126,7 +129,57 @@ export async function squireBornUpdate() {
       );
     }
   }
-  console.log("Migration to 14.23 completed");
+  console.log("Squire update complete");
+}
+
+//Change family relationship data for more detailed entries
+//If female/femme use female version otherwise assume male.
+export async function familyRelationUpdate() {
+  console.log("Family Relationship update started");
+  for (let actor of game.actors) {
+    if (actor.type != "character") continue;
+    let family = await actor.items.filter((itm) => itm.type === "family");
+    if (family.length < 1) continue;
+    let updates = [];
+    for (let item of family) {
+      let gender = item.system.gender.toLowerCase();
+      let relation = "";
+      switch (item.system.relation) {
+        case "parent":
+          relation = "father";
+          if (["female", "femme"].includes(gender)) relation = "mother";
+          break;
+        case "grandparent":
+          relation = "grandfather";
+          if (["female", "femme"].includes(gender)) relation = "grandmother";
+          break;
+        case "sibling":
+          relation = "brother";
+          if (["female", "femme"].includes(gender)) relation = "sister";
+          break;
+        case "pibling":
+          relation = "uncle";
+          if (["female", "femme"].includes(gender)) relation = "aunt";
+          break;
+        case "child":
+          relation = "son";
+          if (["female", "femme"].includes(gender)) relation = "daughter";
+          break;
+        case "grandchild":
+          relation = "grandson";
+          if (["female", "femme"].includes(gender)) relation = "granddaughter";
+          break;
+        default:
+          continue;
+          break;
+      }
+      if (relation != "") {
+        updates.push({ _id: item.id, "system.relation": relation });
+      }
+    }
+    await Item.updateDocuments(updates, { parent: actor });
+  }
+  console.log("Family Relationship update complete");
 }
 
 async function squireBornUpdateItems(actor, items) {

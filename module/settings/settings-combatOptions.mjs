@@ -51,6 +51,7 @@ export class PENCombatSettings extends HandlebarsApplicationMixin(ApplicationV2)
    * @param options
    */
   async _prepareContext(options) {
+    const isGM = game.user.isGM;
     const optSet = {};
     for (const [k, v] of Object.entries(SETTINGS)) {
       optSet[k] = {
@@ -59,6 +60,7 @@ export class PENCombatSettings extends HandlebarsApplicationMixin(ApplicationV2)
       };
     }
     return {
+      isGM,
       optSet,
       buttons: [
         { type: "submit", icon: "fa-solid fa-save", label: "SETTINGS.Save" },

@@ -36,3 +36,21 @@ PENDRAGON.keysActiveEffects = {
   "system.income.libraBonus": "PEN.effectLabels.incomeLibraAdj",
   "system.income.denariiBonus": "PEN.effectLabels.incomeDenariiAdj",
 };
+
+PENDRAGON.familyRelationships = {
+  spouse: "PEN.familyRelationship.spouse",
+  grandfather: "PEN.familyRelationship.grandfather",
+  grandmother: "PEN.familyRelationship.grandmother",
+  father: "PEN.familyRelationship.father",
+  mother: "PEN.familyRelationship.mother",
+  aunt: "PEN.familyRelationship.aunt",
+  uncle: "PEN.familyRelationship.uncle",
+  brother: "PEN.familyRelationship.brother",
+  sister: "PEN.familyRelationship.sister",
+  son: "PEN.familyRelationship.son",
+  daughter: "PEN.familyRelationship.daughter",
+  grandson: "PEN.familyRelationship.grandson",
+  granddaughter: "PEN.familyRelationship.granddaughter",
+  cousin: "PEN.familyRelationship.cousin",
+  other: "PEN.familyRelationship.other",
+};

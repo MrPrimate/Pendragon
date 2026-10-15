@@ -84,9 +84,7 @@ export default class ChaosiumCanvasInterfaceMapPinToggle extends ChaosiumCanvasI
     for (const uuid of this.noteUuids) {
       const doc = await fromUuid(uuid);
       if (doc) {
-        const texture = this.toggle
-          ? "systems/PEN/art-assets/map-pin.svg"
-          : "systems/PEN/art-assets/map-pin-dark.svg";
+        const texture = this.toggle ? "systems/PEN/art-assets/map-pin.svg" : "systems/PEN/art-assets/map-pin-dark.svg";
         await doc.update({ "texture.src": texture });
       } else {
         console.error("Note " + uuid + " not loaded");

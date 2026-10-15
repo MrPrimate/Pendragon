@@ -10,7 +10,7 @@ export class PendragonFamilySheet extends PendragonItemSheet {
   static DEFAULT_OPTIONS = {
     position: {
       width: 560,
-      height: 520,
+      height: 540,
     },
   };
 
@@ -45,6 +45,10 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     };
 
     sheetData.relationType = PENSelectLists.getRelationTypes();
+    sheetData.showParental = false;
+    if (["uncle", "aunt", "grandfather", "grandmother"].includes(this.item.system.relation)) {
+      sheetData.showParental = true;
+    }
 
     // these two values could be set during _preparePartContext
     sheetData.enrichedDescriptionValue = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
@@ -102,7 +106,7 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     event.preventDefault();
     const prop = event.currentTarget.closest(".item-toggle").dataset.property;
     let checkProp = "";
-    if (["barrenMarriage", "blessed"].includes(prop)) {
+    if (["barrenMarriage", "blessed", "maternal"].includes(prop)) {
       checkProp = { [`system.${prop}`]: !this.item.system[prop] };
     } else {
       return;

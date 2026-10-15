@@ -2,10 +2,11 @@ const SETTINGS = {
   switchShift: {
     name: "PEN.Settings.switchShift",
     hint: "PEN.Settings.switchShiftHint",
-    scope: "world",
+    scope: "user",
     config: false,
     type: Boolean,
     default: false,
+    restricted: false,
   },
 
   critAdj: {
@@ -15,6 +16,7 @@ const SETTINGS = {
     config: false,
     type: Boolean,
     default: true,
+    restricted: true,
   },
 
   delayDice: {
@@ -24,6 +26,7 @@ const SETTINGS = {
     config: false,
     type: Boolean,
     default: false,
+    restricted: true,
   },
 };
 
@@ -68,6 +71,7 @@ export class PENDiceSettings extends HandlebarsApplicationMixin(ApplicationV2) {
    * @param options
    */
   async _prepareContext(options) {
+    const isGM = game.user.isGM;
     const optSet = {};
     for (const [k, v] of Object.entries(SETTINGS)) {
       optSet[k] = {
@@ -76,6 +80,7 @@ export class PENDiceSettings extends HandlebarsApplicationMixin(ApplicationV2) {
       };
     }
     return {
+      isGM,
       optSet,
       buttons: [
         { type: "submit", icon: "fa-solid fa-save", label: "SETTINGS.Save" },

@@ -1,0 +1,24 @@
+<div class="settingsForm flexcol" autocomplete="off">
+
+
+    <h2 class="bold">{{localize 'PEN.Settings.familyOptions'}}</h2>
+
+    <div class="form-group">
+      <label class="bold">{{localize 'PEN.Settings.randomFamilyNames'}}</label>
+      <div class="form-fields" style="flex: 1;">
+        <input type="checkbox" {{checked optSet.randomFamilyNames.value}} name="randomFamilyNames">
+      </div>
+      <p class="settingNote">{{localize 'PEN.Settings.randomFamilyNamesHint'}}</p>
+    </div>
+    <br>
+
+    <div class="form-group">
+      <label class="bold">{{localize 'PEN.Settings.createCousins'}}</label>
+      <div class="form-fields" style="flex: 1;">
+        <input type="checkbox" {{checked optSet.createCousins.value}} name="createCousins">
+      </div>
+      <p class="settingNote">{{localize 'PEN.Settings.createCousinsHint'}}</p>
+    </div>
+    <br>
+
+  </div>

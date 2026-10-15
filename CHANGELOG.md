@@ -1,16 +1,23 @@
 # CHANGELOG
 
 ## 14.23
-Winter Phase - thanks to MrPrimate
+
+Families
+
+- Family Relationships now split by sex/gender; e.g. Parent to Mother & Father
+- Migration script will update these for in world characters - if Female or Femme is in the gender it will use the female version, otherwise it will assume male
+- Please review the new labels for your characters and adjust accordingly
+  Winter Phase - thanks to MrPrimate
 - Ending the Winter Phase will give you a dialog box asking if you want to increase the game year, rather than it happening automatically.
 - Winter Phase doesn't automatically add Passive Glory anymore, it is a step in the process you need to trigger.
 - Squires updated via migration script for their age so they age properly during winter phase
 - Double clicking the passive glory step no longer gives two lots of glory
 - Passive glory happens before Prestige Points are spent so you gain the benefit in the year
-Chaosium Canvas Interface - thanks to JamesB
+  Chaosium Canvas Interface - thanks to JamesB
 - Updated code for Foundry v369 and refreshed functionality
 
 ## 14.22
+
 - Battle Cards should update again to show when Encounters are marked as used
 - Added Assault actor - much like Battles but for the Nobles Handbook assault rules - https://github.com/cragstone/Pendragon/wiki/Assault
 

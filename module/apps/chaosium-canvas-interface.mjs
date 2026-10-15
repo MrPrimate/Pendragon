@@ -30,9 +30,7 @@
   }
 }*/
 
-export default class ChaosiumCanvasInterface
-  extends foundry.data.regionBehaviors.RegionBehaviorType
-{
+export default class ChaosiumCanvasInterface extends foundry.data.regionBehaviors.RegionBehaviorType {
   static initSelf() {
     const oldOnClickLeft = foundry.canvas.layers.TokenLayer.prototype._onClickLeft;
     foundry.canvas.layers.TokenLayer.prototype._onClickLeft = function (event) {
@@ -41,9 +39,7 @@ export default class ChaosiumCanvasInterface
         const destination = canvas.activeLayer.toLocal(event);
         for (const region of canvas.scene.regions.contents) {
           if (
-            region.behaviors
-              .filter((b) => !b.disabled)
-              .find((b) => b.system instanceof ChaosiumCanvasInterface) &&
+            region.behaviors.filter((b) => !b.disabled).find((b) => b.system instanceof ChaosiumCanvasInterface) &&
             region.object.document.polygonTree.testPoint(destination)
           ) {
             region.behaviors
@@ -68,9 +64,7 @@ export default class ChaosiumCanvasInterface
         const destination = canvas.activeLayer.toLocal(event);
         for (const region of canvas.scene.regions.contents) {
           if (
-            region.behaviors
-              .filter((b) => !b.disabled)
-              .find((b) => b.system instanceof ChaosiumCanvasInterface) &&
+            region.behaviors.filter((b) => !b.disabled).find((b) => b.system instanceof ChaosiumCanvasInterface) &&
             region.object.document.polygonTree.testPoint(destination)
           ) {
             region.behaviors
@@ -98,9 +92,7 @@ export default class ChaosiumCanvasInterface
         let setPointer = false;
         for (const region of canvas.scene.regions.contents) {
           if (
-            region.behaviors
-              .filter((b) => !b.disabled)
-              .find((b) => b.system instanceof ChaosiumCanvasInterface) &&
+            region.behaviors.filter((b) => !b.disabled).find((b) => b.system instanceof ChaosiumCanvasInterface) &&
             region.object.document.polygonTree.testPoint(destination)
           ) {
             setPointer = await region.behaviors

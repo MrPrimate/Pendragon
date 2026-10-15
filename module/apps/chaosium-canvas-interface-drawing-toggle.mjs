@@ -109,12 +109,8 @@ export default class ChaosiumCanvasInterfaceDrawingToggle extends ChaosiumCanvas
         console.error("Drawing " + uuid + " not loaded");
       }
     }
-    const permissionDocument = !this.toggle
-      ? CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE
-      : this.permissionDocument;
-    const permissionPage = !this.toggle
-      ? CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE
-      : this.permissionPage;
+    const permissionDocument = !this.toggle ? CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE : this.permissionDocument;
+    const permissionPage = !this.toggle ? CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE : this.permissionPage;
     for (const uuid of this.journalEntryUuids) {
       const doc = await fromUuid(uuid);
       if (doc) {
