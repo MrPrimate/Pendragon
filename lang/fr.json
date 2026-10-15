@@ -1631,35 +1631,10 @@
         "Show": "Montrer",
         "Toggle": "Basculer"
       },
-      "AmbientLightToggle": {
-        "Button": {
-          "Title": "Bouton de la souris",
-          "Hint": "Quel bouton devrait déclencher ce comportement"
-        },
-        "Action": {
-          "Title": "Action",
-          "Hint": "Cela devrait-il allumer/éteindre ou basculer les lumières",
-          "Off": "Éteint",
-          "On": "Allumé"
-        },
-        "Light": {
-          "Title": "Sélectionner les sources lumineuses",
-          "Hint": ""
-        }
-      },
-      "Buttons": {
-        "Both": "Les deux boutons de la souris",
-        "Left": "Bouton gauche de la souris",
-        "Right": "Bouton droit de la souris"
-      },
       "DrawingToggle": {
-        "Button": {
-          "Title": "Bouton de la souris",
-          "Hint": "Quel bouton devrait déclencher ce comportement"
-        },
-        "Action": {
-          "Title": "Action",
-          "Hint": "Cela doit-il afficher, masquer ou basculer le dessin et les documents"
+        "Toggle": {
+          "Title": "Montrer",
+          "Hint": "Devrait-on afficher ou cacher le dessin et les documents"
         },
         "Drawing": {
           "Title": "Sélectionner le dessin",
@@ -1681,39 +1656,19 @@
           "Title": "Permission pour les écritures comptables",
           "Hint": "Lorsqu'il est défini pour afficher, définissez la propriété du document à ce niveau"
         },
-        "PermissionDocumentHide": {
-          "Title": "Masquer l'autorisation pour les écritures de journal",
-          "Hint": "Lorsque réglé sur masquer, définir la propriété du document à ce niveau"
-        },
         "PermissionPage": {
           "Title": "Permission pour les pages d'entrée de journal",
           "Hint": "Lorsqu'il est réglé pour afficher, définir la propriété de la page d'écriture du journal à ce niveau"
         },
-        "PermissionPageHide": {
-          "Title": "Masquer l'autorisation pour les pages de saisie de journal",
-          "Hint": "Lorsqu'il est réglé sur masquer, définir la propriété de la page de saisie du journal à ce niveau"
-        },
-        "TriggerButton": {
-          "Title": "Bouton de déclenchement de région",
-          "Hint": "Si le choix bouton de la souris est les deux, et que ce bouton est utilisé pour déclencher la région suivante"
-        },
-        "TriggerRegionUuids": {
-          "Title": "Déclencher cette région",
-          "Hint": ""
-        },
-        "TriggerAsButton": {
-          "Title": "En cliquant",
+        "RegionUuids": {
+          "Title": "Puis déclenche ces régions CCI avec un clic droit",
           "Hint": ""
         }
       },
       "MapPinToggle": {
-        "Button": {
-          "Title": "Bouton de la souris",
-          "Hint": "Quel bouton devrait déclencher ce comportement"
-        },
-        "Action": {
-          "Title": "Action",
-          "Hint": "Cela doit-il afficher, masquer ou basculer l'épingle de carte et les documents"
+        "Toggle": {
+          "Title": "Montrer",
+          "Hint": "Devrait-on afficher ou cacher le dessin et les documents"
         },
         "Document": {
           "Title": "Sélectionner les documents",
@@ -1748,10 +1703,6 @@
         "Anchor": {
           "Title": "Ancre optionnelle",
           "Hint": "Si une page de journal est chargée, sauter à l'ancre"
-        },
-        "Tile": {
-          "Title": "Sélectionner une Tuile",
-          "Hint": "Sélectionnez la Tuile qui doit être visible"
         }
       },
       "Permission": {
@@ -1760,31 +1711,7 @@
         "GM": "MJ",
         "SeeTile": "Voir la tuile"
       },
-      "PlaySound": {
-        "Button": {
-          "Title": "Bouton de la souris",
-          "Hint": "Quel bouton devrait déclencher ce comportement"
-        },
-        "Playlist": {
-          "Title": "Sélectionner la liste de lecture",
-          "Hint": ""
-        },
-        "Sound": {
-          "Title": "Sélectionner le son de la liste de lecture",
-          "Hint": ""
-        },
-        "Action": {
-          "Title": "Action",
-          "Hint": "Cela devrait-il jouer, s'arrêter ou basculer la lecture",
-          "Play": "Jouer",
-          "Stop": "Arrêter"
-        }
-      },
       "ToScene": {
-        "Button": {
-          "Title": "Bouton de la souris",
-          "Hint": "Quel bouton devrait déclencher ce comportement"
-        },
         "Permission": {
           "Title": "Peut cliquer si",
           "Hint": ""
@@ -1799,13 +1726,9 @@
         }
       },
       "TileToggle": {
-        "Button": {
-          "Title": "Bouton de la souris",
-          "Hint": "Quel bouton devrait déclencher ce comportement"
-        },
-        "Action": {
-          "Title": "Action",
-          "Hint": "Cela doit-il afficher, masquer ou basculer la tuile et les documents"
+        "Toggle": {
+          "Title": "Montrer",
+          "Hint": "Devrait-on afficher ou cacher le dessin et les documents"
         },
         "Tile": {
           "Title": "Sélectionner la tuile",
@@ -1827,28 +1750,12 @@
           "Title": "Permission pour les journaux",
           "Hint": "Lorsqu'il est défini à Afficher, définissez le propriétaire du document à ce niveau"
         },
-        "PermissionDocumentHide": {
-          "Title": "Permission Masquer pour les journaux",
-          "Hint": " Lorsqu'il est défini à Masquer, définissez le propriétaire du document à ce niveau"
-        },
         "PermissionPage": {
           "Title": "Permission pour les pages de journal",
           "Hint": "Lorsqu'il est défini à Afficher, définissez le propriétaire de la page à ce niveau"
         },
-        "PermissionPageHide": {
-          "Title": " Permission Masquer pour les pages",
-          "Hint": "Lorsque défini sur Masquer, définissez le propriétaire de la page à ce niveau"
-        },
-        "TriggerButton": {
-          "Title": "Bouton de déclenchement de la région",
-          "Hint": "Si le bouton choisi est Les deux, et que ce bouton est utilisé pour déclencher la région suivante"
-        },
-        "TriggerRegionUuids": {
-          "Title": "Déclencher cette région",
-          "Hint": ""
-        },
-        "TriggerAsButton": {
-          "Title": "En cliquant",
+        "RegionUuids": {
+          "Title": "Puis déclenche ces régions CCI avec un clic droit",
           "Hint": ""
         }
       }

@@ -52,7 +52,7 @@ import {
 } from "./models/items/index.mjs";
 import drawNote from "./hooks/draw-note.mjs";
 import RenderNoteConfig from "./hooks/render-note-config.mjs";
-import PENClickableEvents from "./apps/clickable-events.mjs";
+import ChaosiumCanvasInterfaceInit from "./apps/chaosium-canvas-interface-init.mjs";
 import RenderRegionBehaviorConfig from "./hooks/render-region-behavior-config.mjs";
 import RenderRegionConfig from "./hooks/render-region-config.mjs";
 import { PendragonCalendarWidget } from "./apps/pendragon-calendar.mjs";
@@ -75,14 +75,8 @@ Hooks.once("init", async function () {
     rollItemMacro,
     GMRollMacro,
     NPCImporter,
-    ClickRegionLeftUuid: PENClickableEvents.ClickRegionLeftUuid,
-    ClickRegionRightUuid: PENClickableEvents.ClickRegionRightUuid,
-    hasPermissionDocument: PENClickableEvents.hasPermissionDocument,
-    InSceneRelativeTeleport: PENClickableEvents.InSceneRelativeTeleport,
-    MapPinToggle: PENClickableEvents.MapPinToggle,
-    openDocument: PENClickableEvents.openDocument,
-    toggleTileJournalPages: PENClickableEvents.toggleTileJournalPages,
-    toScene: PENClickableEvents.toScene,
+    ClickRegionLeftUuid: ChaosiumCanvasInterfaceInit.ClickRegionLeftUuid,
+    ClickRegionRightUuid: ChaosiumCanvasInterfaceInit.ClickRegionRightUuid,
   };
   //Add skill categories
   game.Pendragon.skillCategories = ["combat", "courtly", "minsterly", "knightly", "nonknightly", "ladies", "woodcraft"];

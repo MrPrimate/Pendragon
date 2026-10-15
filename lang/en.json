@@ -1669,35 +1669,10 @@
         "Show": "Show",
         "Toggle": "Toggle"
       },
-      "AmbientLightToggle": {
-        "Button": {
-          "Title": "Mouse Button",
-          "Hint": "Which button should trigger this behavior"
-        },
-        "Action": {
-          "Title": "Action",
-          "Hint": "Should this turn on/off or toggle the lights",
-          "Off": "Off",
-          "On": "On"
-        },
-        "Light": {
-          "Title": "Select Light Sources",
-          "Hint": ""
-        }
-      },
-      "Buttons": {
-        "Both": "Both Mouse Buttons",
-        "Left": "Left Mouse Button",
-        "Right": "Right Mouse Button"
-      },
       "DrawingToggle": {
-        "Button": {
-          "Title": "Mouse Button",
-          "Hint": "Which button should trigger this behavior"
-        },
-        "Action": {
-          "Title": "Action",
-          "Hint": "Should this show, hide, or toggle the drawing and documents"
+        "Toggle": {
+          "Title": "Show",
+          "Hint": "Should this show or hide the drawing and documents"
         },
         "Drawing": {
           "Title": "Select Drawing",
@@ -1719,41 +1694,21 @@
           "Title": "Permission for Documents",
           "Hint": "When set to show set Document ownership to this level"
         },
-        "PermissionDocumentHide": {
-          "Title": "Hide Permission for Journal Entries",
-          "Hint": "When set to hide set Document ownership to this level"
-        },
         "PermissionPage": {
           "Title": "Permission for Journal Entry Pages",
           "Hint": "When set to show set Journal Entry Page ownership to this level"
         },
-        "PermissionPageHide": {
-          "Title": "Hide Permission for Journal Entry Pages",
-          "Hint": "When set to hide set Journal Entry Page ownership to this level"
-        },
-        "TriggerButton": {
-          "Title": "Trigger Region Button",
-          "Hint": "If Mouse Button is Both, and this button is used trigger the following region"
-        },
-        "TriggerRegionUuids": {
-          "Title": "Trigger This Region",
-          "Hint": ""
-        },
-        "TriggerAsButton": {
-          "Title": "With A Button Click",
+        "RegionUuids": {
+          "Title": "Then trigger these CCI Regions on Right Click",
           "Hint": ""
         }
       },
       "MapPinToggle": {
-        "Button": {
-          "Title": "Mouse Button",
-          "Hint": "Which button should trigger this behavior"
+        "Toggle": {
+          "Title": "Show",
+          "Hint": "Should this show or hide the map note and documents"
         },
-        "Action": {
-          "Title": "Action",
-          "Hint": "Should this show, hide, or toggle the map pin and documents"
-        },
-        "Document": {
+         "Document": {
           "Title": "Select Documents",
           "Hint": ""
         },
@@ -1786,10 +1741,6 @@
         "Anchor": {
           "Title": "Optional Anchor",
           "Hint": "If loading a JournalEntryPage jump to anchor"
-        },
-        "Tile": {
-          "Title": "Select Tile",
-          "Hint": "Select Tile that must be visible"
         }
       },
       "Permission": {
@@ -1798,31 +1749,7 @@
         "GM": "Gamsemaster",
         "SeeTile": "See Tile"
       },
-      "PlaySound": {
-        "Button": {
-          "Title": "Mouse Button",
-          "Hint": "Which button should trigger this behavior"
-        },
-        "Playlist": {
-          "Title": "Select Playlist",
-          "Hint": ""
-        },
-        "Sound": {
-          "Title": "Select Playlist Sound",
-          "Hint": ""
-        },
-        "Action": {
-          "Title": "Action",
-          "Hint": "Should this play, stop, or toggle playback",
-          "Play": "Play",
-          "Stop": "Stop"
-        }
-      },
       "ToScene": {
-        "Button": {
-          "Title": "Mouse Button",
-          "Hint": "Which button should trigger this behavior"
-        },
         "Permission": {
           "Title": "Can click if",
           "Hint": ""
@@ -1837,13 +1764,9 @@
         }
       },
       "TileToggle": {
-        "Button": {
-          "Title": "Mouse Button",
-          "Hint": "Which button should trigger this behavior"
-        },
-        "Action": {
-          "Title": "Action",
-          "Hint": "Should this show, hide, or toggle the tile and documents"
+        "Toggle": {
+          "Title": "Show",
+          "Hint": "Should this show or hide the map pin and documents"
         },
         "Tile": {
           "Title": "Select Tile",
@@ -1865,28 +1788,12 @@
           "Title": "Permission for Documents",
           "Hint": "When set to show set Document ownership to this level"
         },
-        "PermissionDocumentHide": {
-          "Title": "Hide Permission for Journal Entries",
-          "Hint": "When set to hide set Document ownership to this level"
-        },
         "PermissionPage": {
           "Title": "Permission for Journal Entry Pages",
           "Hint": "When set to show set Journal Entry Page ownership to this level"
         },
-        "PermissionPageHide": {
-          "Title": "Hide Permission for Journal Entry Pages",
-          "Hint": "When set to hide set Journal Entry Page ownership to this level"
-        },
-        "TriggerButton": {
-          "Title": "Trigger Region Button",
-          "Hint": "If Mouse Button is Both, and this button is used trigger the following region"
-        },
-        "TriggerRegionUuids": {
-          "Title": "Trigger This Region",
-          "Hint": ""
-        },
-        "TriggerAsButton": {
-          "Title": "With A Button Click",
+        "RegionUuids": {
+          "Title": "Then trigger these CCI Regions on Right Click",
           "Hint": ""
         }
       }

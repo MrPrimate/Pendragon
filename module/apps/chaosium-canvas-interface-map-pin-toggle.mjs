@@ -18,30 +18,28 @@ export default class ChaosiumCanvasInterfaceMapPinToggle extends ChaosiumCanvasI
   static defineSchema() {
     const fields = foundry.data.fields;
     return {
-      triggerButton: new fields.NumberField({
-        choices: ChaosiumCanvasInterface.triggerButtons,
-        initial: ChaosiumCanvasInterface.triggerButton.Left,
-        label: "PEN.ChaosiumCanvasInterface.MapPinToggle.Button.Title",
-        hint: "PEN.ChaosiumCanvasInterface.MapPinToggle.Button.Hint",
-      }),
-      action: new fields.NumberField({
-        choices: ChaosiumCanvasInterface.actionToggles,
-        initial: ChaosiumCanvasInterface.actionToggle.Off,
-        label: "PEN.ChaosiumCanvasInterface.MapPinToggle.Action.Title",
-        hint: "PEN.ChaosiumCanvasInterface.MapPinToggle.Action.Hint",
-        required: true,
-      }),
-      documentUuids: new fields.SetField(new fields.DocumentUUIDField(), {
-        label: "PEN.ChaosiumCanvasInterface.MapPinToggle.Document.Title",
-        hint: "PEN.ChaosiumCanvasInterface.MapPinToggle.Document.Hint",
+      toggle: new fields.BooleanField({
+        initial: false,
+        label: "PEN.ChaosiumCanvasInterface.MapPinToggle.Toggle.Title",
+        hint: "PEN.ChaosiumCanvasInterface.MapPinToggle.Toggle.Hint",
       }),
       noteUuids: new fields.SetField(
         new fields.DocumentUUIDField({
+          initial: undefined,
           type: "Note",
         }),
         {
           label: "PEN.ChaosiumCanvasInterface.MapPinToggle.Note.Title",
           hint: "PEN.ChaosiumCanvasInterface.MapPinToggle.Note.Hint",
+        },
+      ),
+      documentUuids: new fields.SetField(
+        new fields.DocumentUUIDField({
+          initial: undefined,
+        }),
+        {
+          label: "PEN.ChaosiumCanvasInterface.MapPinToggle.Document.Title",
+          hint: "PEN.ChaosiumCanvasInterface.MapPinToggle.Document.Hint",
         },
       ),
       permissionShow: new fields.NumberField({
@@ -67,41 +65,17 @@ export default class ChaosiumCanvasInterfaceMapPinToggle extends ChaosiumCanvasI
     };
   }
 
-  static migrateData(source) {
-    if (typeof source.toggle !== "undefined" && typeof source.action === "undefined") {
-      source.action = source.toggle
-        ? ChaosiumCanvasInterface.actionToggle.On
-        : ChaosiumCanvasInterface.actionToggle.Off;
-    }
-    return source;
-  }
-
   async _handleMouseOverEvent() {
     return game.user.isGM;
   }
 
-  async #handleClickEvent() {
+  async _handleLeftClickEvent() {
     game.socket.emit("system.Pendragon", { type: "toggleMapNotes", toggle: true });
     game.settings.set("core", foundry.canvas.layers.NotesLayer.TOGGLE_SETTING, true);
-    let toggle = false;
-    switch (this.action) {
-      case ChaosiumCanvasInterface.actionToggle.On:
-        toggle = true;
-        break;
-      case ChaosiumCanvasInterface.actionToggle.Toggle:
-        {
-          const firstUuid = this.documentUuids.first();
-          if (firstUuid) {
-            const doc = await fromUuid(firstUuid);
-            toggle = doc.ownership.default === this.permissionHide;
-          }
-        }
-        break;
-    }
     for (const uuid of this.documentUuids) {
       const doc = await fromUuid(uuid);
       if (doc) {
-        const permission = toggle ? this.permissionShow : this.permissionHide;
+        const permission = this.toggle ? this.permissionShow : this.permissionHide;
         await doc.update({ "ownership.default": permission });
       } else {
         console.error("Document " + uuid + " not loaded");
@@ -110,23 +84,13 @@ export default class ChaosiumCanvasInterfaceMapPinToggle extends ChaosiumCanvasI
     for (const uuid of this.noteUuids) {
       const doc = await fromUuid(uuid);
       if (doc) {
-        const texture = toggle ? "systems/Pendragon/assets/map-pin.svg" : "systems/Pendragon/assets/map-pin-dark.svg";
+        const texture = this.toggle
+          ? "systems/PEN/art-assets/map-pin.svg"
+          : "systems/PEN/art-assets/map-pin-dark.svg";
         await doc.update({ "texture.src": texture });
       } else {
         console.error("Note " + uuid + " not loaded");
       }
-    }
-  }
-
-  async _handleLeftClickEvent() {
-    if (this.triggerButton === ChaosiumCanvasInterface.triggerButton.Left) {
-      this.#handleClickEvent();
-    }
-  }
-
-  async _handleRightClickEvent() {
-    if (this.triggerButton === ChaosiumCanvasInterface.triggerButton.Right) {
-      this.#handleClickEvent();
     }
   }
 }

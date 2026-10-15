@@ -2,7 +2,7 @@
   "id": "Pendragon",
   "title": "Pendragon",
   "description": "Pendragon system for FoundryVTT!",
-  "version": "14.22",
+  "version": "14.23",
   "compatibility": {
     "minimum": "14",
     "verified": "14.368",
@@ -256,18 +256,16 @@
       }
     },
     "RegionBehavior": {
-      "ChaosiumCanvasInterfaceAmbientLightToggle": {},
       "ChaosiumCanvasInterfaceDrawingToggle": {},
       "ChaosiumCanvasInterfaceMapPinToggle": {},
       "ChaosiumCanvasInterfaceOpenDocument": {},
-      "ChaosiumCanvasInterfacePlaySound": {},
       "ChaosiumCanvasInterfaceToScene": {},
       "ChaosiumCanvasInterfaceTileToggle": {}
     }
   },
   "url": "https://github.com/cragstone/Pendragon",
   "manifest": "https://github.com/cragstone/Pendragon/releases/latest/download/system.json",
-  "download": "https://github.com/cragstone/Pendragon/releases/download/14.22/Pendragon.zip",
+  "download": "https://github.com/cragstone/Pendragon/releases/download/14.23/Pendragon.zip",
   "socket": true,
   "license": "LICENSE.txt",
   "changelog": "CHANGELOG.md",
