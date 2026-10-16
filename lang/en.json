@@ -435,7 +435,8 @@
       "alreadyExists": "Already exists",
       "title": "Family Creation",
       "invalidFamilyType": "{type} is not a valid family relationship.  It has been ignored",
-      "invalidFormula": "{formula} is an invalid Roll formula"
+      "invalidFormula": "{formula} is an invalid Roll formula",
+      "cousinCount": "Cousins ({count})"
     },
     "familyRelationship": {
       "aunt": "Aunt",

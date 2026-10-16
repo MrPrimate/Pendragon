@@ -187,6 +187,7 @@ export class PENCreateFamily {
       }
 
       //Now add any cousins needed
+      //1D3-1 for each aunt/uncle, only those who have come of age (14+) and no older than the Player-knight
       msgString +=
         "<div><strong>" +
         game.i18n.localize("PEN.familyCreate.cousins") +
@@ -201,7 +202,7 @@ export class PENCreateFamily {
         for (let pibling of piblings) {
           let results = await this.addFamily(
             "1D3-1",
-            pibling.system.born + 21,
+            Math.max(pibling.system.born + 20, yearBorn - 1),
             "1D6",
             "cousin",
             "",
@@ -209,31 +210,32 @@ export class PENCreateFamily {
             0,
             0,
             maternal,
+            game.time.components.year - 14,
           );
           if (addCousins) {
             familyAdd.push(...results.members);
             msgString += "</div>" + results.resultString;
-          } else {
-            msgString +=
-              "</div><div>" + results.members.length + " " + game.i18n.localize("PEN.familyCreate.cousins") + "</div>";
-            cousinCount += results.members.length;
           }
+          cousinCount += results.members.length;
         }
 
-        let maternalFlag = maternal === "maternal";
-        let memberName = cousinCount + " " + game.i18n.localize("PEN.familyCreate.cousins");
-        if (cousinCount > 0) {
-          familyAdd.push({
-            type: "family",
-            name: memberName,
-            system: {
-              born: game.time.components.year,
-              relation: "cousin",
-              died: "",
-              source: "createFamily",
-              maternal: maternalFlag,
-            },
-          });
+        //Single entry for all the cousins on this side
+        if (!addCousins) {
+          let memberName = game.i18n.format("PEN.familyCreate.cousinCount", { count: cousinCount });
+          msgString += "</div><div>" + memberName + "</div>";
+          if (cousinCount > 0) {
+            familyAdd.push({
+              type: "family",
+              name: memberName,
+              system: {
+                born: yearBorn,
+                relation: "cousin",
+                died: "",
+                source: "createFamily",
+                maternal: maternal === "maternal",
+              },
+            });
+          }
         }
       }
     }

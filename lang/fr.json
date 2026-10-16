@@ -432,7 +432,8 @@
       "alreadyExists": "Existe déjà",
       "title": "Création de famille",
       "invalidFamilyType": "{type} n'est pas un lien familial valide. Il a été ignoré",
-      "invalidFormula": "{formula} n'est pas une formule de lancer valide"
+      "invalidFormula": "{formula} n'est pas une formule de lancer valide",
+      "cousinCount": "Cousins ({count})"
     },
     "familyRelationship": {
       "aunt": "Tante",
