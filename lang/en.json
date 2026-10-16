@@ -1343,7 +1343,7 @@
       "addArchetype": "Archetype reset",
       "addClass": "Class reset",
       "addEquip": "Starting equipment removed",
-      "addFamily": "Family removed except parents",
+      "addFamily": "Generated family members removed",
       "addGender": "Character Gender reset",
       "addHeir": "Heir status reset",
       "addHome": "Home reset",

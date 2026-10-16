@@ -1341,7 +1341,7 @@
       "createMethod": "Méthode de création réinitialisée",
       "addParents": "Parents supprimés",
       "addCulture": "Culture supprimée",
-      "addFamily": "Famille supprimée sauf les parents",
+      "addFamily": "Membres de la famille générés supprimés",
       "addStats": "Caractéristiques réinitialisée",
       "addReligion": "Religion supprimée",
       "addTraits": "Traits réinitialisés",
