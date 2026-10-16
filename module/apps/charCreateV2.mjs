@@ -2319,7 +2319,7 @@ export class PENCharCreateV2 {
       await PENCreateFamily.deleteFamily(actor);
       ui.notifications.warn(actor.name + ": " + game.i18n.localize("PEN.undo." + step));
     } else {
-      let result = PENCreateFamily.startFamily(actor);
+      let result = await PENCreateFamily.startFamily(actor);
       if (!result) {
         return;
       }
