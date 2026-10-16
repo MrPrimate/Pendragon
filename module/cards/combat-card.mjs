@@ -361,7 +361,7 @@ export class COCard {
       case k(RollResult.SUCCESS, RollResult.FAIL):
         return [CombatOutcome.WIN, CombatOutcome.LOSE];
       case k(RollResult.SUCCESS, RollResult.FUMBLE):
-        return [CombatOutcome.FUMBLE, CombatOutcome.FUMBLE];
+        return [CombatOutcome.WIN, CombatOutcome.FUMBLE];
 
       case k(RollResult.FAIL, RollResult.CRITICAL):
         return [CombatOutcome.LOSE, CombatOutcome.CRITICAL];
