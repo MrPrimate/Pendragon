@@ -15,15 +15,16 @@ pages:
       content: >-
         <p>Activating the Winter Phase is controlled by the GM from the GM
         Tools.</p><p>Once Winter Phase is turned on there will be an extra tab
-        visible on your Character Sheet. An History entry is added to your
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.b5d7Ha8LOeLSNvul.JournalEntryPage.8390AvE66aRvM5fJ]{Events
-        Tab} with this year's glory.</p><p>When the Winter Phase is turned off
-        the game year increases by one and so your character's age will
-        automatically increase by 1 year.</p><p>There are many steps to a Winter
-        Phase. You can do everything manually or some stages have been automated
-        for you. Given that a character can die (in Childbirth or due to aging)
-        we appreciate you may want to makes the rolls yourself.</p><p>The stages
-        of the Winter Phase are:</p><ul><li><p>@UUID[.SATAFmPjcQbxdClZ]
+        visible on your Character Sheet. An History entry is added to your <a
+        href="https://github.com/cragstone/Pendragon/wiki/Character-V1:-History-Tab"
+        target="_blank" rel="noopener">Events Tab</a> with this year's
+        glory.</p><p>When the Winter Phase is turned off the game year increases
+        by one and so your character's age will automatically increase by 1
+        year.</p><p>There are many steps to a Winter Phase. You can do
+        everything manually or some stages have been automated for you. Given
+        that a character can die (in Childbirth or due to aging) we appreciate
+        you may want to makes the rolls yourself.</p><p>The stages of the Winter
+        Phase are:</p><ul><li><p>@UUID[.SATAFmPjcQbxdClZ]
         (manual)</p></li><li><p>@UUID[.TkC0R47aztAeBTQu]
         (manual)</p></li><li><p>@UUID[.jnbbfQEU7hcwV3Ah]</p></li><li><p>@UUID[.RrrOlH0FVuoe2fox]</p></li><li><p>@UUID[.F3ATfUdHvTCV5ZE6]</p></li><li><p>@UUID[.65FI8fOChF1PF07n]</p></li><li><p>@UUID[.dtFFRERr0gt3dI8V]</p></li><li><p>@UUID[.y70FF7IdgRTnHweV]</p></li><li><p>@UUID[.Q3jZfR6tyGC4Dk4U]
         - this is fully
@@ -312,9 +313,9 @@ pages:
       content: >-
         <p>This step is automated with any dice being rolled showing and the
         outcomes appearing in a chat message.</p><p>Lost characteristics are
-        automatically adjusted on the "Aging" section of the
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.b5d7Ha8LOeLSNvul.JournalEntryPage.qLYS7miTa5T31GYn]{Stats
-        Tab}</p>
+        automatically adjusted on the "Aging" section of the <a
+        href="https://github.com/cragstone/Pendragon/wiki/Character-V1:-Stats-Tab"
+        target="_blank" rel="noopener">Stats Tab</a></p>
     video:
       controls: true
       volume: 0.5
@@ -466,11 +467,12 @@ pages:
         the chat card.</p><p>You may, if you have chosen to spend Prestige, be
         asked about the gender of the child(ren). In the event of a Tragedy you
         may be asked if a midwife is available to help prevent death.</p><p>All
-        children (whether they survive or not) are added to the family on the
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.b5d7Ha8LOeLSNvul.JournalEntryPage.fRLDTfqAgmiltXyr]{House
-        Tab}</p><p>If the marriage turns out to be barren then either the Spouse
-        family member is updated or you are. No adjustments made if the person
-        who may have conceived was "other"</p>
+        children (whether they survive or not) are added to the family on the <a
+        href="https://github.com/cragstone/Pendragon/wiki/Character-V1:-House-Tab"
+        target="_blank" rel="noopener">House Tab</a></p><p>If the marriage turns
+        out to be barren then either the Spouse family member is updated or you
+        are. No adjustments made if the person who may have conceived was
+        "other"</p>
     video:
       controls: true
       volume: 0.5

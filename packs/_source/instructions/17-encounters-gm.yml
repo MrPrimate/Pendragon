@@ -40,9 +40,9 @@ pages:
         the bottom of the sheet is the Minimum Morale value for the
         Encounter.<br /><br />These Encounters will be added to Battle
         Cards.</p><p><br />Remember it is possible to set all Encounters in the
-        Game World to unused from the GM tools menu
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.CJhCwQigLrJhBBQF.JournalEntryPage.6aH2K7tpoqzfcCf9]{Reset
-        Encounters}</p>
+        Game World to unused from the GM tools menu <a
+        href="https://github.com/cragstone/Pendragon/wiki/GM-Tools"
+        target="_blank" rel="noopener">Reset Encounters</a></p>
     video:
       controls: true
       volume: 0.5

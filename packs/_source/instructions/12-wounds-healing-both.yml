@@ -24,31 +24,32 @@ pages:
         Cold@UUID[.BS5YMZSWPPVKLcfe]{ wounds can not be treated}. Disease which
         impacts Hit Points creates a new wound, but if it affects a
         characteristic it lowers that score (and any associated derived scores).
-        Look at the
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.b5d7Ha8LOeLSNvul.JournalEntryPage.qLYS7miTa5T31GYn]{Stats
-        Tab} to see the disease damage.</p></li><li><p>Fire and Suffocation are
-        like cold damage (they either create or add to an existing wound) but
-        they can be treated.</p></li><li><p>Poison affects the characters CON
-        rather than creating a wound. Look at the
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.b5d7Ha8LOeLSNvul.JournalEntryPage.qLYS7miTa5T31GYn]{Stats
-        Tab} to see the poison damage.</p></li></ul><p>When the wound is created
-        it's severity is calculated and becomes the wound name.</p><p>Once
-        created the only values that can be changed on the wound itself are the
-        current damage and a description of the wound. You can, from the combat
-        tab, toggle on/off the "treated" box.</p><p>If you made a mistake and
-        want to change a wound type etc you need to delete the wound. To delete
-        a wound in full you need to unlock the character sheet for the "Broom"
-        icon to appear - double click this icon to delete the relevant
-        wound.</p><p>If the character sheet is locked you may see a "Healing
-        Hand" icon - this is used to Heal a wound (see
-        @UUID[.BS5YMZSWPPVKLcfe])</p><p>The Debilitated, Unconscious and Near
-        Death statuses may be ticked following the addition of the wound - as
-        these are not specifically related to the wound but are a character
-        level status they are shown in the
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.b5d7Ha8LOeLSNvul.JournalEntryPage.Ra9PK638R24cc31A]{Stats
-        Section} at the top of the character sheet. E.g. a major wound
-        automatically renders the character unconscious and that in turn
-        debilitates them.<br></p><p></p>
+        Look at the <a
+        href="https://github.com/cragstone/Pendragon/wiki/Character-V1:-Stats-Tab"
+        target="_blank" rel="noopener">Stats Tab</a> to see the disease
+        damage.</p></li><li><p>Fire and Suffocation are like cold damage (they
+        either create or add to an existing wound) but they can be
+        treated.</p></li><li><p>Poison affects the characters CON rather than
+        creating a wound. Look at the <a
+        href="https://github.com/cragstone/Pendragon/wiki/Character-V1:-Stats-Tab"
+        target="_blank" rel="noopener">Stats Tab</a> to see the poison
+        damage.</p></li></ul><p>When the wound is created it's severity is
+        calculated and becomes the wound name.</p><p>Once created the only
+        values that can be changed on the wound itself are the current damage
+        and a description of the wound. You can, from the combat tab, toggle
+        on/off the "treated" box.</p><p>If you made a mistake and want to change
+        a wound type etc you need to delete the wound. To delete a wound in full
+        you need to unlock the character sheet for the "Broom" icon to appear -
+        double click this icon to delete the relevant wound.</p><p>If the
+        character sheet is locked you may see a "Healing Hand" icon - this is
+        used to Heal a wound (see @UUID[.BS5YMZSWPPVKLcfe])</p><p>The
+        Debilitated, Unconscious and Near Death statuses may be ticked following
+        the addition of the wound - as these are not specifically related to the
+        wound but are a character level status they are shown in the <a
+        href="https://github.com/cragstone/Pendragon/wiki/Character-V1:-Header-section"
+        target="_blank" rel="noopener">Stats Section</a> at the top of the
+        character sheet. E.g. a major wound automatically renders the character
+        unconscious and that in turn debilitates them.<br></p><p></p>
     video:
       controls: true
       volume: 0.5
