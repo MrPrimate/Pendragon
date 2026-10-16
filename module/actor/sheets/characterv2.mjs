@@ -355,13 +355,18 @@ export class PendragonCharacterSheetv2 extends PendragonActorSheet {
         age: f.system.died > 0 ? f.system.died - f.system.born : game.time.components.year - f.system.born,
         glory: Number(f.system.glory),
         type: "storyNPC",
+        relation: f.system.typeName,
       };
 
       switch (f.system.relation) {
         case "parent":
+        case "father":
+        case "mother":
           familyv2.parents.push(person);
           break;
         case "child":
+        case "son":
+        case "daughter":
           familyv2.children.push(person);
           break;
         case "spouse":
