@@ -2077,7 +2077,7 @@ export class PENCharCreateV2 {
   static async removeParents(actor) {
     let parents = await actor.items
       .filter((itm) => itm.type === "family")
-      .filter((itm) => ["father", "mother"].includes(itm.system.relation))
+      .filter((itm) => ["father", "mother", "parent"].includes(itm.system.relation))
       .map((itm) => {
         return itm.id;
       });
