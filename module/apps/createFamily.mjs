@@ -390,9 +390,7 @@ export class PENCreateFamily {
   //ageGap: roll formula to increase the age by
   //base: base year of birth used if none of the members have a year of birth
   static async checkAges(actor, members, ageGap, base) {
-    try {
-      const result = await Roll.validate(ageGap);
-    } catch (err) {
+    if (!Roll.validate(ageGap)) {
       ui.notifications.warn("PEN.familyCreate.invalidFormula", {
         format: { formula: ageGap },
       });
