@@ -23,6 +23,9 @@ export class PENCreateFamily {
       await actor.update({ "system.born": yearBorn });
     }
 
+    //Get the name tables once rather than for each family member
+    this.nameTables = await this.getNameTables();
+
     //New family members to be added
     let familyAdd = [];
     let msgString = "<h5>" + game.i18n.localize("PEN.familyCreate.title") + "</h5>";
@@ -301,9 +304,9 @@ export class PENCreateFamily {
 
       let memberName = game.i18n.localize("PEN.familyRelationship." + type);
       //If game setting to roll random names
-      if (game.settings.get("Pendragon", "randomFamilyNames")) {
-        let maleTable = (await game.system.api.pid.fromPIDBest({ pid: "rt..male-names" }))[0];
-        let femaleTable = (await game.system.api.pid.fromPIDBest({ pid: "rt..female-names" }))[0];
+      if (this.nameTables) {
+        let maleTable = this.nameTables.male;
+        let femaleTable = this.nameTables.female;
         if (maleTable && femaleTable) {
           let table = maleTable;
           switch (type) {
@@ -353,6 +356,15 @@ export class PENCreateFamily {
       resultString += "</div>";
     }
     return { members, lastBorn: born, resultString };
+  }
+
+  //Get the male and female name tables, false if random names are off or either table is missing
+  static async getNameTables() {
+    if (!game.settings.get("Pendragon", "randomFamilyNames")) return false;
+    let male = (await game.system.api.pid.fromPIDBest({ pid: "rt..male-names" }))[0];
+    let female = (await game.system.api.pid.fromPIDBest({ pid: "rt..female-names" }))[0];
+    if (!male || !female) return false;
+    return { male, female };
   }
 
   //Check Family Members exist
