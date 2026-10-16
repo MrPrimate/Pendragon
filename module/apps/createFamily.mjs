@@ -286,7 +286,7 @@ export class PENCreateFamily {
       let type = first;
       if (genderCheck) {
         let genderResults = await PENUtilities.complexDiceRoll("1D6");
-        if (genderResults.total % 2 != 0) type = second;
+        if (genderResults.total % 2 === 0) type = second;
       }
       let bornResults = await PENUtilities.complexDiceRoll(ageGap);
       let birth = Math.min(bornResults.total + born, game.time.components.year);
