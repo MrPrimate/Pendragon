@@ -1,4 +1,3 @@
-import PENDialog from "../setup/pen-dialog.mjs";
 import { PENCharCreateV2 } from "./charCreateV2.mjs";
 import { PENUtilities } from "./utilities.mjs";
 
@@ -31,7 +30,7 @@ export class PENCreateFamily {
     //Siblings - calculate first to generate youngest age
     msgString += "<div><strong>" + game.i18n.localize("PEN.familyCreate.siblings") + "</strong>: ";
     let lastSibling = yearBorn;
-    let siblings = await this.checkFamily(actor, "brother", "sister");
+    let siblings = this.checkFamily(actor, "brother", "sister");
     if (siblings.length > 0) {
       let youngest = await this.checkAges(actor, siblings, "1D6", yearBorn);
       if (!youngest) return false;
@@ -46,8 +45,8 @@ export class PENCreateFamily {
 
     //Parents - need youngest sibling age
     msgString += "<div><strong>" + game.i18n.localize("PEN.familyCreate.parents") + "</strong>:</div> ";
-    let father = await this.checkFamily(actor, "father");
-    let mother = await this.checkFamily(actor, "mother");
+    let father = this.checkFamily(actor, "father");
+    let mother = this.checkFamily(actor, "mother");
     let fatherBorn = yearBorn - 24; //fallback year
     let motherBorn = yearBorn - 22; //fallback year
     if (father.length > 0) {
@@ -103,7 +102,7 @@ export class PENCreateFamily {
         ")" +
         "</strong>:</div> ";
       let lastPibling = yearBorn;
-      let piblings = await this.checkFamily(actor, "uncle", "aunt", maternal);
+      let piblings = this.checkFamily(actor, "uncle", "aunt", maternal);
       if (piblings.length > 0) {
         let youngest = await this.checkAges(actor, piblings, "1D6", parentBorn);
         if (!youngest) return false;
@@ -125,8 +124,8 @@ export class PENCreateFamily {
         game.i18n.localize("PEN.familyCreate." + maternal) +
         ")" +
         "</strong>:</div> ";
-      let grandfather = await this.checkFamily(actor, "grandfather", "", maternal);
-      let grandmother = await this.checkFamily(actor, "grandmother", "", maternal);
+      let grandfather = this.checkFamily(actor, "grandfather", "", maternal);
+      let grandmother = this.checkFamily(actor, "grandmother", "", maternal);
       let grandfatherBorn = fatherBorn - 24; //fallback year
       if (pCount === 2) {
         grandfatherBorn = motherBorn - 24; //fallback year
@@ -190,7 +189,7 @@ export class PENCreateFamily {
         game.i18n.localize("PEN.familyCreate." + maternal) +
         ")" +
         "</strong>:</div> ";
-      let cousins = await this.checkFamily(actor, "cousin", "", maternal);
+      let cousins = this.checkFamily(actor, "cousin", "", maternal);
       if (cousins.length > 0) {
         msgString += game.i18n.localize("PEN.familyCreate.alreadyExist") + "</div>";
       } else {
@@ -235,7 +234,7 @@ export class PENCreateFamily {
     }
 
     //Create Chat Message for Family
-    ChatMessage.create({
+    await ChatMessage.create({
       content: msgString,
       speaker: ChatMessage.getSpeaker(),
     });
@@ -360,27 +359,27 @@ export class PENCreateFamily {
   //type1 = first relation type
   //type2 = second relation type
   //maternalCheck = filter for maternal/paternal.  Blank = no check, 'maternal' or 'paternal' include only those
-  static async checkFamily(actor, type1 = "", type2 = "", maternalCheck = "") {
+  static checkFamily(actor, type1 = "", type2 = "", maternalCheck = "") {
     let validOptions = Object.keys(CONFIG.PENDRAGON.familyRelationships);
-    if (type1 != "" && ![...validOptions].includes(type1)) {
+    if (type1 != "" && !validOptions.includes(type1)) {
       ui.notifications.warn("PEN.familyCreate.invalidFamilyType", {
         format: { type: type1 },
       });
       type1 = ""; //ignore invalid type
     }
-    if (type2 != "" && ![...validOptions].includes(type2)) {
+    if (type2 != "" && !validOptions.includes(type2)) {
       ui.notifications.warn("PEN.familyCreate.invalidFamilyType", {
         format: { type: type2 },
       });
       type2 = ""; //ignore invalid type
     }
-    let members = await actor.items
+    let members = actor.items
       .filter((itm) => itm.type === "family")
       .filter((itm) => [type1, type2].includes(itm.system.relation));
     if (maternalCheck === "maternal") {
-      members = await members.filter((itm) => itm.system.maternal);
+      members = members.filter((itm) => itm.system.maternal);
     } else if (maternalCheck === "paternal") {
-      members = await members.filter((itm) => !itm.system.maternal);
+      members = members.filter((itm) => !itm.system.maternal);
     }
     return members;
   }
@@ -413,7 +412,7 @@ export class PENCreateFamily {
 
   //Delete Family members created this way
   static async deleteFamily(actor) {
-    let members = await actor.items
+    let members = actor.items
       .filter((itm) => itm.type === "family")
       .filter((itm) => itm.system.source === "createFamily");
     await actor.deleteEmbeddedDocuments(
