@@ -278,7 +278,6 @@ export class PENCreateFamily {
     maternalCheck = "",
   ) {
     let resultString = "";
-    let died = null;
     let maternal = false;
     if (maternalCheck === "maternal") maternal = true;
     let members = [];
@@ -292,6 +291,7 @@ export class PENCreateFamily {
       let bornResults = await PENUtilities.complexDiceRoll(ageGap);
       let birth = Math.min(bornResults.total + born, game.time.components.year);
       born = birth;
+      let died = null;
       if (diedChance > 0) {
         let diedResults = await PENUtilities.complexDiceRoll("1D6");
         if (diedResults.total <= diedChance) {
