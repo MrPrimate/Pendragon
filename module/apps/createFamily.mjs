@@ -2,6 +2,8 @@ import { PENCharCreateV2 } from "./charCreateV2.mjs";
 import { PENUtilities } from "./utilities.mjs";
 
 export class PENCreateFamily {
+  static FEMALE_RELATIONS = ["mother", "sister", "aunt", "grandmother", "daughter", "granddaughter"];
+
   //Start the process with an actor
   static async startFamily(actor) {
     let addCousins = game.settings.get("Pendragon", "createCousins");
@@ -302,34 +304,21 @@ export class PENCreateFamily {
         }
       }
 
+      //Cousins can be either
+      let female = this.FEMALE_RELATIONS.includes(type);
+      if (type === "cousin") {
+        let genderRoll = await new Roll("1D2").evaluate();
+        female = genderRoll.total === 2;
+      }
+
       let memberName = game.i18n.localize("PEN.familyRelationship." + type);
       //If game setting to roll random names
       if (this.nameTables) {
-        let maleTable = this.nameTables.male;
-        let femaleTable = this.nameTables.female;
-        if (maleTable && femaleTable) {
-          let table = maleTable;
-          switch (type) {
-            case "mother":
-            case "sister":
-            case "aunt":
-            case "grandmother":
-            case "daughter":
-              table = femaleTable;
-              break;
-            case "cousin":
-              let tableRoll = new Roll("1D2");
-              let genderTable = await tableRoll.evaluate();
-              if (genderTable.total === 2) table = femaleTable;
-              break;
-          }
-          let nameTableOut = await PENCharCreateV2.makeTableRoll(table);
-          if (nameTableOut) {
-            let n2Roll = nameTableOut?.tableResults?.results[0]?.name;
-            if (n2Roll) {
-              memberName = n2Roll;
-            }
-          }
+        let table = female ? this.nameTables.female : this.nameTables.male;
+        let nameTableOut = await PENCharCreateV2.makeTableRoll(table);
+        let n2Roll = nameTableOut?.tableResults?.results[0]?.name;
+        if (n2Roll) {
+          memberName = n2Roll;
         }
       }
       members.push({
@@ -338,6 +327,7 @@ export class PENCreateFamily {
         system: {
           born: birth,
           relation: type,
+          gender: game.i18n.localize(female ? "PEN.female" : "PEN.male"),
           died: died,
           source: "createFamily",
           maternal: maternal,
