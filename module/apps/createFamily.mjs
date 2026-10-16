@@ -33,23 +33,23 @@ export class PENCreateFamily {
     let msgString = "<h5>" + game.i18n.localize("PEN.familyCreate.title") + "</h5>";
 
     //Siblings - calculate first to generate youngest age
-    msgString += "<div><strong>" + game.i18n.localize("PEN.familyCreate.siblings") + "</strong>: ";
+    msgString += this.headingString("PEN.familyCreate.siblings");
     let lastSibling = yearBorn;
     let siblings = this.checkFamily(actor, "brother", "sister");
     if (siblings.length > 0) {
       let youngest = await this.checkAges(actor, siblings, "1D6", yearBorn);
       if (!youngest) return false;
       lastSibling = youngest;
-      msgString += game.i18n.localize("PEN.familyCreate.alreadyExist") + "</div>";
+      msgString += this.lineString(game.i18n.localize("PEN.familyCreate.alreadyExist"));
     } else {
       let results = await this.addFamily("2D3", yearBorn, "1D6", "brother", "sister", true, 0, 0);
       familyAdd = results.members;
-      msgString += "</div>" + results.resultString;
+      msgString += results.resultString;
       lastSibling = results.lastBorn;
     }
 
     //Parents - need youngest sibling age
-    msgString += "<div><strong>" + game.i18n.localize("PEN.familyCreate.parents") + "</strong>:</div> ";
+    msgString += this.headingString("PEN.familyCreate.parents");
     let father = this.checkFamily(actor, "father");
     let mother = this.checkFamily(actor, "mother");
     let fatherBorn = yearBorn - 24; //fallback year
@@ -58,32 +58,22 @@ export class PENCreateFamily {
       let youngest = await this.checkAges(actor, father, "-1D6-21", yearBorn);
       if (!youngest) return false;
       fatherBorn = youngest;
-      msgString +=
-        "<div>&nbsp&nbsp" +
-        game.i18n.localize("PEN.familyRelationship.father") +
-        ":" +
-        game.i18n.localize("PEN.familyCreate.alreadyExists") +
-        "</div>";
+      msgString += this.existsString("father");
     } else {
       let results = await this.addFamily("1", yearBorn, "-1D6-21", "father", "", false, 4, lastSibling);
       familyAdd.push(...results.members);
-      msgString += "</div>" + results.resultString;
+      msgString += results.resultString;
       fatherBorn = results.lastBorn;
     }
     if (mother.length > 0) {
       let youngest = await this.checkAges(actor, mother, "+1D3-1", fatherBorn);
       if (!youngest) return false;
       motherBorn = youngest;
-      msgString +=
-        "<div>&nbsp&nbsp" +
-        game.i18n.localize("PEN.familyRelationship.mother") +
-        ":" +
-        game.i18n.localize("PEN.familyCreate.alreadyExists") +
-        "</div>";
+      msgString += this.existsString("mother");
     } else {
       let results = await this.addFamily("1", fatherBorn, "1D3-1", "mother", "", false, 4, lastSibling);
       familyAdd.push(...results.members);
-      msgString += "</div>" + results.resultString;
+      msgString += results.resultString;
       motherBorn = results.lastBorn;
     }
 
@@ -95,40 +85,29 @@ export class PENCreateFamily {
         maternal = "maternal";
         parentBorn = motherBorn;
       }
+      let side = " (" + game.i18n.localize("PEN.familyCreate." + maternal) + ")";
 
       //Aunts/Uncles - needs parent ages to generate youngest
       //2D3 of them in total (1D3 for each of maternal & paternal). 1D6 odd = uncle, even = aunt
       //Age = father - 1D6, less 1D6 for each next one
-      msgString +=
-        "<div><strong>" +
-        game.i18n.localize("PEN.familyCreate.piblings") +
-        " (" +
-        game.i18n.localize("PEN.familyCreate." + maternal) +
-        ")" +
-        "</strong>:</div> ";
+      msgString += this.headingString("PEN.familyCreate.piblings", side);
       let lastPibling = yearBorn;
       let piblings = this.checkFamily(actor, "uncle", "aunt", maternal);
       if (piblings.length > 0) {
         let youngest = await this.checkAges(actor, piblings, "1D6", parentBorn);
         if (!youngest) return false;
         lastPibling = youngest;
-        msgString += game.i18n.localize("PEN.familyCreate.alreadyExist") + "</div>";
+        msgString += this.lineString(game.i18n.localize("PEN.familyCreate.alreadyExist"));
       } else {
         let results = await this.addFamily("1D3", parentBorn, "1D6", "uncle", "aunt", true, 0, 0, maternal);
         familyAdd.push(...results.members);
-        msgString += "</div>" + results.resultString;
+        msgString += results.resultString;
         lastPibling = results.lastBorn;
         piblings = results.members;
       }
 
       //Grandparents - need youngest aunt/uncle
-      msgString +=
-        "<div><strong>" +
-        game.i18n.localize("PEN.familyCreate.grandparents") +
-        " (" +
-        game.i18n.localize("PEN.familyCreate." + maternal) +
-        ")" +
-        "</strong>:</div> ";
+      msgString += this.headingString("PEN.familyCreate.grandparents", side);
       let grandfather = this.checkFamily(actor, "grandfather", "", maternal);
       let grandmother = this.checkFamily(actor, "grandmother", "", maternal);
       let grandfatherBorn = fatherBorn - 24; //fallback year
@@ -139,12 +118,7 @@ export class PENCreateFamily {
         let youngest = await this.checkAges(actor, grandfather, "-1D6-21", parentBorn);
         if (!youngest) return false;
         grandfatherBorn = youngest;
-        msgString +=
-          "<div>&nbsp&nbsp" +
-          game.i18n.localize("PEN.familyRelationship.grandfather") +
-          ":" +
-          game.i18n.localize("PEN.familyCreate.alreadyExists") +
-          "</div>";
+        msgString += this.existsString("grandfather");
       } else {
         let results = await this.addFamily(
           "1",
@@ -158,18 +132,13 @@ export class PENCreateFamily {
           maternal,
         );
         familyAdd.push(...results.members);
-        msgString += "</div>" + results.resultString;
+        msgString += results.resultString;
         grandfatherBorn = results.lastBorn;
       }
       if (grandmother.length > 0) {
         let youngest = await this.checkAges(actor, grandmother, "+1D3-1", grandfatherBorn);
         if (!youngest) return false;
-        msgString +=
-          "<div>&nbsp&nbsp" +
-          game.i18n.localize("PEN.familyRelationship.grandmother") +
-          ":" +
-          game.i18n.localize("PEN.familyCreate.alreadyExists") +
-          "</div>";
+        msgString += this.existsString("grandmother");
       } else {
         let results = await this.addFamily(
           "1",
@@ -183,21 +152,15 @@ export class PENCreateFamily {
           maternal,
         );
         familyAdd.push(...results.members);
-        msgString += "</div>" + results.resultString;
+        msgString += results.resultString;
       }
 
       //Now add any cousins needed
       //1D3-1 for each aunt/uncle, only those who have come of age (14+) and no older than the Player-knight
-      msgString +=
-        "<div><strong>" +
-        game.i18n.localize("PEN.familyCreate.cousins") +
-        " (" +
-        game.i18n.localize("PEN.familyCreate." + maternal) +
-        ")" +
-        "</strong>:</div> ";
+      msgString += this.headingString("PEN.familyCreate.cousins", side);
       let cousins = this.checkFamily(actor, "cousin", "", maternal);
       if (cousins.length > 0) {
-        msgString += game.i18n.localize("PEN.familyCreate.alreadyExist") + "</div>";
+        msgString += this.lineString(game.i18n.localize("PEN.familyCreate.alreadyExist"));
       } else {
         for (let pibling of piblings) {
           let results = await this.addFamily(
@@ -214,7 +177,7 @@ export class PENCreateFamily {
           );
           if (addCousins) {
             familyAdd.push(...results.members);
-            msgString += "</div>" + results.resultString;
+            msgString += results.resultString;
           }
           cousinCount += results.members.length;
         }
@@ -222,7 +185,7 @@ export class PENCreateFamily {
         //Single entry for all the cousins on this side
         if (!addCousins) {
           let memberName = game.i18n.format("PEN.familyCreate.cousinCount", { count: cousinCount });
-          msgString += "</div><div>" + memberName + "</div>";
+          msgString += this.lineString(memberName);
           if (cousinCount > 0) {
             familyAdd.push({
               type: "family",
@@ -243,7 +206,7 @@ export class PENCreateFamily {
     //Create Chat Message for Family
     await ChatMessage.create({
       content: msgString,
-      speaker: ChatMessage.getSpeaker(),
+      speaker: ChatMessage.getSpeaker({ actor }),
     });
     let newFamily = await actor.createEmbeddedDocuments("Item", familyAdd);
 
@@ -339,17 +302,18 @@ export class PENCreateFamily {
           maternal: maternal,
         },
       });
-      resultString +=
-        "<div>&nbsp&nbsp" +
+      let line =
         game.i18n.localize("PEN.familyRelationship." + type) +
         ": " +
+        memberName +
+        ", " +
         game.i18n.localize("PEN.born") +
         " " +
         birth;
       if (died != null) {
-        resultString += ", " + game.i18n.localize("PEN.died") + " " + died;
+        line += ", " + game.i18n.localize("PEN.died") + " " + died;
       }
-      resultString += "</div>";
+      resultString += this.lineString(line);
     }
     return { members, lastBorn: born, resultString };
   }
@@ -361,6 +325,23 @@ export class PENCreateFamily {
     let female = (await game.system.api.pid.fromPIDBest({ pid: "rt..female-names" }))[0];
     if (!male || !female) return false;
     return { male, female };
+  }
+
+  //Chat card helpers
+  static headingString(key, suffix = "") {
+    return "<div><strong>" + game.i18n.localize(key) + suffix + "</strong>:</div>";
+  }
+
+  static lineString(text) {
+    return "<div>&nbsp;&nbsp;" + text + "</div>";
+  }
+
+  static existsString(type) {
+    return this.lineString(
+      game.i18n.localize("PEN.familyRelationship." + type) +
+        ": " +
+        game.i18n.localize("PEN.familyCreate.alreadyExists"),
+    );
   }
 
   //Check Family Members exist
