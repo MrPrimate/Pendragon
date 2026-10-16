@@ -270,6 +270,7 @@ export class PENCreateFamily {
   //diedChance - roll under this score on 1D6 to die
   //diedBase - if died then year = 1D6 + diedBase
   //maternalCheck - if 'maternal' then set maternal to true
+  //latestBorn - members who would be born after this year are not added
   static async addFamily(
     formula,
     born,
@@ -280,6 +281,7 @@ export class PENCreateFamily {
     diedChance = 0,
     diedBase = 0,
     maternalCheck = "",
+    latestBorn = game.time.components.year,
   ) {
     let resultString = "";
     let maternal = false;
@@ -293,7 +295,9 @@ export class PENCreateFamily {
         if (genderResults.total % 2 === 0) type = second;
       }
       let bornResults = await PENUtilities.complexDiceRoll(ageGap);
-      let birth = Math.min(bornResults.total + born, game.time.components.year);
+      let birth = bornResults.total + born;
+      //Anyone else would be younger still so stop here
+      if (birth > latestBorn) break;
       born = birth;
       let died = null;
       if (diedChance > 0) {
