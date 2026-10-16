@@ -12,6 +12,11 @@ export class PENCreateFamily {
       ui.notifications.warn("PEN.familyCreate.charOnly", { localize: true });
       return false;
     }
+    //The Parents step handles inherited Glory so must be done first (unless parents already exist)
+    if (!actor.system.create.parents && this.checkFamily(actor, "father", "mother").length < 1) {
+      ui.notifications.warn("PEN.familyCreate.parentsFirst", { localize: true });
+      return false;
+    }
     //Capture Year Actor was born, if blank/zero then request it
     let yearBorn = actor.system.born;
     if (!yearBorn || yearBorn === 0) {

@@ -298,7 +298,7 @@
     {{! - Parents}}
     <li class="charcreate" data-step="addParents">
         <div class="stat-name">{{localize 'PEN.step.addParents'}}</div>
-        {{#if hasParent}}
+        {{#if system.create.parents}}
           <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
           <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>
           <div class="stat-name centre" data-action="charDelete" data-tooltip="{{localize 'PEN.resetHint'}}"><a><i class="fas fa-broom"></i></a></div>

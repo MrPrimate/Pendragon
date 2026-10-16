@@ -436,7 +436,8 @@
       "title": "Family Creation",
       "invalidFamilyType": "{type} is not a valid family relationship.  It has been ignored",
       "invalidFormula": "{formula} is an invalid Roll formula",
-      "cousinCount": "Cousins ({count})"
+      "cousinCount": "Cousins ({count})",
+      "parentsFirst": "Complete the Parents step first, it sets up inherited Glory"
     },
     "familyRelationship": {
       "aunt": "Aunt",

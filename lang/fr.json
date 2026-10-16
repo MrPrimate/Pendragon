@@ -433,7 +433,8 @@
       "title": "Création de famille",
       "invalidFamilyType": "{type} n'est pas un lien familial valide. Il a été ignoré",
       "invalidFormula": "{formula} n'est pas une formule de lancer valide",
-      "cousinCount": "Cousins ({count})"
+      "cousinCount": "Cousins ({count})",
+      "parentsFirst": "Terminez d'abord l'étape Parents, elle définit la Gloire héritée"
     },
     "familyRelationship": {
       "aunt": "Tante",
