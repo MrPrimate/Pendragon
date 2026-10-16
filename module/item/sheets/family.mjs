@@ -51,7 +51,11 @@ export class PendragonFamilySheet extends PendragonItemSheet {
       sheetData.relationType[relation] = game.i18n.localize("PEN.familyRelationship." + relation);
     }
     sheetData.showParental = false;
-    if (["uncle", "aunt", "grandfather", "grandmother"].includes(this.item.system.relation)) {
+    if (
+      ["uncle", "aunt", "pibling", "grandfather", "grandmother", "grandparent", "cousin"].includes(
+        this.item.system.relation,
+      )
+    ) {
       sheetData.showParental = true;
     }
 
