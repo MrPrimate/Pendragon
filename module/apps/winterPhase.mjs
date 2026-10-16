@@ -1944,13 +1944,11 @@ export class PENWinter {
         if (newFamily.status === "dies") {
           died = PENWinter.winterYear(actor);
         }
-        relation = "son";
-        if (gender === "female") relation = "daughter";
         const itemData = {
           name: newFamily.name,
           type: "family",
           system: {
-            relation: relation,
+            relation: newFamily.gender === "female" ? "daughter" : "son",
             gender: newFamily.genderLabel,
             born: PENWinter.winterYear(actor),
             died: died,
