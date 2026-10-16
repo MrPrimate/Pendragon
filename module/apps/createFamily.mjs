@@ -317,7 +317,7 @@ export class PENCreateFamily {
               break;
             case "cousin":
               let tableRoll = new Roll("1D2");
-              let genderTable = tableRoll.evaluate();
+              let genderTable = await tableRoll.evaluate();
               if (genderTable.total === 2) table = femaleTable;
               break;
           }
