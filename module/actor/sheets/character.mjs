@@ -679,8 +679,8 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     families.sort(function (a, b) {
       let x = a.system.born;
       let y = b.system.born;
-      let p = a.system.died;
-      let q = b.system.died;
+      let p = Number(a.system.died) > 0 ? 1 : 0;
+      let q = Number(b.system.died) > 0 ? 1 : 0;
       if (p < q) {
         return -1;
       }
