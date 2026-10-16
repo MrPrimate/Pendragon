@@ -11,7 +11,7 @@ export class PendragonCultureSheet extends PendragonItemSheet {
   static DEFAULT_OPTIONS = {
     position: {
       width: 560,
-      height: 520,
+      height: 600,
     },
     actions: {
       deleteItem: PendragonCultureSheet.#deleteItem,
@@ -50,6 +50,7 @@ export class PendragonCultureSheet extends PendragonItemSheet {
     };
     const itemData = sheetData.item;
     const skills = [];
+    const religionTables = [];
     for (let skill of itemData.system.skills) {
       let valid = true;
       if ((await game.system.api.pid.fromPIDBest({ pid: skill.pid })).length < 1) {
@@ -58,7 +59,33 @@ export class PendragonCultureSheet extends PendragonItemSheet {
       skills.push({ name: skill.name, uuid: skill.uuid, pid: skill.pid, valid: valid });
     }
 
+    for (let religionTable of itemData.system.religionTables) {
+      let displayName = religionTable.name;
+      let thisTable = (await game.system.api.pid.fromPIDBest({ pid: religionTable.pid }))[0];
+      //If no hit on PID then use UUID
+      if (!thisTable) {
+        thisTable = await fromUuid(religionTable.uuid);
+      }
+
+      if (thisTable) {
+        religionTables.push({
+          name: thisTable.name,
+          uuid: thisTable.uuid,
+          pid: thisTable.pid,
+          table: thisTable,
+        });
+      } else {
+        religionTables.push({
+          name: religionTable.name + " [" + game.i18n.localize("PEN.invalid") + "]",
+          uuid: religionTable.uuid,
+          pid: religionTable.pid,
+          table: false,
+        });
+      }
+    }
+
     sheetData.skills = skills.sort(PENUtilities.sortByNameKey);
+    sheetData.religionTables = religionTables
 
     // these two values could be set during _preparePartContext
     sheetData.enrichedDescriptionValue = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
@@ -130,6 +157,11 @@ export class PendragonCultureSheet extends PendragonItemSheet {
     event.stopPropagation();
     const type = "skill";
     const collectionName = event.currentTarget.dataset.collection ?? "skills";
+    if (collectionName === 'religionTables') {
+      const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
+      await this.DropRollTable(data)
+      return
+    }
     const dataList = await PENUtilities.getDataFromDropEvent(event, "Item");
     const collection = this.item.system[collectionName]
       ? foundry.utils.duplicate(this.item.system[collectionName])
@@ -164,11 +196,43 @@ export class PendragonCultureSheet extends PendragonItemSheet {
     await this.item.update({ [`system.${collectionName}`]: collection });
   }
 
-  //Delete an trait from the collection
+  //Delete an item from the collection
   static async #deleteItem(event, target) {
-    const { itemId } = target.closest("[data-item-id]")?.dataset ?? {};
-    const { collection } = target.closest("[data-collection]").dataset ?? {};
-    const coll = this.item.system[collection] ?? [];
-    await this.item.update({ [`system.${collection}`]: coll.filter((itm) => itm.uuid != itemId) });
+    if (event.detail === 2) {
+      const { itemId } = target.closest("[data-item-id]")?.dataset ?? {};
+      const { collection } = target.closest("[data-collection]").dataset ?? {};
+      const coll = this.item.system[collection] ?? [];
+      await this.item.update({ [`system.${collection}`]: coll.filter((itm) => itm.uuid != itemId) });
+    }
   }
+
+  //Drop Roll Table on Actor Sheet
+  async DropRollTable(data) {
+    let newTable = await fromUuid(data.uuid);
+    if (!newTable) {
+      return;
+    }
+    //Check for PID
+    let npid = newTable.flags?.Pendragon?.pidFlag?.id;
+    if (!npid) {
+      ui.notifications.warn(game.i18n.format("PEN.PIDFlag.noPIDFlag", { itemName: newTable.name }));
+      return;
+    }
+    //Check if there already is a rollable table
+    const religionTables = this.item.system.religionTables
+      ? foundry.utils.duplicate(this.item.system.religionTables)
+      : [];
+    if (religionTables.length > 0) {
+      ui.notifications.warn(game.i18n.format("PEN.dupItemType", { name: game.i18n.localize("DOCUMENT.RollTable") }));
+      return;
+    }
+    religionTables.push({
+      name: newTable.name,
+      uuid: data.uuid,
+      pid: newTable.flags?.Pendragon?.pidFlag?.id ?? "",
+    });
+    await this.item.update({ "system.religionTables": religionTables });
+    return;
+  }
+
 }

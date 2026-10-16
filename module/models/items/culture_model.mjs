@@ -1,10 +1,17 @@
-const { HTMLField, SchemaField, NumberField, StringField, FilePathField, ArrayField, BooleanField, DataField } =
+const { HTMLField, SchemaField, NumberField, StringField, FilePathField, ArrayField, BooleanField, DataField, DocumentUUIDField } =
   foundry.data.fields;
 
 export class CultureData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     const requiredInteger = { required: true, nullable: false, integer: true };
     return {
+      religionTables: new ArrayField(
+        new SchemaField({
+          name: new StringField({}),
+          pid: new StringField({}),
+          uuid: new DocumentUUIDField({ type: "RollTable" }),
+        }),
+      ),
       source: new StringField({ initial: "" }),
       description: new StringField({ required: true, blank: true, initial: "" }),
       GMdescription: new StringField({ required: true, blank: true, initial: "" }),

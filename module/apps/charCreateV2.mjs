@@ -661,8 +661,25 @@ export class PENCharCreateV2 {
       if (actor.system.create.random) {
         let results = [];
 
-        //TO DO: Consider adding religion random table to Homeland and accessing that
-        let table = (await game.system.api.pid.fromPIDBest({ pid: "rt..religion" }))[0];
+        //Get the religion table from the Culture
+        if (actor.system.cultureID === "") {
+          ui.notifications.warn("PEN.noCulture", { localize: true });
+          return false
+        }
+        let culture = await actor.items.get(actor.system.cultureID)
+        let religionTable = culture.system.religionTables[0]
+        if (!religionTable) {
+          ui.notifications.warn("PEN.religionTableMissing", { localize: true });
+          return false
+        }
+        let table = (await game.system.api.pid.fromPIDBest({ pid: religionTable.pid }))[0];
+        if (!table) {
+          table = await fromUuid(religionTable.uuid)
+        }
+        if (!table) {
+          ui.notifications.warn("PEN.religionTableMissing", { localize: true });
+          return false
+        }
         const religResults = await PENUtilities.tableDiceRoll(table);
         const doc = await this.documentFromResult(religResults.results[0]);
         if (!doc) {
