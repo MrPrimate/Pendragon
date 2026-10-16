@@ -144,7 +144,7 @@ export class PENCreateFamily {
       } else {
         let results = await this.addFamily(
           "1",
-          fatherBorn,
+          parentBorn,
           "-1D6-21",
           "grandfather",
           "",
