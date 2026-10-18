@@ -133,53 +133,56 @@ export async function squireBornUpdate() {
 }
 
 //Change family relationship data for more detailed entries
-//If female/femme use female version otherwise assume male.
+//Gender is free text so only switch to the male/female version when it is recognised, otherwise keep the neutral relation
 export async function familyRelationUpdate() {
   console.log("Family Relationship update started");
-  for (let actor of game.actors) {
-    if (actor.type != "character") continue;
-    let family = await actor.items.filter((itm) => itm.type === "family");
-    if (family.length < 1) continue;
-    let updates = [];
-    for (let item of family) {
-      let gender = item.system.gender.toLowerCase();
-      let relation = "";
-      switch (item.system.relation) {
-        case "parent":
-          relation = "father";
-          if (["female", "femme"].includes(gender)) relation = "mother";
-          break;
-        case "grandparent":
-          relation = "grandfather";
-          if (["female", "femme"].includes(gender)) relation = "grandmother";
-          break;
-        case "sibling":
-          relation = "brother";
-          if (["female", "femme"].includes(gender)) relation = "sister";
-          break;
-        case "pibling":
-          relation = "uncle";
-          if (["female", "femme"].includes(gender)) relation = "aunt";
-          break;
-        case "child":
-          relation = "son";
-          if (["female", "femme"].includes(gender)) relation = "daughter";
-          break;
-        case "grandchild":
-          relation = "grandson";
-          if (["female", "femme"].includes(gender)) relation = "granddaughter";
-          break;
-        default:
-          continue;
-          break;
-      }
-      if (relation != "") {
-        updates.push({ _id: item.id, "system.relation": relation });
-      }
-    }
-    await Item.updateDocuments(updates, { parent: actor });
+  for (const actor of game.actors) {
+    if (actor.type !== "character") continue;
+    await familyRelationUpdateItems(actor, actor.items);
   }
   console.log("Family Relationship update complete");
+}
+
+const FAMILY_GENDERED_RELATIONS = {
+  parent: ["father", "mother"],
+  grandparent: ["grandfather", "grandmother"],
+  sibling: ["brother", "sister"],
+  pibling: ["uncle", "aunt"],
+  child: ["son", "daughter"],
+  grandchild: ["grandson", "granddaughter"],
+};
+
+//Returns "male", "female" or "" from a free text gender
+function familyGender(text) {
+  const gender = (text ?? "").trim().toLowerCase();
+  if (!gender) return "";
+  const female = ["female", "femme", "f", "woman", "w", "lady", "dame", "girl", "mother", "feminine"];
+  const male = ["male", "mâle", "homme", "m", "man", "lord", "sir", "boy", "father", "masculine"];
+  for (const lang of ["PEN.female", "PEN.male"]) {
+    const label = game.i18n.localize(lang).toLowerCase();
+    if (gender === label) return lang === "PEN.female" ? "female" : "male";
+  }
+  if (female.includes(gender)) return "female";
+  if (male.includes(gender)) return "male";
+  return "";
+}
+
+async function familyRelationUpdateItems(actor, items) {
+  const updates = [];
+  for (const item of items) {
+    if (item.type !== "family") continue;
+    const options = FAMILY_GENDERED_RELATIONS[item.system.relation];
+    if (!options) continue;
+    const gender = familyGender(item.system.gender);
+    if (gender === "male") {
+      updates.push({ _id: item.id, "system.relation": options[0] });
+    } else if (gender === "female") {
+      updates.push({ _id: item.id, "system.relation": options[1] });
+    }
+  }
+  if (updates.length > 0) {
+    await Item.updateDocuments(updates, { parent: actor });
+  }
 }
 
 async function squireBornUpdateItems(actor, items) {

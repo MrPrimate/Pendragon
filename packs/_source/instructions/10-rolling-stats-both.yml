@@ -190,9 +190,9 @@ pages:
         <p>If you want to make a roll with no penalty/bonus hold Shift key and
         click the relevant skill, characteristic etc.</p><p>The relevant roll
         will be made but without the bonus/penalty box appearing it.</p><p>There
-        is a
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.7U9pKyQCsPrhgwnl.JournalEntryPage.8JRDCc5CePLRMFxN]{SHIFT
-        key} game setting which changes this default behaviour.</p>
+        is a <a href="https://github.com/cragstone/Pendragon/wiki/Game-Settings"
+        target="_blank" rel="noopener">SHIFT key</a> game setting which changes
+        this default behaviour.</p>
     video:
       controls: true
       volume: 0.5
@@ -576,9 +576,9 @@ pages:
         Roll</p></td><td data-colwidth="177"><p style="text-align:center">Fixed
         Opposed Roll</p></td></tr></tbody></table><p>Using
         <strong>SHIFT</strong> by default ignores the dialogue box and using the
-        default settings. You can reverse this in the game settings
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.7U9pKyQCsPrhgwnl.JournalEntryPage.8JRDCc5CePLRMFxN]{SHIFT
-        key}</p>
+        default settings. You can reverse this in the game settings <a
+        href="https://github.com/cragstone/Pendragon/wiki/Game-Settings"
+        target="_blank" rel="noopener">SHIFT key</a></p>
       markdown: ''
     video:
       controls: true

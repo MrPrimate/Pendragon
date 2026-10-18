@@ -45,8 +45,17 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     };
 
     sheetData.relationType = PENSelectLists.getRelationTypes();
+    //Older relations (e.g. parent) are no longer offered, but keep the current one so the dropdown still shows it
+    const relation = this.item.system.relation;
+    if (relation && !(relation in sheetData.relationType)) {
+      sheetData.relationType[relation] = game.i18n.localize("PEN.familyRelationship." + relation);
+    }
     sheetData.showParental = false;
-    if (["uncle", "aunt", "grandfather", "grandmother"].includes(this.item.system.relation)) {
+    if (
+      ["uncle", "aunt", "pibling", "grandfather", "grandmother", "grandparent", "cousin"].includes(
+        this.item.system.relation,
+      )
+    ) {
       sheetData.showParental = true;
     }
 

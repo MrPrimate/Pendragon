@@ -2077,7 +2077,7 @@ export class PENCharCreateV2 {
   static async removeParents(actor) {
     let parents = await actor.items
       .filter((itm) => itm.type === "family")
-      .filter((itm) => ["father", "mother"].includes(itm.system.relation))
+      .filter((itm) => ["father", "mother", "parent"].includes(itm.system.relation))
       .map((itm) => {
         return itm.id;
       });
@@ -2319,7 +2319,7 @@ export class PENCharCreateV2 {
       await PENCreateFamily.deleteFamily(actor);
       ui.notifications.warn(actor.name + ": " + game.i18n.localize("PEN.undo." + step));
     } else {
-      let result = PENCreateFamily.startFamily(actor);
+      let result = await PENCreateFamily.startFamily(actor);
       if (!result) {
         return;
       }

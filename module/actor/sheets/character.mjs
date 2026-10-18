@@ -268,8 +268,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     context.hasFamily = false;
     context.hasTraits = false;
     context.hasParentPassion = false;
-    context.hasParent = await this._hasParents(this.actor);
-    context.hasFamilyMembers = await this._hasFamilyMembers(this.actor);
+    context.hasFamilyMembers = this._hasFamilyMembers(this.actor);
     context.hasPSP = false;
     context.hasEquip = false;
     context.hasLuck = false;
@@ -679,8 +678,8 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     families.sort(function (a, b) {
       let x = a.system.born;
       let y = b.system.born;
-      let p = a.system.died;
-      let q = b.system.died;
+      let p = Number(a.system.died) > 0 ? 1 : 0;
+      let q = Number(b.system.died) > 0 ? 1 : 0;
       if (p < q) {
         return -1;
       }
@@ -734,20 +733,9 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     context.followers = followers;
   }
 
-  async _hasParents(actor) {
-    // Returns true if actor has a family item with relation 'father' or 'mother'
-    const hasParent = await actor.items.some(
-      (itm) => itm.type === "family" && ["father", "mother"].includes(itm.system.relation),
-    );
-    return hasParent;
-  }
-
-  async _hasFamilyMembers(actor) {
-    // Returns true if actor has a family item with source of "familyCreate"
-    const hasFamilyMembers = await actor.items.some(
-      (itm) => itm.type === "family" && ["createFamily"].includes(itm.system.source),
-    );
-    return hasFamilyMembers;
+  _hasFamilyMembers(actor) {
+    // Returns true if actor has a family item with source of "createFamily"
+    return actor.items.some((itm) => itm.type === "family" && itm.system.source === "createFamily");
   }
 
   /* --------------------------------ACTIONS--------------------- */

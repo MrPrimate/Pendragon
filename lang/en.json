@@ -435,7 +435,9 @@
       "alreadyExists": "Already exists",
       "title": "Family Creation",
       "invalidFamilyType": "{type} is not a valid family relationship.  It has been ignored",
-      "invalidFormula": "{formula} is an invalid Roll formula"
+      "invalidFormula": "{formula} is an invalid Roll formula",
+      "cousinCount": "Cousins ({count})",
+      "parentsFirst": "Complete the Parents step first, it sets up inherited Glory"
     },
     "familyRelationship": {
       "aunt": "Aunt",
@@ -1343,7 +1345,7 @@
       "addArchetype": "Archetype reset",
       "addClass": "Class reset",
       "addEquip": "Starting equipment removed",
-      "addFamily": "Family removed except parents",
+      "addFamily": "Generated family members removed",
       "addGender": "Character Gender reset",
       "addHeir": "Heir status reset",
       "addHome": "Home reset",

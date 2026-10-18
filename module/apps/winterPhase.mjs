@@ -1538,7 +1538,6 @@ export class PENWinter {
 
       let birthLabel = "";
       let gender = "";
-      let relation = "son";
       //Resolve the outcome of the Birth Result
       switch (birthRes) {
         case -1: //Auto Fail - chance <= 0
@@ -1635,15 +1634,12 @@ export class PENWinter {
             }
           }
           //Add any children to the newborn list
-          relation = "son";
-          if (gender === "female") relation = "daughter";
           if (!childDies && !noChild) {
             newborn.push({
               name: game.i18n.localize("PEN.child"),
               gender: gender,
               genderLabel: game.i18n.localize("PEN." + gender),
               status: "lives",
-              relation: relation,
               notes: "",
               blessed: false,
             });
@@ -1653,7 +1649,6 @@ export class PENWinter {
               gender: gender,
               genderLabel: game.i18n.localize("PEN." + gender),
               status: "dies",
-              relation: relation,
               notes: game.i18n.localize("PEN.died"),
               blessed: false,
             });
@@ -1672,14 +1667,11 @@ export class PENWinter {
               gender = "male";
             }
           }
-          relation = "son";
-          if (gender === "female") relation = "daughter";
           newborn.push({
             name: game.i18n.localize("PEN.child"),
             gender: gender,
             genderLabel: game.i18n.localize("PEN." + gender),
             status: "lives",
-            relation: relation,
             notes: "",
             blessed: false,
           });
@@ -1699,7 +1691,6 @@ export class PENWinter {
                 gender: "male",
                 genderLabel: game.i18n.localize("PEN.male"),
                 status: "lives",
-                relation: "son",
                 notes: birthLabel,
                 blessed: false,
               });
@@ -1708,7 +1699,6 @@ export class PENWinter {
                 gender: "female",
                 genderLabel: game.i18n.localize("PEN.female"),
                 status: "lives",
-                relation: "daughter",
                 notes: birthLabel,
                 blessed: false,
               });
@@ -1717,14 +1707,11 @@ export class PENWinter {
               if (gender === "") {
                 gender = "female";
               }
-              relation = "son";
-              if (gender === "female") relation = "daughter";
               newborn.push({
                 name: game.i18n.localize("PEN.child"),
                 gender: gender,
                 genderLabel: game.i18n.localize("PEN." + gender),
                 status: "lives",
-                relation: relation,
                 notes: birthLabel,
                 blessed: false,
               });
@@ -1733,7 +1720,6 @@ export class PENWinter {
                 gender: gender,
                 genderLabel: game.i18n.localize("PEN." + gender),
                 status: "lives",
-                relation: relation,
                 notes: birthLabel,
                 blessed: false,
               });
@@ -1742,14 +1728,11 @@ export class PENWinter {
               if (gender === "") {
                 gender = "male";
               }
-              relation = "son";
-              if (gender === "female") relation = "daughter";
               newborn.push({
                 name: game.i18n.localize("PEN.child"),
                 gender: gender,
                 genderLabel: game.i18n.localize("PEN." + gender),
                 status: "lives",
-                relation: relation,
                 notes: birthLabel,
                 blessed: false,
               });
@@ -1758,7 +1741,6 @@ export class PENWinter {
                 gender: gender,
                 genderLabel: game.i18n.localize("PEN." + gender),
                 status: "lives",
-                relation: relation,
                 notes: birthLabel,
                 blessed: false,
               });
@@ -1767,14 +1749,11 @@ export class PENWinter {
               if (gender === "") {
                 gender = "female";
               }
-              relation = "son";
-              if (gender === "female") relation = "daughter";
               newborn.push({
                 name: game.i18n.localize("PEN.child"),
                 gender: gender,
                 genderLabel: game.i18n.localize("PEN." + gender),
                 status: "lives",
-                relation: relation,
                 notes: birthLabel,
                 blessed: false,
               });
@@ -1783,7 +1762,6 @@ export class PENWinter {
                 gender: gender,
                 genderLabel: game.i18n.localize("PEN." + gender),
                 status: "lives",
-                relation: relation,
                 notes: birthLabel,
                 blessed: false,
               });
@@ -1792,14 +1770,11 @@ export class PENWinter {
               if (gender === "") {
                 gender = "male";
               }
-              relation = "son";
-              if (gender === "female") relation = "daughter";
               newborn.push({
                 name: game.i18n.localize("PEN.child"),
                 gender: gender,
                 genderLabel: game.i18n.localize("PEN." + gender),
                 status: "lives",
-                relation: relation,
                 notes: birthLabel,
                 blessed: false,
               });
@@ -1808,7 +1783,6 @@ export class PENWinter {
                 gender: gender,
                 genderLabel: game.i18n.localize("PEN." + gender),
                 status: "lives",
-                relation: relation,
                 notes: birthLabel,
                 blessed: false,
               });
@@ -1844,8 +1818,6 @@ export class PENWinter {
                   triplets[0].gender = gender;
                 }
               }
-              relation = "son";
-              if (gender === "female") relation = "daughter";
               birthLabel = game.i18n.localize("PEN.triplets");
               if (identical) birthLabel = game.i18n.localize("PEN.tripletsIdentical");
               newborn.push({
@@ -1853,7 +1825,6 @@ export class PENWinter {
                 gender: triplets[0].gender,
                 genderLabel: game.i18n.localize("PEN." + triplets[0].gender),
                 status: "lives",
-                relation: relation,
                 notes: birthLabel,
                 blessed: false,
               });
@@ -1862,7 +1833,6 @@ export class PENWinter {
                 gender: triplets[1].gender,
                 genderLabel: game.i18n.localize("PEN." + triplets[1].gender),
                 status: "lives",
-                relation: relation,
                 notes: birthLabel,
                 blessed: false,
               });
@@ -1871,7 +1841,6 @@ export class PENWinter {
                 gender: triplets[2].gender,
                 genderLabel: game.i18n.localize("PEN." + triplets[2].gender),
                 status: "lives",
-                relation: relation,
                 notes: birthLabel,
                 blessed: false,
               });
@@ -1897,14 +1866,11 @@ export class PENWinter {
                 gender = "male";
               }
             }
-            relation = "son";
-            if (gender === "female") relation = "daughter";
             newborn.push({
               name: game.i18n.localize("PEN.child"),
               gender: gender,
               genderLabel: game.i18n.localize("PEN." + gender),
               status: "lives",
-              relation: relation,
               notes: notes,
               blessed: true,
             });
@@ -1944,13 +1910,11 @@ export class PENWinter {
         if (newFamily.status === "dies") {
           died = PENWinter.winterYear(actor);
         }
-        relation = "son";
-        if (gender === "female") relation = "daughter";
         const itemData = {
           name: newFamily.name,
           type: "family",
           system: {
-            relation: relation,
+            relation: newFamily.gender === "female" ? "daughter" : "son",
             gender: newFamily.genderLabel,
             born: PENWinter.winterYear(actor),
             died: died,

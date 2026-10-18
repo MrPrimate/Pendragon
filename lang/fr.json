@@ -432,7 +432,9 @@
       "alreadyExists": "Existe déjà",
       "title": "Création de famille",
       "invalidFamilyType": "{type} n'est pas un lien familial valide. Il a été ignoré",
-      "invalidFormula": "{formula} n'est pas une formule de lancer valide"
+      "invalidFormula": "{formula} n'est pas une formule de lancer valide",
+      "cousinCount": "Cousins ({count})",
+      "parentsFirst": "Terminez d'abord l'étape Parents, elle définit la Gloire héritée"
     },
     "familyRelationship": {
       "aunt": "Tante",
@@ -1341,7 +1343,7 @@
       "createMethod": "Méthode de création réinitialisée",
       "addParents": "Parents supprimés",
       "addCulture": "Culture supprimée",
-      "addFamily": "Famille supprimée sauf les parents",
+      "addFamily": "Membres de la famille générés supprimés",
       "addStats": "Caractéristiques réinitialisée",
       "addReligion": "Religion supprimée",
       "addTraits": "Traits réinitialisés",

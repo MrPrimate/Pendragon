@@ -16,13 +16,13 @@ pages:
         <p>There are three ways to create a character which you can for the most
         part, mix and match
         from.</p><p><br></p><p>@UUID[.I3Tr0BSAlnHvBWE5]</p><p>@UUID[.f6IHJxAmKbOjzRJz]</p><p>@UUID[.T83N26BqSr7jw5Na]</p><p><br></p><p>Whilst
-        in
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.CJhCwQigLrJhBBQF.JournalEntryPage.OmYmAHWltBg0sVQO]{Creation
-        Mode} your Traits, Passions and Skills tabs will show a list of the
-        various items with the base and other scores which you can
-        edit.</p><p>The skill tabs has a "recalculate" button at the top right
-        which will recalculate the base scores and the traits tab has a dice
-        icon to re-roll the starting scores.</p>
+        in <a href="https://github.com/cragstone/Pendragon/wiki/GM-Tools"
+        target="_blank" rel="noopener">Creation Mode</a> your Traits, Passions
+        and Skills tabs will show a list of the various items with the base and
+        other scores which you can edit.</p><p>The skill tabs has a
+        "recalculate" button at the top right which will recalculate the base
+        scores and the traits tab has a dice icon to re-roll the starting
+        scores.</p>
     video:
       controls: true
       volume: 0.5
@@ -54,28 +54,29 @@ pages:
       format: 1
       content: >-
         <p>In this method you will edit everything manually.</p><ul><li><p>Ask
-        the GM to turn
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.CJhCwQigLrJhBBQF.JournalEntryPage.OmYmAHWltBg0sVQO]{Character
-        Creation} mode on</p></li><li><p>Ask the GM to create a new actor in
-        Foundry and choose 'Character' as the type and assign ownership to
-        you</p></li><li><p>You can enter your characteristics or roll them on
-        the
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.b5d7Ha8LOeLSNvul.JournalEntryPage.qLYS7miTa5T31GYn]{Stats
-        Tab}.  The red dice to the right of the stats tab will roll the stats
-        for you and produce a chat message.  The dice icon will turn grey - if
-        your GM clicks the grey dice icon it will reset to red letting a player
-        re-roll their stats.</p></li><li><p>Creating the character will
-        automatically add Skills, Traits and Passions to the character
-        sheet</p></li><li><p>Unlock the character sheet</p></li><li><p>Follow
-        the character creation method from the Players Guide going to the
-        appropriate tabs to enter the stats.</p></li><li><p>On the Skills tab
-        there are two arrows forming a circle to the right of the skills list. 
-        Clicking on this will calculate the character base skill
-        scores.</p></li><li><p>You will need to enter stats, bonuses and the
-        like yourself in the relevant tabs</p></li><li><p>You will also have to
-        add squires, family, equipment and History events.</p></li><li><p>Use
-        the steps listed on the "Create" tab of the character sheet as a
-        reminder of what you need to do.</p></li></ul>
+        the GM to turn <a
+        href="https://github.com/cragstone/Pendragon/wiki/GM-Tools"
+        target="_blank" rel="noopener">Character Creation</a> mode
+        on</p></li><li><p>Ask the GM to create a new actor in Foundry and choose
+        'Character' as the type and assign ownership to you</p></li><li><p>You
+        can enter your characteristics or roll them on the <a
+        href="https://github.com/cragstone/Pendragon/wiki/Character-V1:-Stats-Tab"
+        target="_blank" rel="noopener">Stats Tab</a>.  The red dice to the right
+        of the stats tab will roll the stats for you and produce a chat
+        message.  The dice icon will turn grey - if your GM clicks the grey dice
+        icon it will reset to red letting a player re-roll their
+        stats.</p></li><li><p>Creating the character will automatically add
+        Skills, Traits and Passions to the character sheet</p></li><li><p>Unlock
+        the character sheet</p></li><li><p>Follow the character creation method
+        from the Players Guide going to the appropriate tabs to enter the
+        stats.</p></li><li><p>On the Skills tab there are two arrows forming a
+        circle to the right of the skills list.  Clicking on this will calculate
+        the character base skill scores.</p></li><li><p>You will need to enter
+        stats, bonuses and the like yourself in the relevant
+        tabs</p></li><li><p>You will also have to add squires, family, equipment
+        and History events.</p></li><li><p>Use the steps listed on the "Create"
+        tab of the character sheet as a reminder of what you need to
+        do.</p></li></ul>
       markdown: ''
     video:
       controls: true
@@ -106,7 +107,7 @@ pages:
     image: {}
     text:
       format: 1
-      content: "<p>In this method you will edit some things manually.</p><ul style=\"box-sizing:border-box;user-select:text;margin:0.5em 0px;padding:0px 0px 0px 1.5em\"><li><p>Ask the GM to turn @UUID[Compendium.Pendragon.instructions.JournalEntry.CJhCwQigLrJhBBQF.JournalEntryPage.OmYmAHWltBg0sVQO]{Character Creation} mode on</p></li><li><p>Ask the GM to create a new actor in Foundry and choose 'Character' as the type and assign ownership to you</p></li><li><p>Choose your Culture, Class, Homeland and Religion, dragging the relevant items to your character sheet.</p></li><li><p>Go to the\_@UUID[Compendium.Pendragon.instructions.JournalEntry.b5d7Ha8LOeLSNvul.JournalEntryPage.qLYS7miTa5T31GYn]{Stats Tab} and either select your stats values or roll them.</p></li><li><p>Whilst some equipment and bonuses are added you may need to review these and make any manual adjustments as you go</p></li><li><p>You will also have to add History events.</p></li></ul>"
+      content: "<p>In this method you will edit some things manually.</p><ul style=\"box-sizing:border-box;user-select:text;margin:0.5em 0px;padding:0px 0px 0px 1.5em\"><li><p>Ask the GM to turn <a href=\"https://github.com/cragstone/Pendragon/wiki/GM-Tools\" target=\"_blank\" rel=\"noopener\">Character Creation</a> mode on</p></li><li><p>Ask the GM to create a new actor in Foundry and choose 'Character' as the type and assign ownership to you</p></li><li><p>Choose your Culture, Class, Homeland and Religion, dragging the relevant items to your character sheet.</p></li><li><p>Go to the\_<a href=\"https://github.com/cragstone/Pendragon/wiki/Character-V1:-Stats-Tab\" target=\"_blank\" rel=\"noopener\">Stats Tab</a> and either select your stats values or roll them.</p></li><li><p>Whilst some equipment and bonuses are added you may need to review these and make any manual adjustments as you go</p></li><li><p>You will also have to add History events.</p></li></ul>"
     video:
       controls: true
       volume: 0.5
@@ -139,10 +140,11 @@ pages:
       content: >-
         <p>In this method you will be guided through the character creation
         method with much of it automated for you.</p><p>For the wizard to run
-        there needs to be several tables set up with the correct
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.gOCGw5hx6CoGK3h1.JournalEntryPage.9XSOOqLUjc6FpTzQ]{PIDs}.</p><p>If
-        you have the <em>Pendragon Core Rulebook</em> module from Foundry these
-        are included.</p><p><strong>If you don't have the module you will
+        there needs to be several tables set up with the correct <a
+        href="https://github.com/cragstone/Pendragon/wiki/Pendragon-IDs"
+        target="_blank" rel="noopener">PIDs</a>.</p><p>If you have the
+        <em>Pendragon Core Rulebook</em> module from Foundry these are
+        included.</p><p><strong>If you don't have the module you will
         need:</strong></p><table><tbody><tr
         style="box-sizing:border-box;user-select:text"><td data-colwidth="237"
         style="box-sizing:border-box;user-select:text;padding:0.25em 0px 0.25em
@@ -218,15 +220,16 @@ pages:
         drag the skills listed under Cultural Skill modifiers on Page 52 on to
         the item.</p></li></ul><p><strong>Once you have all the items and tables
         either by setting them up or from the Core Rulebook
-        module</strong></p><ul><li><p>Ask the GM to turn
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.CJhCwQigLrJhBBQF.JournalEntryPage.OmYmAHWltBg0sVQO]{Character
-        Creation mode} on</p></li><li><p>Ask the GM to create a new actor in
-        Foundry and choose 'Character' as the type and assign ownership to
-        you</p></li><li><p>You should see a new tab on the character sheet
-        called "Create".  The tab lists the steps and it's recommended that you
-        follow them in order.</p></li><li><p>For each step you will see the step
-        name, a number of icons and a note</p></li><li><p>The status icon is
-        either a Green Shield (step completed) or a Green Shield (step
+        module</strong></p><ul><li><p>Ask the GM to turn <a
+        href="https://github.com/cragstone/Pendragon/wiki/GM-Tools"
+        target="_blank" rel="noopener">Character Creation mode</a>
+        on</p></li><li><p>Ask the GM to create a new actor in Foundry and choose
+        'Character' as the type and assign ownership to you</p></li><li><p>You
+        should see a new tab on the character sheet called "Create".  The tab
+        lists the steps and it's recommended that you follow them in
+        order.</p></li><li><p>For each step you will see the step name, a number
+        of icons and a note</p></li><li><p>The status icon is either a Green
+        Shield (step completed) or a Green Shield (step
         incomplete)</p></li><li><p>The Activate icon will either be red (press
         it to activate the step) or grey (you can't activate
         it)</p></li><li><p>The reset icon will be black if you have completed
@@ -318,18 +321,19 @@ pages:
         (one for each parent if they were knights)</p><p><br></p><p>You don't
         have to enter one or both parents - leave the relevant "Name" field
         blank.</p><p><br></p><p>One you've clicked the "Add Parents" button you
-        will now have them added to your Family
-        (@UUID[Compendium.Pendragon.instructions.JournalEntry.b5d7Ha8LOeLSNvul.JournalEntryPage.fRLDTfqAgmiltXyr]{House
-        Tab}) with the "Parent" type.</p><p><br></p><p>You will also have
-        History Events added - one for becoming a squire with the requisite
-        glory reward and then some "Heroic Events". If you have the Core
-        Rulebook module then the details of the heroic event will be rolled for
-        you. You will need to manually add favors, money etc that are described
-        in the heoric event. If you don't have the Core Rulebook module, you
-        will need to work with your GM to decide what the Heroic Events are.
-        Update the descriptions and make any character adjustments (you can do
-        this later).</p><p>You will also have a "Squired" History event added
-        with the appropriate Glory.<br></p><p>You can now move on to
+        will now have them added to your Family (<a
+        href="https://github.com/cragstone/Pendragon/wiki/Character-V1:-House-Tab"
+        target="_blank" rel="noopener">House Tab</a>) with the "Parent"
+        type.</p><p><br></p><p>You will also have History Events added - one for
+        becoming a squire with the requisite glory reward and then some "Heroic
+        Events". If you have the Core Rulebook module then the details of the
+        heroic event will be rolled for you. You will need to manually add
+        favors, money etc that are described in the heoric event. If you don't
+        have the Core Rulebook module, you will need to work with your GM to
+        decide what the Heroic Events are. Update the descriptions and make any
+        character adjustments (you can do this later).</p><p>You will also have
+        a "Squired" History event added with the appropriate
+        Glory.<br></p><p>You can now move on to
         @UUID[Compendium.Pendragon.instructions.JournalEntry.6oeGiTDZUL8cyL0t.JournalEntryPage.7o0M4NejqHstMwKR]{Heir}.</p>
     video:
       controls: true
@@ -364,10 +368,11 @@ pages:
         <p>The first job is to select your Culture (this will never be random).
         The list is pulled from all the cultures in the World or the
         Compendia.</p><p>This will add the Culture to the character sheet (you
-        can see it in the
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.b5d7Ha8LOeLSNvul.JournalEntryPage.jLkjoTOmE5GIIuJW]{Bio
-        Tab}) which in turn adds dice rolls and bonuses to stats and skill
-        bonuses.</p><p><br></p><p>You can now move on to
+        can see it in the <a
+        href="https://github.com/cragstone/Pendragon/wiki/Character-V1:-Bio-Tab"
+        target="_blank" rel="noopener">Bio Tab</a>) which in turn adds dice
+        rolls and bonuses to stats and skill bonuses.</p><p><br></p><p>You can
+        now move on to
         @UUID[Compendium.Pendragon.instructions.JournalEntry.6oeGiTDZUL8cyL0t.JournalEntryPage.ABAdWwribzZNPL5i]{Homeland}</p><p><br></p>
     video:
       controls: true
@@ -639,7 +644,7 @@ pages:
     image: {}
     text:
       format: 1
-      content: "<p>Again what happens next depends on what you selected in the @UUID[.mW0ixUw2wxOyHzq1] step.</p><p>If you chose <strong>Random </strong>then your family characteristic is selected randomly from the Family Characteristic table.\_ The table includes \"Gifted\".\_ A chat message is produced from the roll.</p><p>If you chose <strong>Constructed</strong> then you are presented with a list of the items on the Family Characteristic table except for \"Gifted\".</p><p>The family characteristic is added to your @UUID[Compendium.Pendragon.instructions.JournalEntry.b5d7Ha8LOeLSNvul.JournalEntryPage.jLkjoTOmE5GIIuJW]{Bio Tab} and the relevant skills are updated.</p><p><br /></p><p>You can now move on to @UUID[Compendium.Pendragon.instructions.JournalEntry.6oeGiTDZUL8cyL0t.JournalEntryPage.f1Krzt3KUJAafeck]{Skill Points}.</p><p><br class=\"Apple-interchange-newline\" /></p>"
+      content: "<p>Again what happens next depends on what you selected in the @UUID[.mW0ixUw2wxOyHzq1] step.</p><p>If you chose <strong>Random </strong>then your family characteristic is selected randomly from the Family Characteristic table.\_ The table includes \"Gifted\".\_ A chat message is produced from the roll.</p><p>If you chose <strong>Constructed</strong> then you are presented with a list of the items on the Family Characteristic table except for \"Gifted\".</p><p>The family characteristic is added to your <a href=\"https://github.com/cragstone/Pendragon/wiki/Character-V1:-Bio-Tab\" target=\"_blank\" rel=\"noopener\">Bio Tab</a> and the relevant skills are updated.</p><p><br /></p><p>You can now move on to @UUID[Compendium.Pendragon.instructions.JournalEntry.6oeGiTDZUL8cyL0t.JournalEntryPage.f1Krzt3KUJAafeck]{Skill Points}.</p><p><br class=\"Apple-interchange-newline\" /></p>"
     video:
       controls: true
       volume: 0.5
@@ -750,12 +755,12 @@ pages:
         <p>You will first be asked if you are eligible for a Luck Benefit -
         discuss this with your GM.</p><p><br></p><p>If you answered yes you will
         then roll on the "Luck Benefits table" with a chat message showing the
-        result.</p><p><br></p><p>The relevant item will be added to your
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.b5d7Ha8LOeLSNvul.JournalEntryPage.TK3AJJwLFtTGA2mH]{Equip
-        Tab} but any permanent effects will need to be adjusted manually (e.g.
-        add a Sword with +1 damage).</p><p><br></p><p>Congratulations, you have
-        now completed the character creation wizard.</p><p><br></p><p>You can
-        now move on to some
+        result.</p><p><br></p><p>The relevant item will be added to your <a
+        href="https://github.com/cragstone/Pendragon/wiki/Character-V1:-Gear-Tab"
+        target="_blank" rel="noopener">Equip Tab</a> but any permanent effects
+        will need to be adjusted manually (e.g. add a Sword with +1
+        damage).</p><p><br></p><p>Congratulations, you have now completed the
+        character creation wizard.</p><p><br></p><p>You can now move on to some
         @UUID[Compendium.Pendragon.instructions.JournalEntry.6oeGiTDZUL8cyL0t.JournalEntryPage.El5zG1GSjRQQvT8C]{Tidying
         Up} steps.</p>
     video:
@@ -830,32 +835,34 @@ pages:
       content: >-
         <p>Although the character wizard has completed there are a few things
         you may want to tidy up</p><ul><li><p>You may have had multiple spears
-        added on the
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.b5d7Ha8LOeLSNvul.JournalEntryPage.0YxsvVe0d1sSzu6F]{Combat
-        Tab}. Change the quantity on the first item and delete the
-        duplicates</p></li><li><p>Because all Passions in the game were added
-        you may have several with a zero score on the
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.b5d7Ha8LOeLSNvul.JournalEntryPage.dY9bwgsZV3XBq1Le]{Passions
-        Tab}. Delete any you don't want to keep (you can always add them back
-        later).  When the character sheet is locked any Passions with a zero
-        score are hidden.</p></li><li><p>You will probably have some Armour on
-        the
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.b5d7Ha8LOeLSNvul.JournalEntryPage.TK3AJJwLFtTGA2mH]{Equip
-        Tab}. Make sure you've equipped those you want to
-        use.</p></li><li><p>You'll also likely have some horses on the
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.b5d7Ha8LOeLSNvul.JournalEntryPage.sEG9oOq3L4kqF5uB]{Squires
-        Tab}. You may want to select one as "Ridden"</p></li><li><p>On the same
-        tab you may want to add a squire.</p></li><li><p>Amend any History
-        Events on the
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.b5d7Ha8LOeLSNvul.JournalEntryPage.8390AvE66aRvM5fJ]{Events
-        Tab} especially the "Heroic Event" items adding more
-        details.</p></li><li><p>On the
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.b5d7Ha8LOeLSNvul.JournalEntryPage.jLkjoTOmE5GIIuJW]{Bio
-        Tab} you may want to add , a Motto and your Heraldic device. You will
-        also want to give some more detail about your distinctive features. And
-        any other background you want.</p></li><li><p>Add a character
-        image.</p></li><li><p>Ensure the character sheet is
-        locked.</p></li></ul><p>You're now ready to go.</p>
+        added on the <a
+        href="https://github.com/cragstone/Pendragon/wiki/Character-V1:-Combat-Tab"
+        target="_blank" rel="noopener">Combat Tab</a>. Change the quantity on
+        the first item and delete the duplicates</p></li><li><p>Because all
+        Passions in the game were added you may have several with a zero score
+        on the <a
+        href="https://github.com/cragstone/Pendragon/wiki/Character-V1:-Passions-Tab"
+        target="_blank" rel="noopener">Passions Tab</a>. Delete any you don't
+        want to keep (you can always add them back later).  When the character
+        sheet is locked any Passions with a zero score are
+        hidden.</p></li><li><p>You will probably have some Armour on the <a
+        href="https://github.com/cragstone/Pendragon/wiki/Character-V1:-Gear-Tab"
+        target="_blank" rel="noopener">Equip Tab</a>. Make sure you've equipped
+        those you want to use.</p></li><li><p>You'll also likely have some
+        horses on the <a
+        href="https://github.com/cragstone/Pendragon/wiki/Character-V1:-House-Tab"
+        target="_blank" rel="noopener">Squires Tab</a>. You may want to select
+        one as "Ridden"</p></li><li><p>On the same tab you may want to add a
+        squire.</p></li><li><p>Amend any History Events on the <a
+        href="https://github.com/cragstone/Pendragon/wiki/Character-V1:-History-Tab"
+        target="_blank" rel="noopener">Events Tab</a> especially the "Heroic
+        Event" items adding more details.</p></li><li><p>On the <a
+        href="https://github.com/cragstone/Pendragon/wiki/Character-V1:-Bio-Tab"
+        target="_blank" rel="noopener">Bio Tab</a> you may want to add , a Motto
+        and your Heraldic device. You will also want to give some more detail
+        about your distinctive features. And any other background you
+        want.</p></li><li><p>Add a character image.</p></li><li><p>Ensure the
+        character sheet is locked.</p></li></ul><p>You're now ready to go.</p>
     video:
       controls: true
       volume: 0.5

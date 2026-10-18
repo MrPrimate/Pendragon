@@ -72,6 +72,30 @@
         </tbody>
     </table>
     {{/if}}
+    {{#if house.family.others}}
+    <table>
+        <tbody>
+          <tr>
+              <th>{{localize 'PEN.familyRelationship.other'}}</th>
+              <th>{{localize 'PEN.status'}}</th>
+              <th>{{localize 'PEN.glory'}}</th>
+          </tr>
+          {{#each house.family.others as |other key|}}
+          <tr>
+            <td>{{#if other.uuid}}<a>{{other.name}}</a>{{else}}{{other.name}}{{/if}}{{#if other.relation}} ({{other.relation}}){{/if}}</td>
+            <td>{{localize 'PEN.born'}}: {{other.born}}
+                {{#if (gt other.died 0)}}
+                {{localize 'PEN.died'}}: {{other.died}}
+                {{else}}
+                <strong>{{localize 'PEN.age'}}:</strong> {{other.age}}
+                {{/if}}
+                </td>
+            <td class="right">{{formatNumber other.glory}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+    </table>
+    {{/if}}
     </section>
     <section>
 <h2>{{localize 'PEN.station'}}</h2>
