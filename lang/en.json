@@ -1009,6 +1009,7 @@
     "religion": "Religion",
     "religiousSkill": "Religious Skill",
     "religionTable": "Starting Religion Table",
+    "religionTableDup": "This Culture already has a Starting Religion Table",
     "religionTableMissing": "No valid starting Religion Table found on Culture",
     "religiousTraits": "Religious Traits",
     "remains": "Remains",

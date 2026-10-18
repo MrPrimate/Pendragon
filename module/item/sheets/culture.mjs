@@ -223,7 +223,7 @@ export class PendragonCultureSheet extends PendragonItemSheet {
       ? foundry.utils.duplicate(this.item.system.religionTables)
       : [];
     if (religionTables.length > 0) {
-      ui.notifications.warn(game.i18n.format("PEN.dupItemType", { name: game.i18n.localize("DOCUMENT.RollTable") }));
+      ui.notifications.warn("PEN.religionTableDup", { localize: true });
       return;
     }
     religionTables.push({

@@ -1008,6 +1008,7 @@
     "religion": "Religion",
     "religiousSkill": "Compétence religieuse",
     "religionTable": "Table de religion de départ",
+    "religionTableDup": "Cette culture a déjà une table de religion de départ",
     "religionTableMissing": "Aucune table de religion valide trouvée pour la culture",
     "religiousTraits": "Traits religieux",
     "remains": "Restes",
