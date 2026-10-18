@@ -654,6 +654,18 @@ export class PENCharCreateV2 {
     return;
   }
 
+  //Get the Starting Religion Table from the actor's Culture, falling back to the default religion table
+  static async getReligionTable(actor) {
+    const culture = actor.items.get(actor.system.cultureID);
+    const religionTable = culture?.system.religionTables[0];
+    if (religionTable) {
+      const table =
+        (await game.system.api.pid.fromPIDBest({ pid: religionTable.pid }))[0] ?? (await fromUuid(religionTable.uuid));
+      if (table) return table;
+    }
+    return (await game.system.api.pid.fromPIDBest({ pid: "rt..religion" }))[0];
+  }
+
   static async addReligion(actor, religion) {
     if (!religion) {
       let itemData = "";
@@ -661,14 +673,23 @@ export class PENCharCreateV2 {
       if (actor.system.create.random) {
         let results = [];
 
-        //TO DO: Consider adding religion random table to Homeland and accessing that
-        let table = (await game.system.api.pid.fromPIDBest({ pid: "rt..religion" }))[0];
+        const table = await this.getReligionTable(actor);
+        if (!table) {
+          ui.notifications.warn("PEN.religionTableMissing", { localize: true });
+          return false;
+        }
         const religResults = await PENUtilities.tableDiceRoll(table);
         const doc = await this.documentFromResult(religResults.results[0]);
         if (!doc) {
-          return;
+          return false;
         }
-        itemData = await game.system.api.pid.fromPIDBest({ pid: doc.flags.Pendragon.pidFlag.id });
+        //Check the rolled document is a religion with a PID
+        const religionPID = doc.flags?.Pendragon?.pidFlag?.id;
+        if (doc.documentName !== "Item" || doc.type !== "religion" || !religionPID) {
+          ui.notifications.error(game.i18n.localize("PEN.notReligDoc"));
+          return false;
+        }
+        itemData = await game.system.api.pid.fromPIDBest({ pid: religionPID });
         results.push({
           name: doc.name,
           rollVal: religResults.roll.total,
