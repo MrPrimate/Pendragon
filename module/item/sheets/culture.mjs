@@ -60,7 +60,6 @@ export class PendragonCultureSheet extends PendragonItemSheet {
     }
 
     for (let religionTable of itemData.system.religionTables) {
-      let displayName = religionTable.name;
       let thisTable = (await game.system.api.pid.fromPIDBest({ pid: religionTable.pid }))[0];
       //If no hit on PID then use UUID
       if (!thisTable) {
@@ -85,7 +84,7 @@ export class PendragonCultureSheet extends PendragonItemSheet {
     }
 
     sheetData.skills = skills.sort(PENUtilities.sortByNameKey);
-    sheetData.religionTables = religionTables
+    sheetData.religionTables = religionTables;
 
     // these two values could be set during _preparePartContext
     sheetData.enrichedDescriptionValue = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
@@ -157,10 +156,10 @@ export class PendragonCultureSheet extends PendragonItemSheet {
     event.stopPropagation();
     const type = "skill";
     const collectionName = event.currentTarget.dataset.collection ?? "skills";
-    if (collectionName === 'religionTables') {
+    if (collectionName === "religionTables") {
       const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
-      await this.DropRollTable(data)
-      return
+      await this.DropRollTable(data);
+      return;
     }
     const dataList = await PENUtilities.getDataFromDropEvent(event, "Item");
     const collection = this.item.system[collectionName]
@@ -206,7 +205,7 @@ export class PendragonCultureSheet extends PendragonItemSheet {
     }
   }
 
-  //Drop Roll Table on Actor Sheet
+  //Drop a Roll Table on to the Starting Religion Table list
   async DropRollTable(data) {
     if (data.type !== "RollTable") {
       ui.notifications.warn("PEN.religionTableOnly", { localize: true });
@@ -238,5 +237,4 @@ export class PendragonCultureSheet extends PendragonItemSheet {
     await this.item.update({ "system.religionTables": religionTables });
     return;
   }
-
 }
