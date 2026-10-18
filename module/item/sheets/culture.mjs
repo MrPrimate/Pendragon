@@ -15,6 +15,7 @@ export class PendragonCultureSheet extends PendragonItemSheet {
     },
     actions: {
       deleteItem: PendragonCultureSheet.#deleteItem,
+      viewTable: PendragonCultureSheet.#viewTable,
     },
     dragDrop: [{ dropSelector: ".droppable" }],
   };
@@ -71,6 +72,7 @@ export class PendragonCultureSheet extends PendragonItemSheet {
         name: thisTable?.name ?? religionTable.name,
         uuid: religionTable.uuid,
         pid: religionTable.pid,
+        tableUuid: thisTable?.uuid ?? "",
         valid: !!thisTable,
       });
     }
@@ -195,6 +197,14 @@ export class PendragonCultureSheet extends PendragonItemSheet {
       const coll = this.item.system[collection] ?? [];
       await this.item.update({ [`system.${collection}`]: coll.filter((itm) => itm.uuid != itemId) });
     }
+  }
+
+  //Open the Starting Religion Table
+  static async #viewTable(event, target) {
+    const { tableUuid } = target.closest("[data-table-uuid]")?.dataset ?? {};
+    const table = await fromUuid(tableUuid);
+    if (!table) return;
+    table.sheet.render(true);
   }
 
   //Drop a Roll Table on to the Starting Religion Table list

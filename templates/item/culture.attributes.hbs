@@ -67,7 +67,7 @@
   <div class="horizontalboxed {{#if isGM}} droppable {{/if}} virtues" style="min-height: 20px;" data-collection = "religionTables">
     <ol class="item-list">
       {{#each religionTables as |religion|}}
-        <li class="item flexrow" data-item-id="{{religion.uuid}}" >
+        <li class="item flexrow" data-item-id="{{religion.uuid}}" data-table-uuid="{{religion.tableUuid}}">
           <div class="item-name flexrow">
             {{#if religion.valid}}
               <div class="stat-name">{{religion.name}}</div>
@@ -76,6 +76,9 @@
             {{/if}}
           </div>
           <div class="item-controls">
+            {{#if religion.valid}}
+              <a class="item-control" data-tooltip="{{localize 'PEN.view'}}" data-action="viewTable"><i class="fa-solid fa-eye"></i></a>
+            {{/if}}
             {{#if ../isGM}}
               <a class="item-control item-delete" title="{{localize 'PEN.deleteItem'}}" data-action="deleteItem"><i class="fas fa-trash"></i></a>
             {{/if}}
