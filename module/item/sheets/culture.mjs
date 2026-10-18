@@ -66,21 +66,13 @@ export class PendragonCultureSheet extends PendragonItemSheet {
         thisTable = await fromUuid(religionTable.uuid);
       }
 
-      if (thisTable) {
-        religionTables.push({
-          name: thisTable.name,
-          uuid: thisTable.uuid,
-          pid: thisTable.pid,
-          table: thisTable,
-        });
-      } else {
-        religionTables.push({
-          name: religionTable.name + " [" + game.i18n.localize("PEN.invalid") + "]",
-          uuid: religionTable.uuid,
-          pid: religionTable.pid,
-          table: false,
-        });
-      }
+      //Keep the stored UUID so the entry can be deleted even if the PID resolves to a different document
+      religionTables.push({
+        name: thisTable?.name ?? religionTable.name,
+        uuid: religionTable.uuid,
+        pid: religionTable.pid,
+        valid: !!thisTable,
+      });
     }
 
     sheetData.skills = skills.sort(PENUtilities.sortByNameKey);

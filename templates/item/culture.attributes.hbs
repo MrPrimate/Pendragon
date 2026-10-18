@@ -69,7 +69,7 @@
       {{#each religionTables as |religion|}}
         <li class="item flexrow" data-item-id="{{religion.uuid}}" >
           <div class="item-name flexrow">
-            {{#if religion.table}}
+            {{#if religion.valid}}
               <div class="stat-name">{{religion.name}}</div>
             {{else}}
               <div class="stat-name result-success">{{religion.name}} [{{localize 'PEN.invalid'}}]</div>
