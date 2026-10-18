@@ -71,7 +71,10 @@ export async function migrateWorld({ bypassVersionCheck = false } = {}) {
 
   //Migrate if current system is less than Version 14.23
   if (foundry.utils.isNewerVersion("14.23", currentVersion ?? "0")) {
+    console.log("Migration to 14.23 started");
     await squireBornUpdate();
+    await familyRelationUpdate();
+    console.log("Migration to 14.23 completed");
   }
 
   await game.settings.set("Pendragon", "systemMigrationVersion", targetVersion);
@@ -107,7 +110,7 @@ export async function equippedHandsUpdate() {
 //Squires saved before the birth year existed have it calculated from their stored age on each load, so it
 //moves with the game year (and the squire never ages) until it is saved
 export async function squireBornUpdate() {
-  console.log("Migration to 14.23 started");
+  console.log("Squire update started");
   for (const actor of game.actors) {
     if (actor.type !== "character") continue;
     await squireBornUpdateItems(actor, actor.items);
@@ -126,7 +129,60 @@ export async function squireBornUpdate() {
       );
     }
   }
-  console.log("Migration to 14.23 completed");
+  console.log("Squire update complete");
+}
+
+//Change family relationship data for more detailed entries
+//Gender is free text so only switch to the male/female version when it is recognised, otherwise keep the neutral relation
+export async function familyRelationUpdate() {
+  console.log("Family Relationship update started");
+  for (const actor of game.actors) {
+    if (actor.type !== "character") continue;
+    await familyRelationUpdateItems(actor, actor.items);
+  }
+  console.log("Family Relationship update complete");
+}
+
+const FAMILY_GENDERED_RELATIONS = {
+  parent: ["father", "mother"],
+  grandparent: ["grandfather", "grandmother"],
+  sibling: ["brother", "sister"],
+  pibling: ["uncle", "aunt"],
+  child: ["son", "daughter"],
+  grandchild: ["grandson", "granddaughter"],
+};
+
+//Returns "male", "female" or "" from a free text gender
+function familyGender(text) {
+  const gender = (text ?? "").trim().toLowerCase();
+  if (!gender) return "";
+  const female = ["female", "femme", "f", "woman", "w", "lady", "dame", "girl", "mother", "feminine"];
+  const male = ["male", "mâle", "homme", "m", "man", "lord", "sir", "boy", "father", "masculine"];
+  for (const lang of ["PEN.female", "PEN.male"]) {
+    const label = game.i18n.localize(lang).toLowerCase();
+    if (gender === label) return lang === "PEN.female" ? "female" : "male";
+  }
+  if (female.includes(gender)) return "female";
+  if (male.includes(gender)) return "male";
+  return "";
+}
+
+async function familyRelationUpdateItems(actor, items) {
+  const updates = [];
+  for (const item of items) {
+    if (item.type !== "family") continue;
+    const options = FAMILY_GENDERED_RELATIONS[item.system.relation];
+    if (!options) continue;
+    const gender = familyGender(item.system.gender);
+    if (gender === "male") {
+      updates.push({ _id: item.id, "system.relation": options[0] });
+    } else if (gender === "female") {
+      updates.push({ _id: item.id, "system.relation": options[1] });
+    }
+  }
+  if (updates.length > 0) {
+    await Item.updateDocuments(updates, { parent: actor });
+  }
 }
 
 async function squireBornUpdateItems(actor, items) {

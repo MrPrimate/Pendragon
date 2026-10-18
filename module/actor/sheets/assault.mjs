@@ -3,7 +3,7 @@ import { PendragonActor } from "../actor.mjs";
 import { PendragonActorSheet } from "./actor-sheet.mjs";
 import { PENSelectLists } from "../../apps/select-lists.mjs";
 import { RollType, PENCheck, CardType } from "../../apps/checks.mjs";
-import { PENUtilities } from "../../apps/utilities.mjs"
+import { PENUtilities } from "../../apps/utilities.mjs";
 import PENDialog from "../../setup/pen-dialog.mjs";
 
 export class PendragonAssaultSheet extends PendragonActorSheet {
@@ -80,7 +80,7 @@ export class PendragonAssaultSheet extends PendragonActorSheet {
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
     //Common parts to the character - this is the order they are show on the sheet
-    options.parts = ["header", "tabs", "turn1","turn2","turn3","turn4", "results"];
+    options.parts = ["header", "tabs", "turn1", "turn2", "turn3", "turn4", "results"];
 
     //GM only tabs
     if (game.user.isGM) {
@@ -333,7 +333,6 @@ export class PendragonAssaultSheet extends PendragonActorSheet {
       }
     }
 
-
     context.encounters = encounters.sort((a, b) => a.name.localeCompare(b.name));
     context.opportunities = opportunities.sort((a, b) => a.name.localeCompare(b.name));
     context.defenders = defenders.sort((a, b) => a.name.localeCompare(b.name));
@@ -385,10 +384,12 @@ export class PendragonAssaultSheet extends PendragonActorSheet {
         return;
       }
       const itemId = target.closest(".partic-item").dataset.property;
-      if (["encounters","defenders","gatedefenders"].includes(collectionName)) {
+      if (["encounters", "defenders", "gatedefenders"].includes(collectionName)) {
         const encIndex = this.actor.system[collectionName].findIndex((i) => itemId && i.uuid === itemId);
         if (encIndex > -1) {
-          const collection = this.actor.system[collectionName] ? foundry.utils.duplicate(this.actor.system[collectionName]) : [];
+          const collection = this.actor.system[collectionName]
+            ? foundry.utils.duplicate(this.actor.system[collectionName])
+            : [];
           collection.splice(encIndex, 1);
           //await this.actor.update({ "system.encounters": encounters });
           await this.actor.update({ [`system.${collectionName}`]: collection });
@@ -492,7 +493,7 @@ export class PendragonAssaultSheet extends PendragonActorSheet {
     await thisTable.sheet.render(true);
   }
 
-  static async _deleteTable(event,target) {
+  static async _deleteTable(event, target) {
     if (event.detail === 2) {
       if (!game.user.isGM) {
         return;
@@ -505,9 +506,9 @@ export class PendragonAssaultSheet extends PendragonActorSheet {
   static async _rollAssault(event, target) {
     event.preventDefault();
     event.stopImmediatePropagation();
-    let assaultTable = this.actor.system.assaultTables[0]
+    let assaultTable = this.actor.system.assaultTables[0];
     if (!assaultTable) {
-      return
+      return;
     }
     let thisTable = (await game.system.api.pid.fromPIDBest({ pid: assaultTable.pid }))[0];
     //If no hit on PID then use UUID
@@ -516,13 +517,13 @@ export class PendragonAssaultSheet extends PendragonActorSheet {
     }
     if (!thisTable) {
       ui.notifications.warn(game.i18n.format("PEN.tableNotFound", { type: assaultTable.pid || assaultTable.uuid }));
-      return
+      return;
     }
 
     const kList = await this.actor.system.getKnights();
-    if (kList.length <1) {
+    if (kList.length < 1) {
       ui.notifications.warn(game.i18n.localize("PEN.assault.noAttackers"));
-      return
+      return;
     }
     for (const { actor: knight } of kList) {
       //TO DO: Consider adding info in roll table results to make the test roll with follow on Damage roll
@@ -530,8 +531,18 @@ export class PendragonAssaultSheet extends PendragonActorSheet {
       //Then parse the hidden element in to a GM roll and if passed roll damage
       if (knight) {
         const rollResult = await PENUtilities.tableDiceRoll(thisTable);
-        const resultText = rollResult.results.map(r => r.description).join(", ");
-        let resultString = "<h5>" + game.i18n.localize('PEN.assault.turn1') + "</h5>" + "<p><strong>" + knight.name + "-" + thisTable.name + "</strong>" + resultText + "</p>"
+        const resultText = rollResult.results.map((r) => r.description).join(", ");
+        let resultString =
+          "<h5>" +
+          game.i18n.localize("PEN.assault.turn1") +
+          "</h5>" +
+          "<p><strong>" +
+          knight.name +
+          "-" +
+          thisTable.name +
+          "</strong>" +
+          resultText +
+          "</p>";
         ChatMessage.create({
           content: resultString,
           speaker: ChatMessage.getSpeaker(),
@@ -543,7 +554,7 @@ export class PendragonAssaultSheet extends PendragonActorSheet {
   static async _rollEncounters(event, target) {
     event.preventDefault();
     event.stopImmediatePropagation();
-    let encounters = []
+    let encounters = [];
     for (let thisEnc of this.actor.system.encounters) {
       let displayName = thisEnc.name;
       let encounter = (await game.system.api.pid.fromPIDBest({ pid: thisEnc.pid }))[0];
@@ -554,28 +565,36 @@ export class PendragonAssaultSheet extends PendragonActorSheet {
       if (encounter) {
         //Ignore Used Encounters and any Opportunities
         if (!encounter.system.opportunity && !encounter.system.used) {
-          if (displayName === "") displayName = encounter.name
-          encounters.push({name: displayName})
+          if (displayName === "") displayName = encounter.name;
+          encounters.push({ name: displayName });
         }
       }
     }
     if (encounters.length < 1) {
-      console.log("No Valid Encounters")
-      return
+      console.log("No Valid Encounters");
+      return;
     }
     encounters = encounters.sort((a, b) => a.name.localeCompare(b.name));
     const kList = await this.actor.system.getKnights();
-    if (kList.length <1) {
+    if (kList.length < 1) {
       ui.notifications.warn(game.i18n.localize("PEN.assault.noAttackers"));
-      return
+      return;
     }
-    let resultString = "<h5>" + game.i18n.localize('PEN.assault.turn2') + "</h5>"
+    let resultString = "<h5>" + game.i18n.localize("PEN.assault.turn2") + "</h5>";
     for (const { actor: knight } of kList) {
       if (knight) {
-        let formula = "1D" + encounters.length
-        let result = await PENUtilities.complexDiceRoll(formula)
-        let outcome = result.total
-        resultString = resultString + "<p><strong>" + knight.name + "</strong>(" + result.total + "): " + encounters[outcome-1].name + "</p>";
+        let formula = "1D" + encounters.length;
+        let result = await PENUtilities.complexDiceRoll(formula);
+        let outcome = result.total;
+        resultString =
+          resultString +
+          "<p><strong>" +
+          knight.name +
+          "</strong>(" +
+          result.total +
+          "): " +
+          encounters[outcome - 1].name +
+          "</p>";
       }
     }
     ChatMessage.create({
@@ -585,9 +604,9 @@ export class PendragonAssaultSheet extends PendragonActorSheet {
   }
 
   static async _rollGate(event, target) {
-    let roll = new Roll("1D6+2")
-    let results = await roll.evaluate()
-    await this.actor.update({'system.openGateRounds': results.total})
+    let roll = new Roll("1D6+2");
+    let results = await roll.evaluate();
+    await this.actor.update({ "system.openGateRounds": results.total });
   }
 
   //-------------Drag and Drop--------------
@@ -634,7 +653,7 @@ export class PendragonAssaultSheet extends PendragonActorSheet {
       case "Folder":
         return this._onDropFolder(event, data);
       case "RollTable":
-        return this._onDropRollTable(event,data);
+        return this._onDropRollTable(event, data);
     }
   }
 
@@ -705,9 +724,13 @@ export class PendragonAssaultSheet extends PendragonActorSheet {
         ui.notifications.warn(game.i18n.localize("PEN.cantDropActor"));
         return;
       }
-      if (!collectionName || collectionName === "") {return}
+      if (!collectionName || collectionName === "") {
+        return;
+      }
       if (["encounter"].includes(newActor.type)) {
-        const collection = this.actor.system[collectionName] ? foundry.utils.duplicate(this.actor.system[collectionName]) : [];
+        const collection = this.actor.system[collectionName]
+          ? foundry.utils.duplicate(this.actor.system[collectionName])
+          : [];
         //Check encounter is not in the current list
         if (collection.find((el) => el.pid === npid)) {
           ui.notifications.warn(game.i18n.localize("PEN.dupNPC"));
@@ -759,16 +782,18 @@ export class PendragonAssaultSheet extends PendragonActorSheet {
       return;
     }
     //Check if there already is a rollable table
-    const assaultTables = this.actor.system.assaultTables ? foundry.utils.duplicate(this.actor.system.assaultTables) : [];
+    const assaultTables = this.actor.system.assaultTables
+      ? foundry.utils.duplicate(this.actor.system.assaultTables)
+      : [];
     if (assaultTables.length > 0) {
-      ui.notifications.warn(game.i18n.format("PEN.dupItemType", {name: game.i18n.localize("DOCUMENT.RollTable")}));
+      ui.notifications.warn(game.i18n.format("PEN.dupItemType", { name: game.i18n.localize("DOCUMENT.RollTable") }));
       return;
     }
     assaultTables.push({
       name: newTable.name,
       uuid: data.uuid,
       pid: newTable.flags?.Pendragon?.pidFlag?.id ?? "",
-    })
+    });
     await this.actor.update({ "system.assaultTables": assaultTables });
     return;
   }

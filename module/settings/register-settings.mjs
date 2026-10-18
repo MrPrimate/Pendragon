@@ -3,6 +3,7 @@ import { PENXPSettings } from "./settings-xpOptions.mjs";
 import { PENDiceSettings } from "./settings-diceOptions.mjs";
 import { PENDisplaySettings } from "./settings-displayOptions.mjs";
 import { PENCharacterSettings } from "./settings-characterOptions.mjs";
+import { PENFamilySettings } from "./settings-familyOptions.mjs";
 
 export function registerSettings() {
   let tokenDropModeOptions = {
@@ -31,6 +32,16 @@ export function registerSettings() {
   });
   PENCharacterSettings.registerSettings();
 
+  //Family Settings Button
+  game.settings.registerMenu("Pendragon", "familyOptions", {
+    name: "PEN.Settings.familyOptionsHint",
+    label: "PEN.Settings.familyOptions",
+    icon: "fas fa-people-group",
+    type: PENFamilySettings,
+    restricted: false,
+  });
+  PENFamilySettings.registerSettings();
+
   //XP Settings Button
   game.settings.registerMenu("Pendragon", "xpOptions", {
     name: "PEN.Settings.xpOptionsHint",
@@ -47,7 +58,7 @@ export function registerSettings() {
     label: "PEN.Settings.diceOptions",
     icon: "fas fa-dice-d20",
     type: PENDiceSettings,
-    restricted: true,
+    restricted: false,
   });
   PENDiceSettings.registerSettings();
 
@@ -57,7 +68,7 @@ export function registerSettings() {
     label: "PEN.Settings.displayOptions",
     icon: "fas fa-desktop",
     type: PENDisplaySettings,
-    restricted: true,
+    restricted: false,
   });
   PENDisplaySettings.registerSettings();
 

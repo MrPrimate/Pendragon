@@ -72,18 +72,17 @@ pages:
         can't be edited. Changing the "Total Wounds" updates the Current HP and
         the health bar.</p><p></p><p><strong>Base Stats</strong></p><p>You can
         enter formulae for the stats (e.g. 2D6+4) to randomly roll the stats.
-        See
-        @UUID[Compendium.Pendragon.instructions.JournalEntry.7U9pKyQCsPrhgwnl.JournalEntryPage.EG80uuwz8hOXkuUN]{When
-        Creating NPC (GM)} for more information on setting
-        defaults.</p><p></p><p>In addition if you add a skill, trait or passion
-        that is already on the NPC sheet you can enter a roll formula to
-        determine the starting value (e.g. If Honor is already on the sheet and
-        you add it a second time you could enter 1D6+10 so that if you chose to
-        use the random values the starting value will be overriden with this
-        dice roll).  <br /><br />These variable/random skills etc are list on
-        the Base Stats section under "Variable Skills etc". The GM can delete
-        them. To change the value you will need to delete and then add the skill
-        etc again, entering the new value.</p>
+        See <a href="https://github.com/cragstone/Pendragon/wiki/Game-Settings"
+        target="_blank" rel="noopener">When Creating NPC (GM)</a> for more
+        information on setting defaults.</p><p></p><p>In addition if you add a
+        skill, trait or passion that is already on the NPC sheet you can enter a
+        roll formula to determine the starting value (e.g. If Honor is already
+        on the sheet and you add it a second time you could enter 1D6+10 so that
+        if you chose to use the random values the starting value will be
+        overriden with this dice roll).  <br /><br />These variable/random
+        skills etc are list on the Base Stats section under "Variable Skills
+        etc". The GM can delete them. To change the value you will need to
+        delete and then add the skill etc again, entering the new value.</p>
       markdown: ''
     video:
       controls: true

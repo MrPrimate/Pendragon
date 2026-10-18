@@ -1,0 +1,258 @@
+name: Male Names
+img: icons/svg/d20.svg
+description: ''
+results:
+  - type: text
+    weight: 1
+    range:
+      - 1
+      - 1
+    _id: UH4Qm4tIIRVj3qkY
+    name: Abel
+    img: icons/svg/d20-black.svg
+    description: ''
+    drawn: false
+    flags: {}
+    _stats:
+      coreVersion: '14.369'
+      systemId: Pendragon
+      systemVersion: '14.23'
+      createdTime: 1792065209286
+      modifiedTime: 1792065209286
+      lastModifiedBy: VOGxQ1MZfSmd6cYy
+      compendiumSource: null
+      duplicateSource: null
+      exportSource: null
+    documentUuid: null
+    _key: '!tables.results!phQPQcFLzf8eO5bM.UH4Qm4tIIRVj3qkY'
+  - type: text
+    weight: 1
+    range:
+      - 2
+      - 2
+    _id: Z1KlBzE2mtx2lcZF
+    name: Adam
+    img: icons/svg/d20-black.svg
+    description: ''
+    drawn: false
+    flags: {}
+    _stats:
+      coreVersion: '14.369'
+      systemId: Pendragon
+      systemVersion: '14.23'
+      createdTime: 1792065209286
+      modifiedTime: 1792065209286
+      lastModifiedBy: VOGxQ1MZfSmd6cYy
+      compendiumSource: null
+      duplicateSource: null
+      exportSource: null
+    documentUuid: null
+    _key: '!tables.results!phQPQcFLzf8eO5bM.Z1KlBzE2mtx2lcZF'
+  - type: text
+    weight: 1
+    range:
+      - 3
+      - 3
+    _id: winpmZPZzZSkUMxV
+    name: Adtherp
+    img: icons/svg/d20-black.svg
+    description: ''
+    drawn: false
+    flags: {}
+    _stats:
+      coreVersion: '14.369'
+      systemId: Pendragon
+      systemVersion: '14.23'
+      createdTime: 1792065209286
+      modifiedTime: 1792065209286
+      lastModifiedBy: VOGxQ1MZfSmd6cYy
+      compendiumSource: null
+      duplicateSource: null
+      exportSource: null
+    documentUuid: null
+    _key: '!tables.results!phQPQcFLzf8eO5bM.winpmZPZzZSkUMxV'
+  - type: text
+    weight: 1
+    range:
+      - 4
+      - 4
+    _id: QJGPX6xH8o6lS2Cc
+    name: Alein
+    img: icons/svg/d20-black.svg
+    description: ''
+    drawn: false
+    flags: {}
+    _stats:
+      coreVersion: '14.369'
+      systemId: Pendragon
+      systemVersion: '14.23'
+      createdTime: 1792065209286
+      modifiedTime: 1792065209286
+      lastModifiedBy: VOGxQ1MZfSmd6cYy
+      compendiumSource: null
+      duplicateSource: null
+      exportSource: null
+    documentUuid: null
+    _key: '!tables.results!phQPQcFLzf8eO5bM.QJGPX6xH8o6lS2Cc'
+  - type: text
+    weight: 1
+    range:
+      - 5
+      - 5
+    _id: 6ISp36WAkdm6vhAu
+    name: Andrew
+    img: icons/svg/d20-black.svg
+    description: ''
+    drawn: false
+    flags: {}
+    _stats:
+      coreVersion: '14.369'
+      systemId: Pendragon
+      systemVersion: '14.23'
+      createdTime: 1792065209286
+      modifiedTime: 1792065209286
+      lastModifiedBy: VOGxQ1MZfSmd6cYy
+      compendiumSource: null
+      duplicateSource: null
+      exportSource: null
+    documentUuid: null
+    _key: '!tables.results!phQPQcFLzf8eO5bM.6ISp36WAkdm6vhAu'
+  - type: text
+    weight: 1
+    range:
+      - 6
+      - 6
+    _id: qcyUszH0pwbWOkwE
+    name: Arnold
+    img: icons/svg/d20-black.svg
+    description: ''
+    drawn: false
+    flags: {}
+    _stats:
+      coreVersion: '14.369'
+      systemId: Pendragon
+      systemVersion: '14.23'
+      createdTime: 1792065209286
+      modifiedTime: 1792065209286
+      lastModifiedBy: VOGxQ1MZfSmd6cYy
+      compendiumSource: null
+      duplicateSource: null
+      exportSource: null
+    documentUuid: null
+    _key: '!tables.results!phQPQcFLzf8eO5bM.qcyUszH0pwbWOkwE'
+  - type: text
+    weight: 1
+    range:
+      - 7
+      - 7
+    _id: IGigtqmmBKrQ4gAR
+    name: Badan
+    img: icons/svg/d20-black.svg
+    description: ''
+    drawn: false
+    flags: {}
+    _stats:
+      coreVersion: '14.369'
+      systemId: Pendragon
+      systemVersion: '14.23'
+      createdTime: 1792065209286
+      modifiedTime: 1792065209286
+      lastModifiedBy: VOGxQ1MZfSmd6cYy
+      compendiumSource: null
+      duplicateSource: null
+      exportSource: null
+    documentUuid: null
+    _key: '!tables.results!phQPQcFLzf8eO5bM.IGigtqmmBKrQ4gAR'
+  - type: text
+    weight: 1
+    range:
+      - 8
+      - 8
+    _id: 0BrcdKyJZ9liDBFO
+    name: Barnabus
+    img: icons/svg/d20-black.svg
+    description: ''
+    drawn: false
+    flags: {}
+    _stats:
+      coreVersion: '14.369'
+      systemId: Pendragon
+      systemVersion: '14.23'
+      createdTime: 1792065209286
+      modifiedTime: 1792065209286
+      lastModifiedBy: VOGxQ1MZfSmd6cYy
+      compendiumSource: null
+      duplicateSource: null
+      exportSource: null
+    documentUuid: null
+    _key: '!tables.results!phQPQcFLzf8eO5bM.0BrcdKyJZ9liDBFO'
+  - type: text
+    weight: 1
+    range:
+      - 9
+      - 9
+    _id: nuSO01MOkUGJZcl3
+    name: Bellangere
+    img: icons/svg/d20-black.svg
+    description: ''
+    drawn: false
+    flags: {}
+    _stats:
+      coreVersion: '14.369'
+      systemId: Pendragon
+      systemVersion: '14.23'
+      createdTime: 1792065209286
+      modifiedTime: 1792065209286
+      lastModifiedBy: VOGxQ1MZfSmd6cYy
+      compendiumSource: null
+      duplicateSource: null
+      exportSource: null
+    documentUuid: null
+    _key: '!tables.results!phQPQcFLzf8eO5bM.nuSO01MOkUGJZcl3'
+  - type: text
+    weight: 1
+    range:
+      - 10
+      - 10
+    _id: mewr5uCI35tdNPUH
+    name: Bellias
+    img: icons/svg/d20-black.svg
+    description: ''
+    drawn: false
+    flags: {}
+    _stats:
+      coreVersion: '14.369'
+      systemId: Pendragon
+      systemVersion: '14.23'
+      createdTime: 1792065209286
+      modifiedTime: 1792065209286
+      lastModifiedBy: VOGxQ1MZfSmd6cYy
+      compendiumSource: null
+      duplicateSource: null
+      exportSource: null
+    documentUuid: null
+    _key: '!tables.results!phQPQcFLzf8eO5bM.mewr5uCI35tdNPUH'
+replacement: true
+displayRoll: true
+folder: null
+flags:
+  Pendragon:
+    pidFlag:
+      id: rt..male-names
+      lang: en
+      priority: 0
+_stats:
+  coreVersion: '14.369'
+  systemId: Pendragon
+  systemVersion: '14.23'
+  createdTime: 1792065209286
+  modifiedTime: 1792065209286
+  lastModifiedBy: pendragonBuilder
+  duplicateSource: null
+  exportSource: null
+formula: 1D10
+ownership:
+  default: 0
+_id: phQPQcFLzf8eO5bM
+sort: 0
+_key: '!tables!phQPQcFLzf8eO5bM'

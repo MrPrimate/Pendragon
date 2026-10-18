@@ -1376,7 +1376,7 @@ export class PENWinter {
       .filter(
         (itm) =>
           Number(itm.system.died) < 1 &&
-          itm.system.relation === "child" &&
+          ["son", "daughter", "child"].includes(itm.system.relation) &&
           PENWinter.winterYear(actor) - itm.system.born < 5 &&
           !itm.system.blessed,
       );
@@ -1444,7 +1444,8 @@ export class PENWinter {
         ];
         let heir = await actor.items
           .filter((itm) => itm.type === "family")
-          .filter((itm) => itm.system.relation === "child" && Number(itm.system.died) < 1).length;
+          .filter((itm) => ["child", "son", "daughter"].includes(itm.system.relation) && Number(itm.system.died) < 1)
+          .length;
         if (heir < 1) {
           prestList.unshift({ name: game.i18n.localize("PEN.heir"), pid: "heir" });
         }
@@ -1913,7 +1914,7 @@ export class PENWinter {
           name: newFamily.name,
           type: "family",
           system: {
-            relation: "child",
+            relation: newFamily.gender === "female" ? "daughter" : "son",
             gender: newFamily.genderLabel,
             born: PENWinter.winterYear(actor),
             died: died,
@@ -2086,6 +2087,7 @@ export class PENWinter {
     const html = await foundry.applications.handlebars.renderTemplate(destination, data);
     const usage = await PENDialog.input({
       window: { title: winTitle },
+      position: { width: 450 },
       content: html,
       ok: {
         label: game.i18n.localize("PEN.confirm"),

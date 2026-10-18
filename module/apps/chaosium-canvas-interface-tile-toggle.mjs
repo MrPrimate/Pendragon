@@ -11,7 +11,7 @@ export default class ChaosiumCanvasInterfaceTileToggle extends ChaosiumCanvasInt
     };
   }
 
-   static get icon() {
+  static get icon() {
     return "fa-solid fa-cubes";
   }
 
@@ -109,12 +109,8 @@ export default class ChaosiumCanvasInterfaceTileToggle extends ChaosiumCanvasInt
         console.error("Tile " + uuid + " not loaded");
       }
     }
-    const permissionDocument = !this.toggle
-      ? CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE
-      : this.permissionDocument;
-    const permissionPage = !this.toggle
-      ? CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE
-      : this.permissionPage;
+    const permissionDocument = !this.toggle ? CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE : this.permissionDocument;
+    const permissionPage = !this.toggle ? CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE : this.permissionPage;
     for (const uuid of this.journalEntryUuids) {
       const doc = await fromUuid(uuid);
       if (doc) {

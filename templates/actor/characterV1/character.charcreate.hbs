@@ -365,6 +365,21 @@
           <div class="stat-name centre">{{localize 'PEN.optional'}}</div>
         {{/if}}
     </li>
+    {{! - Add Family}}
+    <li class="charcreate" data-step="addFamily">
+        <div class="stat-name">{{localize 'PEN.step.addFamily'}}</div>
+        {{#if hasFamilyMembers}}
+          <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
+          <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>
+          <div class="stat-name centre" data-action="charDelete" data-tooltip="{{localize 'PEN.resetHint'}}"><a><i class="fas fa-broom"></i></a></div>
+          <div class="stat-name centre bold"></div>
+        {{else}}
+          <div class="stat-name centre" data-tooltip="{{localize 'PEN.incomplete'}}"><a class=""><i class="darkred fas fa-shield-xmark"></i></a></div>
+          <div class="stat-name centre" data-action="charCreate"><a class="darkred"><i class="fas fa-circle-exclamation"></i></a></div>
+          <div class="stat-name centre"><a class="fade"><i class="fas fa-broom"></i></a></div>
+          <div class="stat-name centre">{{localize 'PEN.optional'}}</div>
+        {{/if}}
+    </li>
   </ol>
   <br>
     <div class="tabHelpIcon">

@@ -68,7 +68,7 @@
       "name": "Pendragon System",
       "sorting": "m",
       "color": "#1274bd",
-      "packs": ["instructions", "macro", "scenes"],
+      "packs": ["instructions", "macro", "scenes", "roll-tables", "active-effects"],
       "folders": []
     }
   ],
@@ -122,6 +122,19 @@
       "flags": {},
       "ownership": {
         "PLAYER": "NONE",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "label": "Roll Tables",
+      "type": "RollTable",
+      "name": "roll-tables",
+      "path": "packs/roll-tables",
+      "system": "Pendragon",
+      "private": false,
+      "flags": {},
+      "ownership": {
+        "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
       }
     }

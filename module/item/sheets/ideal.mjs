@@ -299,10 +299,12 @@ export class PendragonIdealSheet extends PendragonItemSheet {
 
   //Delete an item from the collection
   static async #deleteItem(event, target) {
-    const { itemId } = target.closest("[data-item-id]")?.dataset ?? {};
-    const { collection } = target.closest("[data-collection]").dataset ?? {};
-    const coll = this.item.system[collection] ?? [];
-    await this.item.update({ [`system.${collection}`]: coll.filter((itm) => itm.uuid != itemId) });
+    if (event.detail === 2) {
+      const { itemId } = target.closest("[data-item-id]")?.dataset ?? {};
+      const { collection } = target.closest("[data-collection]").dataset ?? {};
+      const coll = this.item.system[collection] ?? [];
+      await this.item.update({ [`system.${collection}`]: coll.filter((itm) => itm.uuid != itemId) });
+    }
   }
 
   //Handle the dropping of ActiveEffect data onto an Item Sheet

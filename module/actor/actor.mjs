@@ -1004,7 +1004,9 @@ export class PendragonActor extends Actor {
         (actr) =>
           actr.type === "battle" &&
           actr.sheet.rendered &&
-          actr.system.encounters.find((m) => m.uuid === actorData.uuid || m.pid === actorData.flags?.Pendragon?.pidFlag?.id),
+          actr.system.encounters.find(
+            (m) => m.uuid === actorData.uuid || m.pid === actorData.flags?.Pendragon?.pidFlag?.id,
+          ),
       );
       for (const party of parties) {
         await party.render();
@@ -1021,7 +1023,9 @@ export class PendragonActor extends Actor {
         (actr) =>
           actr.type === "assault" &&
           actr.sheet.rendered &&
-          actr.system.encounters.find((m) => m.uuid === actorData.uuid || m.pid === actorData.flags?.Pendragon?.pidFlag?.id),
+          actr.system.encounters.find(
+            (m) => m.uuid === actorData.uuid || m.pid === actorData.flags?.Pendragon?.pidFlag?.id,
+          ),
       );
       for (const party of parties) {
         await party.render();
@@ -1030,7 +1034,6 @@ export class PendragonActor extends Actor {
       // Called before sheet is ready
     }
   }
-
 
   getSkillTotal(pid) {
     const skill = this.items.find((citm) => citm.flags?.Pendragon?.pidFlag?.id === pid);

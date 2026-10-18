@@ -268,6 +268,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     context.hasFamily = false;
     context.hasTraits = false;
     context.hasParentPassion = false;
+    context.hasFamilyMembers = this._hasFamilyMembers(this.actor);
     context.hasPSP = false;
     context.hasEquip = false;
     context.hasLuck = false;
@@ -505,7 +506,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
       } else if (i.type === "weapon") {
         weapons.push(i);
       } else if (i.type === "family") {
-        i.system.typeName = game.i18n.localize("PEN." + i.system.relation);
+        i.system.typeName = game.i18n.localize("PEN.familyRelationship." + i.system.relation);
         families.push(i);
       } else if (i.type === "ideal") {
         ideals.push(i);
@@ -673,6 +674,27 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
       return 0;
     });
 
+    // Sort Families by alive then year born, lowest first
+    families.sort(function (a, b) {
+      let x = a.system.born;
+      let y = b.system.born;
+      let p = Number(a.system.died) > 0 ? 1 : 0;
+      let q = Number(b.system.died) > 0 ? 1 : 0;
+      if (p < q) {
+        return -1;
+      }
+      if (p > q) {
+        return 1;
+      }
+      if (x < y) {
+        return -1;
+      }
+      if (x > y) {
+        return 1;
+      }
+      return 0;
+    });
+
     // Sort Weapons by melee/missile and name
     weapons.sort(function (a, b) {
       let x = a.name.toLowerCase();
@@ -709,6 +731,11 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     context.ideals = ideals.sort((a, b) => a.name.localeCompare(b.name));
     context.household = household;
     context.followers = followers;
+  }
+
+  _hasFamilyMembers(actor) {
+    // Returns true if actor has a family item with source of "createFamily"
+    return actor.items.some((itm) => itm.type === "family" && itm.system.source === "createFamily");
   }
 
   /* --------------------------------ACTIONS--------------------- */

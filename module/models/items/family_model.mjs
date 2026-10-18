@@ -10,9 +10,10 @@ export class FamilyData extends foundry.abstract.TypeDataModel {
       GMdescription: new StringField({ required: true, blank: true, initial: "" }),
       died: new StringField({ required: true, blank: true, initial: "" }),
       gender: new StringField({ required: true, blank: true, initial: "" }),
-      relation: new StringField({ required: true, blank: true, initial: "" }),
+      relation: new StringField({ required: true, blank: true, initial: "other" }),
       barrenMarriage: new BooleanField({ initial: false }),
       blessed: new BooleanField({ initial: false }),
+      maternal: new BooleanField({ initial: false }),
 
       born: new NumberField({ ...requiredInteger, initial: 0 }),
       glory: new NumberField({ ...requiredInteger, initial: 0 }),

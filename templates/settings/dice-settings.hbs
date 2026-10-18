@@ -12,22 +12,25 @@
     </div>
     <br>
 
-    <div class="form-group">
-      <label class="bold">{{localize 'PEN.Settings.critAdj'}}</label>
-      <div class="form-fields" style="flex: 1;">
-        <input type="checkbox" {{checked optSet.critAdj.value}} name="critAdj">
+    {{#if isGM}}
+      <div class="form-group">
+        <label class="bold">{{localize 'PEN.Settings.critAdj'}}</label>
+        <div class="form-fields" style="flex: 1;">
+          <input type="checkbox" {{checked optSet.critAdj.value}}  name="critAdj">
+        </div>
+        <p class="settingNote">{{localize 'PEN.Settings.critAdjHint'}}</p>
       </div>
-      <p class="settingNote">{{localize 'PEN.Settings.critAdjHint'}}</p>
-    </div>
-    <br>
+      <br>
+    {{/if}}
 
-    <div class="form-group">
-      <label class="bold">{{localize 'PEN.Settings.delayDice'}}</label>
-      <div class="form-fields" style="flex: 1;">
-        <input type="checkbox" {{checked optSet.delayDice.value}} name="delayDice">
+    {{#if isGM}}
+      <div class="form-group">
+        <label class="bold">{{localize 'PEN.Settings.delayDice'}}</label>
+        <div class="form-fields" style="flex: 1;">
+          <input type="checkbox" {{checked optSet.delayDice.value}} name="delayDice">
+        </div>
+        <p class="settingNote">{{localize 'PEN.Settings.delayDiceHint'}}</p>
       </div>
-      <p class="settingNote">{{localize 'PEN.Settings.delayDiceHint'}}</p>
-    </div>
-    <br>
-
+      <br>
+    {{/if}}
   </div>

@@ -5,6 +5,7 @@ import { TraitsSelectDialog } from "./trait-selection.mjs";
 import { ItemsSelectDialog } from "./item-selection.mjs";
 import { PassionsSelectDialog } from "./passion-selection.mjs";
 import { PENCheck } from "./checks.mjs";
+import { PENCreateFamily } from "./createFamily.mjs";
 
 export class PENCharCreateV2 {
   //Toggle Creation Phase On/Off
@@ -91,6 +92,9 @@ export class PENCharCreateV2 {
         break;
       case "addLuckBenefit":
         await this.stepLuckBenefit(actor, step, undo);
+        break;
+      case "addFamily":
+        await this.stepFamily(actor, step, undo);
         break;
     }
     return;
@@ -650,6 +654,18 @@ export class PENCharCreateV2 {
     return;
   }
 
+  //Get the Starting Religion Table from the actor's Culture, falling back to the default religion table
+  static async getReligionTable(actor) {
+    const culture = actor.items.get(actor.system.cultureID);
+    const religionTable = culture?.system.religionTables[0];
+    if (religionTable) {
+      const table =
+        (await game.system.api.pid.fromPIDBest({ pid: religionTable.pid }))[0] ?? (await fromUuid(religionTable.uuid));
+      if (table) return table;
+    }
+    return (await game.system.api.pid.fromPIDBest({ pid: "rt..religion" }))[0];
+  }
+
   static async addReligion(actor, religion) {
     if (!religion) {
       let itemData = "";
@@ -657,14 +673,23 @@ export class PENCharCreateV2 {
       if (actor.system.create.random) {
         let results = [];
 
-        //TO DO: Consider adding religion random table to Homeland and accessing that
-        let table = (await game.system.api.pid.fromPIDBest({ pid: "rt..religion" }))[0];
+        const table = await this.getReligionTable(actor);
+        if (!table) {
+          ui.notifications.warn("PEN.religionTableMissing", { localize: true });
+          return false;
+        }
         const religResults = await PENUtilities.tableDiceRoll(table);
         const doc = await this.documentFromResult(religResults.results[0]);
         if (!doc) {
-          return;
+          return false;
         }
-        itemData = await game.system.api.pid.fromPIDBest({ pid: doc.flags.Pendragon.pidFlag.id });
+        //Check the rolled document is a religion with a PID
+        const religionPID = doc.flags?.Pendragon?.pidFlag?.id;
+        if (doc.documentName !== "Item" || doc.type !== "religion" || !religionPID) {
+          ui.notifications.error(game.i18n.localize("PEN.notReligDoc"));
+          return false;
+        }
+        itemData = await game.system.api.pid.fromPIDBest({ pid: religionPID });
         results.push({
           name: doc.name,
           rollVal: religResults.roll.total,
@@ -1970,6 +1995,7 @@ export class PENCharCreateV2 {
   }
 
   static async addParents(actor) {
+    await this.removeParents(actor);
     let glory = 0;
     let heroic = 0;
     let result = "";
@@ -2000,15 +2026,19 @@ export class PENCharCreateV2 {
           glory = 0;
           heroic = 0;
         }
+        let relation = "father";
+        if (pCount === 1) relation = "mother";
+        let diedYear = died[pCount];
+        if (diedYear === 0) diedYear = null;
 
         const itemData = {
           name: familyName[pCount],
           type: "family",
           system: {
-            relation: "parent",
+            relation: relation,
             gender: gender[pCount],
             born: born[pCount],
-            died: died[pCount],
+            died: diedYear,
             glory,
             heroic,
           },
@@ -2068,7 +2098,7 @@ export class PENCharCreateV2 {
   static async removeParents(actor) {
     let parents = await actor.items
       .filter((itm) => itm.type === "family")
-      .filter((itm) => itm.system.relation === "parent")
+      .filter((itm) => ["father", "mother", "parent"].includes(itm.system.relation))
       .map((itm) => {
         return itm.id;
       });
@@ -2088,7 +2118,7 @@ export class PENCharCreateV2 {
   //
   //
   static async stepAddHeir(actor, step, undo) {
-    //Remove Parents
+    //Remove Heir
     if (undo) {
       await this.undoHeir(actor);
       ui.notifications.warn(actor.name + ": " + game.i18n.localize("PEN.undo." + step));
@@ -2301,6 +2331,24 @@ export class PENCharCreateV2 {
     return;
   }
 
+  //----------------------------------------------FAMILY----------------------------------------------
+  //
+  //
+  static async stepFamily(actor, step, undo) {
+    //Remove Family
+    if (undo) {
+      await PENCreateFamily.deleteFamily(actor);
+      ui.notifications.warn(actor.name + ": " + game.i18n.localize("PEN.undo." + step));
+    } else {
+      let result = await PENCreateFamily.startFamily(actor);
+      if (!result) {
+        return;
+      }
+      ui.notifications.warn(actor.name + ": " + game.i18n.localize("PEN.create." + step));
+    }
+    return;
+  }
+
   //----------------------------------------------UTILITIES----------------------------------------------
   //
   //
@@ -2507,11 +2555,15 @@ export class PENCharCreateV2 {
       case CONST.TABLE_RESULT_TYPES.DOCUMENT:
         uuid = res.documentUuid;
         return { res: uuid, tableResults: tableResults };
-      case CONST.TABLE_RESULT_TYPES.COMPENDIUM:
-        uuid = res.documentUuid;
-        return { res: uuid, tableResults: tableResults };
+      //      case CONST.TABLE_RESULT_TYPES.COMPENDIUM:
+      //        uuid = res.documentUuid;
+      //        return { res: uuid, tableResults: tableResults };
       default:
-        return { res: res.text, tableResults: tableResults };
+        if (res.description != "") {
+          return { res: res.description, tableResults: tableResults };
+        } else {
+          return { res: res.name, tableResults: tableResults };
+        }
     }
   }
 
