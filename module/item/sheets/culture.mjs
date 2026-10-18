@@ -15,6 +15,7 @@ export class PendragonCultureSheet extends PendragonItemSheet {
     },
     actions: {
       deleteItem: PendragonCultureSheet.#deleteItem,
+      viewTable: PendragonCultureSheet.#viewTable,
     },
     dragDrop: [{ dropSelector: ".droppable" }],
   };
@@ -60,32 +61,24 @@ export class PendragonCultureSheet extends PendragonItemSheet {
     }
 
     for (let religionTable of itemData.system.religionTables) {
-      let displayName = religionTable.name;
       let thisTable = (await game.system.api.pid.fromPIDBest({ pid: religionTable.pid }))[0];
       //If no hit on PID then use UUID
       if (!thisTable) {
         thisTable = await fromUuid(religionTable.uuid);
       }
 
-      if (thisTable) {
-        religionTables.push({
-          name: thisTable.name,
-          uuid: thisTable.uuid,
-          pid: thisTable.pid,
-          table: thisTable,
-        });
-      } else {
-        religionTables.push({
-          name: religionTable.name + " [" + game.i18n.localize("PEN.invalid") + "]",
-          uuid: religionTable.uuid,
-          pid: religionTable.pid,
-          table: false,
-        });
-      }
+      //Keep the stored UUID so the entry can be deleted even if the PID resolves to a different document
+      religionTables.push({
+        name: thisTable?.name ?? religionTable.name,
+        uuid: religionTable.uuid,
+        pid: religionTable.pid,
+        tableUuid: thisTable?.uuid ?? "",
+        valid: !!thisTable,
+      });
     }
 
     sheetData.skills = skills.sort(PENUtilities.sortByNameKey);
-    sheetData.religionTables = religionTables
+    sheetData.religionTables = religionTables;
 
     // these two values could be set during _preparePartContext
     sheetData.enrichedDescriptionValue = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
@@ -157,10 +150,10 @@ export class PendragonCultureSheet extends PendragonItemSheet {
     event.stopPropagation();
     const type = "skill";
     const collectionName = event.currentTarget.dataset.collection ?? "skills";
-    if (collectionName === 'religionTables') {
+    if (collectionName === "religionTables") {
       const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
-      await this.DropRollTable(data)
-      return
+      await this.DropRollTable(data);
+      return;
     }
     const dataList = await PENUtilities.getDataFromDropEvent(event, "Item");
     const collection = this.item.system[collectionName]
@@ -206,8 +199,20 @@ export class PendragonCultureSheet extends PendragonItemSheet {
     }
   }
 
-  //Drop Roll Table on Actor Sheet
+  //Open the Starting Religion Table
+  static async #viewTable(event, target) {
+    const { tableUuid } = target.closest("[data-table-uuid]")?.dataset ?? {};
+    const table = await fromUuid(tableUuid);
+    if (!table) return;
+    table.sheet.render(true);
+  }
+
+  //Drop a Roll Table on to the Starting Religion Table list
   async DropRollTable(data) {
+    if (data.type !== "RollTable") {
+      ui.notifications.warn("PEN.religionTableOnly", { localize: true });
+      return;
+    }
     let newTable = await fromUuid(data.uuid);
     if (!newTable) {
       return;
@@ -223,7 +228,7 @@ export class PendragonCultureSheet extends PendragonItemSheet {
       ? foundry.utils.duplicate(this.item.system.religionTables)
       : [];
     if (religionTables.length > 0) {
-      ui.notifications.warn(game.i18n.format("PEN.dupItemType", { name: game.i18n.localize("DOCUMENT.RollTable") }));
+      ui.notifications.warn("PEN.religionTableDup", { localize: true });
       return;
     }
     religionTables.push({
@@ -234,5 +239,4 @@ export class PendragonCultureSheet extends PendragonItemSheet {
     await this.item.update({ "system.religionTables": religionTables });
     return;
   }
-
 }
