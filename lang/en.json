@@ -1011,6 +1011,7 @@
     "religionTable": "Starting Religion Table",
     "religionTableDup": "This Culture already has a Starting Religion Table",
     "religionTableMissing": "No valid starting Religion Table found on Culture",
+    "religionTableOnly": "Only Roll Tables can be added as a Starting Religion Table",
     "religiousTraits": "Religious Traits",
     "remains": "Remains",
     "remove": "Remove",

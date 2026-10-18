@@ -208,6 +208,10 @@ export class PendragonCultureSheet extends PendragonItemSheet {
 
   //Drop Roll Table on Actor Sheet
   async DropRollTable(data) {
+    if (data.type !== "RollTable") {
+      ui.notifications.warn("PEN.religionTableOnly", { localize: true });
+      return;
+    }
     let newTable = await fromUuid(data.uuid);
     if (!newTable) {
       return;
