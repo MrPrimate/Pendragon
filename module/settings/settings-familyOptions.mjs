@@ -95,6 +95,8 @@ export class PENFamilySettings extends HandlebarsApplicationMixin(ApplicationV2)
   static async onResetDefaults(event) {
     event.preventDefault();
     for await (const [k, v] of Object.entries(SETTINGS)) {
+      //Players can only reset their own settings
+      if (v.scope === "world" && !game.user.isGM) continue;
       await game.settings.set("Pendragon", k, v?.default);
     }
     return this.render();

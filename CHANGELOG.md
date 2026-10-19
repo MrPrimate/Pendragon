@@ -2,12 +2,16 @@
 
 ## 14.23
 
-Families
+Families (Dangermouse & Mr Primate)
 
 - Family Relationships now split by sex/gender; e.g. Parent to Mother & Father
-- Migration script will update these for in world characters - if Female or Femme is in the gender it will use the female version, otherwise it will assume male
+- Migration script will update these for in world characters - using current gender labels to identify male/female but where it can't match it will roll randomly.
 - Please review the new labels for your characters and adjust accordingly
-  Winter Phase - thanks to MrPrimate
+- Game setting to use random names when creating a family. The system contains sample roll tables for this which you could clone and expand. Full versions are in the Core Rulebook module
+  Cultures
+- Cultures now have the option to add a Starting Religion table - this is used in character creation in preference to the default "Starting Religions table".
+- Set up a new roll table that holds religion documents and then add that to the culture.
+  Winter Phase - (MrPrimate)
 - Ending the Winter Phase will give you a dialog box asking if you want to increase the game year, rather than it happening automatically.
 - Winter Phase doesn't automatically add Passive Glory anymore, it is a step in the process you need to trigger.
 - Squires updated via migration script for their age so they age properly during winter phase
@@ -15,6 +19,15 @@ Families
 - Passive glory happens before Prestige Points are spent so you gain the benefit in the year
   Chaosium Canvas Interface - thanks to JamesB
 - Updated code for Foundry v369 and refreshed functionality
+  Combat Rolls (ryak2)
+- Fixed an issue where A Success and a Fumble was incorrectly giving a fumble for both parties
+  Misc
+- Dragging and dropping a macro to the hot-bar should no longer use a default D20 image and instead use the image associated with the macro
+- Updated French translations (Tontione)
+- Various V2 character missing localizations added
+- Fixed error when doing a non-weapon based combat action (e.g. Mount a Horse) throwing an error regarding XP check
+- Item sheet tidy up (MrPrimate)
+  Again a big thank you to MrPrimate for testing and fixing my code on top of the additions he's made.
 
 ## 14.22
 

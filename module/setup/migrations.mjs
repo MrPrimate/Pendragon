@@ -153,9 +153,8 @@ const FAMILY_GENDERED_RELATIONS = {
 };
 
 //Returns "male", "female" or "" from a free text gender
-function familyGender(text) {
+async function familyGender(text) {
   const gender = (text ?? "").trim().toLowerCase();
-  if (!gender) return "";
   const female = ["female", "femme", "f", "woman", "w", "lady", "dame", "girl", "mother", "feminine"];
   const male = ["male", "mâle", "homme", "m", "man", "lord", "sir", "boy", "father", "masculine"];
   for (const lang of ["PEN.female", "PEN.male"]) {
@@ -164,7 +163,11 @@ function familyGender(text) {
   }
   if (female.includes(gender)) return "female";
   if (male.includes(gender)) return "male";
-  return "";
+  //If can't match gender then roll randomly
+  let roll = new Roll("1D2");
+  let result = await roll.evaluate();
+  if (result.total === 1) return "male";
+  return "female";
 }
 
 async function familyRelationUpdateItems(actor, items) {
@@ -173,7 +176,8 @@ async function familyRelationUpdateItems(actor, items) {
     if (item.type !== "family") continue;
     const options = FAMILY_GENDERED_RELATIONS[item.system.relation];
     if (!options) continue;
-    const gender = familyGender(item.system.gender);
+    console.log(item.name);
+    const gender = await familyGender(item.system.gender);
     if (gender === "male") {
       updates.push({ _id: item.id, "system.relation": options[0] });
     } else if (gender === "female") {

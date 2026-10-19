@@ -296,12 +296,12 @@ async function createItemMacro(data, slot) {
 
     case "Macro":
       let tempMacro = await fromUuid(data.uuid);
-      macro = game.macros.find((m) => m.name === tempMacro.name && m.command === command);
+      macro = game.macros.find((m) => m.name === tempMacro.name && m.command === tempMacro.command);
       if (!macro) {
         macro = await Macro.create({
           name: tempMacro.name,
           type: "script",
-          img: "icons/svg/d20.svg",
+          img: tempMacro.img,
           command: tempMacro.command,
         });
       }

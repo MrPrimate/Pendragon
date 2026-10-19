@@ -576,10 +576,10 @@ export class PENCheck {
     };
     const html = await foundry.applications.handlebars.renderTemplate(options.dialogTemplate, data);
     const result = await PENDialog.input({
-      window: { title: options.winTitle ?? "Roll Options" },
+      window: { title: options.winTitle ?? game.i18n.localize("PEN.rollOptions") },
       content: html,
       ok: {
-        label: "Roll Dice",
+        label: game.i18n.localize("PEN.rollDice"),
       },
     });
     return result;
@@ -732,11 +732,14 @@ export class PENCheck {
     if (checkProp != "") {
       let item = "";
       if (chatCard.rollType === RollType.COMBAT) {
-        item = actor.items.get(actor.items.get(chatCard.itemId).system.sourceID);
+        item = actor.items.get(actor.items.get(chatCard.itemId)?.system?.sourceID);
       } else {
         item = actor.items.get(chatCard.skillId);
       }
-      await item.update(checkProp);
+      //Now Combat Rolls have non-item rolls don't do XP checks if there isn't an item
+      if (item) {
+        await item.update(checkProp);
+      }
     }
   }
 

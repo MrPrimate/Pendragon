@@ -739,11 +739,11 @@ export class PendragonCharacterSheetv2 extends PendragonActorSheet {
       )
       .join("");
     const result = await api.DialogV2.wait({
-      window: { title: "Select Horse" },
+      window: { title: game.i18n.localize("PEN.selectHorse") },
       content: content,
       buttons: [
         {
-          label: "Switch",
+          label: game.i18n.localize("PEN.switch"),
           action: "switch",
           callback: (_, button) => button.form.elements.horse.value,
         },
