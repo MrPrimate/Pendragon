@@ -1304,20 +1304,48 @@ export class PENCharCreateV2 {
   }
 
   //Add Parent Passion
+  //Any number of passions can be inherited, keep asking until "None" is picked or the dialog is closed
   static async addParentPassion(actor) {
-    const parentPass = await this.selectItem("passion", true, "", game.i18n.localize("PEN.parentPass"));
-    let passionPID = "";
-    let bonus = 0;
-    if (parentPass != false) {
-      bonus = Number((await this.inpValue(game.i18n.localize("PEN.parentPassion"))).age);
-      if (bonus > 15) {
-        passionPID = parentPass[0].flags.Pendragon.pidFlag.id;
-        bonus = Math.min(bonus - 15, 5);
-        //Update the passion values
-        let pPas = actor.items.find((itm) => itm.flags.Pendragon.pidFlag.id === passionPID);
-        await pPas.update({ "system.inherit": bonus });
-      }
+    //Only offer passions the character already has
+    let list = actor.items
+      .filter((itm) => itm.type === "passion")
+      .map((itm) => {
+        return { name: itm.name, pid: itm.id };
+      });
+    if (list.length < 1) {
+      ui.notifications.warn("PEN.parentPassionNone", { localize: true });
+      return false;
     }
+    let done = false;
+    while (list.length > 0) {
+      //Own "None/No More" option so it's clear the list repeats until finished
+      const choice = await this.selectFromRadio(
+        "list",
+        false,
+        [{ name: game.i18n.localize("PEN.noneNoMore"), pid: "none" }, ...list],
+        game.i18n.localize("PEN.parentPass"),
+        game.i18n.localize("PEN.parentPassionHint"),
+      );
+      //Dialog closed - stop, but keep any passions already done
+      if (!choice) break;
+      if (choice === "none") {
+        done = true;
+        break;
+      }
+      const score = await this.inpValue(game.i18n.localize("PEN.parentPassion"));
+      if (!score) break;
+      const value = Number(score.age);
+      //Only a parent's score above 15 gives a bonus (max +5)
+      if (value > 15) {
+        await actor.items.get(choice).update({ "system.inherit": Math.min(value - 15, 5) });
+      }
+      done = true;
+      //Each passion can only be inherited once
+      list = list.filter((itm) => itm.pid !== choice);
+    }
+    if (!done) return false;
+    //Mark the step done even if there was no bonus
+    await actor.update({ "system.create.parentPassion": true });
     return true;
   }
 
@@ -1329,6 +1357,7 @@ export class PENCharCreateV2 {
         return { _id: itm.id, "system.inherit": 0 };
       });
     await Item.updateDocuments(passions, { parent: actor });
+    await actor.update({ "system.create.parentPassion": false });
     return;
   }
 
@@ -2638,7 +2667,8 @@ export class PENCharCreateV2 {
   }
 
   //Choose Item Dialog
-  static async selectFromRadio(source, optional, list, title) {
+  //hint - optional extra text shown under the title
+  static async selectFromRadio(source, optional, list, title, hint = "") {
     //Get list of items
     let newList = [];
     if (source != "list") {
@@ -2674,6 +2704,7 @@ export class PENCharCreateV2 {
       });
       let data = {
         headTitle: title,
+        hint,
         newList,
       };
       const html = await foundry.applications.handlebars.renderTemplate(destination, data);

@@ -215,6 +215,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         toggle: new BooleanField({ initial: true }),
         knighted: new BooleanField({ initial: false }),
         parents: new BooleanField({ initial: false }),
+        parentPassion: new BooleanField({ initial: false }),
         train: new BooleanField({ initial: false }),
         heirStat: new BooleanField({ initial: false }),
       }),

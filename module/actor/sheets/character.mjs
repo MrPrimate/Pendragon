@@ -267,7 +267,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     context.hasArchetype = false;
     context.hasFamily = false;
     context.hasTraits = false;
-    context.hasParentPassion = false;
+    context.hasParentPassion = this.actor.system.create.parentPassion;
     context.hasFamilyMembers = this._hasFamilyMembers(this.actor);
     context.hasPSP = false;
     context.hasEquip = false;
