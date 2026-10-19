@@ -396,7 +396,7 @@ export class CombatAction {
       // leap into saddle requires a roll
       // or mount carefully unopposed
       actor.mountCurrentHorse();
-      let msg = options.particName + " " + game.i18n.localize("PEN.mountsHorse");
+      let msg = game.i18n.format("PEN.mountsHorse", { name: options.particName });
       await this.createDeclarationCard(options, msg);
       return;
     }
@@ -431,7 +431,7 @@ export class CombatAction {
       // leap out of saddle requires a roll
       // or mount carefully unopposed
       actor.dismountCurrentHorse();
-      let msg = options.particName + " " + game.i18n.localize("PEN.dismountsHorse");
+      let msg = game.i18n.format("PEN.dismountsHorse", { name: options.particName });
       await this.createDeclarationCard(options, msg);
       return;
     }
@@ -447,7 +447,7 @@ export class CombatAction {
       particImg: actor.img,
       actor: actor,
     };
-    let msg = options.particName + " " + game.i18n.localize("PEN.claimsPrisoner");
+    let msg = game.i18n.format("PEN.claimsPrisoner", { name: options.particName });
     await this.createDeclarationCard(options, msg);
   }
 
@@ -459,7 +459,7 @@ export class CombatAction {
       actor: actor,
     };
     // squire skill; special card to choose action on success
-    let msg = options.particName + " " + game.i18n.localize("PEN.notImplemented");
+    let msg = game.i18n.format("PEN.notImplemented", { name: options.particName });
     await this.createDeclarationCard(options, msg);
   }
 
@@ -538,7 +538,7 @@ export class CombatAction {
     };
     // automatic success if unopposed
     // else DEX+5
-    let msg = options.particName + " " + game.i18n.localize("PEN.pickUp");
+    let msg = game.i18n.format("PEN.pickUp", { name: options.particName });
     await this.createDeclarationCard(options, msg);
   }
 
@@ -552,7 +552,7 @@ export class CombatAction {
     // GM needs to approve, no roll needed
     // auto-success, max crit damage, character dies heroically at the end
     // roll.evaluate({maximize:true})
-    let msg = options.particName + " " + game.i18n.localize("PEN.notImplemented");
+    let msg = game.i18n.format("PEN.notImplemented", { name: options.particName });
     await this.createDeclarationCard(options, msg);
   }
 
@@ -564,7 +564,7 @@ export class CombatAction {
       actor: actor,
     };
     // if attacked, can switch action with -5 penalty
-    let msg = options.particName + " " + game.i18n.localize("PEN.studyScene");
+    let msg = game.i18n.format("PEN.studyScene", { name: options.particName });
     await this.createDeclarationCard(options, msg);
   }
 
@@ -576,7 +576,7 @@ export class CombatAction {
       actor: actor,
     };
     //choose either reduce by X dice or 1/2 damage
-    let msg = options.particName + " " + game.i18n.localize("PEN.notImplemented");
+    let msg = game.i18n.format("PEN.notImplemented", { name: options.particName });
     await this.createDeclarationCard(options, msg);
   }
 
@@ -705,7 +705,7 @@ export class CombatAction {
       actor: actor,
     };
     // Horsemanship, apply horse's normal dmg on win
-    let msg = options.particName + " " + game.i18n.localize("PEN.notImplemented");
+    let msg = game.i18n.format("PEN.notImplemented", { name: options.particName });
     await this.createDeclarationCard(options, msg);
   }
 
@@ -720,7 +720,7 @@ export class CombatAction {
       particImg: actor.img,
       actor: actor,
     };
-    let msg = options.particName + " " + game.i18n.localize("PEN.notImplemented");
+    let msg = game.i18n.format("PEN.notImplemented", { name: options.particName });
     await this.createDeclarationCard(options, msg);
   }
 
@@ -780,7 +780,7 @@ export class CombatAction {
       particImg: actor.img,
       actor: actor,
     };
-    let msg = options.particName + " " + game.i18n.localize("PEN.donsArmour");
+    let msg = game.i18n.format("PEN.donsArmour", { name: options.particName });
     await this.createDeclarationCard(options, msg);
   }
 
@@ -798,7 +798,7 @@ export class CombatAction {
       particImg: actor.img,
       actor: actor,
     };
-    let msg = options.particName + " " + game.i18n.localize("PEN.notImplemented");
+    let msg = game.i18n.format("PEN.notImplemented", { name: options.particName });
     await this.createDeclarationCard(options, msg);
   }
 
