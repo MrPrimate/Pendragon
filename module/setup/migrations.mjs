@@ -1,4 +1,6 @@
 import { WieldState } from "../models/items/weapon_model.mjs";
+import { PENUtilities } from "../apps/utilities.mjs";
+import PENDialog from "./pen-dialog.mjs";
 
 /**
  * Perform a system migration for the entire World, applying migrations for Actors, Items, and Compendium packs.
@@ -133,14 +135,63 @@ export async function squireBornUpdate() {
 }
 
 //Change family relationship data for more detailed entries
-//Gender is free text so only switch to the male/female version when it is recognised, otherwise keep the neutral relation
+//Gender is free text so switch to the male/female version when it is recognised.
+//If any can't be recognised the GM chooses to keep them neutral (default) or pick male/female at random
 export async function familyRelationUpdate() {
   console.log("Family Relationship update started");
+  const unknown = [];
   for (const actor of game.actors) {
     if (actor.type !== "character") continue;
-    await familyRelationUpdateItems(actor, actor.items);
+    unknown.push(...(await familyRelationUpdateItems(actor, actor.items)));
+  }
+  if (unknown.length > 0) {
+    const randomise = await familyRelationAskRandom(unknown);
+    const byActor = new Map();
+    for (const { actor, item } of unknown) {
+      let gender = "";
+      if (randomise) {
+        gender = Math.random() < 0.5 ? "male" : "female";
+        const options = FAMILY_GENDERED_RELATIONS[item.system.relation];
+        if (!byActor.has(actor)) byActor.set(actor, []);
+        byActor.get(actor).push({ _id: item.id, "system.relation": gender === "male" ? options[0] : options[1] });
+      }
+      console.log(
+        `Family Relationship update: ${actor.name} - ${item.name} (${item.system.gender || "no gender"}) ` +
+          (randomise ? `set to ${gender}` : "kept as " + item.system.relation),
+      );
+    }
+    for (const [actor, updates] of byActor) {
+      await Item.updateDocuments(updates, { parent: actor });
+    }
   }
   console.log("Family Relationship update complete");
+}
+
+//Ask the GM what to do with family members whose gender isn't recognised - true = pick at random
+async function familyRelationAskRandom(unknown) {
+  const esc = foundry.utils.escapeHTML;
+  const rows = unknown
+    .map(
+      ({ actor, item }) =>
+        `<li>${esc(actor.name)}: ${esc(item.name)} - ${esc(game.i18n.localize("PEN.familyRelationship." + item.system.relation))}` +
+        (item.system.gender ? ` (${esc(item.system.gender)})` : "") +
+        "</li>",
+    )
+    .join("");
+  const content =
+    "<p>" +
+    game.i18n.format("PEN.familyMigrate.content", { count: unknown.length }) +
+    `</p><ul style="max-height: 200px; overflow-y: auto">${rows}</ul>`;
+  const choice = await PENDialog.wait({
+    window: { title: "PEN.familyMigrate.title" },
+    content,
+    buttons: [
+      { action: "keep", label: "PEN.familyMigrate.keep", default: true },
+      { action: "random", label: "PEN.familyMigrate.random" },
+    ],
+    rejectClose: false,
+  });
+  return choice === "random";
 }
 
 const FAMILY_GENDERED_RELATIONS = {
@@ -152,37 +203,27 @@ const FAMILY_GENDERED_RELATIONS = {
   grandchild: ["grandson", "granddaughter"],
 };
 
-//Returns "male", "female" or "" from a free text gender
-function familyGender(text) {
-  const gender = (text ?? "").trim().toLowerCase();
-  if (!gender) return "";
-  const female = ["female", "femme", "f", "woman", "w", "lady", "dame", "girl", "mother", "feminine"];
-  const male = ["male", "mâle", "homme", "m", "man", "lord", "sir", "boy", "father", "masculine"];
-  for (const lang of ["PEN.female", "PEN.male"]) {
-    const label = game.i18n.localize(lang).toLowerCase();
-    if (gender === label) return lang === "PEN.female" ? "female" : "male";
-  }
-  if (female.includes(gender)) return "female";
-  if (male.includes(gender)) return "male";
-  return "";
-}
-
+//Updates recognised genders and returns the family members that couldn't be recognised
 async function familyRelationUpdateItems(actor, items) {
   const updates = [];
+  const unknown = [];
   for (const item of items) {
     if (item.type !== "family") continue;
     const options = FAMILY_GENDERED_RELATIONS[item.system.relation];
     if (!options) continue;
-    const gender = familyGender(item.system.gender);
+    const gender = PENUtilities.genderType(item.system.gender);
     if (gender === "male") {
       updates.push({ _id: item.id, "system.relation": options[0] });
     } else if (gender === "female") {
       updates.push({ _id: item.id, "system.relation": options[1] });
+    } else {
+      unknown.push({ actor, item });
     }
   }
   if (updates.length > 0) {
     await Item.updateDocuments(updates, { parent: actor });
   }
+  return unknown;
 }
 
 async function squireBornUpdateItems(actor, items) {

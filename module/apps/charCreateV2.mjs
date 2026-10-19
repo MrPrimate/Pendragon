@@ -2009,7 +2009,8 @@ export class PENCharCreateV2 {
       return false;
     }
     let familyName = [usage.familyName1, usage.familyName2];
-    let gender = [usage.gender1, usage.gender2];
+    //Use the standard label for recognised genders so they match generated family members
+    let gender = [PENUtilities.genderLabel(usage.gender1), PENUtilities.genderLabel(usage.gender2)];
     let born = [Number(usage.born1), Number(usage.born2)];
     let died = [Number(usage.died1), Number(usage.died2)];
     let knight = [usage.knight1, usage.knight2];

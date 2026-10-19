@@ -1,4 +1,4 @@
-name: Female Names
+name: Female Names (Cymric)
 img: icons/svg/d20.svg
 description: ''
 results:
@@ -246,7 +246,7 @@ _stats:
   systemId: Pendragon
   systemVersion: '14.23'
   createdTime: 1792065157678
-  modifiedTime: 1792065157678
+  modifiedTime: 1792388681116
   lastModifiedBy: pendragonBuilder
   duplicateSource: null
   exportSource: null

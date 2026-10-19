@@ -109,7 +109,7 @@ export class CombatAction {
     const data = await api.DialogV2.input({
       window: { title: `PEN.actions.${action}` },
       content: content,
-      ok: { label: "Roll" },
+      ok: { label: game.i18n.localize("PEN.roll") },
     });
     return data?.checkBonus;
   }
@@ -396,7 +396,8 @@ export class CombatAction {
       // leap into saddle requires a roll
       // or mount carefully unopposed
       actor.mountCurrentHorse();
-      await this.createDeclarationCard(options, `${options.particName} mounts their horse.`);
+      let msg = game.i18n.format("PEN.mountsHorse", { name: options.particName });
+      await this.createDeclarationCard(options, msg);
       return;
     }
     // make the roll
@@ -430,7 +431,8 @@ export class CombatAction {
       // leap out of saddle requires a roll
       // or mount carefully unopposed
       actor.dismountCurrentHorse();
-      await this.createDeclarationCard(options, `${options.particName} dismounts their horse.`);
+      let msg = game.i18n.format("PEN.dismountsHorse", { name: options.particName });
+      await this.createDeclarationCard(options, msg);
       return;
     }
     // make the roll
@@ -445,7 +447,8 @@ export class CombatAction {
       particImg: actor.img,
       actor: actor,
     };
-    await this.createDeclarationCard(options, `${options.particName} claims a prisoner.`);
+    let msg = game.i18n.format("PEN.claimsPrisoner", { name: options.particName });
+    await this.createDeclarationCard(options, msg);
   }
 
   static async callSquire(actor) {
@@ -456,7 +459,8 @@ export class CombatAction {
       actor: actor,
     };
     // squire skill; special card to choose action on success
-    await this.createDeclarationCard(options, `${options.particName} NOT IMPLEMENTED`);
+    let msg = game.i18n.format("PEN.notImplemented", { name: options.particName });
+    await this.createDeclarationCard(options, msg);
   }
 
   // DISARM
@@ -534,7 +538,8 @@ export class CombatAction {
     };
     // automatic success if unopposed
     // else DEX+5
-    await this.createDeclarationCard(options, `${options.particName} picks up an object within easy reach.`);
+    let msg = game.i18n.format("PEN.pickUp", { name: options.particName });
+    await this.createDeclarationCard(options, msg);
   }
 
   static async selfSacrifice(actor) {
@@ -547,7 +552,8 @@ export class CombatAction {
     // GM needs to approve, no roll needed
     // auto-success, max crit damage, character dies heroically at the end
     // roll.evaluate({maximize:true})
-    await this.createDeclarationCard(options, `${options.particName} NOT IMPLEMENTED`);
+    let msg = game.i18n.format("PEN.notImplemented", { name: options.particName });
+    await this.createDeclarationCard(options, msg);
   }
 
   static async study(actor) {
@@ -558,7 +564,8 @@ export class CombatAction {
       actor: actor,
     };
     // if attacked, can switch action with -5 penalty
-    await this.createDeclarationCard(options, `${options.particName} studies the combat scene carefully.`);
+    let msg = game.i18n.format("PEN.studyScene", { name: options.particName });
+    await this.createDeclarationCard(options, msg);
   }
 
   static async withholdDamage(actor) {
@@ -569,7 +576,8 @@ export class CombatAction {
       actor: actor,
     };
     //choose either reduce by X dice or 1/2 damage
-    await this.createDeclarationCard(options, `${options.particName} NOT IMPLEMENTED`);
+    let msg = game.i18n.format("PEN.notImplemented", { name: options.particName });
+    await this.createDeclarationCard(options, msg);
   }
 
   // ZIGZAG
@@ -697,7 +705,8 @@ export class CombatAction {
       actor: actor,
     };
     // Horsemanship, apply horse's normal dmg on win
-    await this.createDeclarationCard(options, `${options.particName} NOT IMPLEMENTED`);
+    let msg = game.i18n.format("PEN.notImplemented", { name: options.particName });
+    await this.createDeclarationCard(options, msg);
   }
 
   static async quickDismount(actor) {
@@ -711,7 +720,8 @@ export class CombatAction {
       particImg: actor.img,
       actor: actor,
     };
-    await this.createDeclarationCard(options, `${options.particName} NOT IMPLEMENTED`);
+    let msg = game.i18n.format("PEN.notImplemented", { name: options.particName });
+    await this.createDeclarationCard(options, msg);
   }
 
   // DODGE
@@ -770,7 +780,8 @@ export class CombatAction {
       particImg: actor.img,
       actor: actor,
     };
-    await this.createDeclarationCard(options, `${options.particName} dons their armor.`);
+    let msg = game.i18n.format("PEN.donsArmour", { name: options.particName });
+    await this.createDeclarationCard(options, msg);
   }
 
   static async hook(actor) {
@@ -787,7 +798,8 @@ export class CombatAction {
       particImg: actor.img,
       actor: actor,
     };
-    await this.createDeclarationCard(options, `${options.particName} NOT IMPLEMENTED`);
+    let msg = game.i18n.format("PEN.notImplemented", { name: options.particName });
+    await this.createDeclarationCard(options, msg);
   }
 
   // SET SPEAR
