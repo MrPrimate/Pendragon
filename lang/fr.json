@@ -462,6 +462,12 @@
       "spouse": "Épouse",
       "uncle": "Oncle"
     },
+    "familyMigrate": {
+      "title": "Mise à jour des liens familiaux",
+      "content": "Le genre de {count} membre(s) de la famille n'a pas pu être reconnu ; ils gardent donc un lien neutre (ex. Parent, Frère ou sœur). Les garder tels quels, ou choisir Masculin/Féminin au hasard ? Vous pourrez les modifier plus tard sur chaque membre de la famille.",
+      "keep": "Garder neutre",
+      "random": "Choisir au hasard"
+    },
     "familyRolls": "Lancés familiaux",
     "famous": "Célèbre",
     "favour": "Faveur",

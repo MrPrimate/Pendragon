@@ -465,6 +465,12 @@
       "spouse": "Spouse",
       "uncle": "Uncle"
     },
+    "familyMigrate": {
+      "title": "Family Relationships Update",
+      "content": "The gender of {count} family member(s) could not be recognised, so they still have a gender neutral relationship (e.g. Parent, Sibling). Keep them as they are, or pick Male/Female at random? You can change any of them later on the family member.",
+      "keep": "Keep Neutral",
+      "random": "Pick at Random"
+    },
     "familyRolls": "Family Rolls",
     "famous": "Famous",
     "favour": "Favour",
