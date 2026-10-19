@@ -354,7 +354,9 @@ export class PENCheck {
     } else {
       let usage = await PENCheck.RollDialog(config);
       if (usage) {
-        if (usage.flatMod) {
+        // a Check Bonus of 0 is a real choice (e.g. cancelling an improvised weapon's -5);
+        // only an empty field keeps the default
+        if (usage.flatMod != null) {
           config.flatMod = Number(usage.flatMod);
         }
         if (config.reflex) {
