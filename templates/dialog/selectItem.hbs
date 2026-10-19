@@ -1,5 +1,6 @@
 <section class="Pendragon" id="selectItem">
     <div class="stat-name">{{headTitle}}</div>
+    {{#if hint}}<p class="hint">{{hint}}</p>{{/if}}
     <div class="radioList">
       {{#each newList as |type id|}}
         <div class="stat-name">
