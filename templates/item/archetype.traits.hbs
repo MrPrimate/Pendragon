@@ -29,12 +29,12 @@
           <div class="stat-name centre">{{trait.constructed}} / {{trait.formula}}</div>
           <div class="item-controls">
             {{#if ../isGM}}
-              <a class="item-control item-delete" title="{{localize 'PEN.deleteItem'}}" data-action="deleteItem"><i class="fas fa-trash" style="padding-top: 5px;"></i></a>
+              <a class="item-control item-delete" title="{{localize 'PEN.delete'}}" data-action="deleteItem"><i class="fas fa-trash" style="padding-top: 5px;"></i></a>
             {{/if}}
           </div>
         </li>
       {{else}}
-        <div class="centre italics" style="height:60px; padding-top: 20px;">{{localize 'PEN.emptyList'}}</td>
+        <div class="centre italics" style="height:60px; padding-top: 20px;">{{localize 'PEN.emptyList'}}</div>
       {{/each}}
     </ol>
   </div>
