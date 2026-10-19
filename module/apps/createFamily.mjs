@@ -3,6 +3,21 @@ import { PENUtilities } from "./utilities.mjs";
 
 export class PENCreateFamily {
   static FEMALE_RELATIONS = ["mother", "sister", "aunt", "grandmother", "daughter", "granddaughter"];
+  //Gender neutral relation that also counts as each gendered relation when checking existing family
+  static NEUTRAL_RELATIONS = {
+    father: "parent",
+    mother: "parent",
+    grandfather: "grandparent",
+    grandmother: "grandparent",
+    uncle: "pibling",
+    aunt: "pibling",
+    brother: "sibling",
+    sister: "sibling",
+    son: "child",
+    daughter: "child",
+    grandson: "grandchild",
+    granddaughter: "grandchild",
+  };
 
   //Start the process with an actor
   static async startFamily(actor) {
@@ -367,9 +382,11 @@ export class PENCreateFamily {
       });
       type2 = ""; //ignore invalid type
     }
+    //Neutral relations (e.g. parent) match their gendered versions (e.g. father/mother)
+    let types = [type1, type2, this.NEUTRAL_RELATIONS[type1], this.NEUTRAL_RELATIONS[type2]].filter(Boolean);
     let members = actor.items
       .filter((itm) => itm.type === "family")
-      .filter((itm) => [type1, type2].includes(itm.system.relation));
+      .filter((itm) => types.includes(itm.system.relation));
     if (maternalCheck === "maternal") {
       members = members.filter((itm) => itm.system.maternal);
     } else if (maternalCheck === "paternal") {

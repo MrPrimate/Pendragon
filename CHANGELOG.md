@@ -6,6 +6,7 @@ Families (Dangermouse & Mr Primate)
 
 - Family Relationships now split by sex/gender; e.g. Parent to Mother & Father
 - Migration script will update these for in world characters - using current gender labels to identify male/female but where it can't match it will roll randomly.
+- Gender neutral relationships (Parent, Sibling, Aunt or Uncle, Grandparent, Child, Grandchild) remain available and are recognised by Family Creation
 - Please review the new labels for your characters and adjust accordingly
 - Game setting to use random names when creating a family. The system contains sample roll tables for this which you could clone and expand. Full versions are in the Core Rulebook module
   Cultures
