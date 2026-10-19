@@ -245,4 +245,26 @@ export class PENUtilities {
       }
     }
   }
+
+  //Returns "male", "female" or "" from a free text gender
+  static genderType(text) {
+    const gender = (text ?? "").trim().toLowerCase();
+    if (!gender) return "";
+    const female = ["female", "femme", "f", "woman", "w", "lady", "dame", "girl", "mother", "feminine"];
+    const male = ["male", "mâle", "homme", "m", "man", "lord", "sir", "boy", "father", "masculine"];
+    for (const lang of ["PEN.female", "PEN.male"]) {
+      const label = game.i18n.localize(lang).toLowerCase();
+      if (gender === label) return lang === "PEN.female" ? "female" : "male";
+    }
+    if (female.includes(gender)) return "female";
+    if (male.includes(gender)) return "male";
+    return "";
+  }
+
+  //Recognised genders use the standard label (e.g. "male" -> "Male"), anything else is kept as entered
+  static genderLabel(text) {
+    const type = this.genderType(text);
+    if (!type) return (text ?? "").trim();
+    return game.i18n.localize(type === "female" ? "PEN.female" : "PEN.male");
+  }
 }

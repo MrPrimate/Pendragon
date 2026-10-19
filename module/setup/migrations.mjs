@@ -1,4 +1,5 @@
 import { WieldState } from "../models/items/weapon_model.mjs";
+import { PENUtilities } from "../apps/utilities.mjs";
 
 /**
  * Perform a system migration for the entire World, applying migrations for Actors, Items, and Compendium packs.
@@ -152,32 +153,13 @@ const FAMILY_GENDERED_RELATIONS = {
   grandchild: ["grandson", "granddaughter"],
 };
 
-//Returns "male", "female" or "" from a free text gender
-async function familyGender(text) {
-  const gender = (text ?? "").trim().toLowerCase();
-  const female = ["female", "femme", "f", "woman", "w", "lady", "dame", "girl", "mother", "feminine"];
-  const male = ["male", "mâle", "homme", "m", "man", "lord", "sir", "boy", "father", "masculine"];
-  for (const lang of ["PEN.female", "PEN.male"]) {
-    const label = game.i18n.localize(lang).toLowerCase();
-    if (gender === label) return lang === "PEN.female" ? "female" : "male";
-  }
-  if (female.includes(gender)) return "female";
-  if (male.includes(gender)) return "male";
-  //If can't match gender then roll randomly
-  let roll = new Roll("1D2");
-  let result = await roll.evaluate();
-  if (result.total === 1) return "male";
-  return "female";
-}
-
 async function familyRelationUpdateItems(actor, items) {
   const updates = [];
   for (const item of items) {
     if (item.type !== "family") continue;
     const options = FAMILY_GENDERED_RELATIONS[item.system.relation];
     if (!options) continue;
-    console.log(item.name);
-    const gender = await familyGender(item.system.gender);
+    const gender = PENUtilities.genderType(item.system.gender);
     if (gender === "male") {
       updates.push({ _id: item.id, "system.relation": options[0] });
     } else if (gender === "female") {
