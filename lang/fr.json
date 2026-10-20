@@ -1143,6 +1143,7 @@
     "statRoll": "Test de Carac.",
     "stats": "Caracs",
     "statsSpend": "Utilisez les flèches pour ajuster les caractéristiques ou cliquez sur l'icône du dé pour faire un jet",
+    "statSpendFixed": "Utilisez les flèches pour ajuster les scores",
     "status": "Statut",
     "step": {
       "createMethod": "Méthode de création",

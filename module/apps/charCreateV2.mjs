@@ -681,6 +681,7 @@ export class PENCharCreateV2 {
         const religResults = await PENUtilities.tableDiceRoll(table);
         const doc = await this.documentFromResult(religResults.results[0]);
         if (!doc) {
+          ui.notifications.error(game.i18n.localize("PEN.notReligDoc"));
           return false;
         }
         //Check the rolled document is a religion with a PID
@@ -701,7 +702,26 @@ export class PENCharCreateV2 {
         let msg = await this.showCharGenRollChat(html, actor);
       } else {
         //The creation method is constructed so pick the religion
-        itemData = await this.selectItem("religion", false);
+        //Get the possible religions from the religion table from the culture
+        const table = await this.getReligionTable(actor);
+        const listOptions = [];
+        const seen = new Set();
+        for (const result of table?.results ?? []) {
+          if (!result.documentUuid) continue;
+          const doc = await fromUuid(result.documentUuid);
+          const pid = doc?.flags?.Pendragon?.pidFlag?.id;
+          if (doc?.documentName !== "Item" || doc.type !== "religion" || !pid || seen.has(pid)) continue;
+          seen.add(pid);
+          listOptions.push({ name: doc.name, pid });
+        }
+        if (listOptions.length > 0) {
+          const winTitle = game.i18n.format("PEN.selectItem", {
+            type: game.i18n.localize("PEN.Entities.Religion"),
+          });
+          itemData = await this.selectItem("list", false, listOptions, winTitle);
+        } else {
+          itemData = await this.selectItem("religion", false);
+        }
       }
       //In either case if itemData not present then error out
       if (!itemData) {
@@ -1165,7 +1185,7 @@ export class PENCharCreateV2 {
             name: itm.name,
             value: itm.system.total,
             origVal: itm.system.total,
-            pid: itm.flags.Pendragon.pidFlag.id,
+            pid: itm.flags?.Pendragon?.pidFlag?.id,
             homeland: itm.system.homeland,
             source: "",
             minVal: itm.system.total,
@@ -1793,14 +1813,14 @@ export class PENCharCreateV2 {
             case "4":
               let stats = [];
               for (let [key, stat] of Object.entries(actor.system.stats)) {
-                if (stat.value < stat.max) {
+                if (stat.value < stat.cMax) {
                   stats.push({
                     id: key,
                     name: stat.label,
                     value: stat.total,
                     origVal: stat.total,
                     minVal: stat.total,
-                    maxVal: stat.max,
+                    maxVal: stat.cMax,
                   });
                 }
               }

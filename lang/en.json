@@ -1144,6 +1144,7 @@
     "statRoll": "Stat Roll",
     "stats": "Stats",
     "statsSpend": "Use the arrows to adjust characteristics or click the dice icon to roll them",
+    "statSpendFixed": "Use the arrows to adjust the scores",
     "status": "Status",
     "step": {
       "addArchetype": "Archetype",

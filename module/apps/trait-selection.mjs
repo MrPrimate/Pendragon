@@ -94,17 +94,17 @@ export class TraitsSelectDialog extends PENDialog {
       cap: cap,
     };
     const html = await foundry.applications.handlebars.renderTemplate(destination, data);
-
     return new Promise((resolve) => {
       const dlg = TraitsSelectDialog.wait({
-        window: { title: winTitle },
+        window: {
+          title: winTitle,
+          resizable: true,
+        },
         position: {
           width: 570,
           height: 830,
         },
-        window: {
-          resizable: true,
-        },
+
         form: { closeOnSubmit: false },
         content: html,
         data,

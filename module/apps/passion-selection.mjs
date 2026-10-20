@@ -87,7 +87,10 @@ export class PassionsSelectDialog extends PENDialog {
 
     return new Promise((resolve) => {
       const dlg = PassionsSelectDialog.wait({
-        window: { title: winTitle },
+        window: {
+          title: winTitle,
+          resizable: true,
+        },
         form: { closeOnSubmit: false },
         content: html,
         data,

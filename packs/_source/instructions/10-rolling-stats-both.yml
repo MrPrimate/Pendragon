@@ -482,7 +482,7 @@ pages:
     _id: 8WfTBPXalEEYbekv
     category: null
     _key: '!journal.pages!Q8neofTu7Ubvxqzn.8WfTBPXalEEYbekv'
-  - sort: 450000
+  - sort: 600000
     name: Weapon Rolls
     type: text
     _id: JPOU2h5bwqqkXXwt
@@ -503,12 +503,12 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: '13.345'
+      coreVersion: '14.369'
       systemId: Pendragon
       systemVersion: 12.1.16
-      createdTime: null
-      modifiedTime: null
-      lastModifiedBy: null
+      createdTime: 1792498509073
+      modifiedTime: 1792498509073
+      lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
     _key: '!journal.pages!Q8neofTu7Ubvxqzn.JPOU2h5bwqqkXXwt'
