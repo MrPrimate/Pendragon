@@ -2,33 +2,44 @@
 
 ## 14.23
 
-Families (Dangermouse & Mr Primate)
+### Families (Dangermouse & Mr Primate)
 
 - Family Relationships now split by sex/gender; e.g. Parent to Mother & Father
 - Migration script will update these for in world characters - using current gender labels to identify male/female. Where it can't match (e.g. blank or non-binary) the GM is asked whether to keep the gender neutral relationship (default) or pick male/female at random
 - Gender neutral relationships (Parent, Sibling, Aunt or Uncle, Grandparent, Child, Grandchild) remain available and are recognised by Family Creation
 - Please review the new labels for your characters and adjust accordingly
 - Game setting to use random names when creating a family. The system contains sample roll tables for this which you could clone and expand. Full versions are in the Core Rulebook module
-  Cultures
+
+### Cultures
+
 - Cultures now have the option to add a Starting Religion table - this is used in character creation in preference to the default "Starting Religions table".
 - Set up a new roll table that holds religion documents and then add that to the culture.
-  Winter Phase - (MrPrimate)
+
+### Winter Phase - (MrPrimate)
+
 - Ending the Winter Phase will give you a dialog box asking if you want to increase the game year, rather than it happening automatically.
 - Winter Phase doesn't automatically add Passive Glory anymore, it is a step in the process you need to trigger.
 - Squires updated via migration script for their age so they age properly during winter phase
 - Double clicking the passive glory step no longer gives two lots of glory
 - Passive glory happens before Prestige Points are spent so you gain the benefit in the year
-  Chaosium Canvas Interface - thanks to JamesB
+
+### Chaosium Canvas Interface - thanks to JamesB
+
 - Updated code for Foundry v369 and refreshed functionality
-  Combat Rolls (ryak2)
+
+### Combat Rolls (ryak2)
+
 - Fixed an issue where A Success and a Fumble was incorrectly giving a fumble for both parties
-  Misc
+
+### Misc
+
 - Dragging and dropping a macro to the hot-bar should no longer use a default D20 image and instead use the image associated with the macro
 - Updated French translations (Tontione)
 - Various V2 character missing localizations added
 - Fixed error when doing a non-weapon based combat action (e.g. Mount a Horse) throwing an error regarding XP check
 - Item sheet tidy up (MrPrimate)
-  Again a big thank you to MrPrimate for testing and fixing my code on top of the additions he's made.
+- Selecting Religion during Character Creation with Constructed Method will offer the options on the Starting Religion table (see above). It will fall back to all religions in game if the table doesn't provide religions.![alt text](image.png)
+- Character Creation instructions have been refreshed and move to the Wiki - https://github.com/cragstone/Pendragon/wiki/Character-Creation
 
 ## 14.22
 

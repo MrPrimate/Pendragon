@@ -14,82 +14,51 @@ pages:
     text:
       format: 1
       content: >-
-        <p><span style="font-family:Roboto, sans-serif">This is a cut-down
-        character sheet but operates in the same way as a character sheet for
-        the most part.</span></p><p><span style="font-family:Roboto,
-        sans-serif">There are three icons at the top right of the screen (just
-        to the right of the Follower image).The first icon (an x in a circle)
-        will close the Follower sheet as sometime the "Close" option on the
-        title bar can get hidden.The third icon is a padlock - toggling it with
-        Double Click makes more of the sheet editable and adds View/Delete icons
-        (these are hidden when locked to give a cleaner appearance).<br
+        <p>This is a cut-down character sheet but operates in the same way as a
+        character sheet for the most part.</p><p>There are three icons at the
+        top right of the screen (just to the right of the Follower image).The
+        first icon (an x in a circle) will close the Follower sheet as sometime
+        the "Close" option on the title bar can get hidden.The third icon is a
+        padlock - toggling it with Double Click makes more of the sheet editable
+        and adds View/Delete icons (these are hidden when locked to give a
+        cleaner appearance).The middle icon is only visible when the Follower
+        sheet is unlocked and is a pair of dice. When this is double clicked the
+        Followers scores (e.g. Max HP, Knockdown) etc will be automatically
+        derived from the stats. You can then edit any or all of the values to
+        override the calculated score whils the sheet is unlocked. You can
+        double click the dice icon to return <span
         style="box-sizing:border-box;user-select:text;scrollbar-width:thin;scrollbar-color:var(--color-scrollbar)
-        var(--color-scrollbar-track)" /><br
+        var(--color-scrollbar-track)">ALL</span> these scores to the calculated
+        defaults.You <span
         style="box-sizing:border-box;user-select:text;scrollbar-width:thin;scrollbar-color:var(--color-scrollbar)
-        var(--color-scrollbar-track)" />The middle icon is only visible when the
-        Follower sheet is unlocked and is a pair of dice. When this is double
-        clicked the Followers scores (e.g. Max HP, Knockdown) etc will be
-        automatically derived from the stats. You can then edit any or all of
-        the values to override the calculated score whils the sheet is unlocked.
-        You can double click the dice icon to return <strong
-        style="box-sizing:border-box;user-select:text;scrollbar-width:thin;scrollbar-color:var(--color-scrollbar)
-        var(--color-scrollbar-track)">ALL</strong> these scores to the
-        calculated defaults.You <strong
-        style="box-sizing:border-box;user-select:text;scrollbar-width:thin;scrollbar-color:var(--color-scrollbar)
-        var(--color-scrollbar-track)">can not</strong> make dice rolls whilst
-        the Follower sheet is unlocked</span></p><p></p><p>There is also a
-        fourth icon (a book) in the secondary stats selection below the Follower
-        image. Toggling this changes the tab below to show Personal Details or
-        Weapons, Skills etc. The personal details can be input (except Age which
-        is calculated) when the Follower sheet is unlocked. If the follower is a
+        var(--color-scrollbar-track)">can not</span> make dice rolls whilst the
+        Follower sheet is unlocked</p><p></p><p>There is also a fourth icon (a
+        book) in the secondary stats selection below the Follower image.
+        Toggling this changes the tab below to show Personal Details or Weapons,
+        Skills etc. The personal details can be input (except Age which is
+        calculated) when the Follower sheet is unlocked. If the follower is a
         Squire then you can enter a squire skill score - and you can roll this
-        and age as per the squire item.</p><p></p><p><span
-        style="font-family:Roboto, sans-serif">Some differences to
-        note:</span></p><ol><li
+        and age as per the squire item.</p><p></p><p>Some differences to
+        note:</p><ol><li><p><span
         style="box-sizing:border-box;user-select:text;scrollbar-width:thin;scrollbar-color:var(--color-scrollbar)
-        var(--color-scrollbar-track)"><p
-        style="box-sizing:border-box;user-select:text;scrollbar-width:thin;scrollbar-color:var(--color-scrollbar)
-        var(--color-scrollbar-track);margin:0.5em 0px"><span
-        style="font-family:Roboto, sans-serif">Rather than a list of wounds
-        there is one Wound Stat that should simply be updated. Major Wound
-        statuses are not shown - you should track this
-        accordingly.</span></p></li><li
-        style="box-sizing:border-box;user-select:text;scrollbar-width:thin;scrollbar-color:var(--color-scrollbar)
-        var(--color-scrollbar-track)"><p
-        style="box-sizing:border-box;user-select:text;scrollbar-width:thin;scrollbar-color:var(--color-scrollbar)
-        var(--color-scrollbar-track);margin:0.5em 0px"><span
-        style="font-family:Roboto, sans-serif">Whilst weapons etc can be dragged
-        to the character sheet they can be added manually with the "+" icon to
-        allow you to add one off or bespoke skills, weapons
-        etc.</span></p></li><li
-        style="box-sizing:border-box;user-select:text;scrollbar-width:thin;scrollbar-color:var(--color-scrollbar)
-        var(--color-scrollbar-track)"><p
-        style="box-sizing:border-box;user-select:text;scrollbar-width:thin;scrollbar-color:var(--color-scrollbar)
-        var(--color-scrollbar-track);margin:0.5em 0px"><span
-        style="font-family:Roboto, sans-serif">Weapon score and Damage should be
-        added manually - they are not derived from the interaction of skills and
-        weapon. This is to allow for the potential in the future to import NPCs
-        from blocks of text</span></p></li><li
-        style="box-sizing:border-box;user-select:text;scrollbar-width:thin;scrollbar-color:var(--color-scrollbar)
-        var(--color-scrollbar-track)"><p
-        style="box-sizing:border-box;user-select:text;scrollbar-width:thin;scrollbar-color:var(--color-scrollbar)
-        var(--color-scrollbar-track);margin:0.5em 0px"><span
-        style="font-family:Roboto, sans-serif">Armour has an "Arm" toggle box.
-        Toggle this on for armour and off for Shields. Remember you can override
-        the armour values manually when the NPC sheet is
-        unlocked.</span></p></li><li
-        style="box-sizing:border-box;user-select:text;scrollbar-width:thin;scrollbar-color:var(--color-scrollbar)
-        var(--color-scrollbar-track)"><p
-        style="box-sizing:border-box;user-select:text;scrollbar-width:thin;scrollbar-color:var(--color-scrollbar)
-        var(--color-scrollbar-track);margin:0.5em 0px"><span
-        style="font-family:Roboto, sans-serif">Traits only show and roll the
-        main trait (not the opposed trait). If you need this for an NPC add a
-        new trait using the Opposed details.</span></p></li><li><span
-        style="font-family:Roboto, sans-serif">When creating a token for an
+        var(--color-scrollbar-track);margin:0.5em 0px">Rather than a list of
+        wounds there is one Wound Stat that should simply be updated. Major
+        Wound statuses are not shown - you should track this accordingly.Whilst
+        weapons etc can be dragged to the character sheet they can be added
+        manually with the "+" icon to allow you to add one off or bespoke
+        skills, weapons etc.Weapon score and Damage should be added manually -
+        they are not derived from the interaction of skills and weapon. This is
+        to allow for the potential in the future to import NPCs from blocks of
+        textArmour has an "Arm" toggle box. Toggle this on for armour and off
+        for Shields. Remember you can override the armour values manually when
+        the NPC sheet is unlocked.Traits only show and roll the main trait (not
+        the opposed trait). If you need this for an NPC add a new trait using
+        the Opposed details.</span></p></li><li><p><span
+        style="font-family:'Roboto, sans-serif'">When creating a token for an
         Follower there are two attributes shown on the icon. The top attribute
         is the "Total Wounds" and can be updated on the token. The bottom number
         is the Current HP and can't be edited. Changing the "Total Wounds"
-        updates the Current HP and the health bar.</span></li></ol>
+        updates the Current HP and the health bar.</span></p></li></ol>
     video:
       controls: true
       volume: 0.5
@@ -99,11 +68,11 @@ pages:
     flags: {}
     _stats:
       duplicateSource: null
-      coreVersion: '13.348'
+      coreVersion: '14.369'
       systemId: Pendragon
       systemVersion: 12.1.16
-      createdTime: null
-      modifiedTime: 1759401357963
+      createdTime: 1792498492359
+      modifiedTime: 1792498492359
       lastModifiedBy: pendragonBuilder
       exportSource: null
     category: null
