@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 14.24
+- Followers now show the correct drop down list of types (Squire, Family, Retainer) rather than Career Paths
+
 ## 14.23
 
 ### Families (Dangermouse & Mr Primate)
