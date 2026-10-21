@@ -56,6 +56,13 @@ export class SkillData extends foundry.abstract.TypeDataModel {
     const context = {
       ...this.buildTooltipContext(),
       description: desc,
+      base: this.value,
+      culture: this.culture,
+      family: this.family,
+      familyLabel: this.familyChar,
+      training: this.winter + this.create,
+      effectTotal: this.effects,
+      categoryLabels: this.categoryLabels,
     };
     return {
       content: await foundry.applications.handlebars.renderTemplate(this.constructor.SKILL_TOOLTIP_TEMPLATE, context),
@@ -64,8 +71,11 @@ export class SkillData extends foundry.abstract.TypeDataModel {
 
   // this will build the context needed by the template
   buildTooltipContext() {
+    // actor -> item -> data model
     return {
-      parent: this.parent,
+      switchShift: game.settings.get("Pendragon", "switchShift"),
+      item: this.parent,
+      actor: this.item?.parent,
     };
   }
 }

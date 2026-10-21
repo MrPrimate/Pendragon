@@ -100,6 +100,7 @@
   --char-background-image: url("../assets/backgrounds/black-paper.png");
   --item-background-image: url("../assets/backgrounds/dark_arches2.png");
   --pill-bg: #240202;
+  --pill-border: oklch(from var(--pendragon-white) 0.8 c h);
   --pendragon-success: oklch(0.76 0.25 142);
   --pendragon-primary-text: oklch(0.9467 0.0311 75.22);
   --pendragon-secondary-text: oklch(0.62315 0.16929 268.592);
@@ -133,6 +134,12 @@ kbd {
   text-shadow: 0 1px 0 var(--color-shadow-dark);
   line-height: 1.4;
   white-space: nowrap;
+}
+
+/* table of modifiers for total or roll */
+.modifier-sources {
+  tr :nth-child(1) {text-align:left;}
+  tr :nth-child(2) {text-align:right;}
 }
 
 /* Hints regarding clicks or keybinds */

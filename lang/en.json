@@ -1075,6 +1075,18 @@
     "rollDice": "Roll Dice",
     "rolledValue": "Rolled Value",
     "rollHint": "Left click for a normal roll. ALT + click for an Opposed Roll, CTRL + click for a Fixed Opposed Roll.  SHIFT key is whether a dialogue box does or doesn't appear.",
+    "rollHints": {
+      "unopposedRoll": "Unopposed Roll",
+      "opposedRoll": "Opposed Roll",
+      "fixedOpposedRoll": "Fixed Opposed Roll",
+      "showPrompt": "Show Prompt",
+      "hidePrompt": "Hide Prompt",
+      "holdDownKey": "Hold down {key} as well.",
+      "lockHint": "Middle-click to lock.",
+      "middleClick": "Middle-click",
+      "leftClick": "Left click",
+      "rightClick": "Right click"
+    },
     "rollOptions": "Roll Options",
     "rollTableMod": "Request modifier with Roll",
     "rollTableModHint": "When making a roll you will be asked to enter a modifier to the roll formula.  This will be restricted to the table results range",
