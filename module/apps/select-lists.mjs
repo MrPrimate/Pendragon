@@ -197,8 +197,7 @@ export class PENSelectLists {
   }
 
   //Career Paths Type
-  //TO DO - replace with a generated list of Career Types when added as an Item class
-  static getCareerType() {
+  static getFollowerType() {
     let options = {
       familycourtier: game.i18n.localize("PEN.path.familycourtier"),
       familyladies: game.i18n.localize("PEN.path.familyladies"),

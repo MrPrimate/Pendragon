@@ -50,6 +50,8 @@ import {
   BackgroundData,
   ArchetypeData,
 } from "./models/items/index.mjs";
+import drawNote from "./hooks/draw-note.mjs";
+import RenderNoteConfig from "./hooks/render-note-config.mjs";
 import ChaosiumCanvasInterfaceInit from "./apps/chaosium-canvas-interface-init.mjs";
 import RenderRegionBehaviorConfig from "./hooks/render-region-behavior-config.mjs";
 import RenderRegionConfig from "./hooks/render-region-config.mjs";

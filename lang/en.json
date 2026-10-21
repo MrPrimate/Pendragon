@@ -1951,7 +1951,8 @@
       "ChaosiumCanvasInterfaceOpenDocument": "CCI: Open Document",
       "ChaosiumCanvasInterfacePlaySound": "CCI: Play Sound",
       "ChaosiumCanvasInterfaceToScene": "CCI: To Scene",
-      "ChaosiumCanvasInterfaceTileToggle": "CCI: Tile Toggle"
+      "ChaosiumCanvasInterfaceTileToggle": "CCI: Tile Toggle",
+      "ChaosiumCanvasInterfaceShowRegionOnHover": "CCI: Region Hover"
     }
   }
 }

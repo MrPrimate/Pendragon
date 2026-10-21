@@ -30,7 +30,7 @@
       "flags": {}
     }
   ],
-  "esmodules": ["module/pendragon.mjs", "module/setup/load.mjs"],
+  "esmodules": ["module/pendragon.mjs", "module/setup/load.mjs","module/setup/map-notes-levels.mjs"],
   "styles": [
     {
       "src": "css/pendragon.css"
@@ -61,6 +61,9 @@
     },
     {
       "src": "css/dialogv2.css"
+    },
+    {
+      "src": "css/note-preview.css"
     }
   ],
   "packFolders": [
@@ -272,6 +275,7 @@
       "ChaosiumCanvasInterfaceDrawingToggle": {},
       "ChaosiumCanvasInterfaceMapPinToggle": {},
       "ChaosiumCanvasInterfaceOpenDocument": {},
+      "ChaosiumCanvasInterfaceShowRegionOnHover": {},
       "ChaosiumCanvasInterfaceToScene": {},
       "ChaosiumCanvasInterfaceTileToggle": {}
     }

@@ -163,4 +163,14 @@ export function registerSettings() {
     type: Number,
     default: 508,
   });
+
+  game.settings.register("Pendragon", "tooltipToggle", {
+    name: "",
+    hint: "",
+    scope: "world",
+    requiresReload: false,
+    config: false,
+    type: Boolean,
+    default: true,
+  });
 }

@@ -1,0 +1,80 @@
+#scene-navigation-levels {
+  --max-levels-actual: 3;
+  height: calc(min(var(--max-levels, 3), --max-levels-actual) * (var(--control-size) + 0.5rem));
+}
+
+#note-preview-view {
+  --background-sheet: url(../../systems/Pendragon/assets/page-light.webp);
+  width: clamp(30rem, 30vw, 35rem);
+  --total-max-height: min(70vh, 40rem);
+  max-width: calc(100vw - 1rem);
+  max-height: var(--total-max-height);
+  font-family: "Messiri";
+  font-size: 16px;
+
+    .window-header .window-title {
+      color: transparent;
+    }
+
+    .window-content {
+      padding: 5px;
+    }
+
+    span,
+    h2,
+    h3,
+    h4,
+    h5,
+    p {
+      margin: 0px;
+
+      &.title1 {
+        text-transform: uppercase;
+        border-bottom: none;
+        font-family: "IMFell";
+        font-size: 20px;
+        font-weight: bold;
+        color: var(--pendragon-darkblue);
+      }
+
+      &.title2 {
+        border-bottom: none;
+        font-family: "Herb";
+        font-size: 26px;
+        color: darkred;
+        font-weight: bold;
+      }
+
+      &.title3 {
+        border-bottom: none;
+        font-family: "IMFell";
+        font-size: 18px;
+        font-weight: bold;
+        color: var(--pendragon-darkblue);
+      }
+
+      &.title4 {
+        border-bottom: none;
+        font-family: "IMFell";
+        font-size: 18px;
+        color: black;
+        font-weight: bold;
+      }
+
+      &.title5 {
+        border-bottom: 1px solid black;
+        font-family: "IMFell";
+        font-size: 18px;
+        font-style: italic;
+        font-weight: bold;
+        color: black;
+      }
+    }
+
+
+
+}
+
+#note-preview-view section.window-content {
+  overflow-y: scroll;
+}

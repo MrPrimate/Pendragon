@@ -1911,7 +1911,8 @@
       "ChaosiumCanvasInterfaceOpenDocument": "CCI : Ouvrir le document",
       "ChaosiumCanvasInterfacePlaySound": "CCI: Jouer le son",
       "ChaosiumCanvasInterfaceToScene": "CCI : Vers la scène",
-      "ChaosiumCanvasInterfaceTileToggle": "CCI : Basculer la tuile"
+      "ChaosiumCanvasInterfaceTileToggle": "CCI : Basculer la tuile",
+      "ChaosiumCanvasInterfaceShowRegionOnHover": "CCI: Survol de la Région"
     }
   }
 }
