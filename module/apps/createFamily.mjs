@@ -1,5 +1,6 @@
 import { PENCharCreateV2 } from "./charCreateV2.mjs";
 import { PENUtilities } from "./utilities.mjs";
+import { PENRandomName } from "./random-name.mjs";
 
 export class PENCreateFamily {
   static FEMALE_RELATIONS = ["mother", "sister", "aunt", "grandmother", "daughter", "granddaughter"];
@@ -46,7 +47,7 @@ export class PENCreateFamily {
     }
 
     //Get the name tables once rather than for each family member
-    this.nameTables = await this.getNameTables();
+    this.nameTables = await this.getNameTables(actor);
 
     //New family members to be added
     let familyAdd = [];
@@ -339,10 +340,11 @@ export class PENCreateFamily {
   }
 
   //Get the male and female name tables, false if random names are off or either table is missing
-  static async getNameTables() {
+  static async getNameTables(actor) {
     if (!game.settings.get("Pendragon", "randomFamilyNames")) return false;
-    let male = (await game.system.api.pid.fromPIDBest({ pid: "rt..male-names" }))[0];
-    let female = (await game.system.api.pid.fromPIDBest({ pid: "rt..female-names" }))[0];
+    const culture = PENRandomName.resolveCulture(actor);
+    let male = await PENRandomName.getNameTable("male", culture);
+    let female = await PENRandomName.getNameTable("female", culture);
     if (!male || !female) return false;
     return { male, female };
   }

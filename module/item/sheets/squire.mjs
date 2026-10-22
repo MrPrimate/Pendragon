@@ -1,5 +1,6 @@
 import { PENSelectLists } from "../../apps/select-lists.mjs";
 import { PendragonItemSheet } from "./item-sheet.mjs";
+import { PENRandomName } from "../../apps/random-name.mjs";
 
 export class PendragonSquireSheet extends PendragonItemSheet {
   constructor(options = {}) {
@@ -10,6 +11,9 @@ export class PendragonSquireSheet extends PendragonItemSheet {
     position: {
       width: 560,
       height: 470,
+    },
+    actions: {
+      randomName: PENRandomName.onSheetAction,
     },
   };
 
@@ -42,6 +46,7 @@ export class PendragonSquireSheet extends PendragonItemSheet {
     let sheetData = {
       ...(await super._prepareContext(options)),
     };
+    sheetData.showRandomName = true;
     sheetData.squireType = PENSelectLists.getSquireTypes();
 
     // these two values could be set during _preparePartContext

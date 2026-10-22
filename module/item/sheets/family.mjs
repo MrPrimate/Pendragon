@@ -1,6 +1,7 @@
 import { addPIDSheetHeaderButton } from "../../pid/pid-button.mjs";
 import { PENSelectLists } from "../../apps/select-lists.mjs";
 import { PendragonItemSheet } from "./item-sheet.mjs";
+import { PENRandomName } from "../../apps/random-name.mjs";
 
 export class PendragonFamilySheet extends PendragonItemSheet {
   constructor(options = {}) {
@@ -11,6 +12,9 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     position: {
       width: 560,
       height: 540,
+    },
+    actions: {
+      randomName: PENRandomName.onSheetAction,
     },
   };
 
@@ -43,6 +47,7 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     let sheetData = {
       ...(await super._prepareContext(options)),
     };
+    sheetData.showRandomName = true;
 
     sheetData.relationType = PENSelectLists.getRelationTypes();
     //Keep any relation no longer offered so the dropdown still shows it
