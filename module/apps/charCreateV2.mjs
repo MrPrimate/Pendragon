@@ -601,7 +601,7 @@ export class PENCharCreateV2 {
     let newName = await PENDialog.input({
       window: { title: game.i18n.localize("PEN.charName") },
       content: `<div class="name-with-roll"><input class="stat-name centre" type="text" name="age"><a class="random-name" data-tooltip="${game.i18n.localize("PEN.randomName")}"><i class="fas fa-dice"></i></a></div>`,
-      render: (event, dialog) => PENRandomName.activateNameButton(dialog.element, actor, "age"),
+      render: (event, dialog) => this.activateNameButton(dialog.element, actor, "age"),
     });
     if (!newName || newName.age === "") return false;
     let key = (await game.system.api.pid.getPrefix(actor)) + PENUtilities.toKebabCase(newName.age);
@@ -623,6 +623,18 @@ export class PENCharCreateV2 {
     return true;
   }
 
+  //Wire up a random name button in a dialog, filling the named input with a name for the actor
+  static activateNameButton(element, actor, inputName) {
+    const button = element.querySelector(".random-name");
+    const nameInput = element.querySelector(`[name="${inputName}"]`);
+    if (!button || !nameInput) return;
+    button.addEventListener("click", async (event) => {
+      event.preventDefault();
+      const name = await PENRandomName.randomName({ doc: actor, gender: actor.system.gender });
+      if (name) nameInput.value = name;
+    });
+  }
+
   //----------------------------------------------CHARACTER GENDER----------------------------------------------
   //
   //
@@ -631,13 +643,25 @@ export class PENCharCreateV2 {
     let newName = await PENDialog.input({
       window: { title: game.i18n.localize("PEN.charGender") },
       content: `<div class="name-with-roll"><input class="stat-name centre" type="text" name="age"><a class="random-gender" data-tooltip="${game.i18n.localize("PEN.randomGender")}"><i class="fas fa-dice"></i></a></div>`,
-      render: (event, dialog) => PENRandomName.activateGenderButton(dialog.element, "age"),
+      render: (event, dialog) => this.activateGenderButton(dialog.element, "age"),
     });
     if (!newName) return false;
     await actor.update({
       "system.gender": newName.age,
     });
     return true;
+  }
+
+  //Wire up a random gender button in a dialog, filling the named input with Male or Female
+  static activateGenderButton(element, inputName) {
+    const button = element.querySelector(".random-gender");
+    const genderInput = element.querySelector(`[name="${inputName}"]`);
+    if (!button || !genderInput) return;
+    button.addEventListener("click", async (event) => {
+      event.preventDefault();
+      const gender = await PENUtilities.resolveGender();
+      genderInput.value = game.i18n.localize("PEN." + gender);
+    });
   }
 
   //----------------------------------------------RELIGION----------------------------------------------
@@ -2795,9 +2819,25 @@ export class PENCharCreateV2 {
       ok: {
         label: game.i18n.localize("PEN.addParents"),
       },
-      render: (event, dialog) => PENRandomName.activateParentButtons(dialog.element, options.actor),
+      render: (event, dialog) => this.activateParentButtons(dialog.element, options.actor),
     });
     return usage;
+  }
+
+  //Wire up the random name buttons in the add parents dialog
+  //Each button has a data-index matching the familyName and gender inputs (1 = father, 2 = mother)
+  static activateParentButtons(element, actor) {
+    for (const button of element.querySelectorAll(".random-name[data-index]")) {
+      button.addEventListener("click", async (event) => {
+        event.preventDefault();
+        const index = button.dataset.index;
+        const nameInput = element.querySelector(`[name="familyName${index}"]`);
+        const gender = element.querySelector(`[name="gender${index}"]`)?.value ?? "";
+        const fallback = index === "2" ? "female" : "male";
+        const name = await PENRandomName.randomName({ doc: actor, gender, fallback });
+        if (name && nameInput) nameInput.value = name;
+      });
+    }
   }
 
   //Glory Roll

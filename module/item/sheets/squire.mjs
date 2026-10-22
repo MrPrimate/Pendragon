@@ -13,7 +13,7 @@ export class PendragonSquireSheet extends PendragonItemSheet {
       height: 470,
     },
     actions: {
-      randomName: PENRandomName.onSheetAction,
+      randomName: this._onRandomName,
     },
   };
 
@@ -38,6 +38,13 @@ export class PendragonSquireSheet extends PendragonItemSheet {
       template: "systems/Pendragon/templates/item/gmtab.hbs",
     },
   };
+
+  //Roll a random name
+  static async _onRandomName(_event, _target) {
+    if (!this.isEditable) return;
+    const name = await PENRandomName.randomName({ doc: this.item, gender: this.item.system.gender });
+    if (name) await this.item.update({ name });
+  }
 
   async _prepareContext(options) {
     // Default tab for first time it's rendered this session

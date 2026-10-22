@@ -339,6 +339,13 @@ export class PENCreateFamily {
     return { members, lastBorn: born, resultString };
   }
 
+  //Returns "male", "female" or "" for a family relation (e.g. mother -> female, sibling -> "")
+  static relationGender(relation) {
+    if (this.FEMALE_RELATIONS.includes(relation)) return "female";
+    if (relation in this.NEUTRAL_RELATIONS) return "male";
+    return "";
+  }
+
   //Get the male and female name tables, false if random names are off or either table is missing
   static async getNameTables(actor) {
     if (!game.settings.get("Pendragon", "randomFamilyNames")) return false;

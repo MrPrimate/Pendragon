@@ -29,7 +29,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     },
     actions: {
       editPid: this._onEditPid,
-      randomName: PENRandomName.onSheetAction,
+      randomName: this._onRandomName,
       individualWinter: this._individualWinter,
       toggleActor: this._onActorToggle,
       createDoc: this._createDoc,
@@ -1021,6 +1021,14 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
       if (item.id != currentHorse?.id) await this.actor.setFlag("Pendragon", "currentHorse", item.id);
       await this.actor.mountCurrentHorse();
     }
+  }
+
+  //Roll a random name, only when unlocked or in character creation mode
+  static async _onRandomName(_event, _target) {
+    if (!this.isEditable) return;
+    if (this.actor.system.lock && !game.settings.get("Pendragon", "creation")) return;
+    const name = await PENRandomName.randomName({ doc: this.actor, gender: this.actor.system.gender });
+    if (name) await this.actor.update({ name });
   }
 
   static async _onSwitchSheet(event, target) {
