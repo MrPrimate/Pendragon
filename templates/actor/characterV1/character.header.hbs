@@ -4,7 +4,7 @@
 
     <section class="character-title-section">
       {{!-- Characteristics Header --}}
-        <div class="charname-input" style="grid-column: 1 / span 2"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></div>
+        <div class="charname-input name-with-roll" style="grid-column: 1 / span 2"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/>{{#if (and editable (or (not isLocked) isCreation))}}<a class="random-name" data-action="randomName" data-tooltip="{{localize 'PEN.randomName'}}"><i class="fas fa-dice"></i></a>{{/if}}</div>
         <div class="right">
         <button type="button" data-action="switchSheet" data-tooltip="Click to preview v2 sheet" style="display:inline-flex;">v2</button>
         <a class="large-icon" data-action="toggleActor" data-property="lock" data-tooltip='{{localize "PEN.lock"}}'><i class="fas {{#if isLocked}}fa-lock{{else}}fa-lock-open{{/if}}"></i></a>

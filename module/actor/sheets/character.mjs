@@ -4,6 +4,7 @@ import { PENWinter } from "../../apps/winterPhase.mjs";
 import { PENCharCreateV2 } from "../../apps/charCreateV2.mjs";
 import { PENactorItemDrop } from "../actor-itemDrop.mjs";
 import { PENUtilities } from "../../apps/utilities.mjs";
+import { PENRandomName } from "../../apps/random-name.mjs";
 import { PENSelectLists } from "../../apps/select-lists.mjs";
 import { PENActiveEffectSheet } from "../../sheets/pen-active-effect-sheet.mjs";
 import { PendragonActorSheet } from "./actor-sheet.mjs";
@@ -28,6 +29,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     },
     actions: {
       editPid: this._onEditPid,
+      randomName: PENRandomName.onSheetAction,
       individualWinter: this._individualWinter,
       toggleActor: this._onActorToggle,
       createDoc: this._createDoc,

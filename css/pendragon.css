@@ -1035,6 +1035,7 @@
   min-width: 0;
 }
 
+.Pendragon .random-name,
 .Pendragon .random-gender {
   flex: 0 0 auto;
   cursor: pointer;
