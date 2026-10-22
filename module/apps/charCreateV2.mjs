@@ -2059,7 +2059,11 @@ export class PENCharCreateV2 {
     }
     let familyName = [usage.familyName1, usage.familyName2];
     //Use the standard label for recognised genders so they match generated family members
-    let gender = [PENUtilities.genderLabel(usage.gender1), PENUtilities.genderLabel(usage.gender2)];
+    //Blank genders default to Male for the father and Female for the mother
+    let gender = [
+      PENUtilities.genderLabel(usage.gender1) || game.i18n.localize("PEN.male"),
+      PENUtilities.genderLabel(usage.gender2) || game.i18n.localize("PEN.female"),
+    ];
     let born = [Number(usage.born1), Number(usage.born2)];
     let died = [Number(usage.died1), Number(usage.died2)];
     let knight = [usage.knight1, usage.knight2];
