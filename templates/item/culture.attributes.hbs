@@ -89,4 +89,35 @@
       {{/each}}
     </ol>
   </div>
+
+  {{!-- Name Tables --}}
+  {{#each nameTables as |nameTable|}}
+    <br>
+    <div class="stat-name bold">{{localize nameTable.label}}</div>
+    <div class="horizontalboxed {{#if ../isGM}} droppable {{/if}} virtues" style="min-height: 20px;" data-collection="{{nameTable.collection}}">
+      <ol class="item-list">
+        {{#each nameTable.tables as |table|}}
+          <li class="item flexrow" data-item-id="{{table.uuid}}" data-table-uuid="{{table.tableUuid}}">
+            <div class="item-name flexrow">
+              {{#if table.valid}}
+                <div class="stat-name">{{table.name}}</div>
+              {{else}}
+                <div class="stat-name result-success">{{table.name}} [{{localize 'PEN.invalid'}}]</div>
+              {{/if}}
+            </div>
+            <div class="item-controls">
+              {{#if table.valid}}
+                <a class="item-control" data-tooltip="{{localize 'PEN.view'}}" data-action="viewTable"><i class="fa-solid fa-eye"></i></a>
+              {{/if}}
+              {{#if @root.isGM}}
+                <a class="item-control item-delete" title="{{localize 'PEN.delete'}}" data-action="deleteItem"><i class="fas fa-trash"></i></a>
+              {{/if}}
+            </div>
+          </li>
+        {{else}}
+          <div class="centre italics" style="height:60px; padding-top: 20px;">{{localize 'PEN.emptyList'}}</div>
+        {{/each}}
+      </ol>
+    </div>
+  {{/each}}
 </section>
