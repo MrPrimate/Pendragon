@@ -1035,6 +1035,15 @@
   min-width: 0;
 }
 
+/* Sheet headers size the name to its text so the dice sits beside it */
+.Pendragon .charname-input.name-with-roll input {
+  flex: 0 1 auto;
+  width: auto;
+  field-sizing: content;
+  min-width: 4ch;
+  max-width: 100%;
+}
+
 .Pendragon .random-name,
 .Pendragon .random-gender {
   flex: 0 0 auto;

@@ -5,7 +5,7 @@
           <img class="profile-img" data-action='editImage' src="{{actor.system.coatOfArms}}" data-edit="system.coatOfArms" height="70" width="70"/>
         </div>
       <section class="sheet-header">
-          <div class="npcname-input name-with-roll"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/>{{#if (and editable (not isLocked))}}<a class="random-name" data-action="randomName" data-tooltip="{{localize 'PEN.randomName'}}"><i class="fas fa-dice"></i></a>{{/if}}</div>
+          <div class="npcname-input name-with-roll"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/>{{#if (and editable (not isLocked))}}<a class="random-name" data-action="randomName" data-tooltip="{{localize 'PEN.randomName'}}"><i class="black fas fa-dice"></i></a>{{/if}}</div>
 
         <div class="npc-grid">
           {{#if (gt ownershipLevel 1)}}
