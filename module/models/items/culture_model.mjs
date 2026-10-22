@@ -21,6 +21,23 @@ export class CultureData extends foundry.abstract.TypeDataModel {
           uuid: new DocumentUUIDField({ type: "RollTable" }),
         }),
       ),
+      //Name Tables for random names, one table per gender
+      nameTables: new SchemaField({
+        male: new ArrayField(
+          new SchemaField({
+            name: new StringField({}),
+            pid: new StringField({}),
+            uuid: new DocumentUUIDField({ type: "RollTable" }),
+          }),
+        ),
+        female: new ArrayField(
+          new SchemaField({
+            name: new StringField({}),
+            pid: new StringField({}),
+            uuid: new DocumentUUIDField({ type: "RollTable" }),
+          }),
+        ),
+      }),
       source: new StringField({ initial: "" }),
       description: new StringField({ required: true, blank: true, initial: "" }),
       GMdescription: new StringField({ required: true, blank: true, initial: "" }),
