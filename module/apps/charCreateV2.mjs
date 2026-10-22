@@ -597,7 +597,12 @@ export class PENCharCreateV2 {
   //
   //
   static async addName(actor) {
-    let newName = await this.inpValue(game.i18n.localize("PEN.charName"));
+    //Name input with a button to roll a random name for the character's gender
+    let newName = await PENDialog.input({
+      window: { title: game.i18n.localize("PEN.charName") },
+      content: `<div class="name-with-roll"><input class="stat-name centre" type="text" name="age"><a class="random-name" data-tooltip="${game.i18n.localize("PEN.randomName")}"><i class="fas fa-dice"></i></a></div>`,
+      render: (event, dialog) => PENRandomName.activateNameButton(dialog.element, actor, "age"),
+    });
     if (!newName || newName.age === "") return false;
     let key = (await game.system.api.pid.getPrefix(actor)) + PENUtilities.toKebabCase(newName.age);
     await actor.update({

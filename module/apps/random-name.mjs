@@ -97,6 +97,17 @@ export class PENRandomName {
     if (name) await doc.update({ name });
   }
 
+  //Wire up a random name button in a dialog, filling the named input with a name for the actor
+  static activateNameButton(element, actor, inputName) {
+    const button = element.querySelector(".random-name");
+    const nameInput = element.querySelector(`[name="${inputName}"]`);
+    if (!button || !nameInput) return;
+    button.addEventListener("click", async (event) => {
+      event.preventDefault();
+      const name = await PENRandomName.randomName({ doc: actor, ...PENRandomName.docGender(actor) });
+      if (name) nameInput.value = name;
+    });
+  }
 
   //Wire up a random gender button in a dialog, filling the named input with Male or Female
   static activateGenderButton(element, inputName) {
