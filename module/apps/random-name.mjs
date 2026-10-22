@@ -120,4 +120,20 @@ export class PENRandomName {
       genderInput.value = game.i18n.localize("PEN." + gender);
     });
   }
+
+  //Wire up the random name buttons in the add parents dialog
+  //Each button has a data-index matching the familyName and gender inputs (1 = father, 2 = mother)
+  static activateParentButtons(element, actor) {
+    for (const button of element.querySelectorAll(".random-name[data-index]")) {
+      button.addEventListener("click", async (event) => {
+        event.preventDefault();
+        const index = button.dataset.index;
+        const nameInput = element.querySelector(`[name="familyName${index}"]`);
+        const gender = element.querySelector(`[name="gender${index}"]`)?.value ?? "";
+        const fallback = index === "2" ? "female" : "male";
+        const name = await PENRandomName.randomName({ doc: actor, gender, fallback });
+        if (name && nameInput) nameInput.value = name;
+      });
+    }
+  }
 }

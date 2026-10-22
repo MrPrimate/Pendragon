@@ -2063,6 +2063,7 @@ export class PENCharCreateV2 {
     let maxHeroic = 0;
     let options = {
       dialogTemplate: "systems/Pendragon/templates/dialog/familyInput.hbs",
+      actor,
     };
     let usage = await this.familyDialog(options);
     if (!usage) {
@@ -2794,6 +2795,7 @@ export class PENCharCreateV2 {
       ok: {
         label: game.i18n.localize("PEN.addParents"),
       },
+      render: (event, dialog) => PENRandomName.activateParentButtons(dialog.element, options.actor),
     });
     return usage;
   }
