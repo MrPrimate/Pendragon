@@ -1028,6 +1028,7 @@
     "religionTableDup": "Cette culture a déjà une table de religion de départ",
     "religionTableMissing": "Aucune table de religion valide trouvée pour la culture",
     "religionTableOnly": "Seules les tables aléatoires peuvent être ajoutées comme table de religion de départ",
+    "randomGender": "Genre au hasard",
     "religiousTraits": "Traits religieux",
     "remains": "Restes",
     "remove": "Supprimer",

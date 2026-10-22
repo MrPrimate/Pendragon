@@ -1024,6 +1024,22 @@
   grid-template-columns: 100px 130px 5px 130px;
 }
 
+.Pendragon .name-with-roll {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.Pendragon .name-with-roll input {
+  flex: 1;
+  min-width: 0;
+}
+
+.Pendragon .random-gender {
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+
 .Pendragon .statsCreate {
   display: grid;
   width: 405px;

@@ -1,5 +1,6 @@
 import PENDialog from "../setup/pen-dialog.mjs";
 import { PENUtilities } from "./utilities.mjs";
+import { PENRandomName } from "./random-name.mjs";
 import { StatsSelectDialog } from "./stat-selection.mjs";
 import { TraitsSelectDialog } from "./trait-selection.mjs";
 import { ItemsSelectDialog } from "./item-selection.mjs";
@@ -621,7 +622,12 @@ export class PENCharCreateV2 {
   //
   //
   static async addGender(actor) {
-    let newName = await this.inpValue(game.i18n.localize("PEN.charGender"));
+    //Gender input with a button to pick Male or Female at random
+    let newName = await PENDialog.input({
+      window: { title: game.i18n.localize("PEN.charGender") },
+      content: `<div class="name-with-roll"><input class="stat-name centre" type="text" name="age"><a class="random-gender" data-tooltip="${game.i18n.localize("PEN.randomGender")}"><i class="fas fa-dice"></i></a></div>`,
+      render: (event, dialog) => PENRandomName.activateGenderButton(dialog.element, "age"),
+    });
     if (!newName) return false;
     await actor.update({
       "system.gender": newName.age,
