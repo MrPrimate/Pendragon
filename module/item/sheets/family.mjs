@@ -1,6 +1,8 @@
 import { addPIDSheetHeaderButton } from "../../pid/pid-button.mjs";
 import { PENSelectLists } from "../../apps/select-lists.mjs";
 import { PendragonItemSheet } from "./item-sheet.mjs";
+import { PENRandomName } from "../../apps/random-name.mjs";
+import { PENCreateFamily } from "../../apps/createFamily.mjs";
 
 export class PendragonFamilySheet extends PendragonItemSheet {
   constructor(options = {}) {
@@ -11,6 +13,9 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     position: {
       width: 560,
       height: 540,
+    },
+    actions: {
+      randomName: this._onRandomName,
     },
   };
 
@@ -36,6 +41,17 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     },
   };
 
+  //Roll a random name, using the relation's gender if the gender isn't recognised
+  static async _onRandomName(_event, _target) {
+    if (!this.isEditable) return;
+    const name = await PENRandomName.randomName({
+      doc: this.item,
+      gender: this.item.system.gender,
+      fallback: PENCreateFamily.relationGender(this.item.system.relation),
+    });
+    if (name) await this.item.update({ name });
+  }
+
   async _prepareContext(options) {
     // Default tab for first time it's rendered this session
     if (!this.tabGroups.primary) this.tabGroups.primary = "attributes";
@@ -43,6 +59,7 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     let sheetData = {
       ...(await super._prepareContext(options)),
     };
+    sheetData.showRandomName = true;
 
     sheetData.relationType = PENSelectLists.getRelationTypes();
     //Keep any relation no longer offered so the dropdown still shows it

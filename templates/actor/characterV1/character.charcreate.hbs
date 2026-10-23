@@ -79,22 +79,6 @@
         {{/if}}
     </li>
 
-    {{! - Character Name}}
-    <li class="charcreate" data-step="addName">
-        <div class="stat-name">{{localize 'PEN.step.addName'}}</div>
-        {{#if hasName}}
-          <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
-          <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>
-          <div class="stat-name centre" data-action="charDelete" data-tooltip="{{localize 'PEN.resetHint'}}"><a><i class="fas fa-broom"></i></a></div>
-          <div class="stat-name centre bold">{{actor.name}}</div>
-        {{else}}
-          <div class="stat-name centre" data-tooltip="{{localize 'PEN.incomplete'}}"><a class=""><i class="darkred fas fa-shield-xmark"></i></a></div>
-          <div class="stat-name centre" data-action="charCreate"><a class="darkred"><i class="fas fa-circle-exclamation"></i></a></div>
-          <div class="stat-name centre"><a class="fade"><i class="fas fa-broom"></i></a></div>
-          <div class="stat-name centre"></div>
-        {{/if}}
-    </li>
-
     {{! - Character Gender}}
     <li class="charcreate" data-step="addGender">
         <div class="stat-name">{{localize 'PEN.step.addGender'}}</div>
@@ -108,6 +92,22 @@
           <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>
           <div class="stat-name centre" data-action="charDelete" data-tooltip="{{localize 'PEN.resetHint'}}"><a><i class="fas fa-broom"></i></a></div>
           <div class="stat-name centre bold">{{system.gender}}</div>
+        {{/if}}
+    </li>
+
+    {{! - Character Name}}
+    <li class="charcreate" data-step="addName">
+        <div class="stat-name">{{localize 'PEN.step.addName'}}</div>
+        {{#if hasName}}
+          <div class="stat-name centre" data-tooltip="{{localize 'PEN.completed'}}"><a class=""><i class="result-success fas fa-shield-check"></i></a></div>
+          <div class="stat-name centre"><a class="fade"><i class="fas fa-circle-exclamation"></i></a></div>
+          <div class="stat-name centre" data-action="charDelete" data-tooltip="{{localize 'PEN.resetHint'}}"><a><i class="fas fa-broom"></i></a></div>
+          <div class="stat-name centre bold">{{actor.name}}</div>
+        {{else}}
+          <div class="stat-name centre" data-tooltip="{{localize 'PEN.incomplete'}}"><a class=""><i class="darkred fas fa-shield-xmark"></i></a></div>
+          <div class="stat-name centre" data-action="charCreate"><a class="darkred"><i class="fas fa-circle-exclamation"></i></a></div>
+          <div class="stat-name centre"><a class="fade"><i class="fas fa-broom"></i></a></div>
+          <div class="stat-name centre"></div>
         {{/if}}
     </li>
 

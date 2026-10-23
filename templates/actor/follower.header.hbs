@@ -6,7 +6,7 @@
       {{!-- Characteristics Header --}}
       <section class="sheet-header">
         <div class="follower-grid">
-          <div class="followername-input"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></div>
+          <div class="followername-input name-with-roll"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/>{{#if (and editable (not isLocked))}}<a class="random-name" data-action="randomName" data-tooltip="{{localize 'PEN.randomName'}}"><i class="black fas fa-dice"></i></a>{{/if}}</div>
           <div class="follower-type right">
             <select data-handle-change name="system.subtype">
               {{selectOptions followerType selected=actor.system.subtype}}

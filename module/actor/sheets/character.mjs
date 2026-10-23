@@ -4,6 +4,7 @@ import { PENWinter } from "../../apps/winterPhase.mjs";
 import { PENCharCreateV2 } from "../../apps/charCreateV2.mjs";
 import { PENactorItemDrop } from "../actor-itemDrop.mjs";
 import { PENUtilities } from "../../apps/utilities.mjs";
+import { PENRandomName } from "../../apps/random-name.mjs";
 import { PENSelectLists } from "../../apps/select-lists.mjs";
 import { PENActiveEffectSheet } from "../../sheets/pen-active-effect-sheet.mjs";
 import { PendragonActorSheet } from "./actor-sheet.mjs";
@@ -28,6 +29,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     },
     actions: {
       editPid: this._onEditPid,
+      randomName: this._onRandomName,
       individualWinter: this._individualWinter,
       toggleActor: this._onActorToggle,
       createDoc: this._createDoc,
@@ -1019,6 +1021,14 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
       if (item.id != currentHorse?.id) await this.actor.setFlag("Pendragon", "currentHorse", item.id);
       await this.actor.mountCurrentHorse();
     }
+  }
+
+  //Roll a random name, only when unlocked or in character creation mode
+  static async _onRandomName(_event, _target) {
+    if (!this.isEditable) return;
+    if (this.actor.system.lock && !game.settings.get("Pendragon", "creation")) return;
+    const name = await PENRandomName.randomName({ doc: this.actor, gender: this.actor.system.gender });
+    if (name) await this.actor.update({ name });
   }
 
   static async _onSwitchSheet(event, target) {

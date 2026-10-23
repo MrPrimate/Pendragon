@@ -261,6 +261,14 @@ export class PENUtilities {
     return "";
   }
 
+  //Returns "male" or "female" from the gender, then the fallback, otherwise at random
+  static async resolveGender(gender = "", fallback = "") {
+    const type = this.genderType(gender) || fallback;
+    if (["male", "female"].includes(type)) return type;
+    const roll = await new Roll("1D2").evaluate();
+    return roll.total === 2 ? "female" : "male";
+  }
+
   //Recognised genders use the standard label (e.g. "male" -> "Male"), anything else is kept as entered
   static genderLabel(text) {
     const type = this.genderType(text);

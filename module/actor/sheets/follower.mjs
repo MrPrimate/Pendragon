@@ -2,6 +2,7 @@ import { PENRollType } from "../../cards/rollType.mjs";
 import { PENSelectLists } from "../../apps/select-lists.mjs";
 import { PIDEditor } from "../../pid/pid-editor.mjs";
 import { PENactorItemDrop } from "../actor-itemDrop.mjs";
+import { PENRandomName } from "../../apps/random-name.mjs";
 const { api, sheets } = foundry.applications;
 
 export class PendragonFollowerSheet extends api.HandlebarsApplicationMixin(sheets.ActorSheetV2) {
@@ -28,6 +29,7 @@ export class PendragonFollowerSheet extends api.HandlebarsApplicationMixin(sheet
       createDoc: this._createDoc,
       deleteDoc: this._deleteDoc,
       viewDoc: this._viewDoc,
+      randomName: this._onRandomName,
     },
     window: {
       resizable: true,
@@ -333,6 +335,13 @@ export class PendragonFollowerSheet extends api.HandlebarsApplicationMixin(sheet
     }
     await this.actor.update(checkProp);
     return;
+  }
+
+  //Roll a random name, only when unlocked
+  static async _onRandomName(_event, _target) {
+    if (!this.isEditable || this.actor.system.lock) return;
+    const name = await PENRandomName.randomName({ doc: this.actor });
+    if (name) await this.actor.update({ name });
   }
 
   //Auto Calc Follower Scores

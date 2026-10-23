@@ -7,15 +7,21 @@
     <div class="stat-name bold centre">{{localize 'PEN.familyRelationship.mother'}}</div>
 
     <label class="new-row stat-name" title="{{localize 'PEN.addParentsHint'}}">{{localize "PEN.name"}}</label>
-    <input data-handle-change class="stat-name centre" type="text" value="" name="familyName1">
+    <div class="name-with-roll">
+      <input data-handle-change class="stat-name centre" type="text" value="" name="familyName1">
+      <a class="random-name" data-index="1" data-tooltip="{{localize 'PEN.randomName'}}"><i class="fas fa-dice"></i></a>
+    </div>
     <div></div>
-    <input data-handle-change class="stat-name centre" type="text" value="" name="familyName2">
+    <div class="name-with-roll">
+      <input data-handle-change class="stat-name centre" type="text" value="" name="familyName2">
+      <a class="random-name" data-index="2" data-tooltip="{{localize 'PEN.randomName'}}"><i class="fas fa-dice"></i></a>
+    </div>
     <br>
 
     <label class="new-row stat-name">{{localize "PEN.gender"}}</label>
-    <input data-handle-change class="stat-name centre" type="text" value="" name="gender1">
+    <input data-handle-change class="stat-name centre" type="text" value="{{localize 'PEN.male'}}" name="gender1">
     <div></div>
-    <input data-handle-change class="stat-name centre" type="text" value="" name="gender2">
+    <input data-handle-change class="stat-name centre" type="text" value="{{localize 'PEN.female'}}" name="gender2">
     <br>
 
     <label class="new-row stat-name">{{localize "PEN.born"}}</label>
