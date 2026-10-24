@@ -60,6 +60,8 @@ export class PendragonTooltips {
     if (!content) return;
     // finally, set tooltip innerHTML = content
     // we could also adjust the tooltip position at this point
+    this.tooltip.classList.add("pendragon-rich-tooltip");
     this.tooltip.innerHTML = content;
+    requestAnimationFrame(() => game.tooltip._setAnchor(game.tooltip._determineDirection()));
   }
 }
