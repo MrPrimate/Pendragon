@@ -242,7 +242,7 @@
   .partic-cell {
     height: 16px;
     padding-left: 10px;
-    color: var(--pendragon-black);
+    color: var(--pendragon-primary-text);
   }
 
   .enc-list {
@@ -301,7 +301,7 @@
   }
 
   .lowMorale {
-    color: var(--pendragon-darkred);
+    color: var(--pendragon-lowmorale);
     font-style: italic;
   }
 

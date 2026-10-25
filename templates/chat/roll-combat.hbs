@@ -3,14 +3,14 @@
       {{#each chatCard as |c key|}}
         <li>
           <div class="actor-roll">
-          <img class="open-actor" src="{{c.particImg}}" height="50" width="50" title="{{c.particName}}"/>
+          <img class="open-actor" src="{{c.particImg}}" height="50" width="50" data-tooltip="{{c.particName}}"/>
           <div class="roll-details">
             <div class="header">
               <div class='name truncate'>
                 <span class="tag">{{c.particName}} - {{c.actionLabel}}</span>
               </div>
               {{#unless (eq ../state 'closed')}}
-                <a class="gm-visible-only cardbutton" data-rank='{{key}}' data-preset="remove-op-roll" title="{{localize 'PEN.remove'}}"><i class="far fa-times-circle"></i></a>
+                <a class="gm-visible-only cardbutton" data-rank='{{key}}' data-preset="remove-op-roll" data-tooltip="{{localize 'PEN.remove'}}"><i class="far fa-times-circle"></i></a>
               {{/unless}}
             </div>
 
@@ -34,11 +34,11 @@
               {{/if}}
 
               {{#if (eq c.resultLevel 0)}}
-                <summary class="pending">{{c.outcomeLabel}}: {{c.resultLabel}} ({{c.rollVal}}) <i class="result-fail fas fa-skull"></i><i class="result-fail fas fa-skull"></i></i> &nbsp <i class="result-fail fas fa-sword" title="{{localize 'PEN.dropWpn'}}"></i>
+                <summary class="pending">{{c.outcomeLabel}}: {{c.resultLabel}} ({{c.rollVal}}) <i class="result-fail fas fa-skull"></i><i class="result-fail fas fa-skull"></i></i> &nbsp <i class="result-fail fas fa-sword" data-tooltip="{{localize 'PEN.dropWpn'}}"></i>
               {{/if}}
 
               {{#if c.damShield}}
-                &nbsp <i class="fas fa-shield" title="{{localize 'PEN.damShield'}}"></i>
+                &nbsp <i class="fas fa-shield" data-tooltip="{{localize 'PEN.damShield'}}"></i>
               {{/if}}
               </summary>
                 <div class="actor-roll dice-tooltip">
@@ -70,7 +70,7 @@
                 </div>
             </details>
             {{else}}
-              <span class='pending' title="{{localize 'PEN.grTag'}}">{{localize 'PEN.pending'}}</span>
+              <span class='pending' data-tooltip="{{localize 'PEN.grTag'}}">{{localize 'PEN.pending'}}</span>
             {{/if}}
           </div>
         </div>

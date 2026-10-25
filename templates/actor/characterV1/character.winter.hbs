@@ -11,34 +11,34 @@
     <li><div class="stat-name left">{{localize 'PEN.personalEvents'}} {{localize 'PEN.manual'}}</div></li>
     <li><div class="stat-name left bold clickable" data-action="xpChecks">{{localize 'PEN.xpRoll'}}
       {{#unless system.status.xp}}
-        <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+        <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
       {{/unless}}
     </div></li>
     <li>
       <div class="stat-name left bold clickable" data-action="economic">{{localize 'PEN.economicCirc'}}
         {{#unless system.status.economic}}
-          <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+          <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
         {{/unless}}
       </div>
     </li>
     <li>
       <div class="stat-name left bold clickable" data-action="aging">{{localize 'PEN.aging'}}
         {{#unless system.status.aging}}
-          <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+          <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
         {{/unless}}
       </div>
     </li>
     <li>
       <div class="stat-name left bold clickable" data-action="squireAge">{{localize 'PEN.squireMaidenRoll'}}
         {{#unless system.status.squireAge}}
-          <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+          <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
         {{/unless}}
       </div>
     </li>
     <li>
       <div class="stat-name left bold clickable" data-action="horseSurvival">{{localize 'PEN.horseSurvival'}}
         {{#unless system.status.horseSurv}}
-          <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+          <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
         {{/unless}}
       </div>
     </li>
@@ -47,24 +47,24 @@
       <ul>
       <li class="stat-name left bold clickable" data-action="trainTrait">{{localize 'PEN.traitTrain'}}
         {{#unless system.status.train}}
-          <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+          <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
         {{/unless}}
       </li>
       <li class="stat-name left bold clickable" data-action="trainPassion">{{localize 'PEN.prestigePassion'}}
         {{#unless system.status.train}}
-          <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+          <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
         {{/unless}}
       </li>
       {{#if (lt system.age 35)}}
       <li class="stat-name left bold clickable" data-action="trainSingle">{{localize 'PEN.characteristicTrain'}}
         {{#unless system.status.train}}
-          <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+          <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
         {{/unless}}
       </li>
       {{/if}}
       <li class="stat-name left bold clickable" data-action="trainMultiple">{{localize 'PEN.skillTrain'}}
         {{#unless system.status.train}}
-          <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+          <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
         {{/unless}}
       </li>
       </ul>
@@ -72,40 +72,40 @@
     <li>
       <div class="stat-name left bold clickable" data-action="passiveGlory">{{localize 'PEN.passive'}}
         {{#unless system.status.passiveGlory}}
-          <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+          <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
         {{/unless}}
       </div>
     </li>
     <li>
       <div class="stat-name left">{{localize 'PEN.prestigeAward'}} ({{system.gloryPrestige}})
         {{#if (eq system.gloryPrestige 0)}}
-          <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+          <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
         {{/if}}
       </div>
       <ul>
         <li class="stat-name left bold clickable" data-action="prestigeTrait">{{localize 'PEN.prestigeTrait'}}
           {{#if (eq system.gloryPrestige 0)}}
-            <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+            <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
           {{/if}}
         </li>
         <li class="stat-name left bold clickable" data-action="prestigeCheck">{{localize 'PEN.prestigeCharacteristic'}}
           {{#if (eq system.gloryPrestige 0)}}
-            <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+            <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
           {{/if}}
         </li>
         <li class="stat-name left bold clickable" data-action="prestigeSkill">{{localize 'PEN.prestigeSkill'}}
           {{#if (eq system.gloryPrestige 0)}}
-            <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+            <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
           {{/if}}
         </li>
         <li class="stat-name left bold clickable" data-action="prestigePassion">{{localize 'PEN.prestigePassion'}}
           {{#if (eq system.gloryPrestige 0)}}
-            <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+            <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
           {{/if}}
         </li>
         <li class="stat-name left">{{localize 'PEN.prestigeChildren'}}
           {{#if (eq system.gloryPrestige 0)}}
-            <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+            <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
           {{/if}}
         </li>
       </ul>
@@ -123,7 +123,7 @@
     <li>
       <div class="stat-name left bold clickable" data-action="familyRoll">{{localize 'PEN.familyRolls'}}
         {{#unless system.status.familyRoll}}
-          <a class="large-icon" title="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+          <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
         {{/unless}}
       </div>
     </li>

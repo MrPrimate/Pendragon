@@ -118,6 +118,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       }),
       born: new NumberField({ ...requiredInteger, min: 0, initial: 487 }),
       died: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
+      married: new NumberField({ ...requiredInteger, initial: 0 }),
       age: new NumberField({ ...requiredInteger, min: 0, initial: 0, persisted: false }),
       aggravDam: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),
       deterDam: new NumberField({ ...requiredInteger, min: 0, initial: 0 }),

@@ -55,6 +55,7 @@
   --pendragon-primary-text: oklch(0 0 0);
   --pendragon-secondary-text: oklch(0.39984 0.16408 29.223);
   --pendragon-hyperlink: oklch(0.4209 0.19352 328.352);
+  --pendragon-lowmorale: oklch(0.39984 0.16408 29.223);
   --header-row: #240202;
   --background-color: #fffde7;
   --item-background-color: #fffde7;
@@ -104,6 +105,7 @@
   --pendragon-primary-text: oklch(0.9467 0.0311 75.22);
   --pendragon-secondary-text: oklch(0.62315 0.16929 268.592);
   --pendragon-hyperlink: oklch(0.7 0.32 328.352);
+  --pendragon-lowmorale: oklch(63.888% 0.13042 359.621);
   --exalted-color: oklch(0.637 0.185 295);
   --rollable-highlight: oklch(0.473 0.179 92.2);
   --pendragon-darkred: oklch(from var(--pendragon-red) l 0.3 h);

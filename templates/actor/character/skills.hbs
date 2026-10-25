@@ -7,7 +7,7 @@
     {{#each skills as |skill key|}}
       {{#unless skill.system.combat}}
       <li class="{{#if (gt skill.system.total 15)}}famous{{/if}} {{#if (gt skill.system.total 20)}}exalted{{/if}} skill-listitem" data-itemid="{{skill._id}}">
-        <a class="item-control large-icon" data-action="toggleXP" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if skill.system.XP}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a>
+        <a class="item-control large-icon" data-action="toggleXP" data-tooltip="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if skill.system.XP}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a>
         <div data-itemid="{{skill._id}}" data-action="rollSkill">
           <span>{{skill.name}}</span>
           <div class="pills">
@@ -29,7 +29,7 @@
     {{#each skills as |skill key|}}
       {{#if skill.system.combat}}
       <li class="{{#if (gt skill.system.total 15)}}famous{{/if}} {{#if (gt skill.system.total 20)}}exalted{{/if}} skill-listitem" data-itemid="{{skill._id}}">
-        <a class="item-control large-icon" data-action="toggleXP" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if skill.system.XP}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a>
+        <a class="item-control large-icon" data-action="toggleXP" data-tooltip="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if skill.system.XP}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a>
         <div data-itemid="{{skill._id}}" data-action="rollSkill">
           <span>{{skill.name}}</span>
           <div class="pills">

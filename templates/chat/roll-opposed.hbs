@@ -4,15 +4,15 @@
       {{#each chatCard as |c key|}}
       <div class="dice-roll" data-action="expandRoll">
         <li class='actor-roll'>
-          <img class="open-actor" src="{{c.particImg}}" height="50" width="50" title="{{c.particName}}"/>
+          <img class="open-actor" src="{{c.particImg}}" height="50" width="50" data-tooltip="{{c.particName}}"/>
           <div class="roll-details">
-            
+
             <div class="header">
               <div class='name'>
                 <span class="tag">{{c.particName}}</span>
               </div>
               {{#unless (eq ../state 'closed')}}
-                <a class="gm-visible-only cardbutton" data-rank='{{key}}' data-preset="remove-op-roll" title="{{localize 'PEN.remove'}}"><i class="far fa-times-circle"></i></a>
+                <a class="gm-visible-only cardbutton" data-rank='{{key}}' data-preset="remove-op-roll" data-tooltip="{{localize 'PEN.remove'}}"><i class="far fa-times-circle"></i></a>
               {{/unless}}
             </div>
 
@@ -26,7 +26,7 @@
               {{#if (eq c.resultLevel 3)}}
                 <span class="pending {{c.outcome}}">{{c.outcomeLabel}}: {{c.resultLabel}} ({{c.rollVal}}) <i class="result-success fas fa-swords"></i><i class="result-success fas fa-swords"></i></span>
               {{/if}}
-         
+
               {{#if (eq c.resultLevel 2)}}
                 <span class="pending {{c.outcome}}">{{c.outcomeLabel}}: {{c.resultLabel}} ({{c.rollVal}}) <i class="result-success fas fa-swords"></i></span>
               {{/if}}
@@ -34,13 +34,13 @@
               {{#if (eq c.resultLevel 1)}}
                 <span class="pending">{{c.outcomeLabel}}: {{c.resultLabel}} ({{c.rollVal}}) <i class="result-fail fas fa-skull"></i></span>
               {{/if}}
-          
+
               {{#if (eq c.resultLevel 0)}}
                 <span class="pending">{{c.outcomeLabel}}: {{c.resultLabel}} ({{c.rollVal}}) <i class=" result-fail fas fa-skull"></i></i><i class=" result-fail fas fa-skull"></i></span>
               {{/if}}
 
             {{else}}
-              <span class='pending' title="{{localize 'PEN.grTag'}}">{{localize 'PEN.pending'}}</span>
+              <span class='pending' data-tooltip="{{localize 'PEN.grTag'}}">{{localize 'PEN.pending'}}</span>
             {{/if}}
           </div>
         </li>
@@ -71,7 +71,7 @@
               </div>
               <div class="rollHidden bottom-line">{{localize 'PEN.diceRoll'}}: {{c.rollResult}}</div>
             </div>
-          </div>  
+          </div>
         {{/if}}
       </div>
       {{/each}}
@@ -81,4 +81,4 @@
     <button class='cardbutton gm-visible-only' data-preset='resolve-op-card' type="button">{{localize 'PEN.resolveCard'}}</button>
     <button class='cardbutton gm-visible-only' data-preset='close-card' type="button">{{localize 'PEN.closeCard'}}</button>
   {{/unless}}
-</section>  
+</section>

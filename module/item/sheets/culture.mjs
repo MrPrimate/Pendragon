@@ -11,7 +11,7 @@ export class PendragonCultureSheet extends PendragonItemSheet {
   static DEFAULT_OPTIONS = {
     position: {
       width: 560,
-      height: 600,
+      height: 760,
     },
     actions: {
       deleteItem: PendragonCultureSheet.#deleteItem,

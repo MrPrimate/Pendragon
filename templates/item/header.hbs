@@ -2,5 +2,5 @@
     <div class="header-fields">
       <div class="charname-input name-with-roll" style="width: 410px;"><input name="name" type="text" value="{{item.name}}" placeholder="Name"/>{{#if (and showRandomName editable)}}<a class="random-name" data-action="randomName" data-tooltip="{{localize 'PEN.randomName'}}"><i class="fas fa-dice"></i></a>{{/if}}</div>
     </div>
-    <img class="profile-img icon-img" src="{{item.img}}" data-edit="img" data-action='editImage' height="64" width="64"title="{{item.name}}"/>
+    <img class="profile-img icon-img" src="{{item.img}}" data-edit="img" data-action='editImage' height="64" width="64"data-tooltip="{{item.name}}"/>
   </header>

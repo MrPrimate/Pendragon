@@ -3,9 +3,9 @@
     {{#if showHelp}}
       <a class="" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Background-Character" data-tooltip='{{localize "PEN.openWiki"}}'>
         <i class="fas fa-circle-question"></i>
-      </a>  
+      </a>
     {{/if}}
-  </div>  
+  </div>
   {{!-- Characteristics Header --}}
   <section class="item-improv-grid" style="padding-top: 10px;">
       <div class="stat-name bold" style="padding-top:2px;">{{ localize 'PEN.type'}}:&nbsp</div>
@@ -16,32 +16,32 @@
       </div>
       <div class="stat-name left bold new-row">{{localize 'PEN.manor.baseAnnCost'}}</div>
       <div class="small-cost-grid">
-        <div class="stat-name-input"><input class="centre" name="system.annualCost.libra" type="number" value="{{system.annualCost.libra}}"/></div>    
+        <div class="stat-name-input"><input class="centre" name="system.annualCost.libra" type="number" value="{{system.annualCost.libra}}"/></div>
         <div class="stat-name centre" style="padding-top: 3px;">/</div>
-        <div class="stat-name-input  centre"><input class="centre" name="system.annualCost.denarii" type="number" value="{{system.annualCost.denarii}}"/></div>      
+        <div class="stat-name-input  centre"><input class="centre" name="system.annualCost.denarii" type="number" value="{{system.annualCost.denarii}}"/></div>
       </div>
       {{#if hasOwner}}
       <div class="stat-name left bold new-row">{{localize 'PEN.manor.skillCost'}}</div>
       <div class="small-cost-grid">
-        <div class="stat-name centre">{{system.skillCost.libra}}</div>    
+        <div class="stat-name centre">{{system.skillCost.libra}}</div>
         <div class="stat-name centre">/</div>
-        <div class="stat-name centre">{{system.skillCost.denarii}}</div>      
+        <div class="stat-name centre">{{system.skillCost.denarii}}</div>
       </div>
       <div class="stat-name left bold new-row">{{localize 'PEN.manor.totalAnnCost'}}</div>
       <div class="small-cost-grid">
-        <div class="stat-name centre bold">{{system.totalCost.libra}}</div>    
+        <div class="stat-name centre bold">{{system.totalCost.libra}}</div>
         <div class="stat-name centre bold">/</div>
-        <div class="stat-name centre bold">{{system.totalCost.denarii}}</div>      
-      </div>      
+        <div class="stat-name centre bold">{{system.totalCost.denarii}}</div>
+      </div>
       {{/if}}
       <div class="stat-name bold left">{{localize 'PEN.manor.baronyStart'}}</div>
-      <div class="stat-name centre"><a class="item-control large-icon" data-action="itemToggle" data-property = "starting"><i class="{{#if item.system.starting}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>      
+      <div class="stat-name centre"><a class="item-control large-icon" data-action="itemToggle" data-property = "starting"><i class="{{#if item.system.starting}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
       {{#if hasOwner}}
         <br>
         <div class="stat-name left bold new-row">{{localize 'PEN.born'}}</div>
-        <div class="stat-name-input  centre"><input class="centre" name="system.born" type="number" value="{{system.born}}"/></div> 
+        <div class="stat-name-input  centre"><input class="centre" name="system.born" type="number" value="{{system.born}}"/></div>
         <div class="stat-name left bold new-row">{{localize 'PEN.died'}}</div>
-        <div class="stat-name-input  centre"><input class="centre" name="system.died" type="number" value="{{system.died}}"/></div>         
+        <div class="stat-name-input  centre"><input class="centre" name="system.died" type="number" value="{{system.died}}"/></div>
       {{/if}}
   </section>
 
@@ -65,15 +65,15 @@
           <div>{{skill.score}}</div>
           <div class="item-controls">
             {{#if ../isGM}}
-              <a class="item-control item-delete" title="{{localize 'PEN.delete'}}" data-action="deleteItem"><i class="fas fa-trash"></i></a>
+              <a class="item-control item-delete" data-tooltip="{{localize 'PEN.delete'}}" data-action="deleteItem"><i class="fas fa-trash"></i></a>
             {{/if}}
           </div>
         </li>
       {{else}}
-        <div class="centre stat-name italics" style="height:60px;">{{localize 'PEN.emptyList'}}</div>              
+        <div class="centre stat-name italics" style="height:60px;">{{localize 'PEN.emptyList'}}</div>
       {{/each}}
     </ol>
-  </div>      
+  </div>
   <br>
 
 </section>

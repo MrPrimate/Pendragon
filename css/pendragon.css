@@ -49,7 +49,18 @@
   cursor: pointer;
 }
 
-.Pendragon:not(.party, .actor2, .itemV2, .dialogV2, #note-preview-view) .window-content {
+.scenes-sidebar .scene img[src*="cha-pen-fvtt-en-gmscreen"] + a.entry-name {
+      display: none;
+}
+
+.Pendragon.npcv2 .window-content {
+  background-image: url("../assets/parchment.jpg");
+  background-size: cover;
+  padding: 0.5em;
+  font-size: var(--font-size-16);
+}
+
+.Pendragon.follower .window-content {
   background-image: url("../assets/parchment.jpg");
   background-size: cover;
   padding: 0.5em;

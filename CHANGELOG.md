@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## Unreleased
+### Random Names/Cultures (MrPrimate)
+- Cultures now have space for male and female random name tables
+- These tables will be used in preference to the default random name tables.  So you can set up multiple name tables specific to the different cultures
+- In Character Create mode you will see a dice icon when activating the "Character Name" step - click this to generate a random name
+- Family Creation will also use these tables based on the Characters Culture - it will apply to all family members
+- When unlocked the V1 Character, NPC and Follower sheets, along with Squire and Family member item sheets, have a dice icon by the name.  Click this to generate a random name.  It will be based on the culture of the character, or falls back to the default tables
+
+### Scenes (JamesB)
+- New CCI option: Region Hover
+- Dual layer scenes (Map) allowing some assets to be shown/hidden as you zoom in/out
+- Map Notes on scene where set to Map can pop up with a preview for GM and players who can see a different entry
+
+### Misc
+- Item images no longer transform the colours unless they are from the default systems/Pendragon/assets/Icons folder
+- GM Glory Awards now work where there is only one character on the list
+- Now that winter phase doesn't add Passive Glory awards automatically we've removed the check that a character has a Player Owner so you should see the Winter Phase tab on more characters
+
 ## 14.24
 - Followers now show the correct drop down list of types (Squire, Family, Retainer) rather than Career Paths
 

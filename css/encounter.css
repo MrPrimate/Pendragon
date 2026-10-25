@@ -157,6 +157,7 @@
     border: 1px solid var(--pendragon-black);
     padding: 3px;
     background-color: var(--pendragon-grey);
+    color: var(--pendragon-black);
   }
 
   .partic-cell-icons {

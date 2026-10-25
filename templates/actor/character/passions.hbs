@@ -24,7 +24,7 @@
       {{#each courts.honor.items as |passion key|}}
         {{#if (ne passion.system.total 0)}}
           <li class="{{#if (gt passion.system.total 15)}}famous{{/if}} {{#if (gt passion.system.total 20)}}exalted{{/if}}" data-itemid="{{passion._id}}">
-            <a class="item-control large-icon" data-action="toggleXP" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if passion.system.XP}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a>
+            <a class="item-control large-icon" data-action="toggleXP" data-tooltip="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if passion.system.XP}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a>
             <span data-itemid="{{passion._id}}" data-action="rollPassion" data-dishonour="{{passion.system.dishonour}}">{{passion.name}}</span>
             <button class="inline-control icon fa-regular fa-pen-to-square" data-action="editItem"></button>
             <span class="right">{{#if (gt passion.system.total 20)}}20(+{{passion.critical}}){{else}}{{passion.system.total}}{{/if}}</span>
@@ -49,7 +49,7 @@
     {{#each court.items as |passion key|}}
       {{#if (ne passion.system.total 0)}}
         <li data-itemid="{{passion._id}}" class="{{#if (gt passion.system.total 15)}}famous{{/if}} {{#if (gt passion.system.total 20)}}exalted{{/if}}">
-          <a class="item-control large-icon" data-action="toggleXP" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if passion.system.XP}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a>
+          <a class="item-control large-icon" data-action="toggleXP" data-tooltip="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if passion.system.XP}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a>
           <span data-itemid="{{passion._id}}" data-action="rollPassion">{{passion.name}}</span>
           <button class="inline-control icon fa-regular fa-pen-to-square" data-action="editItem"></button>
           <span class="right">{{#if (gt passion.system.total 20)}}20(+{{passion.critical}}){{else}}{{passion.system.total}}{{/if}}</span>

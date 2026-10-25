@@ -2,7 +2,7 @@
   <section class="main-sheet">
     <div class="party-form">
       <ol class='party-list'>
-        <div class="party-grid">      
+        <div class="party-grid">
           {{#each members as |member id|}}
             <li class="party-member" data-item-id='{{member.uuid}}' data-drag='true' data-document-class='Actor'>
               <div class='party-member-name'>
@@ -23,8 +23,8 @@
                     <span class="hpbar" style="width:{{member.hpPerc}};" >&nbsp{{localize 'PEN.hpShort'}}{{#if ../showHPVal}}: {{hpLabel}}{{/if}}</span>
                   </div>
                   {{#if ../showHPVal}}
-                    <div class="high-score" title="{{highScoreLabel}}">{{highScoreLabel}}</div>
-                  {{/if}}  
+                    <div class="high-score" data-tooltip="{{highScoreLabel}}">{{highScoreLabel}}</div>
+                  {{/if}}
                 </div>
               </div>
 

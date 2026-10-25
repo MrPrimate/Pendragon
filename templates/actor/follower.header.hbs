@@ -30,7 +30,7 @@
 
       {{!-- Image Section --}}
       <section class="sheet-header">
-        <img class="profile-img" data-action="editImage" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="70" width="70"/>
+        <img class="profile-img" data-action="editImage" src="{{actor.img}}" data-edit="img" data-tooltip="{{actor.name}}" height="70" width="70"/>
       </section>
 
       {{!-- Icons Section --}}
@@ -38,9 +38,9 @@
         {{#if system.lock}}
           <div><a class=""><i class="fas"></i></a></div>
         {{else}}
-          <div class="right middle-icon"><a data-action="autoCalc" title="{{ localize 'PEN.calcNPC' }}"> <i class="fas fa-dice"></i></a></div>
+          <div class="right middle-icon"><a data-action="autoCalc" data-tooltip="{{ localize 'PEN.calcNPC' }}"> <i class="fas fa-dice"></i></a></div>
         {{/if}}
-        <div class="right middle-icon"><a class="" title="{{ localize 'PEN.lock' }}" data-action="actorToggle" data-property="lock"> <i class="{{#if system.lock}}fas fa-lock{{else}}fas fa-lock-open{{/if}}"></i></a></div>
+        <div class="right middle-icon"><a class="" data-tooltip="{{ localize 'PEN.lock' }}" data-action="actorToggle" data-property="lock"> <i class="{{#if system.lock}}fas fa-lock{{else}}fas fa-lock-open{{/if}}"></i></a></div>
       </section>
 
     </section>
@@ -76,11 +76,11 @@
         <div class="npc-name centre">{{system.manMove}}</div>
         <div></div>
         <div></div>
-        <div class="right middle-icon"><a title="{{ localize 'PEN.viewBackground' }}" data-action="actorToggle" data-property="view"> <i class="{{#if system.view}}fas fa-book-open-cover{{else}}fas fa-book{{/if}}"></i></a></div>
+        <div class="right middle-icon"><a data-tooltip="{{ localize 'PEN.viewBackground' }}" data-action="actorToggle" data-property="view"> <i class="{{#if system.view}}fas fa-book-open-cover{{else}}fas fa-book{{/if}}"></i></a></div>
 
       {{else}}
 
-        <div class="npc-name left bold" title="{{ localize 'PEN.maxHPHint' }}">{{localize 'PEN.maxHP'}}</div>
+        <div class="npc-name left bold" data-tooltip="{{ localize 'PEN.maxHPHint' }}">{{localize 'PEN.maxHP'}}</div>
         <div class="npc-name-input centre"><input name="system.manMaxHP" type="number" value="{{system.manMaxHP}}"/></div>
         <div></div>
         <div class="npc-name left bold">{{localize 'PEN.wounds'}}</div>
@@ -98,7 +98,7 @@
         <div class="npc-name left bold">{{localize 'PEN.healRate'}}</div>
         <div class="npc-name-input centre"><input name="system.manHealRate" type="number" value="{{system.manHealRate}}"/></div>
 
-        <div class="npc-name left bold" title="{{ localize 'PEN.unconsciousHint' }}">{{localize 'PEN.unconscious'}}</div>
+        <div class="npc-name left bold" data-tooltip="{{ localize 'PEN.unconsciousHint' }}">{{localize 'PEN.unconscious'}}</div>
         <div class="npc-name-input centre"><input name="system.manUnconscious" type="number" value="{{system.manUnconscious}}"/></div>
         <div></div>
         <div class="npc-name left bold">{{localize 'PEN.damage'}}</div>
@@ -108,7 +108,7 @@
         <div class="npc-name-input centre"><input name="system.manMove" type="number" value="{{system.manMove}}"/></div>
         <div></div>
         <div></div>
-        <div class="right middle-icon"><a class="actor-toggle" title="{{ localize 'PEN.viewBackground' }}" data-property="view"> <i class="{{#if system.view}}fas fa-book-open-cover{{else}}fas fa-book{{/if}}"></i></a></div>
+        <div class="right middle-icon"><a class="actor-toggle" data-tooltip="{{ localize 'PEN.viewBackground' }}" data-property="view"> <i class="{{#if system.view}}fas fa-book-open-cover{{else}}fas fa-book{{/if}}"></i></a></div>
       {{/if}}
     </section>
 
@@ -132,7 +132,7 @@
           <div class="npc-name-input centre {{#if (eq system.family '')}}  input-border {{/if}}"><input name="system.family" type="text" value="{{system.family}}"/></div>
           <div class="npc-name left bold">{{localize 'PEN.features'}}</div>
           <div class="npc-name-input centre {{#if (eq system.features '')}}  input-border {{/if}}"><input name="system.features" type="text" value="{{system.features}}"/></div>
-          <div class="npc-name left bold" style="margin-top: 2px;" title="{{localize 'PEN.sol'}}">{{localize 'PEN.solShort'}}</div>
+          <div class="npc-name left bold" style="margin-top: 2px;" data-tooltip="{{localize 'PEN.sol'}}">{{localize 'PEN.solShort'}}</div>
           <div class="npc-name centre">
             <select class="centre" style="height:22px;" data-handle-change name="system.sol">
               {{selectOptions solType selected=actor.system.sol}}
@@ -155,7 +155,7 @@
           <div class="npc-name centre">{{system.family}}</div>
           <div class="npc-name left bold">{{localize 'PEN.features'}}</div>
           <div class="npc-name centre">{{system.features}}</div>
-          <div class="npc-name left bold" title="{{localize 'PEN.sol'}}">{{localize 'PEN.solShort'}}</div>
+          <div class="npc-name left bold" data-tooltip="{{localize 'PEN.sol'}}">{{localize 'PEN.solShort'}}</div>
           <div class="npc-name centre">{{solLabel}}</div>
           {{#if (eq system.subtype 'squire')}}
             <div class="npc-name left bold">{{localize 'PEN.squireVal'}}</div>
@@ -163,11 +163,11 @@
           {{/if}}
         {{/unless}}
         <div class="npc-name left bold new-row">{{localize 'PEN.heir'}}</div>
-        <div class="centre"><a class="medium-icon" data-action="actorToggle" data-property = "heir" title="{{localize 'PEN.dblClickToggle'}}">
+        <div class="centre"><a class="medium-icon" data-action="actorToggle" data-property = "heir" data-tooltip="{{localize 'PEN.dblClickToggle'}}">
           <i class="{{#if actor.system.heir}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i>
         </a></div>
         <div class="npc-name left bold new-row">{{localize 'PEN.barren'}}</div>
-        <div class="centre"><a class="medium-icon" data-action="actorToggle" data-property = "barren" title="{{localize 'PEN.dblClickToggle'}}">
+        <div class="centre"><a class="medium-icon" data-action="actorToggle" data-property = "barren" data-tooltip="{{localize 'PEN.dblClickToggle'}}">
           <i class="{{#if actor.system.barren}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i>
         </a></div>
         <div class="npc-name left bold">{{localize 'PEN.age'}}</div>
@@ -188,7 +188,7 @@
           <div class="npc-name bold centre grey">{{ localize "PEN.damage" }}</div>
           {{#unless system.lock}}
             <div class="npc-name bold centre grey" data-document-class='Item' data-action="createDoc" data-type="weapon">
-              <a title="{{localize 'PEN.add'}}"><i class="item-control fas fa-plus"></i></a>
+              <a data-tooltip="{{localize 'PEN.add'}}"><i class="item-control fas fa-plus"></i></a>
             </div>
           {{else}}
             <div class="grey"></div>
@@ -205,8 +205,8 @@
               <div class="npc-name-input centre item" data-field ="score" data-itemid="{{weapon._id}}"><input class="inline-edit" name="item.system.weapon.{{key}}.value" type="number" value="{{weapon.system.value}}"/></div>
               <div class="npc-name-input centre item" data-field ="damage" data-itemid="{{weapon._id}}"><input class="inline-edit" name="item.system.weapon.{{key}}.dmgForm" type="text" value="{{weapon.system.dmgForm}}"/></div>
               <div class="npc-name centre item" data-document-class='Item' data-itemid ="{{weapon._id}}">
-                <a class="item-control fade" data-action="viewDoc"><i title="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
-                <a class="item-control fade" data-action="deleteDoc"><i title="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
+                <a class="item-control fade" data-action="viewDoc"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
+                <a class="item-control fade" data-action="deleteDoc"><i data-tooltip="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
               </div>
             {{/if}}
           {{/each}}
@@ -218,11 +218,11 @@
       {{else}}
         <section class="npc-weapons-grid">
           <div class="npc-name bold grey">{{ localize "PEN.armour" }}</div>
-          <div class="npc-name bold centre grey" title="{{localize 'PEN.armourHint'}}">{{ localize "PEN.arm" }}</div>
+          <div class="npc-name bold centre grey" data-tooltip="{{localize 'PEN.armourHint'}}">{{ localize "PEN.arm" }}</div>
           <div class="npc-name bold centre grey">{{ localize "PEN.ap" }}</div>
           {{#unless system.lock}}
             <div class="npc-name bold centre grey" data-document-class='Item' data-action="createDoc" data-type="armour">
-              <a title="{{localize 'PEN.add'}}"><i class="item-control fas fa-plus"></i></a>
+              <a data-tooltip="{{localize 'PEN.add'}}"><i class="item-control fas fa-plus"></i></a>
             </div>
           {{else}}
             <div class="grey"></div>
@@ -236,11 +236,11 @@
               <div></div>
             {{else}}
               <div class="npc-name-input item" data-field ="name" data-itemid="{{armour._id}}"><input class="inline-edit" name="item.armour.{{key}}.name" type="text" value="{{armour.name}}"/></div>
-              <div class="npc-name centre"><a class="item-control item-toggle" data-itemid ="{{armour._id}}" data-property="armour" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if armour.system.type}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
+              <div class="npc-name centre"><a class="item-control item-toggle" data-itemid ="{{armour._id}}" data-property="armour" data-tooltip="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if armour.system.type}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
               <div class="npc-name-input centre item" data-field ="ap" data-itemid="{{armour._id}}"><input class="inline-edit" name="item.system.armour.{{key}}.ap" type="number" value="{{armour.system.ap}}"/></div>
               <div class="npc-name centre item" data-document-class='Item' data-itemid ="{{armour._id}}">
-                <a class="item-control fade" data-action="viewDoc"><i title="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
-                <a class="item-control fade" data-action="deleteDoc"><i title="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
+                <a class="item-control fade" data-action="viewDoc"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
+                <a class="item-control fade" data-action="deleteDoc"><i data-tooltip="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
               </div>
             {{/if}}
           {{/each}}
@@ -258,7 +258,7 @@
           <div class="npc-name bold centre grey">{{ localize "PEN.valueShort" }}</div>
           {{#unless system.lock}}
             <div class="npc-name bold centre grey" data-document-class='Item' data-action="createDoc" data-type="skill">
-              <a title="{{localize 'PEN.add'}}"><i class="item-control fas fa-plus"></i></a>
+              <a data-tooltip="{{localize 'PEN.add'}}"><i class="item-control fas fa-plus"></i></a>
             </div>
           {{else}}
             <div class="grey"></div>
@@ -273,8 +273,8 @@
               <div class="npc-name-input item" data-field ="name" data-itemid="{{skill._id}}"><input class="inline-edit" name="item.skill.{{key}}.name" type="text" value="{{skill.name}}"/></div>
               <div class="npc-name-input centre item" data-field ="value" data-itemid="{{skill._id}}"><input class="inline-edit" name="item.system.skill.{{key}}.value" type="number" value="{{skill.system.value}}"/></div>
               <div class="npc-name centre item" data-document-class='Item' data-itemid ="{{skill._id}}">
-                <a class="item-control fade" data-action="viewDoc"><i title="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
-                <a class="item-control fade" data-action="deleteDoc"><i title="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
+                <a class="item-control fade" data-action="viewDoc"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
+                <a class="item-control fade" data-action="deleteDoc"><i data-tooltip="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
               </div>
             {{/if}}
           {{/each}}
@@ -292,7 +292,7 @@
           <div class="npc-name bold centre grey">{{ localize "PEN.valueShort" }}</div>
           {{#unless system.lock}}
             <div class="npc-name bold centre grey" data-document-class='Item' data-action="createDoc" data-type="trait">
-              <a title="{{localize 'PEN.add'}}"><i class="item-control fas fa-plus"></i></a>
+              <a data-tooltip="{{localize 'PEN.add'}}"><i class="item-control fas fa-plus"></i></a>
             </div>
           {{else}}
             <div class="grey"></div>
@@ -307,8 +307,8 @@
               <div class="npc-name-input item" data-field ="name" data-itemid="{{trait._id}}"><input class="inline-edit" name="item.trait.{{key}}.name" type="text" value="{{trait.name}}"/></div>
               <div class="npc-name-input centre item" data-field ="value" data-itemid="{{trait._id}}"><input class="inline-edit" name="item.system.trait.{{key}}.value" type="number" value="{{trait.system.value}}"/></div>
               <div class="npc-name centre item" data-document-class='Item' data-itemid ="{{trait._id}}">
-                <a class="item-control fade" data-action="viewDoc"><i title="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
-                <a class="item-control fade" data-action="deleteDoc"><i title="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
+                <a class="item-control fade" data-action="viewDoc"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
+                <a class="item-control fade" data-action="deleteDoc"><i data-tooltip="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
               </div>
             {{/if}}
           {{/each}}
@@ -326,7 +326,7 @@
           <div class="npc-name bold centre grey">{{ localize "PEN.valueShort" }}</div>
           {{#unless system.lock}}
             <div class="npc-name bold centre grey" data-document-class='Item' data-action="createDoc" data-type="passion">
-              <a title="{{localize 'PEN.add'}}"><i class="item-control fas fa-plus"></i></a>
+              <a data-tooltip="{{localize 'PEN.add'}}"><i class="item-control fas fa-plus"></i></a>
             </div>
           {{else}}
             <div class="grey"></div>
@@ -341,8 +341,8 @@
               <div class="npc-name-input item" data-field ="name" data-itemid="{{passion._id}}"><input class="inline-edit" name="item.passion.{{key}}.name" type="text" value="{{passion.name}}"/></div>
               <div class="npc-name-input centre item" data-field ="value" data-itemid="{{passion._id}}"><input class="inline-edit" name="item.system.passion.{{key}}.value" type="number" value="{{passion.system.value}}"/></div>
               <div class="npc-name centre item" data-document-class='Item' data-itemid ="{{passion._id}}">
-                <a class="item-control fade" data-action="viewDoc"><i title="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
-                <a class="item-control fade" data-action="deleteDoc"><i title="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
+                <a class="item-control fade" data-action="viewDoc"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
+                <a class="item-control fade" data-action="deleteDoc"><i data-tooltip="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
               </div>
             {{/if}}
           {{/each}}
@@ -358,7 +358,7 @@
           <div class="npc-name bold centre grey">{{ localize "PEN.damage" }}</div>
           {{#unless system.lock}}
             <div class="npc-name bold centre grey" data-document-class='Item' data-action="createDoc" data-type="horse">
-              <a title="{{localize 'PEN.add'}}"><i class="item-control fas fa-plus"></i></a>
+              <a data-tooltip="{{localize 'PEN.add'}}"><i class="item-control fas fa-plus"></i></a>
             </div>
           {{else}}
             <div class="grey"></div>
@@ -368,15 +368,15 @@
             {{#if ../system.lock}}
               <div class="npc-name rollable" data-type ="horse" data-sourceID = "{{horse.system.sourceID}}" data-itemid="{{horse._id}}">{{horse.name}}</div>
               <div class="npc-name-input centre item" data-field ="hp" data-itemid="{{horse._id}}"><input class="inline-edit" name="item.system.horse.{{key}}.value" type="number" value="{{horse.system.hp}}"/></div>
-              <div class="npc-name centre rollable damage" title="{{localize 'PEN.chargeDmgHint'}}: {{horse.system.chargeDmg}}" data-itemid="{{horse._id}}">{{horse.system.damage}}</div>
+              <div class="npc-name centre rollable damage" data-tooltip="{{localize 'PEN.chargeDmgHint'}}: {{horse.system.chargeDmg}}" data-itemid="{{horse._id}}">{{horse.system.damage}}</div>
               <div></div>
             {{else}}
               <div class="npc-name-input item" data-field ="name" data-itemid="{{horse._id}}"><input class="inline-edit" name="item.horse.{{key}}.name" type="text" value="{{horse.name}}"/></div>
               <div class="npc-name-input centre item" data-field ="hp" data-itemid="{{horse._id}}"><input class="inline-edit" name="item.system.horse.{{key}}.value" type="number" value="{{horse.system.hp}}"/></div>
               <div class="npc-name-input centre item" data-field ="damage" data-itemid="{{horse._id}}"><input class="inline-edit" name="item.system.horse.{{key}}.damage" type="text" value="{{horse.system.damage}}"/></div>
               <div class="npc-name centre item" data-document-class='Item' data-itemid ="{{horse._id}}">
-                <a class="item-control fade" data-action="viewDoc"><i title="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
-                <a class="item-control fade" data-action="deleteDoc"><i title="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
+                <a class="item-control fade" data-action="viewDoc"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
+                <a class="item-control fade" data-action="deleteDoc"><i data-tooltip="{{localize 'PEN.delete'}}" class="fa-solid fa-broom-wide"></i></a>
               </div>
             {{/if}}
           {{/each}}

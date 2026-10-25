@@ -17,7 +17,7 @@
       <div class="stat-item bold centre grid-item-top" data-tooltip="{{localize 'PEN.total'}}">{{ localize 'PEN.totalAbbr'}}</div>
       <div class="stat-item bold centre grid-item-top" data-tooltip="{{localize 'PEN.max'}}">{{ localize 'PEN.maxAbbr'}}</div>
       {{#if isCreation}}
-        <div class="centre"><a class="large-icon {{#if actor.system.create.stats}}result-fail{{else}}fade{{/if}}" data-action="statRoll"><i title="{{localize 'PEN.roll'}}" class="fas fa-dice"></i></a></div>
+        <div class="centre"><a class="large-icon {{#if actor.system.create.stats}}result-fail{{else}}fade{{/if}}" data-action="statRoll"><i data-tooltip="{{localize 'PEN.roll'}}" class="fas fa-dice"></i></a></div>
       {{/if}}
 
       {{#each system.stats as |stat key|}}
@@ -59,7 +59,7 @@
           {{/isOr}}
           <div class="stat-item centre grid-item-bottom">{{stat.effects}}</div>
         {{/isOr}}
-        <div class ="stat-item centre bold grid-item-bottom" title="{{stat.labelShort}}">{{stat.total}}</div>
+        <div class ="stat-item centre bold grid-item-bottom" data-tooltip="{{stat.labelShort}}">{{stat.total}}</div>
         <div class ="stat-item centre grid-item-bottom">{{stat.tMax}}</div>
       {{/each}}
       <div class="stat-item bold centre grid-item-bottom grid-item-left new-row"  data-tooltip="{{localize 'PEN.total'}}" >{{ localize 'PEN.totalAbbr'}}</div>

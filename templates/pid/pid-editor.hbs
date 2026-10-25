@@ -15,7 +15,7 @@
       <input class="stat-name" type="text" style="flex: 2;" name="_existing" value="{{_existing}}" data-prefix="{{idPrefix}}">
       {{/if}}
       {{#if isEditable}}
-      <a style="flex: 0 0 20px; align-self: center; text-align: right;" title="{{localize 'PEN.PIDFlag.guess'}}"
+      <a style="flex: 0 0 20px; align-self: center; text-align: right;" data-tooltip="{{localize 'PEN.PIDFlag.guess'}}"
         data-action="guess" data-guess="{{guessCode}}"><i class="fas fa-wand-magic"></i></a>
       {{/if}}
     </div>
@@ -96,7 +96,7 @@
       <label>{{localize 'PEN.PIDFlag.foundry-id'}}:</label>
       <div class="flexrow">
         <input type="text" value="{{objid}}" readonly>
-        <a title="{{localize 'PEN.CopyToClipboard'}}" data-action="copyToClip">
+        <a data-tooltip="{{localize 'PEN.CopyToClipboard'}}" data-action="copyToClip">
           <i class="fas fa-copy"></i>
         </a>
       </div>
@@ -105,7 +105,7 @@
       <label>{{localize 'PEN.PIDFlag.foundry-uuid'}}:</label>
       <div class="flexrow">
         <input type="text" value="{{objuuid}}" readonly>
-        <a title="{{localize 'PEN.CopyToClipboard'}}" data-action="copyToClip">
+        <a data-tooltip="{{localize 'PEN.CopyToClipboard'}}" data-action="copyToClip">
           <i class="fas fa-copy"></i>
         </a>
       </div>
@@ -114,7 +114,7 @@
       <label>{{localize 'PEN.PIDFlag.get-this-document'}}:</label>
       <div class="flexrow">
         <input type="text" value="await fromUuid('{{objuuid}}')" readonly>
-        <a title="{{localize 'PEN.CopyToClipboard'}}" data-action="copyToClip">
+        <a data-tooltip="{{localize 'PEN.CopyToClipboard'}}" data-action="copyToClip">
           <i class="fas fa-copy"></i>
         </a>
       </div>
@@ -124,7 +124,7 @@
       <label>{{localize 'PEN.PIDFlag.get-document-like-this'}}:</label>
       <div class="flexrow">
         <input type="text" value="await game.PEN.pid.fromPID('{{id}}', '{{lang}}')" readonly>
-        <a title="{{localize 'PEN.CopyToClipboard'}}" data-action="copyToClip">
+        <a data-tooltip="{{localize 'PEN.CopyToClipboard'}}" data-action="copyToClip">
           <i class="fas fa-copy"></i>
         </a>
       </div>
