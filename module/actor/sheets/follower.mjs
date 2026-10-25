@@ -341,7 +341,7 @@ export class PendragonFollowerSheet extends api.HandlebarsApplicationMixin(sheet
   static async _onRandomName(_event, _target) {
     if (!this.isEditable || this.actor.system.lock) return;
     const name = await PENRandomName.randomName({ doc: this.actor });
-    if (name) await this.actor.update({ name });
+    if (name) await this.actor.update({ name, 'prototypeToken.name': name });
   }
 
   //Auto Calc Follower Scores

@@ -409,7 +409,7 @@ export class PendragonNPCSheetv2 extends api.HandlebarsApplicationMixin(sheets.A
   static async _onRandomName(_event, _target) {
     if (!this.isEditable || this.actor.system.lock) return;
     const name = await PENRandomName.randomName({ doc: this.actor });
-    if (name) await this.actor.update({ name });
+    if (name) await this.actor.update({ name, 'prototypeToken.name': name });
   }
 
   //Auto Calc NPC Scores

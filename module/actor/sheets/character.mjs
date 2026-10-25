@@ -1028,7 +1028,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     if (!this.isEditable) return;
     if (this.actor.system.lock && !game.settings.get("Pendragon", "creation")) return;
     const name = await PENRandomName.randomName({ doc: this.actor, gender: this.actor.system.gender });
-    if (name) await this.actor.update({ name });
+    if (name) await this.actor.update({ name, 'prototypeToken.name': name });
   }
 
   static async _onSwitchSheet(event, target) {
