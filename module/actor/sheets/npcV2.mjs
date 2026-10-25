@@ -24,7 +24,6 @@ export class PendragonNPCSheetv2 extends api.HandlebarsApplicationMixin(sheets.A
       submitOnChange: true,
     },
     actions: {
-      editPid: this._onEditPid,
       noteView: this._noteView,
       playerNotesView: this._playerNotesView,
       actorToggle: this._onActorToggle,
@@ -200,24 +199,6 @@ export class PendragonNPCSheetv2 extends api.HandlebarsApplicationMixin(sheets.A
     });
   }
 
-  // adds the PID editor to the sheet frame
-  async _renderFrame(options) {
-    const frame = await super._renderFrame(options);
-    //define button
-    const sheetPID = this.actor.flags?.Pendragon?.pidFlag;
-    const noId = typeof sheetPID === "undefined" || typeof sheetPID.id === "undefined" || sheetPID.id === "";
-    //add button
-    const label = game.i18n.localize("PEN.PIDFlag.id");
-    const pidEditor = `<button type="button" class="header-control fa-solid fa-fingerprint icon ${noId ? "edit-pid-warning" : "edit-pid-exisiting"}"
-        data-action="editPid" data-tooltip="${label}" aria-label="${label}"></button>`;
-    let el = this.window.close;
-    while (el.previousElementSibling.localName === "button") {
-      el = el.previousElementSibling;
-    }
-    el.insertAdjacentHTML("beforebegin", pidEditor);
-    return frame;
-  }
-
   //Activate event listeners using the prepared sheet HTML
   _onRender(context, _options) {
     this._dragDrop.forEach((d) => d.bind(this.element));
@@ -370,13 +351,6 @@ export class PendragonNPCSheetv2 extends api.HandlebarsApplicationMixin(sheets.A
     } else return console.warn("Could not find document class");
   }
 
-  // Handle editPid action
-  static _onEditPid(event) {
-    event.stopPropagation(); // Don't trigger other events
-    if (event.detail > 1) return; // Ignore repeated clicks
-    new PIDEditor(this.document, {}).render(true, { focus: true });
-  }
-
   //Show or hide notes
   static async _noteView(event, target) {
     event.preventDefault();
@@ -409,7 +383,7 @@ export class PendragonNPCSheetv2 extends api.HandlebarsApplicationMixin(sheets.A
   static async _onRandomName(_event, _target) {
     if (!this.isEditable || this.actor.system.lock) return;
     const name = await PENRandomName.randomName({ doc: this.actor });
-    if (name) await this.actor.update({ name, 'prototypeToken.name': name });
+    if (name) await this.actor.update({ name, "prototypeToken.name": name });
   }
 
   //Auto Calc NPC Scores

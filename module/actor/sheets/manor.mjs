@@ -26,7 +26,6 @@ export class PendragonManorSheet extends PendragonActorSheet {
       submitOnChange: true,
     },
     actions: {
-      editPid: this._onEditPid,
       viewDoc: this._viewDoc,
       deleteDoc: this._deleteDoc,
       viewEnf: this._viewEnf,

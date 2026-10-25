@@ -98,12 +98,12 @@ export class PendragonCareerSheet extends PendragonItemSheet {
 
     const ranks = [];
     for (let rank of this.item.system.ranks) {
-      ranks.push(rank)
+      ranks.push(rank);
     }
 
     sheetData.religions = religions;
     sheetData.ranks = ranks;
-    sheetData.lastRank = ranks.length-1
+    sheetData.lastRank = ranks.length - 1;
     return sheetData;
   }
 
@@ -133,15 +133,15 @@ export class PendragonCareerSheet extends PendragonItemSheet {
     this.#dragDrop.forEach((d) => d.bind(this.element));
   }
 
-    /* -------------ACTIONS------------------------ */
-    //View Item from collection
-    static async #viewItem(event, target) {
-      const itemUuid = target.closest("[data-religion-uuid]")?.dataset?.religionUuid;
-      if(!itemUuid) return;
-      const viewItem = await fromUuid(itemUuid);
-      if (!viewItem) return;
-      viewItem.sheet.render(true);
-    }
+  /* -------------ACTIONS------------------------ */
+  //View Item from collection
+  static async #viewItem(event, target) {
+    const itemUuid = target.closest("[data-religion-uuid]")?.dataset?.religionUuid;
+    if (!itemUuid) return;
+    const viewItem = await fromUuid(itemUuid);
+    if (!viewItem) return;
+    viewItem.sheet.render(true);
+  }
 
   //Delete an item from the collection
   static async #deleteItem(event, target) {
@@ -156,34 +156,35 @@ export class PendragonCareerSheet extends PendragonItemSheet {
 
   //Add a Rank/Level
   static async #addLevel(event, target) {
-    const collection = this.item.system.ranks
-      ? foundry.utils.duplicate(this.item.system.ranks)
-      : [];
-    let level = collection.length
-    let usage = await PendragonCareerSheet._careerRankDialog(level)
+    const collection = this.item.system.ranks ? foundry.utils.duplicate(this.item.system.ranks) : [];
+    let level = collection.length;
+    let usage = await PendragonCareerSheet._careerRankDialog(level);
     if (!usage) return false;
-    let newRank = await PendragonCareerSheet._prepareRank(usage, collection)
-    if (!newRank) return
-    collection.push(newRank)
-    await this.item.update({'system.ranks': collection})
-    return
+    let newRank = await PendragonCareerSheet._prepareRank(usage, collection);
+    if (!newRank) return;
+    collection.push(newRank);
+    await this.item.update({ "system.ranks": collection });
+    return;
   }
 
   //Open Rank/Level Dialog box
   static async _careerRankDialog(level, formData) {
-    const data = {}
+    const data = {};
     data.level = level;
     data.specials = await PENSelectLists.careerSpecials();
-    data.formData = formData
-    data.isGM = game.user.isGM
-    let label = game.i18n.localize("PEN.update")
-    if (!formData) label = game.i18n.localize("PEN.addLevel")
-    if (!game.user.isGM) label = game.i18n.localize("PEN.close")
-    const html = await foundry.applications.handlebars.renderTemplate("systems/Pendragon/templates/dialog/careerRank.hbs", data);
+    data.formData = formData;
+    data.isGM = game.user.isGM;
+    let label = game.i18n.localize("PEN.update");
+    if (!formData) label = game.i18n.localize("PEN.addLevel");
+    if (!game.user.isGM) label = game.i18n.localize("PEN.close");
+    const html = await foundry.applications.handlebars.renderTemplate(
+      "systems/Pendragon/templates/dialog/careerRank.hbs",
+      data,
+    );
     const usage = await PENDialog.input({
       window: { title: game.i18n.localize("TYPES.Item.career") },
       content: html,
-      position: {width: 600},
+      position: { width: 600 },
       ok: {
         label: label,
       },
@@ -195,10 +196,10 @@ export class PendragonCareerSheet extends PendragonItemSheet {
   static async #deleteLevel(event, target) {
     if (event.detail === 2) {
       const { itemId } = target.closest("[data-item-id]")?.dataset ?? {};
-      let thisIndex = Number(itemId)
-      const coll = this.item.system.ranks ?? []
-      if (thisIndex <0 || thisIndex>=coll.length) return false;
-      await this.item.update({ 'system.ranks': coll.filter((_, idx)=> thisIndex!=idx) });
+      let thisIndex = Number(itemId);
+      const coll = this.item.system.ranks ?? [];
+      if (thisIndex < 0 || thisIndex >= coll.length) return false;
+      await this.item.update({ "system.ranks": coll.filter((_, idx) => thisIndex != idx) });
     }
   }
 
@@ -207,16 +208,16 @@ export class PendragonCareerSheet extends PendragonItemSheet {
     event.preventDefault();
     event.stopImmediatePropagation();
     const { itemId } = target.closest("[data-item-id]")?.dataset ?? {};
-    let fromIndex = Number(itemId)
-    const move = Number(target?.dataset?.move)
-    const coll = this.item.system.ranks ?? []
-    let toIndex = fromIndex + move
-    if (toIndex === fromIndex) return
-    if (toIndex < 0 || toIndex >= coll.length) return
-    if (fromIndex < 0 || fromIndex >= coll.length) return
-    const [element] = coll.splice(fromIndex,1)
-    coll.splice(toIndex,0,element)
-    await this.item.update({ 'system.ranks': coll });
+    let fromIndex = Number(itemId);
+    const move = Number(target?.dataset?.move);
+    const coll = this.item.system.ranks ?? [];
+    let toIndex = fromIndex + move;
+    if (toIndex === fromIndex) return;
+    if (toIndex < 0 || toIndex >= coll.length) return;
+    if (fromIndex < 0 || fromIndex >= coll.length) return;
+    const [element] = coll.splice(fromIndex, 1);
+    coll.splice(toIndex, 0, element);
+    await this.item.update({ "system.ranks": coll });
   }
 
   //View a rank item
@@ -224,52 +225,52 @@ export class PendragonCareerSheet extends PendragonItemSheet {
     event.preventDefault();
     event.stopImmediatePropagation();
     const { itemId } = target.closest("[data-item-id]")?.dataset ?? {};
-    let fromIndex = Number(itemId)
-    const coll = this.item.system.ranks ?? []
-    if (fromIndex < 0 || fromIndex >= coll.length) return
-    const element = coll[fromIndex]
-    let usage = await PendragonCareerSheet._careerRankDialog(element.level, element)
-    if (!usage || !game.user.isGM) return
-    let newRank =  await PendragonCareerSheet._prepareRank(usage, coll)
-    if (!newRank) return
-    coll.splice(fromIndex,1,newRank)
-    await this.item.update({ 'system.ranks': coll });
+    let fromIndex = Number(itemId);
+    const coll = this.item.system.ranks ?? [];
+    if (fromIndex < 0 || fromIndex >= coll.length) return;
+    const element = coll[fromIndex];
+    let usage = await PendragonCareerSheet._careerRankDialog(element.level, element);
+    if (!usage || !game.user.isGM) return;
+    let newRank = await PendragonCareerSheet._prepareRank(usage, coll);
+    if (!newRank) return;
+    coll.splice(fromIndex, 1, newRank);
+    await this.item.update({ "system.ranks": coll });
   }
 
   //Prepare a rank item
   static async _prepareRank(usage, collection) {
     //Set Title
-    let title = usage.title
+    let title = usage.title;
     if (title === "") {
-      let level = collection.length
-      title = game.i18n.format("PEN.career.rank", {rank: level})
+      let level = collection.length;
+      title = game.i18n.format("PEN.career.rank", { rank: level });
     }
     //Set Promotion
     let promotion = "roll";
     if (usage.ageTest != "") {
-      promotion = "age"
-    }  else if (usage.noPromotion) {
-      promotion = "none"
+      promotion = "age";
+    } else if (usage.noPromotion) {
+      promotion = "none";
     } else if (usage.special != "none" || usage.special != "") {
-      promotion = usage.special
+      promotion = usage.special;
     }
-    let newRank =  {
+    let newRank = {
       title: title,
       description: usage.description,
       promotion: promotion,
-      ageTest : usage.ageTest,
+      ageTest: usage.ageTest,
       minYears: usage.minYears,
       special: usage.special,
       noPromotion: usage.noPromotion,
       marriage: usage.marriage ?? 0,
       marriagePromotes: usage.marriagePromotes,
-    }
-    return newRank
+    };
+    return newRank;
   }
 
   /* -------------DRAG AND DROP------------------ */
 
-    #createDragDropHandlers() {
+  #createDragDropHandlers() {
     return this.options.dragDrop.map((d) => {
       d.permissions = {
         //dragstart: this._canDragStart.bind(this),
@@ -314,7 +315,7 @@ export class PendragonCareerSheet extends PendragonItemSheet {
         return false;
     }
 
-    if (collectionName === "") return false
+    if (collectionName === "") return false;
 
     const collection = this.item.system[collectionName]
       ? foundry.utils.duplicate(this.item.system[collectionName])
@@ -350,6 +351,6 @@ export class PendragonCareerSheet extends PendragonItemSheet {
       pid: item.flags.Pendragon.pidFlag.id,
     });
     await this.item.update({ [`system.${collectionName}`]: collection });
-    return true
+    return true;
   }
 }

@@ -23,7 +23,6 @@ export class PendragonFollowerSheet extends api.HandlebarsApplicationMixin(sheet
       submitOnChange: true,
     },
     actions: {
-      editPid: this._onEditPid,
       actorToggle: this._onActorToggle,
       autoCalc: this._onAutoCalc,
       createDoc: this._createDoc,
@@ -139,24 +138,6 @@ export class PendragonFollowerSheet extends api.HandlebarsApplicationMixin(sheet
       return a.name.localeCompare(b.name);
     });
     context.horses = horses;
-  }
-
-  // adds the PID editor to the sheet frame
-  async _renderFrame(options) {
-    const frame = await super._renderFrame(options);
-    //define button
-    const sheetPID = this.actor.flags?.Pendragon?.pidFlag;
-    const noId = typeof sheetPID === "undefined" || typeof sheetPID.id === "undefined" || sheetPID.id === "";
-    //add button
-    const label = game.i18n.localize("PEN.PIDFlag.id");
-    const pidEditor = `<button type="button" class="header-control fa-solid fa-fingerprint icon ${noId ? "edit-pid-warning" : "edit-pid-exisiting"}"
-      data-action="editPid" data-tooltip="${label}" aria-label="${label}"></button>`;
-    let el = this.window.close;
-    while (el.previousElementSibling.localName === "button") {
-      el = el.previousElementSibling;
-    }
-    el.insertAdjacentHTML("beforebegin", pidEditor);
-    return frame;
   }
 
   //Activate event listeners using the prepared sheet HTML
@@ -318,13 +299,6 @@ export class PendragonFollowerSheet extends api.HandlebarsApplicationMixin(sheet
     } else return console.warn("Could not find document class");
   }
 
-  // Handle editPid action
-  static _onEditPid(event) {
-    event.stopPropagation(); // Don't trigger other events
-    if (event.detail > 1) return; // Ignore repeated clicks
-    new PIDEditor(this.document, {}).render(true, { focus: true });
-  }
-
   //Toggle Actor
   static async _onActorToggle(event, target) {
     //Only perform on double click
@@ -341,7 +315,7 @@ export class PendragonFollowerSheet extends api.HandlebarsApplicationMixin(sheet
   static async _onRandomName(_event, _target) {
     if (!this.isEditable || this.actor.system.lock) return;
     const name = await PENRandomName.randomName({ doc: this.actor });
-    if (name) await this.actor.update({ name, 'prototypeToken.name': name });
+    if (name) await this.actor.update({ name, "prototypeToken.name": name });
   }
 
   //Auto Calc Follower Scores

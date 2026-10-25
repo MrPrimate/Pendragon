@@ -23,7 +23,6 @@ export class PendragonItemSheet extends api.HandlebarsApplicationMixin(sheets.It
       resizable: true,
     },
     actions: {
-      editPid: this._onEditPid,
       openWiki: this._openWiki,
       addEffect: this._onCreateActiveEffect,
       editEffect: this._onEditActiveEffect,
@@ -31,23 +30,6 @@ export class PendragonItemSheet extends api.HandlebarsApplicationMixin(sheets.It
       toggleEffect: this._onToggleActiveEffect,
     },
   };
-
-  async _renderFrame(options) {
-    const frame = await super._renderFrame(options);
-    //define button
-    const sheetPID = this.item.flags?.Pendragon?.pidFlag;
-    const noId = typeof sheetPID === "undefined" || typeof sheetPID.id === "undefined" || sheetPID.id === "";
-    //add button
-    const label = game.i18n.localize("PEN.PIDFlag.id");
-    const pidEditor = `<button type="button" class="header-control fa-solid fa-fingerprint icon ${noId ? "edit-pid-warning" : "edit-pid-exisiting"}"
-        data-action="editPid" data-tooltip="${label}" aria-label="${label}"></button>`;
-    let el = this.window.close;
-    while (el.previousElementSibling.localName === "button") {
-      el = el.previousElementSibling;
-    }
-    el.insertAdjacentHTML("beforebegin", pidEditor);
-    return frame;
-  }
 
   async _prepareContext(options) {
     let effects = await PENActiveEffectSheet.getItemEffectsFromSheet(this.document);
@@ -68,22 +50,6 @@ export class PendragonItemSheet extends api.HandlebarsApplicationMixin(sheets.It
       changesActiveEffects: changesActiveEffects,
       effectChanges: effectChanges,
     };
-  }
-
-  /**
-   * Handle changing a Document's image.
-   *
-   * @this PendragonItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @returns {Promise}
-   * @protected
-   */
-  // handle editPid action
-  static _onEditPid(event) {
-    event.stopPropagation(); // Don't trigger other events
-    if (event.detail > 1) return; // Ignore repeated clicks
-    new PIDEditor(this.document, {}).render(true, { focus: true });
   }
 
   _initTabs(group, tabNames) {

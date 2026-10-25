@@ -18,7 +18,7 @@ export class PENactorItemDrop {
       }
 
       //Don't add these items to actors
-      if (['career'].includes(dropItm.type)) {
+      if (["career"].includes(dropItm.type)) {
         ui.notifications.warn(
           game.i18n.format("PEN.itemActormismatch", {
             itemType: game.i18n.localize("TYPES.Item." + dropItm.type),

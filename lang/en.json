@@ -1580,6 +1580,7 @@
       "foundry-uuid": "Foundry UUID",
       "get-document-like-this": "Get document like this",
       "get-this-document": "Get this document",
+      "guess": "Autogenerate the PID based on the name",
       "id": "PID",
       "info": "Info",
       "key": "System ID (PID)",

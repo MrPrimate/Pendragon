@@ -1544,6 +1544,7 @@
       "foundry-uuid": "Foundry UUID",
       "get-document-like-this": "Obtenir les documents semblables",
       "get-this-document": "Obtenir ce document",
+      "guess": "Génère automatiquement l'PID en fonction du nom",
       "id": "PID",
       "info": "Info",
       "key": "ID système (PID)",

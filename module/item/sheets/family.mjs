@@ -24,7 +24,7 @@ export class PendragonFamilySheet extends PendragonItemSheet {
       randomCareer: this._onRandomCareer,
     },
     dragDrop: [{ dropSelector: ".droppable" }],
-  }
+  };
 
   static PARTS = {
     header: {
@@ -56,9 +56,9 @@ export class PendragonFamilySheet extends PendragonItemSheet {
       ...(await super._prepareContext(options)),
     };
     sheetData.showRandomName = true;
-    sheetData.showCareer = this.item.system.age>=14;
-    sheetData.showRandomCareer = this.item.system.age>=14;
-    if (Number(this.item.system.died)>0) sheetData.showRandomCareer = false
+    sheetData.showCareer = this.item.system.age >= 14;
+    sheetData.showRandomCareer = this.item.system.age >= 14;
+    if (Number(this.item.system.died) > 0) sheetData.showRandomCareer = false;
 
     sheetData.relationType = PENSelectLists.getRelationTypes();
     //Keep any relation no longer offered so the dropdown still shows it
@@ -95,14 +95,15 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     const careers = [];
     let maxLevel = 0;
     for (let career of this.item.system.careers) {
-      sheetData.showRandomCareer = false
+      sheetData.showRandomCareer = false;
       let thisCareer = (await game.system.api.pid.fromPIDBest({ pid: career.pid }))[0];
       //If no hit on PID then use UUID
       if (!thisCareer) {
         thisCareer = await fromUuid(career.uuid);
       }
-      maxLevel = thisCareer.system.ranks.length ?? 0
-      let careerTitle = thisCareer?.system?.ranks[this.item.system.careerLevel]?.title ?? game.i18n.localize('PEN.invalid')
+      maxLevel = thisCareer.system.ranks.length ?? 0;
+      let careerTitle =
+        thisCareer?.system?.ranks[this.item.system.careerLevel]?.title ?? game.i18n.localize("PEN.invalid");
       //Keep the stored UUID so the entry can be deleted even if the PID resolves to a different document
       careers.push({
         name: thisCareer?.name ?? career.name,
@@ -114,7 +115,7 @@ export class PendragonFamilySheet extends PendragonItemSheet {
         careerLevel: this.item.system.careerLevel,
       });
     }
-    sheetData.hasCareer = careers.length > 0
+    sheetData.hasCareer = careers.length > 0;
     sheetData.careerLevels = await PENSelectLists.getCareerLevels(maxLevel);
     sheetData.careers = careers;
 
@@ -152,7 +153,6 @@ export class PendragonFamilySheet extends PendragonItemSheet {
       .forEach((n) => n.addEventListener("click", this.#onItemToggle.bind(this)));
   }
 
-
   //Handle toggle states
   async #onItemToggle(event) {
     event.preventDefault();
@@ -176,13 +176,12 @@ export class PendragonFamilySheet extends PendragonItemSheet {
 
       //If deleting career then reset level and next Promotion
       if (collection === "careers") {
-        await this.item.update ({
-          'system.careerLevel' : 0,
-          'system.nextPromotion' : 0,
-          'system.yearPromoted' : 0
-        })
+        await this.item.update({
+          "system.careerLevel": 0,
+          "system.nextPromotion": 0,
+          "system.yearPromoted": 0,
+        });
       }
-
     }
   }
 
@@ -211,14 +210,13 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     const career = await PENRandomCareer.randomCareer(this.item);
     if (career) {
       //await this.item.update({ name });
-      console.log(career)
+      console.log(career);
     }
   }
 
-
   /* -------------DRAG AND DROP------------------ */
 
-    #createDragDropHandlers() {
+  #createDragDropHandlers() {
     return this.options.dragDrop.map((d) => {
       d.permissions = {
         //dragstart: this._canDragStart.bind(this),
@@ -263,7 +261,7 @@ export class PendragonFamilySheet extends PendragonItemSheet {
         return false;
     }
 
-    if (collectionName === "") return false
+    if (collectionName === "") return false;
 
     const collection = this.item.system[collectionName]
       ? foundry.utils.duplicate(this.item.system[collectionName])
@@ -299,32 +297,29 @@ export class PendragonFamilySheet extends PendragonItemSheet {
       pid: newItem.flags.Pendragon.pidFlag.id,
     });
 
-
     if (newItem.type === "career") {
-      let yearPromoted = this.item.system.born + 14
-      let rank = newItem.system.ranks[0]
-      let nextPromotion = 0
+      let yearPromoted = this.item.system.born + 14;
+      let rank = newItem.system.ranks[0];
+      let nextPromotion = 0;
       if (rank) {
-        if (rank.ageTest !="") {
-          nextPromotion = this.item.system.born + (await new Roll(rank.ageTest).evaluate()).total ;
-        }else if (rank.minYears) {
-          nextPromotion = yearPromoted + (await new Roll(rank.minYears).evaluate()).total ;
+        if (rank.ageTest != "") {
+          nextPromotion = this.item.system.born + (await new Roll(rank.ageTest).evaluate()).total;
+        } else if (rank.minYears) {
+          nextPromotion = yearPromoted + (await new Roll(rank.minYears).evaluate()).total;
         } else if (rank.special === "swordProspects") {
-          nextPromotion = this.item.system.born + 21
+          nextPromotion = this.item.system.born + 21;
         } else if (rank.special === "maidInWaiting") {
-          nextPromotion = this.item.system.born + (await new Roll("1D6+15").evaluate()).total ;
+          nextPromotion = this.item.system.born + (await new Roll("1D6+15").evaluate()).total;
         }
       }
       await this.item.update({
         [`system.${collectionName}`]: collection,
-        'system.yearPromoted' : yearPromoted,
-        'system.nextPromotion' : nextPromotion
-      })
+        "system.yearPromoted": yearPromoted,
+        "system.nextPromotion": nextPromotion,
+      });
     } else {
       await this.item.update({ [`system.${collectionName}`]: collection });
     }
-    return true
+    return true;
   }
-
-
 }

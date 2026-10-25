@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+
+### Misc
+
+- PID Flag code updated to v14. Objects in world and compendia are treated equally - so highest priority irrespective of where they are(JamesB)
+
 ## 14.25
 
 ### Random Names/Cultures (MrPrimate)

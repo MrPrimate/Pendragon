@@ -46,7 +46,7 @@ export class PENCreateFamily {
       await actor.update({ "system.born": yearBorn });
     }
 
-    //Get the name and career tables once rather than for each family member
+    //Get the name tables once rather than for each family member
     this.nameTables = await this.getNameTables(actor);
 
     //New family members to be added
@@ -441,7 +441,4 @@ export class PENCreateFamily {
       members.map((i) => i.id),
     );
   }
-
-
-
 }

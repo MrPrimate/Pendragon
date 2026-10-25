@@ -2,9 +2,12 @@
 @import "core.css" layer(core);
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 
-.app .header-button.edit-pid-warning,
-.application .window-header .header-control.edit-pid-warning {
-  color: red;
+.application {
+  header.window-header {
+    .invalid-pid {
+      color: var(--color-level-error);
+    }
+  }
 }
 
 .Pendragon.pid-editor {
