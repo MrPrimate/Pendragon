@@ -1,0 +1,44 @@
+<div class="Pendragon tooltip">
+  <header>
+    <h2>{{ item.name }}</h2>
+    <ul class="pills">
+    {{#each categoryLabels as |category|}}
+      <li class="pill">{{category }}</li>
+    {{/each}}
+    </ul>
+  </header>
+  {{{ description }}}
+  <hr />
+  <table class="modifier-sources">
+  <tr><th scope="col">{{localize 'PEN.sourceItem'}}</th><th scope="col">{{localize 'PEN.value'}}</th></tr>
+  <tr><td>{{localize 'PEN.baseVal'}}</td><td>{{base}}</td></tr>
+  {{#if culture}}
+  <tr><td>{{localize 'PEN.culture'}}</td><td>{{numberFormat culture sign=true}}</td></tr>
+  {{/if}}
+  {{#if family}}
+  <tr><td>{{familyLabel}}</td><td>{{numberFormat family sign=true}}</td></tr>
+  {{/if}}
+  {{#if training}}
+  <tr><td>{{localize 'PEN.training'}}</td><td>{{numberFormat training sign=true}}</td></tr>
+  {{/if}}
+  {{#if effectTotal}}
+  <tr><td>{{localize 'PEN.effects'}}</td><td>{{numberFormat effectTotal sign=true}}</td></tr>
+  {{/if}}
+  </table>
+  <footer class="control-hints">
+    <ul>
+      <li><strong>{{localize 'PEN.rollHints.unopposedRoll'}}: </strong><img src="systems/Pendragon/assets/Icons/mouse-left.svg" alt="{{localize 'PEN.rollHints.leftClick'}}" /></li>
+      <li><strong>{{localize 'PEN.rollHints.opposedRoll'}}: </strong><kbd>ALT</kbd> + <img src="systems/Pendragon/assets/Icons/mouse-left.svg" alt="{{localize 'PEN.rollHints.leftClick'}}" /></li>
+      <li><strong>{{localize 'PEN.rollHints.fixedOpposedRoll'}}: </strong><kbd>CTRL</kbd> + <img src="systems/Pendragon/assets/Icons/mouse-left.svg" alt="{{localize 'PEN.rollHints.leftClick'}}" /></li>
+      <li>
+      {{#if switchShift}}
+        <strong>{{localize 'PEN.rollHints.showPrompt'}}: </strong>
+      {{else}}
+        <strong>{{localize 'PEN.rollHints.hidePrompt'}}: </strong>
+      {{/if}}
+      Hold down <kbd>SHIFT</kbd> as well.
+      </li>
+      <li style="text-align:center;">{{localize 'PEN.rollHints.lockHint'}}</li>
+    </ul>
+  </footer>
+</div>

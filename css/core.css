@@ -100,6 +100,7 @@
   --char-background-image: url("../assets/backgrounds/black-paper.png");
   --item-background-image: url("../assets/backgrounds/dark_arches2.png");
   --pill-bg: #240202;
+  --pill-border: oklch(from var(--pendragon-white) 0.8 c h);
   --pendragon-success: oklch(0.76 0.25 142);
   --pendragon-primary-text: oklch(0.9467 0.0311 75.22);
   --pendragon-secondary-text: oklch(0.62315 0.16929 268.592);
@@ -119,4 +120,48 @@
   }
   --pendragon-geneality-back: oklch(0.15096 0.0192 288.951);
   --active-effect-aura: url("../assets/Icons/aura.svg");
+}
+
+/* Used for keyboard keys */
+kbd {
+  padding: 0.1em 0.6em;
+  border: 1px solid var(--color-text-secondary);
+  font-size: 75%;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  display: inline-block;
+  margin: 0 0.1em;
+  text-shadow: 0 1px 0 var(--color-shadow-dark);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* table of modifiers for total or roll */
+.modifier-sources {
+  tr :nth-child(1) {text-align:left;}
+  tr :nth-child(2) {text-align:right;}
+}
+
+/* Hints regarding clicks or keybinds */
+.control-hints {
+  font-size: 0.8125rem;
+  opacity: 0.7;
+
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+  }
+
+  li + li {
+    margin-block-start: 0.5em;
+  }
+
+  /* used for left/middle/right click */
+  img {
+    display: inline-block;
+    height: 1em;
+    aspect-ratio: 1;
+    vertical-align: middle;
+  }
 }

@@ -13,6 +13,7 @@ import { PENRollType } from "./cards/rollType.mjs";
 import { migrateWorld } from "./setup/migrations.mjs";
 import { PendragonCombatTracker } from "./apps/combat-tracker.mjs";
 import { PendragonStatusEffects } from "./apps/status-effects.mjs";
+import { PendragonTooltips } from "./apps/tooltips.mjs";
 import { PIDEditor } from "./pid/pid-editor.mjs";
 import { PendragonActiveEffect } from "./apps/active-effects.mjs";
 import RenderActiveEffectConfig from "./hooks/render-active-effect-config.mjs";
@@ -87,6 +88,9 @@ Hooks.once("init", async function () {
   //Register Handlebar Helpers & settings
   handlebarsHelper();
   registerSettings();
+
+  // add custom tooltup renderer
+  game.Pendragon.tooltips = new PendragonTooltips();
 
   // define data models
   CONFIG.Actor.dataModels.character = CharacterData;
@@ -230,6 +234,9 @@ Hooks.once("ready", async function () {
       await game.time.set({ year: 510 });
     }
   }
+
+  // start our tooltip observer
+  game.Pendragon.tooltips.observe();
 
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => {
