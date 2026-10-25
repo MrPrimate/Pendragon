@@ -1,0 +1,89 @@
+<section class="tab attributes droppable {{tab.cssClass}}" data-group="primary" data-tab="attributes">
+   <div class="helpicon">
+    {{#if showHelp}}
+      <a class="" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Gear" data-tooltip='{{localize "PEN.openWiki"}}'>
+        <i class="fas fa-circle-question"></i>
+      </a>
+    {{/if}}
+  </div>
+  {{!-- Religion --}}
+  <div class="stat-name bold">{{ localize "PEN.requiredReligion"}}</div>
+  <div class="horizontalboxed {{#if isGM}} droppable {{/if}} virtues" style="min-height: 20px;" data-collection = "religions">
+    <ol class="item-list">
+      {{#each religions as |religion|}}
+        <li class="item flexrow" data-item-id="{{religion.uuid}}" data-religion-uuid="{{religion.religionUuid}}">
+          <div class="item-name flexrow">
+            {{#if religion.valid}}
+              <div class="stat-name">{{religion.name}}</div>
+            {{else}}
+              <div class="stat-name result-success">{{religion.name}} [{{localize 'PEN.invalid'}}]</div>
+            {{/if}}
+          </div>
+          <div class="item-controls">
+            {{#if religion.valid}}
+              <a class="item-control" data-tooltip="{{localize 'PEN.view'}}" data-action="viewItem"><i class="fa-solid fa-eye"></i></a>
+            {{/if}}
+            {{#if ../isGM}}
+              <a class="item-control item-delete" data-tooltip="{{localize 'PEN.delete'}}" data-action="deleteItem"><i class="fas fa-trash" style="padding-top: 5px;"></i></a>
+            {{/if}}
+          </div>
+        </li>
+      {{else}}
+        <div class="centre italics" style="height:60px; padding-top: 20px;">{{localize 'PEN.emptyList'}}</div>
+      {{/each}}
+    </ol>
+  </div>
+  <br>
+
+{{!-- Gender --}}
+  <div class="stat-name bold">{{ localize "PEN.gender"}}</div>
+  <div class="stat-name centre" style="margin-top: 0px; padding-top: 0px">
+    <select class="centre" data-handle-change name="system.gender" {{#unless isGM}} disabled {{/unless}}>
+      {{selectOptions genderOptions selected=item.system.gender}}
+    </select>
+  </div>
+  <br>
+  {{!-- Ranks/Levels --}}
+  <div class="stat-name bold">{{ localize "PEN.levels"}}
+    {{#if isGM}}
+      <a>
+        <i class="fas fa-plus" style="padding-left:25px;" data-action="addLevel" data-tooltip="{{localize 'PEN.addLevel'}}"></i>
+      </a>
+    {{/if}}
+  </div>
+  <div class="horizontalboxed" style="min-height: 20px;" data-collection = "ranks">
+    <ol class="ranks">
+      {{#each ranks as |rank|}}
+        <li class="item" data-item-id="{{@index}}">
+          {{#if ../isGM}}
+            {{#unless (eq @index 0)}}
+              <div class="rank-controls centre"><a class="large-icon" data-action="changeRank" data-move="-1"><i class="fa-solid fa-circle-arrow-up"></i></a></div>
+            {{else}}
+              <div></div>
+            {{/unless}}
+            {{#unless (eq @index ../lastRank)}}
+              <div class="rank-controls centre"><a class="large-icon" data-action="changeRank" data-move="1"><i class="fa-solid fa-circle-arrow-down"></i></a></div>
+            {{else}}
+              <div></div>
+            {{/unless}}
+          {{else}}
+            <div></div>
+            <div></div>
+          {{/if}}
+          <div class="stat-name centre">{{@index}}</div>
+          <div class="stat-name">{{rank.title}}</div>
+          <div class="stat-name truncate">{{rank.description}}</div>
+          <div class="rank-controls centre">
+            <a data-tooltip="{{localize 'PEN.view'}}" data-action="viewLevel"><i class="fa-solid fa-eye"></i></a>
+            {{#if ../isGM}}
+              <a data-tooltip="{{localize 'PEN.delete'}}" data-action="deleteLevel"><i class="fas fa-trash" style="padding-top: 5px;"></i></a>
+            {{/if}}
+          </div>
+        </li>
+      {{else}}
+        <div class="centre italics" style="height:20px;">{{localize 'PEN.none'}}</div>
+      {{/each}}
+    </ol>
+  </div>
+  <br>
+</section>

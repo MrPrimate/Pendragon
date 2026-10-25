@@ -46,7 +46,7 @@ export class PENCreateFamily {
       await actor.update({ "system.born": yearBorn });
     }
 
-    //Get the name tables once rather than for each family member
+    //Get the name and career tables once rather than for each family member
     this.nameTables = await this.getNameTables(actor);
 
     //New family members to be added
@@ -311,6 +311,7 @@ export class PENCreateFamily {
           memberName = n2Roll;
         }
       }
+
       members.push({
         type: "family",
         name: memberName,
@@ -349,7 +350,7 @@ export class PENCreateFamily {
   //Get the male and female name tables, false if random names are off or either table is missing
   static async getNameTables(actor) {
     if (!game.settings.get("Pendragon", "randomFamilyNames")) return false;
-    const culture = PENRandomName.resolveCulture(actor);
+    const culture = PENRandomName.resolveCulture(actor, "culture");
     let male = await PENRandomName.getNameTable("male", culture);
     let female = await PENRandomName.getNameTable("female", culture);
     if (!male || !female) return false;
@@ -440,4 +441,7 @@ export class PENCreateFamily {
       members.map((i) => i.id),
     );
   }
+
+
+
 }
