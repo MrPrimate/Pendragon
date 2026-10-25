@@ -1113,7 +1113,9 @@
       "lockHint": "Clique du milieu pour verrouiller",
       "middleClick": "Clic du milieu",
       "leftClick": "Clic gauche",
-      "rightClick": "Clic droit"
+      "rightClick": "Clic droit",
+      "holdDown": "Maintiens aussi la touche ",
+      "asWell": ""
     },
     "rollOptions": "Options de jet",
     "rollTableMod": "Demande de modificateur avec jet",

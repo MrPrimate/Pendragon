@@ -194,11 +194,11 @@ export class PENUtilities {
       return;
     }
 
-    let newAwards = []
+    let newAwards = [];
     if (Array.isArray(awards.gloryAward)) {
-      newAwards.push(...awards.gloryAward)
+      newAwards.push(...awards.gloryAward);
     } else {
-      newAwards.push(awards.gloryAward)
+      newAwards.push(awards.gloryAward);
     }
 
     let count = 0;

@@ -36,11 +36,11 @@
       {{!-- Icons Section --}}
       <section class="bottom sheet-header">
         {{#if system.lock}}
-          <div><a class=""><i class="fas"></i></a></div>
+          <div><a class="black"><i class="fas"></i></a></div>
         {{else}}
-          <div class="right middle-icon"><a data-action="autoCalc" data-tooltip="{{ localize 'PEN.calcNPC' }}"> <i class="fas fa-dice"></i></a></div>
+          <div class="black right middle-icon"><a data-action="autoCalc" data-tooltip="{{ localize 'PEN.calcNPC' }}"> <i class="fas fa-dice"></i></a></div>
         {{/if}}
-        <div class="right middle-icon"><a class="" data-tooltip="{{ localize 'PEN.lock' }}" data-action="actorToggle" data-property="lock"> <i class="{{#if system.lock}}fas fa-lock{{else}}fas fa-lock-open{{/if}}"></i></a></div>
+        <div class="black right middle-icon"><a class="" data-tooltip="{{ localize 'PEN.lock' }}" data-action="actorToggle" data-property="lock"> <i class="{{#if system.lock}}fas fa-lock{{else}}fas fa-lock-open{{/if}}"></i></a></div>
       </section>
 
     </section>
@@ -58,7 +58,7 @@
         <div class="npc-name centre">{{system.manKnockdown}}</div>
         <div></div>
         <div class="npc-name left bold">{{localize 'PEN.armour'}}</div>
-        <div class="npc-name centre" title = "{{localize 'PEN.armourShield'}}">{{system.manArm}} / {{system.manShd}}</div>
+        <div class="npc-name centre" data-tooltip="{{localize 'PEN.armourShield'}}">{{system.manArm}} / {{system.manShd}}</div>
 
         <div class="npc-name left bold">{{localize 'PEN.mjrWnd'}}</div>
         <div class="npc-name centre">{{system.manMjrWnd}}</div>
@@ -90,7 +90,7 @@
         <div class="npc-name-input centre"><input name="system.manKnockdown" type="number" value="{{system.manKnockdown}}"/></div>
         <div></div>
         <div class="npc-name left bold">{{localize 'PEN.armour'}}</div>
-        <div class="npc-name-input npc-armour centre" title = "{{localize 'PEN.armourShield'}}"><input name="system.manArm" type="number" value="{{system.manArm}}"/> / <input name="system.manShd" type="number" value="{{system.manShd}}"/></div>
+        <div class="npc-name-input npc-armour centre" data-tooltip="{{localize 'PEN.armourShield'}}"><input name="system.manArm" type="number" value="{{system.manArm}}"/> / <input name="system.manShd" type="number" value="{{system.manShd}}"/></div>
 
         <div class="npc-name left bold">{{localize 'PEN.mjrWnd'}}</div>
         <div class="npc-name-input centre"><input name="system.manMjrWnd" type="number" value="{{system.manMjrWnd}}"/></div>
@@ -184,6 +184,7 @@
       {{else}}
         <section class="npc-weapons-grid">
           <div class="npc-name bold grey">{{ localize "PEN.weapon" }}</div>
+          <div class="npc-name bold centre grey"></div>
           <div class="npc-name bold centre grey">{{ localize "PEN.value" }}</div>
           <div class="npc-name bold centre grey">{{ localize "PEN.damage" }}</div>
           {{#unless system.lock}}
@@ -197,11 +198,26 @@
           {{#each weapons as |weapon key|}}
             {{#if ../system.lock}}
             <div class="npc-name rollable combat" data-type ="weapon" data-sourceID = "{{weapon.system.sourceID}}" data-itemid="{{weapon._id}}">{{weapon.name}}</div>
+              {{#if weapon.system.special}}
+                <div class="npc-name centre" data-tooltip="{{ localize 'PEN.specialHint'}}">
+                  <a><i class="fa-solid fa-droplet"></i></a>
+                </div>
+              {{else}}
+                <div></div>
+              {{/if}}
             <div class="npc-name centre">{{weapon.system.value}}</div>
             <div class="npc-name centre rollable damage" data-itemid="{{weapon._id}}">{{weapon.system.dmgForm}}</div>
             <div></div>
             {{else}}
               <div class="npc-name-input item" data-field ="name" data-itemid="{{weapon._id}}"><input class="inline-edit" name="item.weapon.{{key}}.name" type="text" value="{{weapon.name}}"/></div>
+              {{#if weapon.system.special}}
+                <div class="npc-name centre" data-tooltip="{{ localize 'PEN.specialHint'}}">
+                  <a><i class="fa-solid fa-droplet"></i></a>
+                </div>
+              {{else}}
+                <div></div>
+              {{/if}}
+
               <div class="npc-name-input centre item" data-field ="score" data-itemid="{{weapon._id}}"><input class="inline-edit" name="item.system.weapon.{{key}}.value" type="number" value="{{weapon.system.value}}"/></div>
               <div class="npc-name-input centre item" data-field ="damage" data-itemid="{{weapon._id}}"><input class="inline-edit" name="item.system.weapon.{{key}}.dmgForm" type="text" value="{{weapon.system.dmgForm}}"/></div>
               <div class="npc-name centre item" data-document-class='Item' data-itemid ="{{weapon._id}}">
@@ -216,7 +232,7 @@
       {{!--Armour Block --}}
       {{#isAnd noArmour system.lock}}
       {{else}}
-        <section class="npc-weapons-grid">
+        <section class="npc-armor-grid">
           <div class="npc-name bold grey">{{ localize "PEN.armour" }}</div>
           <div class="npc-name bold centre grey" data-tooltip="{{localize 'PEN.armourHint'}}">{{ localize "PEN.arm" }}</div>
           <div class="npc-name bold centre grey">{{ localize "PEN.ap" }}</div>
@@ -352,7 +368,7 @@
       {{!--Horses Block --}}
       {{#isAnd noHorse system.lock}}
       {{else}}
-        <section class="npc-weapons-grid">
+        <section class="npc-armor-grid">
           <div class="npc-name bold grey">{{ localize "PEN.horse" }}</div>
           <div class="npc-name bold centre grey">{{ localize "PEN.hpShort" }}</div>
           <div class="npc-name bold centre grey">{{ localize "PEN.damage" }}</div>

@@ -27,7 +27,7 @@
 
     <div class="stat-name left bold new-row">{{localize 'PEN.blessedBirth'}}</div>
     <div class="centre pad-icon">
-      <a class="item-control item-toggle large-icon" data-property = "blessed" title="{{localize 'PEN.dblClickToggle'}}">
+      <a class="item-control item-toggle large-icon" data-property = "blessed" data-tooltip="{{localize 'PEN.dblClickToggle'}}">
         <i class="{{#if item.system.blessed}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i>
       </a>
     </div>
@@ -43,7 +43,7 @@
     {{#if showParental}}
       <div class="stat-name left bold">{{localize 'PEN.familyCreate.maternal'}}</div>
       <div class="centre pad-icon">
-        <a class="item-control item-toggle large-icon" data-property = "maternal" title="{{localize 'PEN.dblClickToggle'}}">
+        <a class="item-control item-toggle large-icon" data-property = "maternal" data-tooltip="{{localize 'PEN.dblClickToggle'}}">
           <i class="{{#if item.system.maternal}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i>
         </a>
       </div>
@@ -53,7 +53,7 @@
       <br>
       <div class="stat-name left bold new-row">{{localize 'PEN.barrenMarriage'}}</div>
       <div class="centre pad-icon">
-        <a class="item-control item-toggle large-icon" data-property = "barrenMarriage" title="{{localize 'PEN.dblClickToggle'}}">
+        <a class="item-control item-toggle large-icon" data-property = "barrenMarriage" data-tooltip="{{localize 'PEN.dblClickToggle'}}">
           <i class="{{#if item.system.barrenMarriage}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i>
         </a>
       </div>

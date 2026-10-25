@@ -82,7 +82,7 @@ export default class ChaosiumCanvasInterface extends foundry.data.regionBehavior
       }
     };
 
-    ChaosiumCanvasInterface.lastBehaviors = []
+    ChaosiumCanvasInterface.lastBehaviors = [];
     document.body.addEventListener("mousemove", async function (event) {
       if (canvas.activeLayer instanceof foundry.canvas.layers.TokenLayer) {
         const pointer = canvas?.app?.renderer?.events?.pointer;
@@ -91,7 +91,7 @@ export default class ChaosiumCanvasInterface extends foundry.data.regionBehavior
         }
         const destination = canvas.activeLayer.toLocal(event);
         let setPointer = false;
-        const currentBehaviors = []
+        const currentBehaviors = [];
         for (const region of canvas.scene.regions.contents) {
           if (
             region.behaviors.filter((b) => !b.disabled).find((b) => b.system instanceof ChaosiumCanvasInterface) &&
@@ -101,8 +101,8 @@ export default class ChaosiumCanvasInterface extends foundry.data.regionBehavior
               .filter((b) => !b.disabled)
               .reduce(async (c, b) => {
                 const r = await b.system._handleMouseOverEvent();
-                if (typeof b.system._handleMouseOutEvent === 'function') {
-                  currentBehaviors.push(b.uuid)
+                if (typeof b.system._handleMouseOutEvent === "function") {
+                  currentBehaviors.push(b.uuid);
                 }
                 if (r !== false && r !== true) {
                   console.error(b.uuid + " did not return a boolean");
@@ -117,11 +117,11 @@ export default class ChaosiumCanvasInterface extends foundry.data.regionBehavior
         } else {
           document.getElementById("board").style.cursor = "";
         }
-        const uuids = ChaosiumCanvasInterface.lastBehaviors.filter(uuid => !currentBehaviors.includes(uuid))
+        const uuids = ChaosiumCanvasInterface.lastBehaviors.filter((uuid) => !currentBehaviors.includes(uuid));
         for (const uuid of uuids) {
-          fromUuid(uuid).then(doc => doc.system._handleMouseOutEvent())
+          fromUuid(uuid).then((doc) => doc.system._handleMouseOutEvent());
         }
-        ChaosiumCanvasInterface.lastBehaviors = currentBehaviors
+        ChaosiumCanvasInterface.lastBehaviors = currentBehaviors;
       }
     });
   }

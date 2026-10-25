@@ -50,7 +50,7 @@
 }
 
 .scenes-sidebar .scene img[src*="cha-pen-fvtt-en-gmscreen"] + a.entry-name {
-      display: none;
+  display: none;
 }
 
 .Pendragon.npcv2 .window-content {

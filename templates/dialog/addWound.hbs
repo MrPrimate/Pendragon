@@ -11,7 +11,7 @@
     <div class="stat-name large left bold new-row">{{localize 'PEN.damage'}}</div>
     <div class="centre"><input class="stat-name large" name="amount" type="number" value= 1 /></div>
     <br>
-    <div class="stat-name left large bold new-row" title = "{{localize 'PEN.diseaseImpactHint'}}">{{localize 'PEN.diseaseImpact'}}</div>
+    <div class="stat-name left large bold new-row" data-tooltip="{{localize 'PEN.diseaseImpactHint'}}">{{localize 'PEN.diseaseImpact'}}</div>
     <div class="stat-name large">
       <select class="centre" data-handle-change name="stat">
         {{selectOptions attType selected='hp'}}

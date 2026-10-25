@@ -40,7 +40,7 @@ export class ActorImport extends api.HandlebarsApplicationMixin(api.ApplicationV
     if (inputs.text[inputs.text.length] !== ".") {
       inputs.text += "."; // Add a dot a the end to help the regex find the end
     }
-    const actor = new CoC7ActorImporter();
+    const actor = new PendragonActorImporter();
     const createdActor = await actor.createActor(inputs);
     return;
   }

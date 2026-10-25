@@ -13,11 +13,7 @@ export class PENWinter {
   //Only living, player owned characters take part in the Winter Phase
   //
   static isWinterParticipant(actor) {
-    return (
-      actor.type === "character" &&
-      !(Number(actor.system.died) > 0) &&
-      !actor.statuses.has("dead")
-    );
+    return actor.type === "character" && !(Number(actor.system.died) > 0) && !actor.statuses.has("dead");
   }
 
   //

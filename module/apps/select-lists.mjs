@@ -224,13 +224,12 @@ export class PENSelectLists {
 
   //Career Levels
   static getCareerLevels(maxValue) {
-    let options = {}
-    for (let i=0; i<maxValue; i++) {
+    let options = {};
+    for (let i = 0; i < maxValue; i++) {
       options[i] = i;
     }
     return options;
   }
-
 
   //Battle Posture
   static getBattlePos() {

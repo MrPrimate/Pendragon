@@ -2,7 +2,7 @@
   "id": "Pendragon",
   "title": "Pendragon",
   "description": "Pendragon system for FoundryVTT!",
-  "version": "14.24",
+  "version": "14.25",
   "compatibility": {
     "minimum": "14",
     "verified": "14.369",
@@ -30,7 +30,11 @@
       "flags": {}
     }
   ],
-  "esmodules": ["module/pendragon.mjs", "module/setup/load.mjs","module/setup/map-notes-levels.mjs"],
+  "esmodules": [
+    "module/pendragon.mjs",
+    "module/setup/load.mjs",
+    "module/setup/map-notes-levels.mjs"
+  ],
   "styles": [
     {
       "src": "css/pendragon.css"
@@ -282,7 +286,7 @@
   },
   "url": "https://github.com/cragstone/Pendragon",
   "manifest": "https://github.com/cragstone/Pendragon/releases/latest/download/system.json",
-  "download": "https://github.com/cragstone/Pendragon/releases/download/14.24/Pendragon.zip",
+  "download": "https://github.com/cragstone/Pendragon/releases/download/14.25/Pendragon.zip",
   "socket": true,
   "license": "LICENSE.txt",
   "changelog": "CHANGELOG.md",

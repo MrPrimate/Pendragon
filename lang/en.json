@@ -1114,7 +1114,9 @@
       "lockHint": "Middle-click to lock.",
       "middleClick": "Middle-click",
       "leftClick": "Left click",
-      "rightClick": "Right click"
+      "rightClick": "Right click",
+      "holdDown": "Hold down ",
+      "asWell": " as well"
     },
     "rollOptions": "Roll Options",
     "rollTableMod": "Request modifier with Roll",

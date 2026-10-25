@@ -33,7 +33,6 @@ export class PendragonActorSheet extends api.HandlebarsApplicationMixin(sheets.A
 
   // handle the editImage action
 
-
   // simplify standard tab initialisation
   _initTabs(group, tabNames) {
     const tabs = {};
