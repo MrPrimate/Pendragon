@@ -5,7 +5,7 @@
         <li class="item skill-listitem" data-drag='true' data-document-class='Item' data-item-id="{{skill._id}}">
           <div class="skill-grid {{#if skill.combat}}grey{{/if}}">
             <div class="centre"><a class="item-control item-toggle large-icon" data-itemid ="{{skill._id}}" data-property="XP" data-tooltip="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if skill.system.XP}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
-            <div class="stat-name rollable skill-name {{#if skill.combat}}italics{{/if}} truncate" data-tooltip="{{localize 'PEN.rollHint'}}" data-itemid="{{skill._id}}">{{skill.name}}</div>
+            <div class="stat-name rollable skill-name {{#if skill.combat}}italics{{/if}} truncate" data-itemid="{{skill._id}}" data-reference="{{skill.uuid}}">{{skill.name}}</div>
               <div class="stat-name centre">{{skill.system.total}}</div>
               <div class="centre item" data-itemid ="{{skill._id}}">
                 <a class="large-icon item-control fade" data-action="viewDoc"><i data-tooltip="{{localize 'PEN.view'}}" class="fa-solid fa-eye"></i></a>
