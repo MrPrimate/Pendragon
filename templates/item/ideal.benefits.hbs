@@ -23,7 +23,7 @@
       <div class="stat-name left bold">{{localize 'PEN.move'}}</div>
       <div class="stat-name-input "><input class="centre" name="system.move" type="number" value="{{item.system.move}}"/></div>
       <div class="stat-name left bold" data-tooltip="{{localize 'PEN.magicProt'}}">{{localize 'PEN.magicProtShort'}}</div>
-      <div class="stat-name centre"><a class="item-control item-toggle large-icon" data-property = "protect" title="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if item.system.protect}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
+      <div class="stat-name centre"><a class="item-control item-toggle large-icon" data-property = "protect" data-tooltip="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if item.system.protect}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a></div>
     {{else}}
       <div class="stat-name left bold">{{localize 'PEN.passive'}}</div>
       <div class="stat-name centre">{{item.system.glory}}</div>
@@ -58,7 +58,7 @@
           </div>
           <div class="item-controls">
             {{#if ../isGM}}
-              <a class="item-control item-delete" data-collection = "luck" title="{{localize 'PEN.delete'}}" data-action="deleteItem"><i class="fas fa-trash"></i></a>
+              <a class="item-control item-delete" data-collection = "luck" data-tooltip="{{localize 'PEN.delete'}}" data-action="deleteItem"><i class="fas fa-trash"></i></a>
             {{/if}}
           </div>
         </li>

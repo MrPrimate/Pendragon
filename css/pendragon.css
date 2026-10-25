@@ -49,6 +49,10 @@
   cursor: pointer;
 }
 
+.scenes-sidebar .scene img[src*="cha-pen-fvtt-en-gmscreen"] + a.entry-name {
+      display: none;
+}
+
 .Pendragon.npcv2 .window-content {
   background-image: url("../assets/parchment.jpg");
   background-size: cover;

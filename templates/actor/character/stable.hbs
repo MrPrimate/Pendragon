@@ -8,7 +8,7 @@
         <span>{{horse.name}}{{#if horse.system.combat}} - {{localize 'PEN.warTrained'}}{{/if}}</span>
       </h3>
       <div style="display:flex; gap: 0.5lh;">
-    <img class="horse-img" src="{{horse.img}}" title="{{horse.name}}" style="width:64px;height:auto;background-color: #0004;"/>
+    <img class="horse-img" src="{{horse.img}}" data-tooltip="{{horse.name}}" style="width:64px;height:auto;background-color: #0004;"/>
     <div style="flex:auto;">
       <div class="flexrow">
         <p>{{localize 'PEN.hp'}}: {{horse.system.hp}} / {{horse.system.maxHP}}</p>

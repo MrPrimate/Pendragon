@@ -197,7 +197,7 @@ export class PENSelectLists {
   }
 
   //Career Paths Type
-  static getFollowerType() {
+  static getCareerType() {
     let options = {
       familycourtier: game.i18n.localize("PEN.path.familycourtier"),
       familyladies: game.i18n.localize("PEN.path.familyladies"),
@@ -211,6 +211,26 @@ export class PENSelectLists {
     };
     return options;
   }
+
+  //Career Gender Options
+  static getCareerGender() {
+    let options = {
+      either: game.i18n.localize("PEN.career.either"),
+      male: game.i18n.localize("PEN.career.male"),
+      female: game.i18n.localize("PEN.career.female"),
+    };
+    return options;
+  }
+
+  //Career Levels
+  static getCareerLevels(maxValue) {
+    let options = {}
+    for (let i=0; i<maxValue; i++) {
+      options[i] = i;
+    }
+    return options;
+  }
+
 
   //Battle Posture
   static getBattlePos() {
@@ -276,6 +296,17 @@ export class PENSelectLists {
       unmaintained: game.i18n.localize("PEN.manor.unmaintained"),
       ruined: game.i18n.localize("PEN.manor.ruined"),
       unavail: game.i18n.localize("PEN.manor.unavail"),
+    };
+    return options;
+  }
+
+  //Career Special Promotions
+  static careerSpecials() {
+    let options = {
+      none: "",
+      swordProspects: game.i18n.localize("PEN.career.swordProspects"),
+      maidenOfLake: game.i18n.localize("PEN.career.maidenOfLake"),
+      maidInWaiting: game.i18n.localize("PEN.career.maidInWaiting"),
     };
     return options;
   }

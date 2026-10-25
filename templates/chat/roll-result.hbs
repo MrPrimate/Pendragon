@@ -4,7 +4,7 @@
       {{#each chatCard as |c key|}}
         <div class="dice-roll" data-action="expandRoll">
           <li class='actor-roll'>
-            <img class="open-actor" src="{{c.particImg}}" height="50" width="50" title="{{c.particName}}"/>
+            <img class="open-actor" src="{{c.particImg}}" height="50" width="50" data-tooltip="{{c.particName}}"/>
             <div class="roll-details">
               <div class="header">
                 <div class='name'>
@@ -14,10 +14,10 @@
               <div class="header">
                 <div class='name'>
                   {{#if (eq ../rollType 'DM')}}
-                  <span class="tag truncate" title="{{c.rollFormula}}">{{c.label}} ({{c.rollFormula}})</span>
+                  <span class="tag truncate" data-tooltip="{{c.rollFormula}}">{{c.label}} ({{c.rollFormula}})</span>
                   {{else}}
                     <span class="tag">{{c.label}} ({{c.targetScore}})</span>
-                  {{/if}}  
+                  {{/if}}
                 </div>
               </div>
 
@@ -26,29 +26,29 @@
                   <span class="pending">{{localize 'PEN.critDamage'}}: {{c.rollVal}}
                 {{else}}
                   <span class="pending">{{localize 'PEN.damage'}}: {{c.rollVal}}
-                {{/if}}  
- 
+                {{/if}}
+
               {{else}}
                 {{#if (eq c.resultLevel 4)}}
                   <span class="pending">{{c.resultLabel}}: {{c.rollVal}} <i class="result-success fas fa-swords"></i><i class="result-success fas fa-swords"></i><i class="result-success fas fa-swords"></i>
                 {{/if}}
-              
+
                 {{#if (eq c.resultLevel 3)}}
                   <span class="pending">{{c.resultLabel}}: {{c.rollVal}} <i class="result-success fas fa-swords"></i><i class="result-success fas fa-swords"></i>
                 {{/if}}
-          
+
                 {{#if (eq c.resultLevel 2)}}
                   <span class="pending">{{c.resultLabel}}: {{c.rollVal}} <i class="result-success fas fa-swords"></i>
                 {{/if}}
-              
+
                 {{#if (eq c.resultLevel 1)}}
                   <span class="pending">{{c.resultLabel}}: {{c.rollVal}} <i class="result-fail fas fa-skull"></i>
                 {{/if}}
-              
+
                 {{#if (eq c.resultLevel 0)}}
                   <span class="pending">{{c.resultLabel}}: {{c.rollVal}} <i class=" result-fail fas fa-skull"></i><i class="result-fail fas fa-skull"></i>
                 {{/if}}
-              {{/if}}        
+              {{/if}}
             </span>
             </div>
 
@@ -66,7 +66,7 @@
                     +{{c.reflexMod}}
                   {{/if}}
                 </div>
-              {{else}}  
+              {{else}}
                 <div class="rollHidden"> {{localize 'PEN.bonus'}}:
                   {{#if (lt c.flatMod 1)}}
                     {{c.flatMod}}
@@ -74,7 +74,7 @@
                     +{{c.flatMod}}
                   {{/if}}
                 </div>
-              {{/if}}  
+              {{/if}}
               <div class="rollHidden"> {{localize 'PEN.critBonus'}}:
                 {{#if (lt c.critBonus 1)}}
                   {{c.critBonus}}
@@ -85,12 +85,12 @@
               <div class="rollHidden bottom-line">{{localize 'PEN.diceRoll'}}: {{c.rollResult}}</div>
             </div>
             {{/unless}}
-          </div>  
-        </div>  
+          </div>
+        </div>
         {{#if c.reverseRoll}}
             <button class='cardbutton owner-only' data-partic-id="{{c.particId}}" data-partic-type="{{c.particType}}" data-preset='reverseRoll' type="button">{{localize 'PEN.reverseRoll'}}</button>
         {{/if}}
       {{/each}}
     </ol>
   </div>
-</section>  
+</section>

@@ -8,13 +8,13 @@
         {{else}}
           <div class="enc-title"><input name='name' type='text' value='{{actor.name}}' />
         {{/if}}
-          <a class="enc-result-icon" title="{{ localize 'PEN.toggleResults' }}" data-action="resultsView"><i class="fas fa-feather-pointed"></i></a>
+          <a class="enc-result-icon" data-tooltip="{{ localize 'PEN.toggleResults' }}" data-action="resultsView"><i class="fas fa-feather-pointed"></i></a>
         {{#if isGM}}
-          <a class="enc-notes-icon" title="{{ localize 'PEN.toggleNotes' }}" data-action="noteView"><i class="fas fa-scroll-old"></i></a>
+          <a class="enc-notes-icon" data-tooltip="{{ localize 'PEN.toggleNotes' }}" data-action="noteView"><i class="fas fa-scroll-old"></i></a>
           <a></a>
-          <a class="enc-clear-icon" title="{{ localize 'PEN.clearBattleField' }}" data-action="clearBattle"><i class="fas fa-person-walking-arrow-right"></i></a>
-          <a class="enc-combat-icon" title="{{ localize 'PEN.addToCombat' }}" data-action="addTokensCombat"><i class="fas fa-swords"></i></a>
-          <a class="enc-lock-icon" title="{{ localize 'PEN.lock' }}" data-action="toggleActor" data-property="lock">
+          <a class="enc-clear-icon" data-tooltip="{{ localize 'PEN.clearBattleField' }}" data-action="clearBattle"><i class="fas fa-person-walking-arrow-right"></i></a>
+          <a class="enc-combat-icon" data-tooltip="{{ localize 'PEN.addToCombat' }}" data-action="addTokensCombat"><i class="fas fa-swords"></i></a>
+          <a class="enc-lock-icon" data-tooltip="{{ localize 'PEN.lock' }}" data-action="toggleActor" data-property="lock">
             {{#if isLocked}}
               <i class="fas fa-lock"></i></a></div>
             {{else}}

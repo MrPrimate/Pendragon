@@ -8,10 +8,10 @@
         {{else}}
           <div class="enc-title {{#if actor.system.opportunity}}oppBack{{else}}encBack{{/if}}"><input class="{{#if actor.system.used}}strikethrough{{/if}}" name='name' type='text' value='{{actor.name}}' />
         {{/if}}
-        <a class="enc-notes-icon" title="{{ localize 'PEN.toggleNotes' }}" data-action="noteView"><i class="fas fa-scroll-old"></i></a>
-        <a class="enc-opp-icon" title="{{ localize 'PEN.toggleOpp' }}" data-action="toggleActor" data-property="opportunity"><i class="fas fa-certificate"></i></a>
-        <a class="enc-used-icon" title="{{ localize 'PEN.toggleUsed' }}" data-action="toggleActor" data-property="used"><i class="fas fa-swords"></i></a>
-        <a class="enc-lock-icon" title="{{ localize 'PEN.lock' }}" data-action="toggleActor" data-property="lock">
+        <a class="enc-notes-icon" data-tooltip="{{ localize 'PEN.toggleNotes' }}" data-action="noteView"><i class="fas fa-scroll-old"></i></a>
+        <a class="enc-opp-icon" data-tooltip="{{ localize 'PEN.toggleOpp' }}" data-action="toggleActor" data-property="opportunity"><i class="fas fa-certificate"></i></a>
+        <a class="enc-used-icon" data-tooltip="{{ localize 'PEN.toggleUsed' }}" data-action="toggleActor" data-property="used"><i class="fas fa-swords"></i></a>
+        <a class="enc-lock-icon" data-tooltip="{{ localize 'PEN.lock' }}" data-action="toggleActor" data-property="lock">
           {{#if isLocked}}
             <i class="fas fa-lock"></i></a></div>
           {{else}}
@@ -32,7 +32,7 @@
         {{else}}
           <div class="enc-input"><input name='system.moraleLoss' type='text' value='{{actor.system.moraleLoss}}' /></div>
         {{/if}}
-        <div class="enc-display" title="{{localize 'PEN.numOppHint'}}">{{localize 'PEN.numOpp'}}</div>
+        <div class="enc-display" data-tooltip="{{localize 'PEN.numOppHint'}}">{{localize 'PEN.numOpp'}}</div>
         {{#if isLocked}}
           <div class="enc-display" style="padding-left: 8px;">{{system.numOpp}}</div>
         {{else}}

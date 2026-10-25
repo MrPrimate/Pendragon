@@ -194,8 +194,15 @@ export class PENUtilities {
       return;
     }
 
+    let newAwards = []
+    if (Array.isArray(awards.gloryAward)) {
+      newAwards.push(...awards.gloryAward)
+    } else {
+      newAwards.push(awards.gloryAward)
+    }
+
     let count = 0;
-    for (let award of awards.gloryAward) {
+    for (let award of newAwards) {
       if (award != 0) {
         let actor = await game.actors.get(chars[count].id);
         //Create the event

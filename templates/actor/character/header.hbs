@@ -1,6 +1,6 @@
 <header class="sheet-header">
   <div style="max-width: 125px;text-align:center;">
-    <img src="{{actor.system.coatOfArms}}" title="{{actor.system.heraldry}}" data-edit="system.coatOfArms" data-action="onEditImage" style="width:100%;height:auto;"/>
+    <img src="{{actor.system.coatOfArms}}" data-tooltip="{{actor.system.heraldry}}" data-edit="system.coatOfArms" data-action="onEditImage" style="width:100%;height:auto;"/>
     <div data-action="rollGlory">
     <div>{{localize 'PEN.glory'}}</div>
     <div>{{system.reputation}}</div>
@@ -26,7 +26,7 @@
     </div>
   </div>
   <div style="max-width: 125px;text-align:center;">
-  <img class="profile-img" src="{{actor.img}}" data-edit="img" data-action="onEditImage" title="{{actor.name}}" style="width:100%;height:auto;"/>
+  <img class="profile-img" src="{{actor.img}}" data-edit="img" data-action="onEditImage" data-tooltip="{{actor.name}}" style="width:100%;height:auto;"/>
 
   <div>{{localize 'PEN.hp'}}</div>
   {{#if trackWnd}}

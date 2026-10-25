@@ -15,7 +15,6 @@ export class PENWinter {
   static isWinterParticipant(actor) {
     return (
       actor.type === "character" &&
-      actor.hasPlayerOwner &&
       !(Number(actor.system.died) > 0) &&
       !actor.statuses.has("dead")
     );

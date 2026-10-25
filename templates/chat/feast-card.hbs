@@ -1,6 +1,6 @@
 <form class="Pendragon">
   <div class="actor-roll">
-    <img class="open-actor" src="{{particImg}}" width="50" title="{{name}}"/>
+    <img class="open-actor" src="{{particImg}}" width="50" data-tooltip="{{name}}"/>
     <div class="roll-details">
       <div class="header">
         <span class="name">{{name}}{{#if card}} - {{card.cardName}}{{/if}}{{#if played}} - {{localize 'PEN.feast.cardPlayedLabel'}}{{/if}}</span>
@@ -15,7 +15,7 @@
   {{#if card}}
   <div class="feast-card">
     {{#if card.cardImg}}
-    <img class="feast-card-face" src="{{card.cardImg}}" title="{{card.cardName}}" width="266"/>
+    <img class="feast-card-face" src="{{card.cardImg}}" data-tooltip="{{card.cardName}}" width="266"/>
     {{/if}}
     {{#if played}}
     <p class="flavor-text">{{localize 'PEN.feast.cardPlayed' name=name geniality=gained}}</p>

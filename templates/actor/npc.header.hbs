@@ -26,23 +26,23 @@
 
       {{!-- Image Section --}}
       <section class="sheet-header">
-        <img class="profile-img"  data-action='editImage' src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="70" width="70"/>
+        <img class="profile-img"  data-action='editImage' src="{{actor.img}}" data-edit="img" data-tooltip="{{actor.name}}" height="70" width="70"/>
       </section>
 
       {{!-- Icon Section --}}
       <section class="bottom sheet-header">
         {{#if (gt ownershipLevel 2)}}
           {{#if isGM}}
-            <div class="centre middle-icon"><a data-action="noteView" title="{{ localize 'PEN.toggleGMNotes' }}" ><i class="black fas fa-scroll-old"></i></a></div>
+            <div class="centre middle-icon"><a data-action="noteView" data-tooltip="{{ localize 'PEN.toggleGMNotes' }}" ><i class="black fas fa-scroll-old"></i></a></div>
           {{else}}
             <div></div>
           {{/if}}
-          <div class="centre middle-icon"><a data-action="playerNotesView" title="{{ localize 'PEN.togglePlayerNotes' }}" ><i class="black fas fa-book-open"></i></a></div>
+          <div class="centre middle-icon"><a data-action="playerNotesView" data-tooltip="{{ localize 'PEN.togglePlayerNotes' }}" ><i class="black fas fa-book-open"></i></a></div>
           {{#if system.lock}}
             <div><a class=""><i class="fas"></i></a></div>
           {{else}}
             {{#if isGM}}
-              <div class="centre middle-icon"><a data-action="autoCalc" title="{{ localize 'PEN.calcNPC' }}"> <i class="black fas fa-dice"></i></a></div>
+              <div class="centre middle-icon"><a data-action="autoCalc" data-tooltip="{{ localize 'PEN.calcNPC' }}"> <i class="black fas fa-dice"></i></a></div>
             {{else}}
               <div></div>
             {{/if}}
@@ -51,13 +51,13 @@
       </section>
       <section class="bottom sheet-header">
         {{#if (gt ownershipLevel 2)}}
-          <div class="centre middle-icon"><a data-action="actorToggle" title="{{ localize 'PEN.lock' }}" data-property="lock"> <i class="black {{#if system.lock}}fas fa-lock{{else}}fas fa-lock-open{{/if}}"></i></a></div>
+          <div class="centre middle-icon"><a data-action="actorToggle" data-tooltip="{{ localize 'PEN.lock' }}" data-property="lock"> <i class="black {{#if system.lock}}fas fa-lock{{else}}fas fa-lock-open{{/if}}"></i></a></div>
         {{else}}
           <div></div>
         {{/if}}
         <div><a class=""><i class="fas"></i></a></div>
         {{#if isGM}}
-          <div class="centre middle-icon" data-action="baseStats"><a data-action="baseStats" title="{{ localize 'PEN.baseStats' }}"> <i class="black fas fa-user"></i></a></div>
+          <div class="centre middle-icon" data-action="baseStats"><a data-action="baseStats" data-tooltip="{{ localize 'PEN.baseStats' }}"> <i class="black fas fa-user"></i></a></div>
         {{/if}}
       </section>
     </section>
