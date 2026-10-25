@@ -1103,6 +1103,18 @@
     "rollDice": "Lancer le dé",
     "rolledValue": "Valeur obtenue",
     "rollHint": "Clic gauche pour un test normal. ALT + clic pour un test opposé, CTRL + clic pour un test d'opposition fixe.  La touche SHIFT permet d'afficher une boîte de dialogue.",
+    "rollHints": {
+      "unopposedRoll": "Test non opposé",
+      "opposedRoll": "Test opposé",
+      "fixedOpposedRoll": "Rouleau opposé fixe",
+      "showPrompt": "Montrer l'invite",
+      "hidePrompt": "Cacher l'invite",
+      "holdDownKey": "Maintiens aussi {key}.",
+      "lockHint": "Clique du milieu pour verrouiller",
+      "middleClick": "Clic du milieu",
+      "leftClick": "Clic gauche",
+      "rightClick": "Clic droit"
+    },
     "rollOptions": "Options de jet",
     "rollTableMod": "Demande de modificateur avec jet",
     "rollTableModHint": "Lors d'un lancer, il vous sera demandé de saisir un modificateur à la formule de lancer. Cela sera limité à la plage des résultats du tableau.",

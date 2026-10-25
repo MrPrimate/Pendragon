@@ -230,18 +230,8 @@ export class PendragonEncounterSheet extends PendragonActorSheet {
       }
     }
 
-    // Check actor exists in the game world and if not create it
-    let tempActor = await game.actors.filter(
-      (actr) =>
-        actr.flags?.Pendragon?.pidFlag?.id === actor.flags?.Pendragon?.pidFlag?.id &&
-        actr.flags?.Pendragon?.pidFlag?.priority === actor.flags?.Pendragon?.pidFlag?.priority,
-    )[0];
-    if (tempActor) {
-      actor = tempActor;
-    } else {
-      tempActor = await PendragonActor.create(actor);
-      actor = tempActor;
-    }
+    //Place tokens for the world copy of a compendium NPC, importing it if there is none yet
+    actor = await PendragonActor.worldCopy(actor);
 
     let newTokens = [];
     let current = (await game.canvas.scene.tokens.filter((t) => t.actorId === actor.id)).length;

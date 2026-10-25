@@ -285,24 +285,15 @@ export class PendragonBattleSheet extends PendragonActorSheet {
       return;
     }
     const { pid, property: uuid } = target.closest(".partic-item").dataset;
-    //Check to see if Encounter is in game world
-    let enc =
-      pid && game.actors.find((actr) => actr.type === "encounter" && actr.flags?.Pendragon?.pidFlag?.id === pid);
-    //If not in game then check compendiums as well
-    if (!enc) {
-      enc = (await game.system.api.pid.fromPIDBest({ pid: pid }))[0];
-    }
-    //Older battles may only have a UUID, just as in the encounter list lookup.
-    if (!enc && uuid) {
-      enc = await fromUuid(uuid);
-    }
+    //Find the Encounter the list shows: the best copy by PID, or by UUID for older entries
+    let enc = (await game.system.api.pid.fromPIDBest({ pid }))[0];
+    if (!enc && uuid) enc = await fromUuid(uuid);
     if (!enc) {
       ui.notifications.warn(game.i18n.format("PEN.actorNotFound", { type: pid || uuid }));
       return;
     }
-    if (enc.pack) {
-      enc = await PendragonActor.create(enc);
-    }
+    //Open a world copy of a compendium Encounter, importing it if there is none yet
+    enc = await PendragonActor.worldCopy(enc);
     await enc.sheet.render(true);
   }
 
@@ -310,13 +301,13 @@ export class PendragonBattleSheet extends PendragonActorSheet {
   static async _viewKnight(event, target) {
     event.preventDefault();
     event.stopImmediatePropagation();
-    const pid = target.closest(".partic-item").dataset.pid;
-    //Check to see if Encounter is in game world
-    let enc = await game.actors.filter((actr) => actr.flags.Pendragon?.pidFlag?.id === pid)[0];
-    if (enc) {
-      enc.sheet.render(true);
+    //Knights are stored by actor id, and can share a PID, e.g. when an actor is duplicated
+    const { property: id, pid } = target.closest(".partic-item").dataset;
+    const knight = game.actors.get(id);
+    if (knight) {
+      knight.sheet.render(true);
     } else {
-      ui.notifications.warn(game.i18n.format("PEN.noWorldActor", { pid: pid }));
+      ui.notifications.warn(game.i18n.format("PEN.noWorldActor", { pid: pid || id }));
     }
   }
 

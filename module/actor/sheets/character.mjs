@@ -1037,7 +1037,8 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
   }
   // -----------------------------------LISTENERS-----------------------------------------
   //Activate event listeners using the prepared sheet HTML
-  _onRender(context, _options) {
+  async _onRender(context, _options) {
+    this.element.querySelectorAll("[data-reference]").forEach((e) => this._processReference(e));
     this._dragDrop.forEach((d) => d.bind(this.element));
     this.element
       .querySelectorAll(".rollable.stat")

@@ -10,11 +10,6 @@
         <a class="item-control large-icon" data-action="toggleXP" data-tooltip="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if skill.system.XP}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a>
         <div data-itemid="{{skill._id}}" data-action="rollSkill">
           <span>{{skill.name}}</span>
-          <div class="pills">
-            {{#each skill.system.categoryLabels as |category|}}
-              <span class="pill">{{category }}</span>
-            {{/each}}
-          </div>
         </div>
         <button class="inline-control icon fa-regular fa-pen-to-square" data-action="editItem"></button>
         <span class="right">{{#if (gt skill.system.total 20)}}20(+{{skill.critical}}){{else}}{{skill.system.total}}{{/if}}</span>
@@ -32,11 +27,6 @@
         <a class="item-control large-icon" data-action="toggleXP" data-tooltip="{{localize 'PEN.dblClickToggle'}}"><i class="{{#if skill.system.XP}}fa-regular fa-square-check{{else}}fa-regular fa-square{{/if}}"></i></a>
         <div data-itemid="{{skill._id}}" data-action="rollSkill">
           <span>{{skill.name}}</span>
-          <div class="pills">
-            {{#each skill.system.categoryLabels as |category|}}
-              <span class="pill">{{category }}</span>
-            {{/each}}
-          </div>
         </div>
         <button class="inline-control icon fa-regular fa-pen-to-square" data-action="editItem"></button>
         <span class="right">{{#if (gt skill.system.total 20)}}20(+{{skill.critical}}){{else}}{{skill.system.total}}{{/if}}</span>
