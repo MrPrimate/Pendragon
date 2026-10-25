@@ -15,7 +15,7 @@ export class PENRandomName {
   //Returns the name or null if no name table could be found
   static async randomName({ doc = null, gender = "", fallback = "" } = {}) {
     const type = await PENUtilities.resolveGender(gender, fallback);
-    const culture = this.resolveCulture(doc);
+    const culture = this.resolveCulture(doc, "culture");
     const table = await this.getNameTable(type, culture);
     if (!table) {
       ui.notifications.warn("PEN.noNameTable", { localize: true });
@@ -26,12 +26,12 @@ export class PENRandomName {
     return name || null;
   }
 
-  //Returns the culture item that applies to the document, or null
-  //Embedded items (family, squire) use their owner's culture
-  static resolveCulture(doc) {
+  //Returns the specified item type that applies to the document, or null
+  //Embedded items (family, squire) use their owner's culture, religion etc
+  static resolveCulture(doc, type = "culture") {
     const actor = doc instanceof Actor ? doc : doc?.parent instanceof Actor ? doc.parent : null;
     if (!actor) return null;
-    return actor.items.find((itm) => itm.type === "culture") ?? null;
+    return actor.items.find((itm) => itm.type === type) ?? null;
   }
 
   //Returns the first name table found for the gender, checking the culture before the defaults

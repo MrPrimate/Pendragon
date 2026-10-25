@@ -50,6 +50,7 @@ import {
   RelationshipData,
   BackgroundData,
   ArchetypeData,
+  CareerData,
 } from "./models/items/index.mjs";
 import drawNote from "./hooks/draw-note.mjs";
 import RenderNoteConfig from "./hooks/render-note-config.mjs";
@@ -124,6 +125,7 @@ Hooks.once("init", async function () {
   CONFIG.Item.dataModels.relationship = RelationshipData;
   CONFIG.Item.dataModels.background = BackgroundData;
   CONFIG.Item.dataModels.archetype = ArchetypeData;
+  CONFIG.Item.dataModels.career = CareerData;
 
   // Define custom Document classes
   CONFIG.Actor.documentClass = PendragonActor;

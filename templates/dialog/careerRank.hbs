@@ -1,0 +1,54 @@
+<section class="Pendragon" id="career-rank">
+  <div class="flexrow stat-name">
+    <label style="flex: 0 0 150px;">{{localize "PEN.title"}}</label>
+    <input data-handle-change class="centre" type="text" value="{{formData.title}}" {{#unless isGM}}disabled{{/unless}} name="title">
+  </div>
+  <br>
+
+  <div class="flexrow stat-name">
+    <label style="flex: 0 0 150px;">{{localize "PEN.description"}}</label>
+    <textarea class="stat-name" style="min-height: 100px;" data-handle-change type="text" value="{{formData.description}}" {{#unless isGM}}disabled{{/unless}} name="description">{{formData.description}}</textarea>
+  </div>
+  <br>
+
+  <div class="stat-name bold">{{localize "PEN.career.promotionRequirements"}}</div>
+  <div class="flexrow stat-name">
+    <label style="flex: 0 0 150px;">{{localize "PEN.age"}}</label>
+    <input data-handle-change class="centre" type="text" value="{{formData.ageTest}}" {{#unless isGM}}disabled{{/unless}} name="ageTest">
+  </div>
+  <br>
+
+  <div class="flexrow stat-name">
+    <label style="flex: 0 0 150px;">{{localize "PEN.minYears"}}</label>
+    <input data-handle-change class="centre" type="text" value="{{formData.minYears}}" {{#unless isGM}}disabled{{/unless}} name="minYears">
+  </div>
+  <br>
+
+  <div class="flexrow stat-name">
+    <label style="flex: 0 0 150px;">{{ localize 'PEN.special' }}</label>
+    <select data-handle-change class="centre" value="{{formData.special}}" {{#unless isGM}}disabled{{/unless}} name="special">
+      {{selectOptions specials selected=formData.special}}
+    </select>
+  </div>
+  <br>
+
+  <div class="flexrow stat-name">
+    <label style="flex: 0 0 150px;">{{localize "PEN.career.noPromotion"}}</label>
+    <input data-handle-change class="centre" type="checkbox" {{checked formData.noPromotion}} {{#unless isGM}}disabled{{/unless}} name="noPromotion">
+  </div>
+  <br>
+
+  <div class="stat-name bold">{{localize "PEN.career.marriage"}}</div>
+  <div class="flexrow stat-name">
+    <label style="flex: 0 0 150px;">{{localize "PEN.career.marriageChance"}}</label>
+      <input data-handle-change class="centre" type="number" value="{{formData.marriage}}" {{#unless isGM}}disabled{{/unless}} name="marriage">
+  </div>
+  <br>
+
+  <div class="flexrow stat-name">
+    <label style="flex: 0 0 150px;">{{localize "PEN.career.marriagePromotes"}}</label>
+    <input data-handle-change class="centre" type="checkbox" {{checked formData.marriagePromotes}} {{#unless isGM}}disabled{{/unless}} name="marriagePromotes">
+  </div>
+  <br>
+
+</section>

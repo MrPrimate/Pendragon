@@ -17,6 +17,17 @@ export class PENactorItemDrop {
         continue;
       }
 
+      //Don't add these items to actors
+      if (['career'].includes(dropItm.type)) {
+        ui.notifications.warn(
+          game.i18n.format("PEN.itemActormismatch", {
+            itemType: game.i18n.localize("TYPES.Item." + dropItm.type),
+            actorType: game.i18n.localize("TYPES.Actor." + actor.type),
+          }),
+        );
+        continue;
+      }
+
       //Barony & Manors are only allowed to have Skills, Traits, Manorial Improvements or Background NPCs
       if (
         !["manorImp", "background", "skill", "trait"].includes(dropItm.type) &&

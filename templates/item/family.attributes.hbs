@@ -1,4 +1,4 @@
-<section class="tab attributes {{tab.cssClass}}" data-group="primary" data-tab="attributes">
+<section class="tab attributes droppable {{tab.cssClass}}" data-group="primary" data-tab="attributes">
    <div class="helpicon">
     {{#if showHelp}}
       <a class="" data-action="openWiki" data-property="https://github.com/cragstone/Pendragon/wiki/Family" data-tooltip='{{localize "PEN.openWiki"}}'>
@@ -13,6 +13,9 @@
 
     <div class="stat-name left bold new-row">{{localize 'PEN.born'}}</div>
     <div class="stat-name-input centre"><input name="system.born" type="number" value="{{item.system.born}}"/></div>
+
+    <div class="stat-name left bold">{{localize 'PEN.married'}}</div>
+    <div class="stat-name-input centre"><input name="system.married" type="number" value="{{item.system.married}}"/></div>
 
     <div class="stat-name left bold">{{localize 'PEN.died'}}</div>
     <div class="stat-name-input centre"><input name="system.died" type="number" value="{{item.system.died}}"/></div>
@@ -59,5 +62,56 @@
       </div>
     {{/if}}
   </div>
+  <br>
+  {{!-- Career --}}
+  {{#if showCareer}}
+    <div class="stat-name bold">{{ localize "TYPES.Item.career"}}
+      {{#if showRandomCareer}}
+        <a class="random-name" data-action="randomCareer" data-tooltip="{{localize 'PEN.randomCareer'}}">
+          <i class="fas fa-dice"></i>
+        </a>
+      {{/if}}
+    </div>
+    <div class="horizontalboxed" style="min-height: 20px;" data-collection = "careers">
+      <ol class="item-list">
+        {{#each careers as |career|}}
+          <li class="item flexrow" data-item-id="{{career.careerUuid}}" >
+            <div class="item-name flexrow">
+              {{#if career.valid}}
+                <div class="stat-name"><span class="bold">{{career.name}}</span>:  {{career.careerTitle}}</div>
+              {{else}}
+                <div class="stat-name result-success">{{career.name}} [{{localize 'PEN.invalid'}}]</div>
+              {{/if}}
+            </div>
+            <div class="item-controls" style="flex: 0 0 60px;">
+              {{#if career.valid}}
+                <a class="item-control" data-tooltip="{{localize 'PEN.view'}}" data-action="viewItem"><i class="fa-solid fa-eye"></i></a>
+              {{/if}}
+              {{#if ../isGM}}
+                <a class="item-control item-delete" data-tooltip="{{localize 'PEN.delete'}}" data-action="deleteItem"><i class="fas fa-trash" style="padding-top: 5px;"></i></a>
+              {{/if}}
+            </div>
+          </li>
+        {{else}}
+          <div class="centre italics" style="height:60px; padding-top: 20px;">{{localize 'PEN.emptyList'}}</div>
+        {{/each}}
+      </ol>
+    </div>
 
+    {{#if hasCareer}}
+      <div class="item-trait-grid">
+        <div class="stat-name left bold new-row">{{localize 'PEN.level'}}</div>
+        <div class="stat-name centre">
+          <select class="centre" data-handle-change name="system.careerLevel" style="padding-left: 20px;">
+            {{selectOptions careerLevels selected=item.system.careerLevel}}
+          </select>
+        </div>
+
+        <div class="stat-name left bold">{{localize 'PEN.career.nextPromotion'}}</div>
+        <div class="stat-name-input centre"><input name="system.nextPromotion" type="number" value="{{item.system.nextPromotion}}"/></div>
+      </div>
+    {{/if}}
+  {{/if}}
+
+  <br>
 </section>
