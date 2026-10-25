@@ -42,7 +42,7 @@
 
       <div class="partic-grid">
         {{#each npcs as |npc id|}}
-          <div class="partic-cell" data-property={{npc.uuid}} data-pid={{npc.pid}} data-index="{{@index}}">
+          <div class="partic-cell" data-property="{{npc.uuid}}" data-pid="{{npc.pid}}" data-index="{{@index}}">
             <div class="bold darkred truncate" data-tooltip="{{npc.name}}">{{npc.name}}</div>
             {{#if npc.actr}}
               <div><span class="bold">Knight Value: </span><span>{{npc.actr.system.kv}}</span></div>

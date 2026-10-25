@@ -428,6 +428,19 @@ export class PendragonActor extends Actor {
     // Process additional NPC data here.
   }
 
+  //The world copy of a compendium actor: one with the same PID and priority, which is the copy PID lookups find.
+  //Imports the actor if there is no copy yet. An actor already in the world is returned as it is
+  static async worldCopy(actor) {
+    if (!actor.pack) return actor;
+    const pid = actor.flags?.Pendragon?.pidFlag;
+    const copy = pid?.id
+      ? game.actors.find(
+          (a) => a.flags?.Pendragon?.pidFlag?.id === pid.id && a.flags?.Pendragon?.pidFlag?.priority === pid.priority,
+        )
+      : null;
+    return copy ?? (await PendragonActor.create(actor));
+  }
+
   /** @override */
   static async create(data, options = {}) {
     //If dropping from compendium check to see if the actor already exists in game.actors and if it does then get the game.actors details rather than create a copy
