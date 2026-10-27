@@ -73,9 +73,7 @@ export class PIDEditor extends HandlebarsApplicationMixin(DocumentSheetV2) {
           },
           buttons: [0, 2],
         };
-        const copyUuidButton = element.querySelector(
-          "button.header-control.fa-solid.fa-ellipsis-vertical",
-        );
+        const copyUuidButton = element.querySelector("button.header-control.fa-solid.fa-ellipsis-vertical");
         if (copyUuidButton) {
           const button = document.createElement("button");
           button.type = "button";
@@ -152,7 +150,6 @@ export class PIDEditor extends HandlebarsApplicationMixin(DocumentSheetV2) {
       sheetData.warnDuplicateWorldPriority = false;
       sheetData.warnDuplicateCompendiumPriority = false;
     }
-
     return sheetData;
   }
 
@@ -201,7 +198,7 @@ export class PIDEditor extends HandlebarsApplicationMixin(DocumentSheetV2) {
   static async guessID(event, target) {
     event.preventDefault();
     const value = target.dataset.guess;
-    console.log(value)
+    console.log(value);
     if (value) {
       const element = this.element.querySelector("input[name=id]");
       element.value = value;
@@ -235,12 +232,14 @@ export class PIDEditor extends HandlebarsApplicationMixin(DocumentSheetV2) {
           warnDuplicatePriority = true;
         }
         const folders = [];
+        console.log(d);
         let e = d?.folder;
         while (e?.name) {
           folders.unshift(e?.name);
           e = e.folder;
         }
-        if (d.collection.inCompendium === true) {
+
+        if (d.inCompendium) {
           folders.unshift(d.collection.metadata.label);
           e = d?.collection.folder;
           while (e?.name) {
@@ -248,6 +247,7 @@ export class PIDEditor extends HandlebarsApplicationMixin(DocumentSheetV2) {
             e = e.folder;
           }
         }
+
         return {
           priority: parseInt(d.flags.Pendragon.pidFlag.priority, 10),
           lang: d.flags.Pendragon.pidFlag.lang ?? "en",
@@ -268,7 +268,7 @@ export class PIDEditor extends HandlebarsApplicationMixin(DocumentSheetV2) {
    * @param {FormDataExtended} formData
    */
   static async #onSubmit(event, form, formData) {
-    console.log(formData)
+    console.log(formData);
     if (!this.isEditable) return;
     const submitData = this._processFormData(event, form, formData);
     const changes = {
@@ -276,9 +276,7 @@ export class PIDEditor extends HandlebarsApplicationMixin(DocumentSheetV2) {
       "flags.Pendragon.pidFlag.lang": submitData.lang || game.i18n.lang,
       "flags.Pendragon.pidFlag.priority": submitData.priority || 0,
     };
-    const html = this.document.sheet.element.querySelector(
-      "header.window-header [data-action='pid']",
-    );
+    const html = this.document.sheet.element.querySelector("header.window-header [data-action='pid']");
     if (html) {
       if (changes["flags.Pendragon.pidFlag.id"].length) {
         html.classList.remove("invalid-pid");

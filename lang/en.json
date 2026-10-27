@@ -1764,8 +1764,10 @@
         "rt..table-d-3-amble-breeding-moderate-fine": "NHB-Table D.3: Ambler Breeding Outcomes (Moderate Ambler Stallion, Fine Ambler Mare)",
         "rt..table-d-3-amble-breeding-fine-fine": "NHB-Table D.3: Ambler Breeding Outcomes (Fine Ambler Stallion, Fine Ambler Mare)"
       },
+      "lang": "Lang",
       "language": "Language",
       "link": "Link",
+      "loading": "Loading Matching Items",
       "new": "- Custom System ID - ",
       "noPID": "{type} document requires a PID",
       "noPIDFlag": "Can't add {itemName} as it does not have a PID",

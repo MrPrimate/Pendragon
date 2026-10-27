@@ -276,6 +276,19 @@ export class PENUtilities {
     return roll.total === 2 ? "female" : "male";
   }
 
+  //Returns "male" or "female" from the relation, then from gender, then the fallback, then roll random
+  static async resolveRelationGender(gender = "", relation = "", fallback = "") {
+    const female = ["aunt", "mother", "sister", "grandmother", "daughter", "granddaughter"];
+    const male = ["uncle", "father", "brother", "grandfather", "son", "grandson"];
+    if (female.includes(relation)) return "female";
+    if (male.includes(relation)) return "male";
+    const type = this.genderType(gender) || fallback;
+    if (["male", "female"].includes(type)) return type;
+    const roll = await new Roll("1D2").evaluate();
+    return roll.total === 2 ? "female" : "male";
+    return null;
+  }
+
   //Recognised genders use the standard label (e.g. "male" -> "Male"), anything else is kept as entered
   static genderLabel(text) {
     const type = this.genderType(text);
