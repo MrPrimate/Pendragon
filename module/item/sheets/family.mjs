@@ -291,14 +291,14 @@ export class PendragonFamilySheet extends PendragonItemSheet {
         return false;
       }
     }
-    collection.push({
-      name: newItem.name,
-      uuid: newItem.uuid,
-      pid: newItem.flags.Pendragon.pidFlag.id,
-    });
-
     if (newItem.type === "career") {
       const result = await PENRandomCareer.careerHistory(this.item, newItem, 0, 0);
+      //The history may have moved them to another career (e.g. Maiden of the Lake)
+      collection.push({
+        name: result.career.name,
+        uuid: result.career.uuid,
+        pid: result.career.flags?.Pendragon?.pidFlag?.id ?? "",
+      });
       await this.item.update({
         [`system.${collectionName}`]: collection,
         "system.yearPromoted": result.yearPromoted,
@@ -306,6 +306,11 @@ export class PendragonFamilySheet extends PendragonItemSheet {
         "system.careerLevel": result.level,
       });
     } else {
+      collection.push({
+        name: newItem.name,
+        uuid: newItem.uuid,
+        pid: newItem.flags.Pendragon.pidFlag.id,
+      });
       await this.item.update({ [`system.${collectionName}`]: collection });
     }
     return true;
