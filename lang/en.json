@@ -1272,6 +1272,7 @@
     "type": "Type",
 
     "update": "Update",
+    "whatCopiedClipboard": "{what} copied to clipboard",
     "UnableToCopyToClipboard": "Unable to copy to clipboard, this is likely due to your browser security settings.",
     "unarmouredMod": "Bonus D6 v No armor",
     "unconscious": "Unconscious",
@@ -1575,6 +1576,7 @@
       "documents-in-compendiums": "{count} documents in compendiums",
       "error.incorrect.type": "Tried to convert PID with non existing document type.",
       "error.duplicate": "Warning: Multiple System IDs with same priority!",
+      "error.documents-not-found": "Documents not found for PIDs ({lang}): {pids}",
       "folder": "Folder",
       "foundry-id": "Foundry ID",
       "foundry-uuid": "Foundry UUID",

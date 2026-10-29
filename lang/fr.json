@@ -1271,6 +1271,7 @@
     "type": "Type",
 
     "update": "Mettre à jour",
+    "whatCopiedClipboard": "{what} copié dans le presse-papiers",
     "UnableToCopyToClipboard": "Impossible de copier dans le presse-papiers, cela est probablement dû aux paramètres de sécurité de votre navigateur.",
     "unarmouredMod": "Bonus D6 vs sans armure",
     "unconscious": "Inconscient",
@@ -1539,6 +1540,7 @@
       "documents-in-compendiums": "{count} documents dans les compendiums",
       "error.incorrect.type": "Tentative de conversion de PID avec type de document inconnu.",
       "error.duplicate": "Attention : plusieurs IDs système ont la même priorité !",
+      "error.documents-not-found": "Documents introuvables pour les PID ({lang}) : {pids}",
       "folder": "Dossier",
       "foundry-id": "Foundry ID",
       "foundry-uuid": "Foundry UUID",
