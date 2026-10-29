@@ -97,7 +97,9 @@ export class PENRandomCareer {
         case "aunt":
         case "pibling":
           table = this.resolvePiblingTable(doc, religion);
-          let promotionResults = await PENUtilities.tableDiceRoll(this.careerTables.promotions);
+          let promotionResults = this.careerTables.promotions
+            ? await PENUtilities.tableDiceRoll(this.careerTables.promotions)
+            : null;
           if (promotionResults) {
             let thisResult = Number(promotionResults.results[0]?.name?.split(" ")[0]);
             promotion = Number.isFinite(thisResult) ? thisResult : 0;
@@ -129,16 +131,11 @@ export class PENRandomCareer {
     return false;
   }
 
-  //Get the Career tables
+  //Get the Career tables. A missing table is only a problem when it is needed, so it is left as null
   static async getCareerTables() {
     let careerTables = {};
     for (let key in this.DEFAULT_TABLES) {
-      let table = await PENRandomName.tableFromSource({ pid: this.DEFAULT_TABLES[key] });
-      if (!table) {
-        ui.notifications.warn("PEN.career.missingTable", { format: { source: this.DEFAULT_TABLES[key] } });
-        return null;
-      }
-      careerTables[key] = table;
+      careerTables[key] = await PENRandomName.tableFromSource({ pid: this.DEFAULT_TABLES[key] });
     }
     return careerTables;
   }
@@ -146,38 +143,27 @@ export class PENRandomCareer {
   //Turn Career Roll results in to career info
   static async resolveCareer(tableResults, gender, religion) {
     let level = 0;
-    let careerPID = "";
-    let careerName = "";
-    let careerUuid = "";
-    let careerMax = 0;
-    let careerGender = "";
-    let careerReligion = "";
-    let careerItem = {};
+    let careerItem = null;
     for (let result of tableResults.results) {
       if (result.type === "text") {
         const match = result.name?.match(/\[(\d+)\]/);
         level = match ? Number(match[1]) : 0;
       } else if (result.type === "document") {
-        let career = await fromUuid(result.documentUuid);
-        if (career) {
-          careerPID = career.flags?.Pendragon?.pidFlag?.id;
-          careerName = career.name;
-          careerUuid = result.documentUuid;
-          careerMax = career.system.ranks.length - 1;
-          careerGender = career.system.gender;
-          careerReligion = career.system.religions[0]?.pid ?? "";
-          careerItem = career;
-        }
+        const career = await fromUuid(result.documentUuid);
+        if (career?.type === "career") careerItem = career;
       }
     }
+    if (!careerItem) return null;
     //Check that the career requirements match the family member (e.g. Religion and Gender)
+    const careerGender = careerItem.system.gender;
+    const careerReligion = careerItem.system.religions[0]?.pid ?? "";
     if (["male", "female"].includes(careerGender) && gender != careerGender) {
       return null;
     }
-    if (careerReligion != "" && careerReligion != religion.flags?.Pendragon?.pidFlag?.id) {
+    if (careerReligion != "" && careerReligion != religion?.flags?.Pendragon?.pidFlag?.id) {
       return null;
     }
-    return { level, careerPID, careerName, careerUuid, careerMax, careerItem };
+    return { level, careerItem };
   }
 
   //Is leaving this rank automatic (happens at a known year) rather than a yearly chance roll?
