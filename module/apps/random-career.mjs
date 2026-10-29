@@ -116,7 +116,7 @@ export class PENRandomCareer {
         let career = await this.resolveCareer(tableResults, doc.gender, religion);
         if (!career) continue; //Reroll up to 5 times
         if (career) {
-          const result = await this.careerHistory(doc, career.careerItem, career.level, promotion);
+          const result = await this.careerHistory(doc, career.careerItem, career.level, promotion, doc.position);
           careers.push({
             name: result.career.name,
             pid: result.career.flags?.Pendragon?.pidFlag?.id,
@@ -212,81 +212,86 @@ export class PENRandomCareer {
     return { yearPromoted, nextPromotion };
   }
 
-  //One year of career progress for a family member.
+  //One year of career progress for a family member. Returns true if they changed rank or career.
   //allowChance: does a chance-based promotion succeed this year?
   //  - history: true while they still have rolled promotions left
   //  - Winter Phase: true if they won the 1D20 draw and passed the promotion roll
-  static async careerYear(member, career, state, year, allowChance) {
-    const ranks = career.system.ranks;
+  static async careerYear(member, state, year, allowChance) {
+    const ranks = state.career.system.ranks;
     const rank = ranks[state.level];
     if (!rank || rank.noPromotion || state.level >= ranks.length - 1) return false; //Top rank or dead end
     if (state.nextPromotion > year) return false; //Too young, or hasn't served long enough yet
     if (!this.isAutoPromotion(rank) && !allowChance) return false;
-    if (rank.special != "" && rank.special != "none") {
-      const specialResult = await this.specialOutcome(
-        member,
-        career,
-        state.level,
-        rank.special,
-        year,
-        state.yearPromoted,
-      );
-      if (specialResult) {
-        state.career = specialResult.career;
-        state.promotions += Math.max(specialResult.level - state.level, 0);
-        state.level = specialResult.level;
-      }
-    } else {
-      state.level++;
-      state.promotions++;
+
+    //Special ranks decide their own result; null means a normal step up
+    let next = null;
+    if (rank.special && rank.special !== "none") next = await this.specialOutcome(member, state, rank.special, year);
+    next ??= { career: state.career, level: state.level + 1 };
+
+    //No change: keep yearPromoted, just roll a new wait
+    if (next.career === state.career && next.level === state.level) {
+      const { nextPromotion } = await this.careerTiming(member, state.career, state.level, { from: year });
+      state.nextPromotion = nextPromotion;
+      return false;
     }
-    Object.assign(state, await this.careerTiming(member, career, state.level, { from: year }));
+
+    //Uses up one of their rolled promotions, even if it skips ranks or changes career
+    state.promotions++;
+    state.career = next.career;
+    state.level = next.level;
+    Object.assign(state, await this.careerTiming(member, state.career, state.level, { from: year }));
     return true;
   }
 
   //Replay a family member's career year by year from their 14th birthday to now (or their death)
   //Automatic promotions always happen and count towards the rolled promotions
   //Chance promotions happen at the first opportunity while any rolled promotions are left
-  static async careerHistory(member, career, startLevel = 0, rolledPromotions = 0) {
+  //No promotion in the year they turn 14, as that is the year they start
+  static async careerHistory(member, career, startLevel = 0, rolledPromotions = 0, position = null) {
     const born = Number(member.system.born) || 0;
     const died = Number(member.system.died) || 0;
     const currentYear = game.time.components.year;
     const lastYear = died > 0 ? Math.min(died, currentYear) : currentYear;
     const state = {
-      career: career,
+      career,
       level: startLevel,
       promotions: 0,
+      position,
       ...(await this.careerTiming(member, career, startLevel)),
     };
     for (let year = born + 15; year <= lastYear; year++) {
-      await this.careerYear(member, state.career, state, year, state.promotions < rolledPromotions);
+      await this.careerYear(member, state, year, state.promotions < rolledPromotions);
     }
-    return state; //{ career, level, promotions, yearPromoted, nextPromotion }
+    return state; //{ career, level, promotions, position, yearPromoted, nextPromotion }
   }
 
   //Return { career, level }, or null to just go up one rank
-  static async specialOutcome(member, career, level, special, year, yearPromoted) {
+  //Called before state changes, so state.yearPromoted/nextPromotion are still for the rank being left
+  static async specialOutcome(member, state, special, year) {
     switch (special) {
-      case "swordProspects":
+      case "swordProspects": {
         //Not strictly the rules on this.  Have assumed not vassal knight.  If heir rank 4, if spare 1D2+1, otherwise 1D3
-        const formula = member.position === 1 ? "4" : member.position === 2 ? "1D2+1" : "1D3";
-        return { career, level: (await new Roll(formula).evaluate()).total };
-      case "maidInWaiting":
-        //If promotion is at age 21 we rolled 6, therefore rank 1, otherwise rank 2
-        return {
-          career,
-          level: year - member.system.born === 21 ? 1 : 2,
-        };
-      case "maidenOfLake":
+        const formula = state.position === 1 ? "4" : state.position === 2 ? "1D2+1" : "1D3";
+        const level = (await new Roll(formula).evaluate()).total;
+        return { career: state.career, level: Math.max(level, state.level + 1) };
+      }
+      case "maidInWaiting": {
+        //1D6+15: due at 21 means a 6 was rolled, therefore rank 1, otherwise rank 2
+        const dueAge = state.nextPromotion - (Number(member.system.born) || 0);
+        return { career: state.career, level: dueAge === 21 ? 1 : 2 };
+      }
+      case "maidenOfLake": {
+        //After 10 years in the rank
         const { total } = await new Roll("1D6").evaluate();
-        //Change career to family
+        //1-4 she marries and becomes a wife (Path of the Family)
         if (total < 5) {
           const careers = await game.system.api.pid.fromPIDBest({ pid: "i.career.path-of-the-family-ladies" });
-          const newCareer = careers?.[0] || null;
-          return newCareer ? { career: newCareer, level: 2 } : null;
+          const newCareer = careers?.[0] ?? null;
+          if (newCareer) return { career: newCareer, level: 2 };
         }
-        //Otherwise promote current career
-        return { career, level: 2 };
+        //5-6 she becomes a Lady of the Lake
+        return { career: state.career, level: Math.max(2, state.level + 1) };
+      }
       default:
         return null;
     }
