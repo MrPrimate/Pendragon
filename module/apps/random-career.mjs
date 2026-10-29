@@ -180,10 +180,10 @@ export class PENRandomCareer {
     return { level, careerPID, careerName, careerUuid, careerMax, careerItem };
   }
 
-  //Is leaving this rank automatic or a yearly chance roll?
+  //Is leaving this rank automatic (happens at a known year) rather than a yearly chance roll?
   static isAutoPromotion(rank) {
     if (!rank || rank.noPromotion) return false;
-    return rank.ageTest !== "" || ["swordProspects", "maidInWaiting"].includes(rank.special);
+    return rank.ageTest !== "" || ["swordProspects", "maidInWaiting", "maidenOfLake"].includes(rank.special);
   }
 
   //Work out yearPromoted / nextPromotion for a family member
@@ -204,6 +204,8 @@ export class PENRandomCareer {
       nextPromotion = born + 21;
     } else if (rank.special === "maidInWaiting") {
       nextPromotion = born + (await new Roll("1D6+15").evaluate()).total;
+    } else if (rank.special === "maidenOfLake") {
+      nextPromotion = yearPromoted + 10;
     }
     //Can't be promoted again in the same year they reached this rank
     if (nextPromotion > 0) nextPromotion = Math.max(nextPromotion, yearPromoted + 1);
@@ -220,7 +222,6 @@ export class PENRandomCareer {
     if (!rank || rank.noPromotion || state.level >= ranks.length - 1) return false; //Top rank or dead end
     if (state.nextPromotion > year) return false; //Too young, or hasn't served long enough yet
     if (!this.isAutoPromotion(rank) && !allowChance) return false;
-    if (rank.special === "maidenOfLake" && year < state.yearPromoted + 10) return false;
     if (rank.special != "" && rank.special != "none") {
       const specialResult = await this.specialOutcome(
         member,
