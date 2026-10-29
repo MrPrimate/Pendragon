@@ -96,7 +96,7 @@ export class PENRandomCareer {
         case "uncle":
         case "aunt":
         case "pibling":
-          table = this.resolvePiblingTable(doc);
+          table = this.resolvePiblingTable(doc, religion);
           let promotionResults = await PENUtilities.tableDiceRoll(this.careerTables.promotions);
           if (promotionResults) {
             let thisResult = Number(promotionResults.results[0]?.name?.split(" ")[0]);
@@ -355,7 +355,7 @@ export class PENRandomCareer {
   }
 
   //Resovle which table to use for Piblings
-  static resolvePiblingTable(doc) {
+  static resolvePiblingTable(doc, religion) {
     if (doc.position === 2 && doc.gender === "male") {
       return this.careerTables.heir;
     } else if (
