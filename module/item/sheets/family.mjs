@@ -292,7 +292,8 @@ export class PendragonFamilySheet extends PendragonItemSheet {
       }
     }
     if (newItem.type === "career") {
-      const result = await PENRandomCareer.careerHistory(this.item, newItem, 0, 0);
+      const { position } = await PENRandomCareer.memberInfo(this.item);
+      const result = await PENRandomCareer.careerHistory(this.item, newItem, 0, 0, position);
       //The history may have moved them to another career (e.g. Maiden of the Lake)
       collection.push({
         name: result.career.name,

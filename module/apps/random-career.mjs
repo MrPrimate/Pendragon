@@ -16,21 +16,27 @@ export class PENRandomCareer {
     prayerChristian: "rt..table-2-9-sibling-prayer-profession-christian",
   };
 
+  static PIBLINGS = ["pibling", "aunt", "uncle"];
+
   static async randomCareer(doc) {
     let updates = [];
     let members = [];
     let msgString = "<h5>" + game.i18n.localize("PEN.familyCreate.careers") + "</h5>";
     const actor = doc instanceof Actor ? doc : doc?.parent instanceof Actor ? doc.parent : null;
-    if (!actor) return;
+    if (!actor) return null;
     // Prepare the roll tables once
     this.careerTables = await this.getCareerTables();
     if (!this.careerTables) return null;
 
-    this.family = await this.resolveFamily(actor); //Family list is used for position of each person tested
+    //Family list is used for the gender and position of each person tested
+    const family = await this.resolveFamily(actor);
 
-    //If handin doc is a character  we are rolling on all the family
+    //If handin doc is a character we are rolling on all the family who don't have a career yet
     if (doc instanceof Actor && doc.type === "character") {
-      console.log("All family");
+      //TODO: Only works for Piblings, need to extend to Siblings, children, grandchildren
+      members = family.items.filter(
+        (itm) => this.PIBLINGS.includes(itm.system.relation) && itm.system.age >= 14 && !itm.system.careers.length,
+      );
       //Else if doc is a family item roll on just this member
     } else if (doc instanceof Item && doc.type === "family") {
       members.push(doc);
@@ -41,7 +47,7 @@ export class PENRandomCareer {
     }
 
     //Get the relevant religion from the doc if actor or parent actor
-    let religion = await PENRandomName.resolveCulture(doc, "religion");
+    let religion = PENRandomName.resolveCulture(doc, "religion");
     if (!religion) {
       ui.notifications.warn("PEN.noReligion", { localize: true });
       return null;
@@ -49,15 +55,18 @@ export class PENRandomCareer {
 
     //Loop through all the members and get career
     for (let member of members) {
-      //Resolve gender now as used in a couple of places
-      member.gender = this.family.find((itm) => itm.id === member.id).gender; //Resolve position in family now we have gender
-      member.position = await this.resolvePosition(member);
-      let careerResult = await this.singleCareer(member, religion);
+      const info = {
+        gender: family.genders.get(member.id),
+        position: this.resolvePosition(member, family),
+        religion,
+      };
+      let careerResult = await this.singleCareer(member, info);
       if (!careerResult) {
-        msgString += "<div><strong>" + doc.name + "</strong>: " + game.i18n.localize("PEN.career.mismatch") + "</div>";
+        msgString +=
+          "<div><strong>" + member.name + "</strong>: " + game.i18n.localize("PEN.career.mismatch") + "</div>";
       } else {
         updates.push({
-          _id: doc.id,
+          _id: member.id,
           "system.careerLevel": careerResult.result.level,
           "system.careers": careerResult.careers,
           "system.yearPromoted": careerResult.result.yearPromoted,
@@ -65,7 +74,7 @@ export class PENRandomCareer {
         });
         msgString +=
           "<div><strong>" +
-          doc.name +
+          member.name +
           "</strong>: " +
           careerResult.careers[0].name +
           " [" +
@@ -82,12 +91,12 @@ export class PENRandomCareer {
     if (updates.length > 0) {
       await actor.updateEmbeddedDocuments("Item", updates);
     }
-    return;
+    return updates;
   }
 
-  static async singleCareer(doc, religion) {
+  //info = { gender, position, religion }
+  static async singleCareer(doc, info) {
     let careers = [];
-    let careerLevel = 0;
     let promotion = 0;
     //Roll careers for family member who have come of age
     if (doc.system.age >= 14) {
@@ -95,9 +104,9 @@ export class PENRandomCareer {
       switch (doc.system.relation) {
         case "uncle":
         case "aunt":
-        case "pibling":
-          table = this.resolvePiblingTable(doc, religion);
-          let promotionResults = this.careerTables.promotions
+        case "pibling": {
+          table = this.resolvePiblingTable(doc, info);
+          const promotionResults = this.careerTables.promotions
             ? await PENUtilities.tableDiceRoll(this.careerTables.promotions)
             : null;
           if (promotionResults) {
@@ -105,6 +114,7 @@ export class PENRandomCareer {
             promotion = Number.isFinite(thisResult) ? thisResult : 0;
           }
           break;
+        }
         default:
           return null;
       }
@@ -115,17 +125,15 @@ export class PENRandomCareer {
       //Roll up to five times - in the event of a roll that doesn't match gender/religion
       for (let c = 1; c <= 5; c++) {
         const tableResults = await PENUtilities.tableDiceRoll(table);
-        let career = await this.resolveCareer(tableResults, doc.gender, religion);
+        let career = await this.resolveCareer(tableResults, info.gender, info.religion);
         if (!career) continue; //Reroll up to 5 times
-        if (career) {
-          const result = await this.careerHistory(doc, career.careerItem, career.level, promotion, doc.position);
-          careers.push({
-            name: result.career.name,
-            pid: result.career.flags?.Pendragon?.pidFlag?.id,
-            uuid: result.career.uuid,
-          });
-          return { careers, result };
-        }
+        const result = await this.careerHistory(doc, career.careerItem, career.level, promotion, info.position);
+        careers.push({
+          name: result.career.name,
+          pid: result.career.flags?.Pendragon?.pidFlag?.id,
+          uuid: result.career.uuid,
+        });
+        return { careers, result };
       }
     }
     return false;
@@ -284,50 +292,47 @@ export class PENRandomCareer {
   }
 
   //Resolve Family & establish gender
+  //Returns { items, genders } where genders is a Map of item id to "male" / "female"
   static async resolveFamily(actor) {
-    let family = await actor.items.filter((itm) => itm.type === "family");
-    for (let member of family) {
-      member.gender = await PENUtilities.resolveRelationGender(member.system.gender, member.system.relation);
+    const items = actor.items.filter((itm) => itm.type === "family");
+    const genders = new Map();
+    for (let member of items) {
+      genders.set(member.id, await PENUtilities.resolveRelationGender(member.system.gender, member.system.relation));
     }
-    return family;
+    return { items, genders };
+  }
+
+  //Gender and family position for one member, for use outside randomCareer (e.g. dropping a career)
+  static async memberInfo(member) {
+    const actor = member.parent instanceof Actor ? member.parent : null;
+    if (!actor) return { gender: null, position: null };
+    const family = await this.resolveFamily(actor);
+    return { gender: family.genders.get(member.id), position: this.resolvePosition(member, family) };
   }
 
   //Resolve position in family
-  static async resolvePosition(member) {
+  static resolvePosition(member, family) {
     let relation = member.system.relation;
     if (!relation) return null;
-    let relationGroup = await this.relationGroups(relation);
+    let relationGroup = this.relationGroups(relation);
     if (!relationGroup) return null;
-    //Get family members (alive or dead) who are aged 14+ in this relationGroup
-    let group = this.family.filter((itm) => relationGroup.includes(itm.system.relation));
-    group = group.sort((a, b) => b.system.age - a.system.age);
+    //Family members (alive or dead) in this relationGroup on the same side of the family
+    let group = family.items.filter(
+      (itm) => relationGroup.includes(itm.system.relation) && itm.system.maternal === member.system.maternal,
+    );
 
     switch (member.system.relation) {
       case "uncle":
       case "aunt":
-      case "pibling":
-        //Order family group by gender (male > female) then age (oldest first)
-        group.sort(function (a, b) {
-          let x = a.system.age;
-          let y = b.system.age;
-          let p = a.gender;
-          let q = b.gender;
-          if (p < q) {
-            return 1;
-          }
-          if (p > q) {
-            return -1;
-          }
-          if (x < y) {
-            return 1;
-          }
-          if (x > y) {
-            return -1;
-          }
-          return 0;
-        });
+      case "pibling": {
+        //Order family group by gender (male first) then birth year (oldest first)
+        //Age is not used as it stops increasing for the dead
+        const male = (itm) => (family.genders.get(itm.id) === "male" ? 0 : 1);
+        group.sort((a, b) => male(a) - male(b) || a.system.born - b.system.born);
         //Add 2 to position, one for index starting at 0, one for parent being the heir and not in list
+        //TODO: Check the rule for the maternal side, where the mother is not the heir
         return group.findIndex((itm) => itm.id === member.id) + 2;
+      }
       default:
         return null;
     }
@@ -335,40 +340,29 @@ export class PENRandomCareer {
 
   //Setup family groups by relation
   static relationGroups(relation) {
-    const piblings = ["pibling", "aunt", "uncle"];
     const siblings = ["sibling", "brother", "sister"];
     const children = ["child", "son", "daughter"];
     const grandchildren = ["grandchild", "grandson", "granddaughter"];
-    if (piblings.includes(relation)) return piblings;
+    if (this.PIBLINGS.includes(relation)) return this.PIBLINGS;
     if (siblings.includes(relation)) return siblings;
     if (children.includes(relation)) return children;
     if (grandchildren.includes(relation)) return grandchildren;
     return "";
   }
 
-  //Resovle which table to use for Piblings
-  static resolvePiblingTable(doc, religion) {
-    if (doc.position === 2 && doc.gender === "male") {
+  //Resolve which table to use for Piblings
+  static resolvePiblingTable(doc, { gender, position, religion }) {
+    const religionPID = religion?.flags?.Pendragon?.pidFlag?.id;
+    if (position === 2 && gender === "male") {
       return this.careerTables.heir;
-    } else if (
-      doc.position === 3 &&
-      doc.gender === "male" &&
-      religion?.flags.Pendragon?.pidFlag?.id === "i.religion.pagan"
-    ) {
+    } else if (position === 3 && gender === "male" && religionPID === "i.religion.pagan") {
       return this.careerTables.prayerPagan;
-    } else if (
-      doc.position === 3 &&
-      doc.gender === "male" &&
-      religion?.flags.Pendragon?.pidFlag?.id === "i.religion.christian"
-    ) {
+    } else if (position === 3 && gender === "male" && religionPID === "i.religion.christian") {
       return this.careerTables.prayerChristian;
-    } else if (doc.system.relation === "pibling" && doc.gender === "male") {
+    } else if (gender === "male") {
       return this.careerTables.uncle;
-    } else if (doc.system.relation === "pibling" && doc.gender === "female") {
-      return this.careerTables.aunt;
     } else {
-      return this.careerTables[doc.system.relation];
+      return this.careerTables.aunt;
     }
-    return null;
   }
 }
