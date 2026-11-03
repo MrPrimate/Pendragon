@@ -17,6 +17,8 @@ import { PendragonTooltips } from "./apps/tooltips.mjs";
 import { PIDEditor } from "./pid/pid-editor.mjs";
 import { PendragonActiveEffect } from "./apps/active-effects.mjs";
 import RenderActiveEffectConfig from "./hooks/render-active-effect-config.mjs";
+import RenderActorSheetV2 from "./hooks/render-actor-sheet-v2.mjs";
+import RenderItemSheetV2 from "./hooks/render-item-sheet-v2.mjs";
 
 import {
   CharacterData,
@@ -50,6 +52,7 @@ import {
   RelationshipData,
   BackgroundData,
   ArchetypeData,
+  CareerData,
 } from "./models/items/index.mjs";
 import drawNote from "./hooks/draw-note.mjs";
 import RenderNoteConfig from "./hooks/render-note-config.mjs";
@@ -124,6 +127,7 @@ Hooks.once("init", async function () {
   CONFIG.Item.dataModels.relationship = RelationshipData;
   CONFIG.Item.dataModels.background = BackgroundData;
   CONFIG.Item.dataModels.archetype = ArchetypeData;
+  CONFIG.Item.dataModels.career = CareerData;
 
   // Define custom Document classes
   CONFIG.Actor.documentClass = PendragonActor;
@@ -181,6 +185,8 @@ Hooks.on("renderRegionConfig", RenderRegionConfig);
 Hooks.on("renderJournalEntryPageTextSheet", RenderJournalEntryPageTextSheet);
 Hooks.on("renderJournalEntrySheet", RenderJournalEntrySheet);
 Hooks.on("renderRollTableSheet", RenderRollTableSheet);
+Hooks.on("renderActorSheetV2", RenderActorSheetV2);
+Hooks.on("renderItemSheetV2", RenderItemSheetV2);
 Hooks.on("createToken", createToken);
 Hooks.on("updateWorldTime", (worldTime, dt, options, userId) => {
   for (const doc of game.actors) {

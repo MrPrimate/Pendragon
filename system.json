@@ -273,6 +273,9 @@
       },
       "archetype": {
         "htmlFields": ["description", "GMdescription"]
+      },
+      "career": {
+        "htmlFields": ["description", "GMdescription"]
       }
     },
     "RegionBehavior": {

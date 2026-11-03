@@ -42,6 +42,8 @@ export class PendragonItem extends Item {
         data.img = "systems/Pendragon/assets/Icons/tarot-13-death.svg";
       } else if (data.type === "wound") {
         data.img = "systems/Pendragon/assets/Icons/drop.svg";
+      } else if (data.type === "career") {
+        data.img = "systems/Pendragon/assets/Icons/stone-crafting.svg";
       }
     }
     super(data, context);

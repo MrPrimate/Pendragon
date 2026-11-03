@@ -612,14 +612,9 @@ export class PENCharCreateV2 {
       "flags.Pendragon.pidFlag.priority": 0,
     });
     //Update PID icon
-    const html = $(actor.sheet.element).find(
-      "header.window-header .edit-pid-warning,header.window-header .edit-pid-exisiting",
-    );
-    if (html.length) {
-      html.css({
-        color: key ? "white" : "red",
-      });
-    }
+    actor.sheet?.element
+      ?.querySelector("header.window-header [data-action='pid']")
+      ?.classList.toggle("invalid-pid", !key);
     return true;
   }
 

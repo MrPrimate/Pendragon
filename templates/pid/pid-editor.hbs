@@ -1,134 +1,150 @@
-<div class="{{cssClass}}" autocomplete="off">
-  <h2 class="">{{localize 'PEN.PIDFlag.title'}}</h2>
-  <p class="stat-name">{{{localize 'PEN.PIDFlag.summary' type=objtype }}}</p>
+<section class="tab scrollable active">
   <input type="hidden" name="id" value="{{id}}">
-  <div class="form-group stat-name">
+  <div class="form-group">
+    <div>{{{localize 'PEN.PIDFlag.summary' type=object.type}}}</div>
+  </div>
+  <div class="form-group">
     <label for="_existing">{{localize 'PEN.PIDFlag.key'}}:</label>
-    <div class="flexrow stat-name" style="flex: 2; border: 1px solid transparent; padding: 1px 3px 1px 0;">
+    <div class="form-value flexrow" style="column-gap: 8px;">
       {{#if existingKeys.length}}
-      <select style="margin-left: -2px;" name="known">
-        <option value="">{{localize 'PEN.PIDFlag.new'}}</option>
-        {{selectOptions existingKeys selected=id localize=true valueAttr="k" nameAttr="k" labelAttr="name"}}
-      </select>
+        <select name="known">
+          <option value="">{{localize 'PEN.PIDFlag.new'}}</option>
+          {{selectOptions existingKeys selected=id localize=false}}
+        </select>
       {{else}}
-      <span style="flex: 0; margin-top: 2px;">{{idPrefix}}</span>
-      <input class="stat-name" type="text" style="flex: 2;" name="_existing" value="{{_existing}}" data-prefix="{{idPrefix}}">
+        <span style="flex: 0 0 auto;">{{idPrefix}}</span>
+        <input type="text" name="_existing" value="{{_existing}}" data-prefix="{{idPrefix}}">
       {{/if}}
-      {{#if isEditable}}
-      <a style="flex: 0 0 20px; align-self: center; text-align: right;" data-tooltip="{{localize 'PEN.PIDFlag.guess'}}"
-        data-action="guess" data-guess="{{guessCode}}"><i class="fas fa-wand-magic"></i></a>
+      {{#if editable}}
+        <span style="flex: 0 0 auto;">
+          <a data-tooltip="PEN.PIDFlag.guess" data-action="guess" data-guess="{{guessCode}}"><i class="fa-solid fa-wand-magic fa-fw"></i></a>
+        </span>
       {{/if}}
     </div>
   </div>
   {{#if (and existingKeys.length (not isSystemID))}}
-  <div class="form-group">
-    <label>&nbsp;</label>
-    <div class="flexrow" style="flex: 2; border: 1px solid transparent; padding: 1px 3px 1px 0;">
-      <span style="flex: 0; margin-top: 2px;">{{idPrefix}}</span>
-      <input type="text" style="flex: 2;" name="_existing" value="{{_existing}}" data-prefix="{{idPrefix}}">
+    <div class="form-group">
+      <label>&nbsp;</label>
+      <div class="form-value flexrow" style="column-gap: 8px;">
+        <span style="flex: 0 0 auto;">{{idPrefix}}</span>
+        <input type="text" name="_existing" value="{{_existing}}" data-prefix="{{idPrefix}}">
+      </div>
     </div>
-  </div>
   {{/if}}
   <div class="form-group">
-    <label for="lang" style="min-width: 284.78px;">{{localize 'PEN.PIDFlag.language'}}:</label>
-    <select style="flex: 2;" name="lang">
-      {{selectOptions supportedLanguages selected=lang localize=false}}
-    </select>
+    <label for="lang">{{localize 'PEN.PIDFlag.language'}}:</label>
+    <div class="form-value">
+      <select name="lang">
+        {{selectOptions supportedLanguages selected=lang localize=false}}
+      </select>
+    </div>
   </div>
   <div class="form-group">
     <label for="priority">{{localize 'PEN.PIDFlag.priority'}}:</label>
-    <div style="flex: 2; border: 1px solid transparent; padding: 1px 3px 1px 0;">
-      <input type="number" style="width: 50px; margin-left: -2px" name="priority" value="{{priority}}">
+    <div class="form-value">
+      <input type="number" style="width: 3rem;" name="priority" value="{{priority}}">
     </div>
   </div>
 
   <fieldset class="item-sheet-properties">
     <legend>{{localize 'PEN.PIDFlag.info'}}</legend>
-    <div class="form-group">
-      <label>{{localize 'PEN.PIDFlag.others'}}:</label>
-      <div>
-        <details>
-          <summary>{{localize 'PEN.PIDFlag.documents-in-world' count=worldDuplicates}}{{#if warnDuplicateWorldPriority}}
-            <span class="bold"><i class=" darkred fas fa-exclamation-triangle"></i>{{localize
-              'PEN.PIDFlag.error.duplicate'}}</span>{{/if}}</summary>
-          <table>
+    <label>{{localize 'PEN.PIDFlag.others'}}:</label>
+    <div class="flexcol">
+      <details>
+        <summary>{{localize 'PEN.PIDFlag.documents-in-world' count=worldDuplicates}}{{#if warnDuplicateWorldPriority}} <span class="warning"><i class="darkred fa-solid fa-exclamation-triangle"></i>{{localize 'PEN.PIDFlag.error.duplicate'}}</span>{{/if}}</summary>
+        <table>
+          <thead>
             <tr>
-              <td class="shorttext"><b>{{localize 'PEN.PIDFlag.priorShrt'}}</b></td>
-              <td class="shorttext"><b>{{localize 'PEN.PIDFlag.language'}}</b></td>
-              <td><b>{{localize 'PEN.PIDFlag.link'}}</b></td>
-              <td><b>{{localize 'PEN.PIDFlag.folder'}}</b></td>
+              <td class="short-text">{{localize 'PEN.PIDFlag.priorShrt'}}</td>
+              <td class="short-text">{{localize 'PEN.PIDFlag.lang'}}</td>
+              <td>{{localize 'PEN.PIDFlag.link'}}</td>
+              <td>{{localize 'PEN.PIDFlag.folder'}}</td>
             </tr>
+          </thead>
+          <tbody>
             {{#each worldDocumentInfo}}
-            <tr>
-              <td class="shorttext">{{priority}}</td>
-              <td class="shorttext">{{lang}}</td>
-              <td>{{{link}}}</td>
-              <td>{{folder}}</td>
-            </tr>
+              <tr>
+                <td class="short-text">{{priority}}</td>
+                <td class="short-text">{{lang}}</td>
+                <td>{{{link}}}</td>
+                <td>{{folder}}</td>
+              </tr>
             {{/each}}
-          </table>
-        </details>
-        <details>
-          <summary>{{localize 'PEN.PIDFlag.documents-in-compendiums' count=compendiumDuplicates}}{{#if
-            warnDuplicateCompendiumPriority}} <span class="bold"><i
-                class=" darkred fas fa-exclamation-triangle"></i>{{localize
-              'PEN.PIDFlag.error.duplicate'}}</span>{{/if}}</summary>
-          <table>
+          </tbody>
+        </table>
+      </details>
+      <details>
+        <summary>{{localize 'PEN.PIDFlag.documents-in-compendiums' count=compendiumDuplicates}}{{#if warnDuplicateCompendiumPriority}} <span class="warning"><i class="darkred fa-solid fa-exclamation-triangle"></i>{{localize 'PEN.PIDFlag.error.duplicate'}}</span>{{/if}}</summary>
+        <table>
+          <thead>
             <tr>
-              <td class="shorttext"><b>{{localize 'PEN.PIDFlag.priorShrt'}}</b></td>
-              <td class="shorttext"><b>{{localize 'PEN.PIDFlag.language'}}</b></td>
-              <td><b>{{localize 'PEN.PIDFlag.link'}}</b></td>
-              <td><b>{{localize 'PEN.PIDFlag.folder'}}</b></td>
+              <td class="short-text">{{localize 'PEN.PIDFlag.priorShrt'}}</td>
+              <td class="short-text">{{localize 'PEN.PIDFlag.lang'}}</td>
+              <td>{{localize 'PEN.PIDFlag.link'}}</td>
+              <td>{{localize 'COMPENDIUM.Name'}}</td>
             </tr>
+          </thead>
+          <tbody>
             {{#each compendiumDocumentInfo}}
-            <tr>
-              <td class="shorttext">{{priority}}</td>
-              <td class="shorttext">{{lang}}</td>
-              <td>{{{link}}}</td>
-              <td>{{folder}}</td>
-            </tr>
+              <tr>
+                <td class="short-text">{{priority}}</td>
+                <td class="short-text">{{lang}}</td>
+                <td>{{{link}}}</td>
+                <td>{{folder}}</td>
+              </tr>
             {{/each}}
-          </table>
-        </details>
-      </div>
+          </tbody>
+        </table>
+      </details>
     </div>
     <div class="form-group">
       <label>{{localize 'PEN.PIDFlag.foundry-id'}}:</label>
-      <div class="flexrow">
-        <input type="text" value="{{objid}}" readonly>
-        <a data-tooltip="{{localize 'PEN.CopyToClipboard'}}" data-action="copyToClip">
-          <i class="fas fa-copy"></i>
-        </a>
+      <div class="form-value flexrow" style="column-gap: 8px;">
+        <input type="text" value="{{document.id}}" readonly>
+        <span style="flex: 0 0 auto;">
+          <a data-tooltip="PEN.CopyToClipboard" data-action="copyToClip"><i class="fa-solid fa-copy fa-fw"></i></a>
+        </span>
       </div>
     </div>
     <div class="form-group">
       <label>{{localize 'PEN.PIDFlag.foundry-uuid'}}:</label>
-      <div class="flexrow">
-        <input type="text" value="{{objuuid}}" readonly>
-        <a data-tooltip="{{localize 'PEN.CopyToClipboard'}}" data-action="copyToClip">
-          <i class="fas fa-copy"></i>
-        </a>
+      <div class="form-value flexrow" style="column-gap: 8px;">
+        <input type="text" value="{{document.uuid}}" readonly>
+        <span style="flex: 0 0 auto;">
+          <a data-tooltip="PEN.CopyToClipboard" data-action="copyToClip"><i class="fa-solid fa-copy fa-fw"></i></a>
+        </span>
       </div>
     </div>
+    {{#if id}}
+      <div class="form-group">
+        <label>{{localize 'PEN.PIDFlag.key'}}:</label>
+        <div class="form-value flexrow" style="column-gap: 8px;">
+          <input type="text" value="{{id}}" readonly>
+          <span style="flex: 0 0 auto;">
+            <a data-tooltip="PEN.CopyToClipboard" data-action="copyToClip"><i class="fa-solid fa-copy fa-fw"></i></a>
+          </span>
+        </div>
+      </div>
+    {{/if}}
     <div class="form-group">
       <label>{{localize 'PEN.PIDFlag.get-this-document'}}:</label>
-      <div class="flexrow">
-        <input type="text" value="await fromUuid('{{objuuid}}')" readonly>
-        <a data-tooltip="{{localize 'PEN.CopyToClipboard'}}" data-action="copyToClip">
-          <i class="fas fa-copy"></i>
-        </a>
+      <div class="form-value flexrow" style="column-gap: 8px;">
+        <input type="text" value="await fromUuid('{{document.uuid}}')" readonly>
+        <span style="flex: 0 0 auto;">
+          <a data-tooltip="PEN.CopyToClipboard" data-action="copyToClip"><i class="fa-solid fa-copy fa-fw"></i></a>
+        </span>
       </div>
     </div>
-    {{#if (or id)}}
-    <div class="form-group">
-      <label>{{localize 'PEN.PIDFlag.get-document-like-this'}}:</label>
-      <div class="flexrow">
-        <input type="text" value="await game.PEN.pid.fromPID('{{id}}', '{{lang}}')" readonly>
-        <a data-tooltip="{{localize 'PEN.CopyToClipboard'}}" data-action="copyToClip">
-          <i class="fas fa-copy"></i>
-        </a>
+    {{#if id}}
+      <div class="form-group">
+        <label>{{localize 'PEN.PIDFlag.get-document-like-this'}}:</label>
+        <div class="form-value flexrow" style="column-gap: 8px;">
+          <input type="text" value="await game.system.api.pid.fromPID('{{id}}', '{{lang}}')" readonly>
+          <span style="flex: 0 0 auto;">
+            <a data-tooltip="PEN.CopyToClipboard" data-action="copyToClip"><i class="fa-solid fa-copy fa-fw"></i></a>
+          </span>
+        </div>
       </div>
-    </div>
     {{/if}}
   </fieldset>
-</div>
+</section>

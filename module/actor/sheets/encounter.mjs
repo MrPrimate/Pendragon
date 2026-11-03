@@ -24,7 +24,6 @@ export class PendragonEncounterSheet extends PendragonActorSheet {
       submitOnChange: true,
     },
     actions: {
-      editPid: this._onEditPid,
       noteView: this._noteView,
       toggleActor: this._onToggleActor,
       deleteNPC: this._deleteNPC,
