@@ -27,7 +27,6 @@ export class PendragonAssaultSheet extends PendragonActorSheet {
       submitOnChange: true,
     },
     actions: {
-      editPid: this._onEditPid,
       noteView: this._noteView,
       toggleActor: this._onToggleActor,
       deleteActr: this._deleteActr,

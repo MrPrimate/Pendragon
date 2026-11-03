@@ -17,6 +17,8 @@ import { PendragonTooltips } from "./apps/tooltips.mjs";
 import { PIDEditor } from "./pid/pid-editor.mjs";
 import { PendragonActiveEffect } from "./apps/active-effects.mjs";
 import RenderActiveEffectConfig from "./hooks/render-active-effect-config.mjs";
+import RenderActorSheetV2 from "./hooks/render-actor-sheet-v2.mjs";
+import RenderItemSheetV2 from "./hooks/render-item-sheet-v2.mjs";
 
 import {
   CharacterData,
@@ -183,6 +185,8 @@ Hooks.on("renderRegionConfig", RenderRegionConfig);
 Hooks.on("renderJournalEntryPageTextSheet", RenderJournalEntryPageTextSheet);
 Hooks.on("renderJournalEntrySheet", RenderJournalEntrySheet);
 Hooks.on("renderRollTableSheet", RenderRollTableSheet);
+Hooks.on("renderActorSheetV2", RenderActorSheetV2);
+Hooks.on("renderItemSheetV2", RenderItemSheetV2);
 Hooks.on("createToken", createToken);
 Hooks.on("updateWorldTime", (worldTime, dt, options, userId) => {
   for (const doc of game.actors) {

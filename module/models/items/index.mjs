@@ -1,7 +1,7 @@
 export { ArchetypeData } from "./archetype_model.mjs";
 export { ArmourData } from "./armour_model.mjs";
 export { BackgroundData } from "./background_model.mjs";
-export { CareerData } from "./career_model.mjs"
+export { CareerData } from "./career_model.mjs";
 export { ClassData } from "./class_model.mjs";
 export { CultureData } from "./culture_model.mjs";
 export { FamilyData } from "./family_model.mjs";

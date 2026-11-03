@@ -31,7 +31,6 @@ export class PendragonCharacterSheetv2 extends PendragonActorSheet {
     },
     actions: {
       onEditImage: this._onEditImage,
-      editPid: this._onEditPid,
       rollStat: this._onRollStat,
       rollTrait: this._onRollTrait,
       rollDecision: this._onRollDecision,

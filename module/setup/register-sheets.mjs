@@ -190,7 +190,6 @@ export function registerSheets() {
     makeDefault: true,
   });
 
-
   foundry.documents.collections.RollTables.unregisterSheet("core", foundry.applications.sheets.RollTableSheet);
   foundry.documents.collections.RollTables.registerSheet("Pendragon", PendragonRollTableConfig, {
     makeDefault: true,

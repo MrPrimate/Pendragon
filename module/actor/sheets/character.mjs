@@ -28,7 +28,6 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
       submitOnChange: true,
     },
     actions: {
-      editPid: this._onEditPid,
       randomName: this._onRandomName,
       individualWinter: this._individualWinter,
       toggleActor: this._onActorToggle,
@@ -1028,7 +1027,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     if (!this.isEditable) return;
     if (this.actor.system.lock && !game.settings.get("Pendragon", "creation")) return;
     const name = await PENRandomName.randomName({ doc: this.actor, gender: this.actor.system.gender });
-    if (name) await this.actor.update({ name, 'prototypeToken.name': name });
+    if (name) await this.actor.update({ name, "prototypeToken.name": name });
   }
 
   static async _onSwitchSheet(event, target) {
