@@ -101,7 +101,7 @@ export class PendragonFamilySheet extends PendragonItemSheet {
       if (!thisCareer) {
         thisCareer = await fromUuid(career.uuid);
       }
-      maxLevel = thisCareer.system.ranks.length ?? 0;
+      maxLevel = thisCareer?.system?.ranks?.length ?? 0;
       let careerTitle =
         thisCareer?.system?.ranks[this.item.system.careerLevel]?.title ?? game.i18n.localize("PEN.invalid");
       //Keep the stored UUID so the entry can be deleted even if the PID resolves to a different document
@@ -112,7 +112,7 @@ export class PendragonFamilySheet extends PendragonItemSheet {
         careerUuid: thisCareer?.uuid ?? "",
         valid: !!thisCareer,
         careerTitle,
-        careerLevel: this.item.system.careerLevel,
+        careerLevel: this.item?.system?.careerLevel ?? 0,
       });
     }
     sheetData.hasCareer = careers.length > 0;
@@ -169,19 +169,19 @@ export class PendragonFamilySheet extends PendragonItemSheet {
   //Delete an item from the collection
   static async #deleteItem(event, target) {
     if (event.detail === 2) {
-      const { itemId } = target.closest("[data-item-id]")?.dataset ?? {};
+      const itemId = target.closest("[data-item-uuid]")?.dataset.itemUuid ?? "";
       const { collection } = target.closest("[data-collection]").dataset ?? {};
       const coll = this.item.system[collection] ?? [];
-      await this.item.update({ [`system.${collection}`]: coll.filter((itm) => itm.uuid != itemId) });
-
+      const changes = { [`system.${collection}`]: coll.filter((itm) => itm.uuid != itemId) };
       //If deleting career then reset level and next Promotion
       if (collection === "careers") {
-        await this.item.update({
+        Object.assign(changes, {
           "system.careerLevel": 0,
           "system.nextPromotion": 0,
           "system.yearPromoted": 0,
         });
       }
+      await this.item.update(changes);
     }
   }
 
@@ -207,11 +207,7 @@ export class PendragonFamilySheet extends PendragonItemSheet {
   //Roll a random career
   static async _onRandomCareer(_event, _target) {
     if (!this.isEditable) return;
-    const career = await PENRandomCareer.randomCareer(this.item);
-    if (career) {
-      //await this.item.update({ name });
-      console.log(career);
-    }
+    await PENRandomCareer.randomCareer(this.item);
   }
 
   /* -------------DRAG AND DROP------------------ */
@@ -291,33 +287,27 @@ export class PendragonFamilySheet extends PendragonItemSheet {
         return false;
       }
     }
-    collection.push({
-      name: newItem.name,
-      uuid: newItem.uuid,
-      pid: newItem.flags.Pendragon.pidFlag.id,
-    });
-
     if (newItem.type === "career") {
-      let yearPromoted = this.item.system.born + 14;
-      let rank = newItem.system.ranks[0];
-      let nextPromotion = 0;
-      if (rank) {
-        if (rank.ageTest != "") {
-          nextPromotion = this.item.system.born + (await new Roll(rank.ageTest).evaluate()).total;
-        } else if (rank.minYears) {
-          nextPromotion = yearPromoted + (await new Roll(rank.minYears).evaluate()).total;
-        } else if (rank.special === "swordProspects") {
-          nextPromotion = this.item.system.born + 21;
-        } else if (rank.special === "maidInWaiting") {
-          nextPromotion = this.item.system.born + (await new Roll("1D6+15").evaluate()).total;
-        }
-      }
+      const { position } = await PENRandomCareer.memberInfo(this.item);
+      const result = await PENRandomCareer.careerHistory(this.item, newItem, 0, 0, position);
+      //The history may have moved them to another career (e.g. Maiden of the Lake)
+      collection.push({
+        name: result.career.name,
+        uuid: result.career.uuid,
+        pid: result.career.flags?.Pendragon?.pidFlag?.id ?? "",
+      });
       await this.item.update({
         [`system.${collectionName}`]: collection,
-        "system.yearPromoted": yearPromoted,
-        "system.nextPromotion": nextPromotion,
+        "system.yearPromoted": result.yearPromoted,
+        "system.nextPromotion": result.nextPromotion,
+        "system.careerLevel": result.level,
       });
     } else {
+      collection.push({
+        name: newItem.name,
+        uuid: newItem.uuid,
+        pid: newItem.flags.Pendragon.pidFlag.id,
+      });
       await this.item.update({ [`system.${collectionName}`]: collection });
     }
     return true;

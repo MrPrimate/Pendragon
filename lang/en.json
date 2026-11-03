@@ -1272,6 +1272,7 @@
     "type": "Type",
 
     "update": "Update",
+    "whatCopiedClipboard": "{what} copied to clipboard",
     "UnableToCopyToClipboard": "Unable to copy to clipboard, this is likely due to your browser security settings.",
     "unarmouredMod": "Bonus D6 v No armor",
     "unconscious": "Unconscious",
@@ -1575,6 +1576,7 @@
       "documents-in-compendiums": "{count} documents in compendiums",
       "error.incorrect.type": "Tried to convert PID with non existing document type.",
       "error.duplicate": "Warning: Multiple System IDs with same priority!",
+      "error.documents-not-found": "Documents not found for PIDs ({lang}): {pids}",
       "folder": "Folder",
       "foundry-id": "Foundry ID",
       "foundry-uuid": "Foundry UUID",
@@ -1764,8 +1766,10 @@
         "rt..table-d-3-amble-breeding-moderate-fine": "NHB-Table D.3: Ambler Breeding Outcomes (Moderate Ambler Stallion, Fine Ambler Mare)",
         "rt..table-d-3-amble-breeding-fine-fine": "NHB-Table D.3: Ambler Breeding Outcomes (Fine Ambler Stallion, Fine Ambler Mare)"
       },
+      "lang": "Lang",
       "language": "Language",
       "link": "Link",
+      "loading": "Loading Matching Items",
       "new": "- Custom System ID - ",
       "noPID": "{type} document requires a PID",
       "noPIDFlag": "Can't add {itemName} as it does not have a PID",

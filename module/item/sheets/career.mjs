@@ -251,7 +251,7 @@ export class PendragonCareerSheet extends PendragonItemSheet {
       promotion = "age";
     } else if (usage.noPromotion) {
       promotion = "none";
-    } else if (usage.special != "none" || usage.special != "") {
+    } else if (usage.special != "none" && usage.special != "") {
       promotion = usage.special;
     }
     let newRank = {

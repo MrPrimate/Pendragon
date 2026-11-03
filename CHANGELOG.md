@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Careers (MrPrimate/Dangermouse)
+
+- Careers for family members added as an Item.
+- Can be dropped on to Family members or rolled randomly
+- TODO: Only works for Piblings, need to extend to Siblings, children, grandchildren
+- TODO: Add as a step in Character Creation
+- TODO: Add improvement rolls in Winterphase
+
 ### Misc
 
 - PID Flag code updated to v14. Objects in world and compendia are treated equally - so highest priority irrespective of where they are(JamesB)

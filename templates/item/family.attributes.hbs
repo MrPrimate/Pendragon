@@ -75,7 +75,7 @@
     <div class="horizontalboxed" style="min-height: 20px;" data-collection = "careers">
       <ol class="item-list">
         {{#each careers as |career|}}
-          <li class="item flexrow" data-item-id="{{career.careerUuid}}" >
+          <li class="item flexrow" data-item-id="{{career.careerUuid}}" data-item-uuid="{{career.uuid}}">
             <div class="item-name flexrow">
               {{#if career.valid}}
                 <div class="stat-name"><span class="bold">{{career.name}}</span>:  {{career.careerTitle}}</div>

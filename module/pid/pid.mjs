@@ -27,7 +27,7 @@ export class PID {
    * @returns {RegExp}
    */
   static #regExKey() {
-    return new RegExp("^(" + Object.keys(PID.#gamePropertyLookup).join("|") + ")-(.*?)-(.+)$");
+    return new RegExp("^(" + Object.keys(PID.#gamePropertyLookup).join("|") + ")\\.(.*?)\\.(.+)$");
   }
 
   /**
@@ -161,15 +161,15 @@ export class PID {
       const row = [];
       for (const s in splits[t]) {
         if (splits[t][s].length > 1) {
-          row.push(s + "." + "(" + splits[t][s].join("|") + ")");
+          row.push(s + "\\." + "(" + splits[t][s].join("|") + ")");
         } else {
-          row.push(s + "." + splits[t][s].join(""));
+          row.push(s + "\\." + splits[t][s].join(""));
         }
       }
       if (row.length > 1) {
-        regExParts.push(t + "." + "(" + row.join("|") + ")");
+        regExParts.push(t + "\\." + "(" + row.join("|") + ")");
       } else {
-        regExParts.push(t + "." + row.join(""));
+        regExParts.push(t + "\\." + row.join(""));
       }
     }
     if (regExParts.length > 1) {
