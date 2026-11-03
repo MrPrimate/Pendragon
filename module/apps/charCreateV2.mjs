@@ -7,6 +7,7 @@ import { ItemsSelectDialog } from "./item-selection.mjs";
 import { PassionsSelectDialog } from "./passion-selection.mjs";
 import { PENCheck } from "./checks.mjs";
 import { PENCreateFamily } from "./createFamily.mjs";
+import { PENRandomCareer } from "./random-career.mjs";
 
 export class PENCharCreateV2 {
   //Toggle Creation Phase On/Off
@@ -96,6 +97,9 @@ export class PENCharCreateV2 {
         break;
       case "addFamily":
         await this.stepFamily(actor, step, undo);
+        break;
+      case "addFamilyCareers":
+        await this.stepFamilyCareers(actor, step, undo);
         break;
     }
     return;
@@ -2432,6 +2436,42 @@ export class PENCharCreateV2 {
       ui.notifications.warn(actor.name + ": " + game.i18n.localize("PEN.create." + step));
     }
     return;
+  }
+
+  //----------------------------------------------FAMILY CAREERS--------------------------------------
+  //
+  //
+  static async stepFamilyCareers(actor, step, undo) {
+    //Remove Family Careers
+    if (undo) {
+      await this.deleteFamilyCareers(actor);
+      ui.notifications.warn(actor.name + ": " + game.i18n.localize("PEN.undo." + step));
+    } else {
+      let results = await PENRandomCareer.randomCareer(actor);
+      console.log(results);
+      if (!results) {
+        return;
+      }
+      ui.notifications.warn(actor.name + ": " + game.i18n.localize("PEN.create." + step));
+    }
+    return;
+  }
+
+  static async deleteFamilyCareers(actor) {
+    let family = actor.items
+      .filter((itm) => itm.type === "family")
+      .filter((itm) => itm.system.careers.length > 0)
+      .map((itm) => {
+        return {
+          _id: itm.id,
+          "system.careers": [],
+          "system.careerLevel": 0,
+          "system.yearPromoted": 0,
+          "system.profession": "",
+          "system.nextPromotion": 0,
+        };
+      });
+    await Item.updateDocuments(family, { parent: actor });
   }
 
   //----------------------------------------------UTILITIES----------------------------------------------

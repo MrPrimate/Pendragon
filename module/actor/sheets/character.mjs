@@ -270,6 +270,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     context.hasTraits = false;
     context.hasParentPassion = this.actor.system.create.parentPassion;
     context.hasFamilyMembers = this._hasFamilyMembers(this.actor);
+    context.hasFamilyCareers = this._hasFamilyCareers(this.actor);
     context.hasPSP = false;
     context.hasEquip = false;
     context.hasLuck = false;
@@ -508,6 +509,25 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
         weapons.push(i);
       } else if (i.type === "family") {
         i.system.typeName = game.i18n.localize("PEN.familyRelationship." + i.system.relation);
+        if (i.system.careers.length > 0) {
+          let thisCareer = (await game.system.api.pid.fromPIDBest({ pid: i.system.careers[0].pid }))[0];
+          if (!thisCareer) {
+            thisCareer = await fromUuid(i.system.careers[0].uuid);
+          }
+          //If no hit on PID then use UUID
+          i.system.careerName =
+            (i.system?.careers[0]?.name ?? "") +
+            " [" +
+            game.i18n.localize("PEN.level") +
+            " " +
+            i.system.careerLevel +
+            "]";
+          i.system.careerLabel =
+            thisCareer?.system?.ranks[i.system.careerLevel]?.title ?? game.i18n.localize("PEN.invalid");
+        } else {
+          i.system.careerName = "";
+          i.system.careerLabel = "";
+        }
         families.push(i);
       } else if (i.type === "ideal") {
         ideals.push(i);
@@ -737,6 +757,13 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
   _hasFamilyMembers(actor) {
     // Returns true if actor has a family item with source of "createFamily"
     return actor.items.some((itm) => itm.type === "family" && itm.system.source === "createFamily");
+  }
+
+  _hasFamilyCareers(actor) {
+    // Returns true if actor has a family item with source of "createFamily" and has at least one career
+    return actor.items.some(
+      (itm) => itm.type === "family" && itm.system.source === "createFamily" && itm.system.careers.length > 0,
+    );
   }
 
   /* --------------------------------ACTIONS--------------------- */
