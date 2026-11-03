@@ -172,16 +172,16 @@ export class PendragonFamilySheet extends PendragonItemSheet {
       const itemId = target.closest("[data-item-uuid]")?.dataset.itemUuid ?? "";
       const { collection } = target.closest("[data-collection]").dataset ?? {};
       const coll = this.item.system[collection] ?? [];
-      await this.item.update({ [`system.${collection}`]: coll.filter((itm) => itm.uuid != itemId) });
-
+      const changes = { [`system.${collection}`]: coll.filter((itm) => itm.uuid != itemId) };
       //If deleting career then reset level and next Promotion
       if (collection === "careers") {
-        await this.item.update({
+        Object.assign(changes, {
           "system.careerLevel": 0,
           "system.nextPromotion": 0,
           "system.yearPromoted": 0,
         });
       }
+      await this.item.update(changes);
     }
   }
 
@@ -207,11 +207,7 @@ export class PendragonFamilySheet extends PendragonItemSheet {
   //Roll a random career
   static async _onRandomCareer(_event, _target) {
     if (!this.isEditable) return;
-    const career = await PENRandomCareer.randomCareer(this.item);
-    if (career) {
-      //await this.item.update({ name });
-      console.log(career);
-    }
+    await PENRandomCareer.randomCareer(this.item);
   }
 
   /* -------------DRAG AND DROP------------------ */
@@ -291,14 +287,15 @@ export class PendragonFamilySheet extends PendragonItemSheet {
         return false;
       }
     }
-    collection.push({
-      name: newItem.name,
-      uuid: newItem.uuid,
-      pid: newItem.flags.Pendragon.pidFlag.id,
-    });
-
     if (newItem.type === "career") {
-      const result = await PENRandomCareer.careerHistory(this.item, newItem, 0, 0);
+      const { position } = await PENRandomCareer.memberInfo(this.item);
+      const result = await PENRandomCareer.careerHistory(this.item, newItem, 0, 0, position);
+      //The history may have moved them to another career (e.g. Maiden of the Lake)
+      collection.push({
+        name: result.career.name,
+        uuid: result.career.uuid,
+        pid: result.career.flags?.Pendragon?.pidFlag?.id ?? "",
+      });
       await this.item.update({
         [`system.${collectionName}`]: collection,
         "system.yearPromoted": result.yearPromoted,
@@ -306,6 +303,11 @@ export class PendragonFamilySheet extends PendragonItemSheet {
         "system.careerLevel": result.level,
       });
     } else {
+      collection.push({
+        name: newItem.name,
+        uuid: newItem.uuid,
+        pid: newItem.flags.Pendragon.pidFlag.id,
+      });
       await this.item.update({ [`system.${collectionName}`]: collection });
     }
     return true;

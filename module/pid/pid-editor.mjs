@@ -162,7 +162,7 @@ export class PIDEditor extends HandlebarsApplicationMixin(DocumentSheetV2) {
   async _onRender(context, options) {
     await super._onRender(context, options);
 
-    this.element.querySelector("input[name=_existing")?.addEventListener("change", (event) => {
+    this.element.querySelector("input[name=_existing]")?.addEventListener("change", (event) => {
       let value = event.target.value;
       const prefix = event.target.dataset.prefix;
       if (value !== "") {
@@ -198,7 +198,6 @@ export class PIDEditor extends HandlebarsApplicationMixin(DocumentSheetV2) {
   static async guessID(event, target) {
     event.preventDefault();
     const value = target.dataset.guess;
-    console.log(value);
     if (value) {
       const element = this.element.querySelector("input[name=id]");
       element.value = value;
@@ -232,7 +231,6 @@ export class PIDEditor extends HandlebarsApplicationMixin(DocumentSheetV2) {
           warnDuplicatePriority = true;
         }
         const folders = [];
-        console.log(d);
         let e = d?.folder;
         while (e?.name) {
           folders.unshift(e?.name);
@@ -268,7 +266,6 @@ export class PIDEditor extends HandlebarsApplicationMixin(DocumentSheetV2) {
    * @param {FormDataExtended} formData
    */
   static async #onSubmit(event, form, formData) {
-    console.log(formData);
     if (!this.isEditable) return;
     const submitData = this._processFormData(event, form, formData);
     const changes = {
@@ -276,7 +273,7 @@ export class PIDEditor extends HandlebarsApplicationMixin(DocumentSheetV2) {
       "flags.Pendragon.pidFlag.lang": submitData.lang || game.i18n.lang,
       "flags.Pendragon.pidFlag.priority": submitData.priority || 0,
     };
-    const html = this.document.sheet.element.querySelector("header.window-header [data-action='pid']");
+    const html = this.document.sheet?.element?.querySelector("header.window-header [data-action='pid']");
     if (html) {
       if (changes["flags.Pendragon.pidFlag.id"].length) {
         html.classList.remove("invalid-pid");

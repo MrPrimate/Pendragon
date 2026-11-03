@@ -286,7 +286,6 @@ export class PENUtilities {
     if (["male", "female"].includes(type)) return type;
     const roll = await new Roll("1D2").evaluate();
     return roll.total === 2 ? "female" : "male";
-    return null;
   }
 
   //Recognised genders use the standard label (e.g. "male" -> "Male"), anything else is kept as entered
