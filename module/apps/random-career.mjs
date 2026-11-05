@@ -347,31 +347,21 @@ export class PENRandomCareer {
         const posIndex = group.findIndex((itm) => itm.id === member.id) + 1;
         return posIndex + (member.system.maternal ? 0 : 1);
       }
-      //Order family group by martial status (martial first) then birth year (oldest first)
       case "brother":
       case "sister":
       case "sibling": {
-        //Sort group by age
-        const byAge = [...group].sort((a, b) => a.system.born - b.system.born);
-        const spare = byAge[0] || null;
-        const prayer = byAge[1] || null;
-
-        const martial = (itm) => (family.martials.get(itm.id) === "martial" ? 0 : 1);
-        const sorted = [...group].sort((a, b) => martial(a) - martial(b) || a.system.born - b.system.born);
-
-        const moveTo = (arr, id, targetIndex) => {
-          const idx = arr.findIndex((itm) => itm.id === id);
-          if (idx !== -1) {
-            const [el] = arr.splice(idx, 1);
-            arr.splice(targetIndex, 0, el);
-          }
-        };
-
-        if (spare) moveTo(sorted, spare.id, 0);
-        if (prayer) moveTo(sorted, prayer.id, 1);
-
-        //Add 1 to position for index starting at 0, and one for parent being the heir
-        return sorted.findIndex((itm) => itm.id === member.id) + 2;
+        //The character is the heir (1).
+        //The eldest martial sibling is the spare (2),
+        //and the eldest non-martial sibling is the prayer (3), whether brother or sister.
+        //The rest follow in birth order (4+)
+        group.sort((a, b) => a.system.born - b.system.born);
+        const isMartial = (itm) => family.martials.get(itm.id) === "martial";
+        const spare = group.find(isMartial);
+        const prayer = group.find((itm) => !isMartial(itm));
+        if (spare?.id === member.id) return 2;
+        if (prayer?.id === member.id) return 3;
+        const rest = group.filter((itm) => itm.id !== spare?.id && itm.id !== prayer?.id);
+        return rest.findIndex((itm) => itm.id === member.id) + 4;
       }
       default:
         return null;
@@ -409,7 +399,8 @@ export class PENRandomCareer {
   //Resolve which table to use for Siblings
   static resolveSiblingTable(doc, { gender, martial, position, religion }) {
     const religionPID = religion?.flags?.Pendragon?.pidFlag?.id;
-    //Position 2 is the "spare"
+    //Position 2 is the "spare" (Squire on the Path of the Sword), position 3 the "prayer"
+    //Female prayers use the women's tables (e.g. Path of the Nun for Christians)
     if (position === 2) {
       return this.careerTables.heir;
     } else if (position === 3 && gender === "male" && religionPID === "i.religion.pagan") {
