@@ -299,23 +299,4 @@ export class PENUtilities {
     const roll = await new Roll("1D20").evaluate();
     return roll.total >= target ? "martial" : "nonMartial";
   }
-
-  static async resolveRelationMartialStatus(relation, gender, fallback) {
-    const female = ["aunt", "mother", "sister", "grandmother", "daughter", "granddaughter"];
-    const male = ["uncle", "father", "brother", "grandfather", "son", "grandson"];
-
-    // Direct male & female relations
-    if (male.includes(relation)) return await this.decideMartial(11);
-    if (female.includes(relation)) return await this.decideMartial(20);
-
-    // Gender-based fallback
-    const type = this.genderType(gender) || fallback;
-    if (type === "male") return await this.decideMartial(11);
-    if (type === "female") return await this.decideMartial(11);
-
-    // Default random choice
-    const roll = await new Roll("1D2").evaluate();
-    if (roll.total === 1) return await this.decideMartial(11); //Male child
-    return await this.decideMartial(20);
-  }
 }

@@ -300,17 +300,19 @@ export class PENRandomCareer {
   }
 
   //Resolve Family & establish gender
-  //Returns { items, genders } where genders is a Map of item id to "male" / "female"
+  //Returns { items, genders, martials } where genders is a Map of item id to "male" / "female"
+  //and martials a Map of item id to "martial" / "nonMartial" (rolled fresh on every call)
   static async resolveFamily(actor) {
     const items = actor.items.filter((itm) => itm.type === "family");
     const genders = new Map();
     const martials = new Map();
     for (let member of items) {
-      genders.set(member.id, await PENUtilities.resolveRelationGender(member.system.gender, member.system.relation));
-      martials.set(
-        member.id,
-        await PENUtilities.resolveRelationMartialStatus(member.system.gender, member.system.relation),
-      );
+      const gender = await PENUtilities.resolveRelationGender(member.system.gender, member.system.relation);
+      genders.set(member.id, gender);
+      //Sisters are martial on a 20 on 1D20 (NHB Professions for Siblings)
+      //The book gives no odds for brothers, so 50:50 (11+) is assumed until Chaosium confirms
+      const martial = await PENUtilities.decideMartial(gender === "female" ? 20 : 11);
+      martials.set(member.id, martial);
     }
     return { items, genders, martials };
   }
