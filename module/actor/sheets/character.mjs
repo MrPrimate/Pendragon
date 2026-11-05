@@ -420,6 +420,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     const armours = [];
     const weapons = [];
     const families = [];
+    const careerCache = new Map();
     const household = [];
     const followers = [];
 
@@ -510,11 +511,14 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
       } else if (i.type === "family") {
         i.system.typeName = game.i18n.localize("PEN.familyRelationship." + i.system.relation);
         if (i.system.careers.length > 0) {
-          let thisCareer = (await game.system.api.pid.fromPIDBest({ pid: i.system.careers[0].pid }))[0];
-          if (!thisCareer) {
-            thisCareer = await fromUuid(i.system.careers[0].uuid);
+          const { pid, uuid } = i.system.careers[0];
+          //Several family members often share a career, so look each one up once per render
+          if (!careerCache.has(pid + uuid)) {
+            //If no hit on PID then use UUID
+            const found = (await game.system.api.pid.fromPIDBest({ pid }))[0] ?? (await fromUuid(uuid));
+            careerCache.set(pid + uuid, found);
           }
-          //If no hit on PID then use UUID
+          const thisCareer = careerCache.get(pid + uuid);
           i.system.careerName =
             (i.system?.careers[0]?.name ?? "") +
             " [" +

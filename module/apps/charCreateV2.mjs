@@ -2448,8 +2448,8 @@ export class PENCharCreateV2 {
       ui.notifications.warn(actor.name + ": " + game.i18n.localize("PEN.undo." + step));
     } else {
       let results = await PENRandomCareer.randomCareer(actor);
-      console.log(results);
-      if (!results) {
+      //Nothing was added (no one eligible, or every roll mismatched)
+      if (!results?.length) {
         return;
       }
       ui.notifications.warn(actor.name + ": " + game.i18n.localize("PEN.create." + step));
