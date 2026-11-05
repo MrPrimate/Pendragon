@@ -6,13 +6,13 @@
 
 - Careers for family members added as an Item.
 - Can be dropped on to Family members or rolled randomly
-- TODO: Only works for Piblings, need to extend to Siblings, children, grandchildren
-- TODO: Add as a step in Character Creation
+- Rolling Random Careers works for Piblings (Aunts/Uncles) and Siblings (Brothers/Sisters)
+- There is an extra step at the end of Character Creation to roll for Careers
 - TODO: Add improvement rolls in Winterphase
 
 ### Misc
 
-- PID Flag code updated to v14. Objects in world and compendia are treated equally - so highest priority irrespective of where they are(JamesB)
+- PID Flag code updated to v14. Objects in world and compendia are treated equally - so highest priority irrespective of where they are(JamesB & Mr Primate)
 
 ## 14.25
 

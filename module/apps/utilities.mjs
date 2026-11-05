@@ -294,4 +294,9 @@ export class PENUtilities {
     if (!type) return (text ?? "").trim();
     return game.i18n.localize(type === "female" ? "PEN.female" : "PEN.male");
   }
+
+  static async decideMartial(target) {
+    const roll = await new Roll("1D20").evaluate();
+    return roll.total >= target ? "martial" : "nonMartial";
+  }
 }

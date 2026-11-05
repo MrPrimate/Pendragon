@@ -12,11 +12,14 @@ export class PENRandomCareer {
     martial: "rt..table-2-9-sibling-profession-martial",
     nonMartial: "rt..table-2-9-sibling-profession-nonmartial",
     heir: "rt..table-2-9-sibling-heir-profession", //Heir and spare
-    prayerPagan: "rt..table-2-9-sibling-prayer-profession-pagan",
-    prayerChristian: "rt..table-2-9-sibling-prayer-profession-christian",
+    prayerPaganMen: "rt..table-2-9-sibling-prayer-profession-pagan-men",
+    prayerPaganWomen: "rt..table-2-9-sibling-prayer-profession-pagan-women",
+    prayerChristianMen: "rt..table-2-9-sibling-prayer-profession-christian-men",
+    prayerChristianWomen: "rt..table-2-9-sibling-prayer-profession-christian-women",
   };
 
   static PIBLINGS = ["pibling", "aunt", "uncle"];
+  static SIBLINGS = ["sibling", "brother", "sister"];
 
   static async randomCareer(doc) {
     let updates = [];
@@ -28,14 +31,16 @@ export class PENRandomCareer {
     this.careerTables = await this.getCareerTables();
     if (!this.careerTables) return null;
 
-    //Family list is used for the gender and position of each person tested
+    //Family list is used for the gender, martial status and position of each person tested
     const family = await this.resolveFamily(actor);
-
     //If handin doc is a character we are rolling on all the family who don't have a career yet
     if (doc instanceof Actor && doc.type === "character") {
-      //TODO: Only works for Piblings, need to extend to Siblings, children, grandchildren
+      //TODO: Only works for Piblings & Siblings, need to extend to children, grandchildren
       members = family.items.filter(
-        (itm) => this.PIBLINGS.includes(itm.system.relation) && itm.system.age >= 14 && !itm.system.careers.length,
+        (itm) =>
+          (this.PIBLINGS.includes(itm.system.relation) || this.SIBLINGS.includes(itm.system.relation)) &&
+          itm.system.age >= 14 &&
+          !itm.system.careers.length,
       );
       //Else if doc is a family item roll on just this member
     } else if (doc instanceof Item && doc.type === "family") {
@@ -57,6 +62,7 @@ export class PENRandomCareer {
     for (let member of members) {
       const info = {
         gender: family.genders.get(member.id),
+        martial: family.martials.get(member.id),
         position: this.resolvePosition(member, family),
         religion,
       };
@@ -115,6 +121,12 @@ export class PENRandomCareer {
           }
           break;
         }
+        case "brother":
+        case "sister":
+        case "sibling": {
+          table = this.resolveSiblingTable(doc, info);
+          break;
+        }
         default:
           return null;
       }
@@ -158,19 +170,15 @@ export class PENRandomCareer {
         level = match ? Number(match[1]) : 0;
       } else if (result.type === "document") {
         const career = await fromUuid(result.documentUuid);
-        if (career?.type === "career") careerItem = career;
+        if (career?.type != "career") continue;
+        const careerGender = career.system.gender;
+        const careerReligion = career.system.religions[0]?.pid ?? "";
+        if (["male", "female"].includes(careerGender) && gender != careerGender) continue;
+        if (careerReligion != "" && careerReligion != religion?.flags?.Pendragon?.pidFlag?.id) continue;
+        careerItem = career;
       }
     }
     if (!careerItem) return null;
-    //Check that the career requirements match the family member (e.g. Religion and Gender)
-    const careerGender = careerItem.system.gender;
-    const careerReligion = careerItem.system.religions[0]?.pid ?? "";
-    if (["male", "female"].includes(careerGender) && gender != careerGender) {
-      return null;
-    }
-    if (careerReligion != "" && careerReligion != religion?.flags?.Pendragon?.pidFlag?.id) {
-      return null;
-    }
     return { level, careerItem };
   }
 
@@ -292,14 +300,21 @@ export class PENRandomCareer {
   }
 
   //Resolve Family & establish gender
-  //Returns { items, genders } where genders is a Map of item id to "male" / "female"
+  //Returns { items, genders, martials } where genders is a Map of item id to "male" / "female"
+  //and martials a Map of item id to "martial" / "nonMartial" (rolled fresh on every call)
   static async resolveFamily(actor) {
     const items = actor.items.filter((itm) => itm.type === "family");
     const genders = new Map();
+    const martials = new Map();
     for (let member of items) {
-      genders.set(member.id, await PENUtilities.resolveRelationGender(member.system.gender, member.system.relation));
+      const gender = await PENUtilities.resolveRelationGender(member.system.gender, member.system.relation);
+      genders.set(member.id, gender);
+      //Sisters are martial on a 20 on 1D20 (NHB Professions for Siblings)
+      //The book gives no odds for brothers, so 50:50 (11+) is assumed until Chaosium confirms
+      const martial = await PENUtilities.decideMartial(gender === "female" ? 20 : 11);
+      martials.set(member.id, martial);
     }
-    return { items, genders };
+    return { items, genders, martials };
   }
 
   //Gender and family position for one member, for use outside randomCareer (e.g. dropping a career)
@@ -320,7 +335,6 @@ export class PENRandomCareer {
     let group = family.items.filter(
       (itm) => relationGroup.includes(itm.system.relation) && itm.system.maternal === member.system.maternal,
     );
-
     switch (member.system.relation) {
       case "uncle":
       case "aunt":
@@ -329,9 +343,25 @@ export class PENRandomCareer {
         //Age is not used as it stops increasing for the dead
         const male = (itm) => (family.genders.get(itm.id) === "male" ? 0 : 1);
         group.sort((a, b) => male(a) - male(b) || a.system.born - b.system.born);
-        //Add 2 to position, one for index starting at 0, one for parent being the heir and not in list
-        //TODO: Check the rule for the maternal side, where the mother is not the heir
-        return group.findIndex((itm) => itm.id === member.id) + 2;
+        //Add 1 to position for index starting at 0, and one for parent being the heir if on paternal side
+        const posIndex = group.findIndex((itm) => itm.id === member.id) + 1;
+        return posIndex + (member.system.maternal ? 0 : 1);
+      }
+      case "brother":
+      case "sister":
+      case "sibling": {
+        //The character is the heir (1).
+        //The eldest martial sibling is the spare (2),
+        //and the eldest non-martial sibling is the prayer (3), whether brother or sister.
+        //The rest follow in birth order (4+)
+        group.sort((a, b) => a.system.born - b.system.born);
+        const isMartial = (itm) => family.martials.get(itm.id) === "martial";
+        const spare = group.find(isMartial);
+        const prayer = group.find((itm) => !isMartial(itm));
+        if (spare?.id === member.id) return 2;
+        if (prayer?.id === member.id) return 3;
+        const rest = group.filter((itm) => itm.id !== spare?.id && itm.id !== prayer?.id);
+        return rest.findIndex((itm) => itm.id === member.id) + 4;
       }
       default:
         return null;
@@ -356,13 +386,35 @@ export class PENRandomCareer {
     if (position === 2 && gender === "male") {
       return this.careerTables.heir;
     } else if (position === 3 && gender === "male" && religionPID === "i.religion.pagan") {
-      return this.careerTables.prayerPagan;
+      return this.careerTables.prayerPaganMen;
     } else if (position === 3 && gender === "male" && religionPID === "i.religion.christian") {
-      return this.careerTables.prayerChristian;
+      return this.careerTables.prayerChristianMen;
     } else if (gender === "male") {
       return this.careerTables.uncle;
     } else {
       return this.careerTables.aunt;
+    }
+  }
+
+  //Resolve which table to use for Siblings
+  static resolveSiblingTable(doc, { gender, martial, position, religion }) {
+    const religionPID = religion?.flags?.Pendragon?.pidFlag?.id;
+    //Position 2 is the "spare" (Squire on the Path of the Sword), position 3 the "prayer"
+    //Female prayers use the women's tables (e.g. Path of the Nun for Christians)
+    if (position === 2) {
+      return this.careerTables.heir;
+    } else if (position === 3 && gender === "male" && religionPID === "i.religion.pagan") {
+      return this.careerTables.prayerPaganMen;
+    } else if (position === 3 && gender === "male" && religionPID === "i.religion.christian") {
+      return this.careerTables.prayerChristianMen;
+    } else if (position === 3 && gender === "female" && religionPID === "i.religion.pagan") {
+      return this.careerTables.prayerPaganWomen;
+    } else if (position === 3 && gender === "female" && religionPID === "i.religion.christian") {
+      return this.careerTables.prayerChristianWomen;
+    } else if (martial === "martial") {
+      return this.careerTables.martial;
+    } else {
+      return this.careerTables.nonMartial;
     }
   }
 }
