@@ -381,12 +381,12 @@ export class PENRandomCareer {
   }
 
   //Resolve which table to use for Piblings
-  static resolvePiblingTable(doc, { gender, martial, position, religion }) {
+  static resolvePiblingTable(doc, { gender, position, religion }) {
     const religionPID = religion?.flags?.Pendragon?.pidFlag?.id;
     if (position === 2 && gender === "male") {
       return this.careerTables.heir;
     } else if (position === 3 && gender === "male" && religionPID === "i.religion.pagan") {
-      return this.careerTables.Men;
+      return this.careerTables.prayerPaganMen;
     } else if (position === 3 && gender === "male" && religionPID === "i.religion.christian") {
       return this.careerTables.prayerChristianMen;
     } else if (gender === "male") {
