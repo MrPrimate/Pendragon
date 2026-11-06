@@ -6,6 +6,7 @@ import { PENCheck } from "../apps/checks.mjs";
 import { PENCharCreateV2 } from "./charCreateV2.mjs";
 import { SkillTrainingDialog } from "./skill-training-selection.mjs";
 import { PENRandomName } from "./random-name.mjs";
+import { PENRandomCareer } from "./random-career.mjs";
 import PENDialog from "../setup/pen-dialog.mjs";
 
 export class PENWinter {
@@ -2242,5 +2243,80 @@ export class PENWinter {
     if (!table) return null;
     let rollResults = await PENUtilities.tableDiceRoll(table)
     return rollResults.results[0].description ?? null
+  }
+
+
+  //Family Careers
+  static async familyCareers(actor) {
+    if (!actor.system.status.familycareers) {
+      return;
+    }
+    //Add careers where missing
+    await PENRandomCareer.randomCareer(actor, true)
+
+    //Check for automatic promotions or 1D20 roll
+    const careerCache = new Map();
+        let family = await actor.items.filter((itm)=>itm.type==='family')
+      .filter((itm)=>(!itm.system.died || itm.system.died === "0"))
+      .filter((itm)=> (itm.system.careers.length))
+
+    let updates = []
+    let msgString = "<h5>" + game.i18n.localize('PEN.familyPromotions') + " (" + game.time.components.year + ")</h5>"
+    let rolledId = "";
+    let roll = await PENUtilities.simpleDiceRoll("1D20");
+    if (roll <= family.length) rolledId = family[roll - 1].id
+    console.log(roll, rolledId)
+    for (let member of family) {
+      let careers=[]
+      const { pid, uuid } = member.system.careers[0];
+      //Several family members often share a career, so look each one up once per render
+        if (!careerCache.has(pid + uuid)) {
+            //If no hit on PID then use UUID
+            const found = (await game.system.api.pid.fromPIDBest({ pid }))[0] ?? (await fromUuid(uuid));
+            careerCache.set(pid + uuid, found);
+          }
+        const thisCareer = careerCache.get(pid + uuid);
+        const state = { career: thisCareer, level: member.system.careerLevel, promotions: 0, yearPromoted: member.system.yearPromoted, nextPromotion: member.system.nextPromotion };
+        const ranks = state.career.system.ranks;
+        const rank = ranks[state.level];
+        const autoPromotion = (await PENRandomCareer.isAutoPromotion(rank))
+        const makePromotion = (autoPromotion || member.id === rolledId) && state.nextPromotion <= game.time.components.year
+        const oldCareer = state.career.uuid
+        const oldRank = state.level
+        if (makePromotion) {
+        console.log(member.name, member.id === rolledId, state.nextPromotion)
+          await PENRandomCareer.careerYear(member, state, game.time.components.year, makePromotion);
+          careers.push({
+            name: state.career.name,
+            pid: state.career.flags?.Pendragon?.pidFlag?.id,
+            uuid: state.career.uuid,
+          });
+          if( oldCareer != state.career.uuid || oldRank != state.level) {
+            updates.push({
+              _id: member.id,
+              "system.careerLevel": state.level,
+              "system.careers": careers,
+              "system.yearPromoted": state.yearPromoted,
+              "system.nextPromotion": state.nextPromotion,
+            })
+            if (member.id === rolledId) {
+              msgString += `<div><strong>${member.name}</strong> ${state.career.name}: ` + game.i18n.localize('PEN.level') + ` ${state.level} [${roll})]</div>`;
+            } else {
+              msgString += `<div><strong>${member.name}</strong> ${state.career.name}: ` + game.i18n.localize('PEN.level') + ` ${state.level}</div>`;
+            }
+          }
+        }
+    }
+    if (updates.length === 0) msgString += "<div>" + game.i18n.localize('PEN.none') + "</div>"
+    //Create Chat Message for Family Deaths
+    await ChatMessage.create({
+      content: msgString,
+      speaker: ChatMessage.getSpeaker({ actor }),
+    });
+
+    if (updates.length>0) {
+      await actor.updateEmbeddedDocuments("Item", updates)
+      await actor.update({ "system.status.familycareers": false });
+    }
   }
 }
