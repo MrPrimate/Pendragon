@@ -60,6 +60,7 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
       prestigePassion: this._prestigePassion,
       childbirth: this._childbirth,
       familysurvival: this._familysurvival,
+      familycareers: this._familycareers,
       passiveGlory: this._passiveGlory,
       switchSheet: this._onSwitchSheet,
       toggleHorse: this._toggleHorse,
@@ -1040,6 +1041,11 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
   //Family Survival
   static async _familysurvival(event, target) {
     await PENWinter.familysurvival(this.actor);
+  }
+
+  //Family Careers
+  static async _familycareers(event, target) {
+    await PENWinter.familyCareers(this.actor);
   }
 
   static async _passiveGlory(event, target) {

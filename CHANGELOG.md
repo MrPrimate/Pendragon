@@ -12,7 +12,8 @@
 ### WinterPhase (MrPrimate/Dangermouse)
 - Childbirth & child survival rolls re-labelled in Winterphase
 - Extended family survival rolls added (Family Record)
-- TODO: Add career improvement rolls in Winterphase
+- Family career in Winterphase will add careers for those 14+ without a career (Piblings, Siblings and Children only)
+- Also make career improvement checks and rolls in Winterphase
 - TODO: Extended Family Childbirth, Marriages & Random Events
 
 ### Misc
