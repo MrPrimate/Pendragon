@@ -58,7 +58,8 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
       prestigeCheck: this._prestigeCheck,
       prestigeSkill: this._prestigeSkill,
       prestigePassion: this._prestigePassion,
-      familyRoll: this._familyRoll,
+      childbirth: this._childbirth,
+      familysurvival: this._familysurvival,
       passiveGlory: this._passiveGlory,
       switchSheet: this._onSwitchSheet,
       toggleHorse: this._toggleHorse,
@@ -1031,9 +1032,14 @@ export class PendragonCharacterSheet extends PendragonActorSheet {
     await PENWinter.winterImproveSkill(this.actor, "prestige");
   }
 
-  //Family Roll
-  static async _familyRoll(event, target) {
-    await PENWinter.familyRoll(this.actor);
+  //Childbirth Roll
+  static async _childbirth(event, target) {
+    await PENWinter.childbirth(this.actor);
+  }
+
+  //Family Survival
+  static async _familysurvival(event, target) {
+    await PENWinter.familysurvival(this.actor);
   }
 
   static async _passiveGlory(event, target) {

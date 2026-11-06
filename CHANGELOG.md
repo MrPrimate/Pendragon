@@ -8,7 +8,12 @@
 - Can be dropped on to Family members or rolled randomly
 - Rolling Random Careers works for Piblings (Aunts/Uncles) and Siblings (Brothers/Sisters)
 - There is an extra step at the end of Character Creation to roll for Careers
-- TODO: Add improvement rolls in Winterphase
+
+### WinterPhase (MrPrimate/Dangermouse)
+- Childbirth & child survival rolls re-labelled in Winterphase
+- Extended family survival rolls added (Family Record)
+- TODO: Add career improvement rolls in Winterphase
+- TODO: Extended Family Childbirth, Marriages & Random Events
 
 ### Misc
 

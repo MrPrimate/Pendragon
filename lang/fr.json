@@ -220,6 +220,7 @@
     "checkType": "Type de jets",
     "child": "Enfant",
     "childBirth": "Naissance",
+    "childBirthSurvive": "Accouchement et survie",
     "childGender": "Choisir le Genre de l'enfant",
     "childLastYear": "A eu un enfant l'an dernier",
     "childSurvival": "Survie de la Famille",
@@ -437,6 +438,7 @@
 
     "fall": "Chute",
     "family": "Famille",
+    "familyCareers": "Carrières familiales",
     "familyChar": "Caractéristique familiale",
     "familyCharHint": "Nom de la caractéristique familiale associée à cette compétence",
     "familyCreate": {
@@ -489,7 +491,9 @@
       "keep": "Garder neutre",
       "random": "Choisir au hasard"
     },
+    "familyDeaths": "Décès dans la famille",
     "familyRolls": "Lancés familiaux",
+    "familySurvival": "Survie en famille",
     "famous": "Célèbre",
     "favour": "Faveur",
     "favourLevel": "Niveau de Faveur",
@@ -1465,6 +1469,8 @@
       "diceOptionsHint": "Changer les paramètres pour les lancers de dés",
       "displayOptions": "Options d’affichage",
       "displayOptionsHint": "Afficher les paramètres d’affichage de Pendragon",
+      "familyDecrepitude": "Détérioration de la famille",
+      "familyDecrepitudeHint": "Lance les dés pour la mort d'un membre de la famille à cause de la vieillesse",
       "familyOptions": "Options pour la famille",
       "familyOptionsHint": "Changer les options de création de famille aléatoire",
       "fumbleXP": "Fumble XP",

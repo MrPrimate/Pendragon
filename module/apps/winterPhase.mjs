@@ -3,12 +3,19 @@ import { TraitsSelectDialog } from "./trait-selection.mjs";
 import { PassionsSelectDialog } from "./passion-selection.mjs";
 import { PENSelectLists } from "./select-lists.mjs";
 import { PENCheck } from "../apps/checks.mjs";
-//import { PENCharCreate } from "./charCreate.mjs";
 import { PENCharCreateV2 } from "./charCreateV2.mjs";
 import { SkillTrainingDialog } from "./skill-training-selection.mjs";
+import { PENRandomName } from "./random-name.mjs";
 import PENDialog from "../setup/pen-dialog.mjs";
 
 export class PENWinter {
+
+  static DEATH_TABLES = {
+    young: "rt..table-2-10-causeofdeath-young",
+    adult: "rt..table-2-10-causeofdeath-adult",
+    elder: "rt..table-2-10-causeofdeath-elder",
+  };
+
   //
   //Only living, player owned characters take part in the Winter Phase
   //
@@ -66,7 +73,9 @@ export class PENWinter {
             "system.status.aging": false,
             "system.status.squireAge": false,
             "system.status.horseSurv": false,
-            "system.status.familyRoll": false,
+            "system.status.childbirth": false,
+            "system.status.familysurvival": false,
+            "system.status.familycareers": false,
             "system.status.xp": false,
             "system.status.winter": false,
             "system.status.winterYear": 0,
@@ -98,7 +107,9 @@ export class PENWinter {
           "system.status.aging": true,
           "system.status.squireAge": true,
           "system.status.horseSurv": true,
-          "system.status.familyRoll": true,
+          "system.status.childbirth": true,
+            "system.status.familysurvival": true,
+            "system.status.familycareers": true,
           "system.status.xp": true,
           "system.status.passiveGlory": true,
         });
@@ -118,7 +129,9 @@ export class PENWinter {
       squireAge: "PEN.squireMaidenRoll",
       horseSurv: "PEN.horseSurvival",
       train: "PEN.training",
-      familyRoll: "PEN.familyRolls",
+      childbirth: "PEN.childBirthSurvive",
+      familysurvival: "PEN.familySurvival",
+      familycareers: "PEN.familyCareers",
       passiveGlory: "PEN.passive",
     };
     let incomplete = [];
@@ -198,7 +211,9 @@ export class PENWinter {
       "system.status.aging": toggle,
       "system.status.squireAge": toggle,
       "system.status.horseSurv": toggle,
-      "system.status.familyRoll": toggle,
+      "system.status.childbirth": toggle,
+      "system.status.familysurvival": toggle,
+      "system.status.familycareers": toggle,
       "system.status.passiveGlory": toggle,
       "system.status.xp": toggle,
     });
@@ -254,7 +269,9 @@ export class PENWinter {
           "system.status.aging": active,
           "system.status.squireAge": active,
           "system.status.horseSurv": active,
-          "system.status.familyRoll": active,
+          "system.status.childbirth": active,
+          "system.status.familysurvival": active,
+          "system.status.familycareers": active,
           "system.status.xp": active,
         });
       }
@@ -1360,9 +1377,9 @@ export class PENWinter {
     return html;
   }
 
-  //Family Rolls
-  static async familyRoll(actor) {
-    if (!actor.system.status.familyRoll) {
+  //Childbirth & survival Rolls
+  static async childbirth(actor) {
+    if (!actor.system.status.childbirth) {
       return;
     }
     //Child Survival Roll
@@ -2006,8 +2023,7 @@ export class PENWinter {
         await Item.create(itemData, { parent: actor });
       }
     }
-
-    await actor.update({ "system.status.familyRoll": false });
+    await actor.update({ "system.status.childbirth": false });
   }
 
   //Childbirth Card
@@ -2159,5 +2175,72 @@ export class PENWinter {
       "flags.Pendragon.pidFlag.lang": game.i18n.lang,
       "flags.Pendragon.pidFlag.priority": 0,
     });
+  }
+
+  //Family Survival Rolls
+  static async familysurvival(actor) {
+    if (!actor.system.status.familysurvival) {
+      return;
+    }
+    this.deathTables = await this.getDeathTables();
+    let deaths = []
+    let msgString = "<h5>" + game.i18n.localize('PEN.familyDeaths') + " (" + game.time.components.year + ")</h5>"
+    //Family Record, excludes cousins and other, age less than 5 or died already
+    let family = await actor.items.filter((itm)=>itm.type==='family')
+      .filter((itm)=>(!itm.system.died || itm.system.died === "0"))
+      .filter((itm)=> (!['cousin','other'].includes(itm.system.relation)))
+      .filter((itm)=>itm.system.age>5)
+      family.sort((a, b) =>  a.system.born - b.system.born);
+      //Potential two rolls 1D20 & optionally 1D6
+      const formulas = ["1D20", "1D6"];
+      let firstDeath = "";
+      for (const formula of formulas) {
+        if (formula === "1D6" && !game.settings.get('Pendragon','familyDecrepitude')) continue;
+        let result = await PENUtilities.simpleDiceRoll(formula);
+        //Ignore rolls if greater than list of relevant family members
+        if (result > family.length) continue;
+        //Ignore second rolls if age is < 65
+        if (formula === '1D6' && family[result-1].system.age<65) continue;
+        //Ignore roll if the family member already died in the first roll
+        if (firstDeath === family[result-1].id) continue;
+        firstDeath = family[result-1].id;
+        let causeOfDeath = (await this.causeOfDeath(family[result-1])).toString().replace(/<[^>]*>/g, '');
+        family[result-1].system.description = family[result-1].system.description + causeOfDeath;
+        deaths.push(family[result-1])
+        msgString += `<div>${family[result-1].name} (${family[result-1].system.age}) ${causeOfDeath ? `${causeOfDeath}` : ''}</div>`;
+      }
+
+      let deadFamily = deaths.map((itm) => {
+        return { _id: itm.id, "system.died": game.time.components.year, "system.description": itm.system.description };
+      })
+      if (deadFamily.length === 0) msgString += "<div>" + game.i18n.localize('PEN.none') + "</div>"
+      //Create Chat Message for Family Deaths
+      await ChatMessage.create({
+        content: msgString,
+        speaker: ChatMessage.getSpeaker({ actor }),
+      });
+      await actor.updateEmbeddedDocuments("Item", deadFamily)
+      await actor.update({ "system.status.familysurvival": false });
+    return;
+  }
+
+  //Get the Death tables. A missing table is only a problem when it is needed, so it is left as null
+  static async getDeathTables() {
+    let deathTables = {};
+    for (let key in this.DEATH_TABLES) {
+      deathTables[key] = await PENRandomName.tableFromSource({ pid: this.DEATH_TABLES[key] });
+    }
+    return deathTables;
+  }
+
+  //Cause of Death Rolls
+  static async causeOfDeath(member) {
+    let age = member.system.age;
+    let table = this.deathTables.adult;
+    if (age<21) table = this.deathTables.young;
+    if (age>45) table = this.deathTables.elder;
+    if (!table) return null;
+    let rollResults = await PENUtilities.tableDiceRoll(table)
+    return rollResults.results[0].description ?? null
   }
 }

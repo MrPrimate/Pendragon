@@ -18,6 +18,16 @@ const SETTINGS = {
     default: true,
     requiresReload: true,
   },
+
+  familyDecrepitude: {
+    name: "PEN.Settings.familyDecrepitude",
+    hint: "PEN.Settings.familyDecrepitudeHint",
+    scope: "world",
+    config: false,
+    type: Boolean,
+    default: true,
+    requiresReload: true,
+  },
 };
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
