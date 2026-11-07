@@ -6,10 +6,10 @@ import { PENCheck } from "../apps/checks.mjs";
 import { PENCharCreateV2 } from "./charCreateV2.mjs";
 import { SkillTrainingDialog } from "./skill-training-selection.mjs";
 import { PENRandomName } from "./random-name.mjs";
+import { PENRandomCareer } from "./random-career.mjs";
 import PENDialog from "../setup/pen-dialog.mjs";
 
 export class PENWinter {
-
   static DEATH_TABLES = {
     young: "rt..table-2-10-causeofdeath-young",
     adult: "rt..table-2-10-causeofdeath-adult",
@@ -108,8 +108,8 @@ export class PENWinter {
           "system.status.squireAge": true,
           "system.status.horseSurv": true,
           "system.status.childbirth": true,
-            "system.status.familysurvival": true,
-            "system.status.familycareers": true,
+          "system.status.familysurvival": true,
+          "system.status.familycareers": true,
           "system.status.xp": true,
           "system.status.passiveGlory": true,
         });
@@ -2182,46 +2182,52 @@ export class PENWinter {
     if (!actor.system.status.familysurvival) {
       return;
     }
+    //Use the year the actor's Winter Phase belongs to, so an individual Winter Phase records the right year and ages
+    const year = PENWinter.winterYear(actor);
+    const ageOf = (itm) => year - itm.system.born;
     this.deathTables = await this.getDeathTables();
-    let deaths = []
-    let msgString = "<h5>" + game.i18n.localize('PEN.familyDeaths') + " (" + game.time.components.year + ")</h5>"
-    //Family Record, excludes cousins and other, age less than 5 or died already
-    let family = await actor.items.filter((itm)=>itm.type==='family')
-      .filter((itm)=>(!itm.system.died || itm.system.died === "0"))
-      .filter((itm)=> (!['cousin','other'].includes(itm.system.relation)))
-      .filter((itm)=>itm.system.age>5)
-      family.sort((a, b) =>  a.system.born - b.system.born);
-      //Potential two rolls 1D20 & optionally 1D6
-      const formulas = ["1D20", "1D6"];
-      let firstDeath = "";
-      for (const formula of formulas) {
-        if (formula === "1D6" && !game.settings.get('Pendragon','familyDecrepitude')) continue;
-        let result = await PENUtilities.simpleDiceRoll(formula);
-        //Ignore rolls if greater than list of relevant family members
-        if (result > family.length) continue;
-        //Ignore second rolls if age is < 65
-        if (formula === '1D6' && family[result-1].system.age<65) continue;
-        //Ignore roll if the family member already died in the first roll
-        if (firstDeath === family[result-1].id) continue;
-        firstDeath = family[result-1].id;
-        let causeOfDeath = (await this.causeOfDeath(family[result-1])).toString().replace(/<[^>]*>/g, '');
-        family[result-1].system.description = family[result-1].system.description + causeOfDeath;
-        deaths.push(family[result-1])
-        msgString += `<div>${family[result-1].name} (${family[result-1].system.age}) ${causeOfDeath ? `${causeOfDeath}` : ''}</div>`;
-      }
-
-      let deadFamily = deaths.map((itm) => {
-        return { _id: itm.id, "system.died": game.time.components.year, "system.description": itm.system.description };
-      })
-      if (deadFamily.length === 0) msgString += "<div>" + game.i18n.localize('PEN.none') + "</div>"
-      //Create Chat Message for Family Deaths
-      await ChatMessage.create({
-        content: msgString,
-        speaker: ChatMessage.getSpeaker({ actor }),
+    let msgString = "<h5>" + game.i18n.localize("PEN.familyDeaths") + " (" + year + ")</h5>";
+    //Family Record, excludes cousins and other, children under 5 (covered by child survival), the dead,
+    //and anyone without a birth year as they can't be ordered by age
+    let family = actor.items
+      .filter((itm) => itm.type === "family")
+      .filter((itm) => Number(itm.system.died) < 1)
+      .filter((itm) => !["cousin", "other"].includes(itm.system.relation))
+      .filter((itm) => itm.system.born > 0 && ageOf(itm) >= 5);
+    //Oldest first
+    family.sort((a, b) => a.system.born - b.system.born);
+    //Potential two rolls 1D20 & optionally 1D6
+    const formulas = ["1D20", "1D6"];
+    let deadFamily = [];
+    for (const formula of formulas) {
+      if (formula === "1D6" && !game.settings.get("Pendragon", "familyDecrepitude")) continue;
+      let result = await PENUtilities.simpleDiceRoll(formula);
+      let member = family[result - 1];
+      //Ignore rolls if greater than list of relevant family members
+      if (!member) continue;
+      //Ignore second rolls if age is < 65
+      if (formula === "1D6" && ageOf(member) < 65) continue;
+      //Ignore roll if the family member already died in the first roll
+      if (deadFamily.some((upd) => upd._id === member.id)) continue;
+      let causeOfDeath = ((await this.causeOfDeath(ageOf(member))) ?? "")
+        .toString()
+        .replace(/<[^>]*>/g, "")
+        .trim();
+      deadFamily.push({
+        _id: member.id,
+        "system.died": year,
+        "system.description": member.system.description + (causeOfDeath ? `<p>${causeOfDeath}</p>` : ""),
       });
-      await actor.updateEmbeddedDocuments("Item", deadFamily)
-      await actor.update({ "system.status.familysurvival": false });
-    return;
+      msgString += `<div>${foundry.utils.escapeHTML(member.name)} (${ageOf(member)}) ${causeOfDeath}</div>`;
+    }
+    if (deadFamily.length === 0) msgString += "<div>" + game.i18n.localize("PEN.none") + "</div>";
+    //Create Chat Message for Family Deaths
+    await ChatMessage.create({
+      content: msgString,
+      speaker: ChatMessage.getSpeaker({ actor }),
+    });
+    if (deadFamily.length > 0) await actor.updateEmbeddedDocuments("Item", deadFamily);
+    await actor.update({ "system.status.familysurvival": false });
   }
 
   //Get the Death tables. A missing table is only a problem when it is needed, so it is left as null
@@ -2234,13 +2240,99 @@ export class PENWinter {
   }
 
   //Cause of Death Rolls
-  static async causeOfDeath(member) {
-    let age = member.system.age;
+  static async causeOfDeath(age) {
     let table = this.deathTables.adult;
-    if (age<21) table = this.deathTables.young;
-    if (age>45) table = this.deathTables.elder;
+    if (age < 21) table = this.deathTables.young;
+    if (age > 45) table = this.deathTables.elder;
     if (!table) return null;
-    let rollResults = await PENUtilities.tableDiceRoll(table)
-    return rollResults.results[0].description ?? null
+    let rollResults = await PENUtilities.tableDiceRoll(table);
+    return rollResults.results[0]?.description || rollResults.results[0]?.name || null;
+  }
+
+  //Family Careers
+  static async familyCareers(actor) {
+    if (!actor.system.status.familycareers) {
+      return;
+    }
+    const year = PENWinter.winterYear(actor);
+    //Add careers for family members who have come of age and don't have one yet
+    //Their career history is already played up to this year, so they take no part in this year's promotions
+    const added = (await PENRandomCareer.randomCareer(actor, true)) ?? [];
+    const newCareers = new Set(added.map((upd) => upd._id));
+
+    //Living family members with a career, oldest first to match the Family Record
+    const family = actor.items
+      .filter(
+        (itm) =>
+          itm.type === "family" &&
+          Number(itm.system.died) < 1 &&
+          itm.system.careers.length > 0 &&
+          !newCareers.has(itm.id),
+      )
+      .sort((a, b) => a.system.born - b.system.born);
+    //Family position is needed for some special ranks (e.g. Sword Prospects)
+    const familyInfo = await PENRandomCareer.resolveFamily(actor);
+    const careerCache = new Map();
+    const updates = [];
+    let promoted = 0;
+    let msgString = "<h5>" + game.i18n.localize("PEN.familyPromotions") + " (" + year + ")</h5>";
+    //One family member, picked on 1D20, can get a chance promotion this year
+    const roll = await PENUtilities.simpleDiceRoll("1D20");
+    const rolledId = family[roll - 1]?.id ?? "";
+    for (const member of family) {
+      const { pid, uuid } = member.system.careers[0];
+      //Several family members often share a career, so look each one up once
+      const key = (pid ?? "") + "|" + (uuid ?? "");
+      if (!careerCache.has(key)) {
+        //If no hit on PID then use UUID
+        const found =
+          (pid ? (await game.system.api.pid.fromPIDBest({ pid }))[0] : null) ?? (uuid ? await fromUuid(uuid) : null);
+        careerCache.set(key, found ?? null);
+      }
+      const career = careerCache.get(key);
+      //Career can't be found (e.g. the content module is not active)
+      if (!career) continue;
+      const rolled = member.id === rolledId;
+      if (!rolled && !PENRandomCareer.isAutoPromotion(career.system.ranks[member.system.careerLevel])) continue;
+      const state = {
+        career,
+        level: member.system.careerLevel,
+        promotions: 0,
+        position: PENRandomCareer.resolvePosition(member, familyInfo),
+        yearPromoted: member.system.yearPromoted,
+        nextPromotion: member.system.nextPromotion,
+      };
+      const changed = await PENRandomCareer.careerYear(member, state, year, rolled);
+      //No promotion, but a new wait may have been rolled
+      if (!changed && state.nextPromotion === member.system.nextPromotion) continue;
+      updates.push({
+        _id: member.id,
+        "system.careerLevel": state.level,
+        "system.careers": [
+          {
+            name: state.career.name,
+            pid: state.career.flags?.Pendragon?.pidFlag?.id,
+            uuid: state.career.uuid,
+          },
+        ],
+        "system.yearPromoted": state.yearPromoted,
+        "system.nextPromotion": state.nextPromotion,
+      });
+      if (!changed) continue;
+      promoted++;
+      msgString +=
+        `<div><strong>${foundry.utils.escapeHTML(member.name)}</strong> ` +
+        `${foundry.utils.escapeHTML(state.career.name)}: ${game.i18n.localize("PEN.level")} ${state.level}` +
+        (rolled ? ` [${roll}]` : "") +
+        "</div>";
+    }
+    if (promoted === 0) msgString += "<div>" + game.i18n.localize("PEN.none") + "</div>";
+    //Create Chat Message for Family Promotions
+    await ChatMessage.create({
+      content: msgString,
+      speaker: ChatMessage.getSpeaker({ actor }),
+    });
+    if (updates.length > 0) await actor.updateEmbeddedDocuments("Item", updates);
+    await actor.update({ "system.status.familycareers": false });
   }
 }
