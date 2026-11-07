@@ -28,7 +28,6 @@ export class PENRandomCareer {
   static CHILDREN = ["child", "son", "daughter"];
   static GRANDCHILDREN = ["grandchild", "grandson", "granddaughter"];
 
-
   static async randomCareer(doc, winter=false) {
     let updates = [];
     let members = [];
@@ -407,8 +406,6 @@ export class PENRandomCareer {
 
   //Setup family groups by relation
   static relationGroups(relation) {
-    const children = ["child", "son", "daughter"];
-    const grandchildren = ["grandchild", "grandson", "granddaughter"];
     if (this.PIBLINGS.includes(relation)) return this.PIBLINGS;
     if (this.SIBLINGS.includes(relation)) return this.SIBLINGS;
     if (this.CHILDREN.includes(relation)) return this.CHILDREN;
