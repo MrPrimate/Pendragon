@@ -323,10 +323,9 @@ export class PENRandomCareer {
     for (let member of items) {
       const gender = await PENUtilities.resolveRelationGender(member.system.gender, member.system.relation);
       genders.set(member.id, gender);
-      //Sisters are martial on a 20 on 1D20 (NHB Professions for Siblings)
-      //The book gives no odds for brothers
-      //However for children suggests all sons are martial Pg 57 so assume same for brothers
-      const martial = await PENUtilities.decideMartial(gender === "female" ? 20 : 1);
+      //Sisters and daughters are martial on a 20 on 1D20 (NHB Professions for Siblings)
+      //The book gives no odds for brothers, but treats all sons as martial (Pg 57), so assume the same for brothers
+      const martial = gender === "female" ? await PENUtilities.decideMartial(20) : "martial";
       martials.set(member.id, martial);
     }
     return { items, genders, martials };
