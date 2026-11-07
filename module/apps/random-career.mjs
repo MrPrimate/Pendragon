@@ -28,7 +28,7 @@ export class PENRandomCareer {
   static CHILDREN = ["child", "son", "daughter"];
   static GRANDCHILDREN = ["grandchild", "grandson", "granddaughter"];
 
-  static async randomCareer(doc, winter=false) {
+  static async randomCareer(doc, winter = false) {
     let updates = [];
     let members = [];
     let msgString = "<h5>" + game.i18n.localize("PEN.familyCreate.careers") + "</h5>";
@@ -45,7 +45,9 @@ export class PENRandomCareer {
       //This works for Piblings, Siblings & Children.  Can't work out order for Grandchildren - would expect this to be done from parents family tree
       members = family.items.filter(
         (itm) =>
-          (this.PIBLINGS.includes(itm.system.relation) || this.SIBLINGS.includes(itm.system.relation) || this.CHILDREN.includes(itm.system.relation)) &&
+          (this.PIBLINGS.includes(itm.system.relation) ||
+            this.SIBLINGS.includes(itm.system.relation) ||
+            this.CHILDREN.includes(itm.system.relation)) &&
           itm.system.age >= 14 &&
           !itm.system.careers.length,
       );
@@ -59,7 +61,7 @@ export class PENRandomCareer {
     }
 
     //If Winter Phase and no members to add a career to then stop
-    if (winter && members.length === 0) return
+    if (winter && members.length === 0) return;
 
     //Get the relevant religion from the doc if actor or parent actor
     let religion = PENRandomName.resolveCulture(doc, "religion");
@@ -140,7 +142,7 @@ export class PENRandomCareer {
         case "son":
         case "daughter":
         case "child":
-          table = this.resolveChildTable (doc, info)
+          table = this.resolveChildTable(doc, info);
           break;
         default:
           return null;
