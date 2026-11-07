@@ -2181,46 +2181,52 @@ export class PENWinter {
     if (!actor.system.status.familysurvival) {
       return;
     }
+    //Use the year the actor's Winter Phase belongs to, so an individual Winter Phase records the right year and ages
+    const year = PENWinter.winterYear(actor);
+    const ageOf = (itm) => year - itm.system.born;
     this.deathTables = await this.getDeathTables();
-    let deaths = []
-    let msgString = "<h5>" + game.i18n.localize('PEN.familyDeaths') + " (" + game.time.components.year + ")</h5>"
-    //Family Record, excludes cousins and other, age less than 5 or died already
-    let family = await actor.items.filter((itm)=>itm.type==='family')
-      .filter((itm)=>(!itm.system.died || itm.system.died === "0"))
-      .filter((itm)=> (!['cousin','other'].includes(itm.system.relation)))
-      .filter((itm)=>itm.system.age>5)
-      family.sort((a, b) =>  a.system.born - b.system.born);
-      //Potential two rolls 1D20 & optionally 1D6
-      const formulas = ["1D20", "1D6"];
-      let firstDeath = "";
-      for (const formula of formulas) {
-        if (formula === "1D6" && !game.settings.get('Pendragon','familyDecrepitude')) continue;
-        let result = await PENUtilities.simpleDiceRoll(formula);
-        //Ignore rolls if greater than list of relevant family members
-        if (result > family.length) continue;
-        //Ignore second rolls if age is < 65
-        if (formula === '1D6' && family[result-1].system.age<65) continue;
-        //Ignore roll if the family member already died in the first roll
-        if (firstDeath === family[result-1].id) continue;
-        firstDeath = family[result-1].id;
-        let causeOfDeath = (await this.causeOfDeath(family[result-1])).toString().replace(/<[^>]*>/g, '');
-        family[result-1].system.description = family[result-1].system.description + causeOfDeath;
-        deaths.push(family[result-1])
-        msgString += `<div>${family[result-1].name} (${family[result-1].system.age}) ${causeOfDeath ? `${causeOfDeath}` : ''}</div>`;
-      }
-
-      let deadFamily = deaths.map((itm) => {
-        return { _id: itm.id, "system.died": game.time.components.year, "system.description": itm.system.description };
-      })
-      if (deadFamily.length === 0) msgString += "<div>" + game.i18n.localize('PEN.none') + "</div>"
-      //Create Chat Message for Family Deaths
-      await ChatMessage.create({
-        content: msgString,
-        speaker: ChatMessage.getSpeaker({ actor }),
+    let msgString = "<h5>" + game.i18n.localize("PEN.familyDeaths") + " (" + year + ")</h5>";
+    //Family Record, excludes cousins and other, children under 5 (covered by child survival), the dead,
+    //and anyone without a birth year as they can't be ordered by age
+    let family = actor.items
+      .filter((itm) => itm.type === "family")
+      .filter((itm) => Number(itm.system.died) < 1)
+      .filter((itm) => !["cousin", "other"].includes(itm.system.relation))
+      .filter((itm) => itm.system.born > 0 && ageOf(itm) >= 5);
+    //Oldest first
+    family.sort((a, b) => a.system.born - b.system.born);
+    //Potential two rolls 1D20 & optionally 1D6
+    const formulas = ["1D20", "1D6"];
+    let deadFamily = [];
+    for (const formula of formulas) {
+      if (formula === "1D6" && !game.settings.get("Pendragon", "familyDecrepitude")) continue;
+      let result = await PENUtilities.simpleDiceRoll(formula);
+      let member = family[result - 1];
+      //Ignore rolls if greater than list of relevant family members
+      if (!member) continue;
+      //Ignore second rolls if age is < 65
+      if (formula === "1D6" && ageOf(member) < 65) continue;
+      //Ignore roll if the family member already died in the first roll
+      if (deadFamily.some((upd) => upd._id === member.id)) continue;
+      let causeOfDeath = ((await this.causeOfDeath(ageOf(member))) ?? "")
+        .toString()
+        .replace(/<[^>]*>/g, "")
+        .trim();
+      deadFamily.push({
+        _id: member.id,
+        "system.died": year,
+        "system.description": member.system.description + (causeOfDeath ? `<p>${causeOfDeath}</p>` : ""),
       });
-      await actor.updateEmbeddedDocuments("Item", deadFamily)
-      await actor.update({ "system.status.familysurvival": false });
-    return;
+      msgString += `<div>${foundry.utils.escapeHTML(member.name)} (${ageOf(member)}) ${causeOfDeath}</div>`;
+    }
+    if (deadFamily.length === 0) msgString += "<div>" + game.i18n.localize("PEN.none") + "</div>";
+    //Create Chat Message for Family Deaths
+    await ChatMessage.create({
+      content: msgString,
+      speaker: ChatMessage.getSpeaker({ actor }),
+    });
+    if (deadFamily.length > 0) await actor.updateEmbeddedDocuments("Item", deadFamily);
+    await actor.update({ "system.status.familysurvival": false });
   }
 
   //Get the Death tables. A missing table is only a problem when it is needed, so it is left as null
@@ -2233,13 +2239,12 @@ export class PENWinter {
   }
 
   //Cause of Death Rolls
-  static async causeOfDeath(member) {
-    let age = member.system.age;
+  static async causeOfDeath(age) {
     let table = this.deathTables.adult;
-    if (age<21) table = this.deathTables.young;
-    if (age>45) table = this.deathTables.elder;
+    if (age < 21) table = this.deathTables.young;
+    if (age > 45) table = this.deathTables.elder;
     if (!table) return null;
-    let rollResults = await PENUtilities.tableDiceRoll(table)
-    return rollResults.results[0].description ?? null
+    let rollResults = await PENUtilities.tableDiceRoll(table);
+    return rollResults.results[0]?.description || rollResults.results[0]?.name || null;
   }
 }
