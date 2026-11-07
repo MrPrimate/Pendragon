@@ -368,14 +368,12 @@ export class PENRandomCareer {
       case "sibling": {
         //The character is the heir (1).
         //The eldest martial sibling is the spare (2),
-        //and the eldest non-martial sibling is the prayer (3), whether brother or sister.
+        //and the next eldest martial sibling is the prayer (3).
         //The rest follow in birth order (4+)
         group.sort((a, b) => a.system.born - b.system.born);
-        const isMartial = (itm) => family.martials.get(itm.id) === "martial";
-        const martials = group.filter(isMartial)
-        const spare = group.find(isMartial);
-        //const prayer = group.find((itm) => !isMartial(itm));
-        const prayer = martials.length >=2 ? martials[1] : null;
+        const martials = group.filter((itm) => family.martials.get(itm.id) === "martial");
+        const spare = martials[0] ?? null;
+        const prayer = martials[1] ?? null;
         if (spare?.id === member.id) return 2;
         if (prayer?.id === member.id) return 3;
         const rest = group.filter((itm) => itm.id !== spare?.id && itm.id !== prayer?.id);
@@ -384,16 +382,15 @@ export class PENRandomCareer {
       case "son":
       case "daughter":
       case "child": {
-        //The eldest martial sibling is the heir (1),
-        //The next eldest martial sibling is the spare (2)
-        //and the eldest non-martial sibling is the prayer (3), whether brother or sister.
+        //The eldest martial child is the heir (1),
+        //the next eldest martial child is the spare (2),
+        //and the third eldest martial child is the prayer (3).
         //The rest follow in birth order (4+)
         group.sort((a, b) => a.system.born - b.system.born);
-        const isMartial = (itm) => family.martials.get(itm.id) === "martial";
-        const martials = group.filter(isMartial)
-        const heir = group.find(isMartial);
-        const spare = martials.length >=2 ? martials[1] : null;
-        const prayer = martials.length >=3 ? martials[2] : null;
+        const martials = group.filter((itm) => family.martials.get(itm.id) === "martial");
+        const heir = martials[0] ?? null;
+        const spare = martials[1] ?? null;
+        const prayer = martials[2] ?? null;
         if (heir?.id === member.id) return 1;
         if (spare?.id === member.id) return 2;
         if (prayer?.id === member.id) return 3;
@@ -454,17 +451,15 @@ export class PENRandomCareer {
   }
 
   //Resolve which table to use for Children
-  static resolveChildTable(doc, { gender, martial, position, religion }) {
-    const religionPID = religion?.flags?.Pendragon?.pidFlag?.id;
-    //Position 1 is the "heir", 2is the "spare" (Squire on the Path of the Sword), position 3 the "prayer"
-    //Female prayers use the women's tables (e.g. Path of the Nun for Christians)
+  static resolveChildTable(doc, { martial, position }) {
+    //Position 1 is the "heir", 2 is the "spare" (Squire on the Path of the Sword), position 3 the "prayer"
     if (position === 1) {
       return this.careerTables.heir;
     } else if (position === 2) {
       return this.careerTables.childSpare;
-    } else if (position === 3 ) {
+    } else if (position === 3) {
       return this.careerTables.childPrayer;
-    } else if (position > 3 && martial === 'martial') {
+    } else if (martial === "martial") {
       return this.careerTables.childMartial;
     } else {
       return this.careerTables.childNonMartial;
