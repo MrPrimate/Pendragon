@@ -121,8 +121,22 @@
       {{/unless}}
     {{/if}}
     <li>
-      <div class="stat-name left bold clickable" data-action="familyRoll">{{localize 'PEN.familyRolls'}}
-        {{#unless system.status.familyRoll}}
+      <div class="stat-name left bold clickable" data-action="childbirth">{{localize 'PEN.childBirthSurvive'}}
+        {{#unless system.status.childbirth}}
+          <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+        {{/unless}}
+      </div>
+    </li>
+    <li>
+      <div class="stat-name left bold clickable" data-action="familysurvival">{{localize 'PEN.familySurvival'}}
+        {{#unless system.status.familysurvival}}
+          <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+        {{/unless}}
+      </div>
+    </li>
+    <li>
+      <div class="stat-name left bold clickable" data-action="familycareers">{{localize 'PEN.familyCareers'}}
+        {{#unless system.status.familycareers}}
           <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
         {{/unless}}
       </div>

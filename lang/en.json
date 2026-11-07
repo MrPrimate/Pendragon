@@ -224,6 +224,7 @@
     "checkType": "Roll Type",
     "child": "Child",
     "childBirth": "Childbirth",
+    "childBirthSurvive": "Childbirth & Survival",
     "childGender": "Select the child's gender",
     "childLastYear": "Gave birth last year",
     "childSurvival": "Family Survival",
@@ -440,6 +441,7 @@
 
     "fall": "Fall",
     "family": "Family",
+    "familyCareers": "Family Careers",
     "familyChar": "Family Characteristic",
     "familyCharHint": "Name of the family characteristic associated with this skill",
     "familyCreate": {
@@ -463,6 +465,7 @@
       "cousinCount": "Cousins ({count})",
       "parentsFirst": "Complete the Parents step first, it sets up inherited Glory"
     },
+    "familyDeaths": "Family Deaths",
     "familyRelationship": {
       "aunt": "Aunt",
       "brother": "Brother",
@@ -492,7 +495,9 @@
       "keep": "Keep Neutral",
       "random": "Pick at Random"
     },
+    "familyPromotions": "Family Career Promotions",
     "familyRolls": "Family Rolls",
+    "familySurvival": "Family Survival",
     "famous": "Famous",
     "favour": "Favour",
     "favourLevel": "Favour Level",
@@ -1483,6 +1488,8 @@
       "diceRolls": "Dice Rolls",
       "displayOptions": "Display Options",
       "displayOptionsHint": "Show Pendragon display settings",
+      "familyDecrepitude": "Family Decrepitude",
+      "familyDecrepitudeHint": "Roll for family death due to old age",
       "familyOptions": "Family Options",
       "familyOptionsHint": "Change random family creation options",
       "fumbleXP": "Fumble XP",
