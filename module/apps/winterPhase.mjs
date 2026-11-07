@@ -10,7 +10,6 @@ import { PENRandomCareer } from "./random-career.mjs";
 import PENDialog from "../setup/pen-dialog.mjs";
 
 export class PENWinter {
-
   static DEATH_TABLES = {
     young: "rt..table-2-10-causeofdeath-young",
     adult: "rt..table-2-10-causeofdeath-adult",
@@ -109,8 +108,8 @@ export class PENWinter {
           "system.status.squireAge": true,
           "system.status.horseSurv": true,
           "system.status.childbirth": true,
-            "system.status.familysurvival": true,
-            "system.status.familycareers": true,
+          "system.status.familysurvival": true,
+          "system.status.familycareers": true,
           "system.status.xp": true,
           "system.status.passiveGlory": true,
         });
