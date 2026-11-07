@@ -2249,78 +2249,90 @@ export class PENWinter {
     return rollResults.results[0]?.description || rollResults.results[0]?.name || null;
   }
 
-
   //Family Careers
   static async familyCareers(actor) {
     if (!actor.system.status.familycareers) {
       return;
     }
-    //Add careers where missing
-    await PENRandomCareer.randomCareer(actor, true)
+    const year = PENWinter.winterYear(actor);
+    //Add careers for family members who have come of age and don't have one yet
+    //Their career history is already played up to this year, so they take no part in this year's promotions
+    const added = (await PENRandomCareer.randomCareer(actor, true)) ?? [];
+    const newCareers = new Set(added.map((upd) => upd._id));
 
-    //Check for automatic promotions or 1D20 roll
+    //Living family members with a career, oldest first to match the Family Record
+    const family = actor.items
+      .filter(
+        (itm) =>
+          itm.type === "family" &&
+          Number(itm.system.died) < 1 &&
+          itm.system.careers.length > 0 &&
+          !newCareers.has(itm.id),
+      )
+      .sort((a, b) => a.system.born - b.system.born);
+    //Family position is needed for some special ranks (e.g. Sword Prospects)
+    const familyInfo = await PENRandomCareer.resolveFamily(actor);
     const careerCache = new Map();
-        let family = await actor.items.filter((itm)=>itm.type==='family')
-      .filter((itm)=>(!itm.system.died || itm.system.died === "0"))
-      .filter((itm)=> (itm.system.careers.length))
-
-    let updates = []
-    let msgString = "<h5>" + game.i18n.localize('PEN.familyPromotions') + " (" + game.time.components.year + ")</h5>"
-    let rolledId = "";
-    let roll = await PENUtilities.simpleDiceRoll("1D20");
-    if (roll <= family.length) rolledId = family[roll - 1].id
-    console.log(roll, rolledId)
-    for (let member of family) {
-      let careers=[]
+    const updates = [];
+    let promoted = 0;
+    let msgString = "<h5>" + game.i18n.localize("PEN.familyPromotions") + " (" + year + ")</h5>";
+    //One family member, picked on 1D20, can get a chance promotion this year
+    const roll = await PENUtilities.simpleDiceRoll("1D20");
+    const rolledId = family[roll - 1]?.id ?? "";
+    for (const member of family) {
       const { pid, uuid } = member.system.careers[0];
-      //Several family members often share a career, so look each one up once per render
-        if (!careerCache.has(pid + uuid)) {
-            //If no hit on PID then use UUID
-            const found = (await game.system.api.pid.fromPIDBest({ pid }))[0] ?? (await fromUuid(uuid));
-            careerCache.set(pid + uuid, found);
-          }
-        const thisCareer = careerCache.get(pid + uuid);
-        const state = { career: thisCareer, level: member.system.careerLevel, promotions: 0, yearPromoted: member.system.yearPromoted, nextPromotion: member.system.nextPromotion };
-        const ranks = state.career.system.ranks;
-        const rank = ranks[state.level];
-        const autoPromotion = (await PENRandomCareer.isAutoPromotion(rank))
-        const makePromotion = (autoPromotion || member.id === rolledId) && state.nextPromotion <= game.time.components.year
-        const oldCareer = state.career.uuid
-        const oldRank = state.level
-        if (makePromotion) {
-        console.log(member.name, member.id === rolledId, state.nextPromotion)
-          await PENRandomCareer.careerYear(member, state, game.time.components.year, makePromotion);
-          careers.push({
+      //Several family members often share a career, so look each one up once
+      const key = (pid ?? "") + "|" + (uuid ?? "");
+      if (!careerCache.has(key)) {
+        //If no hit on PID then use UUID
+        const found =
+          (pid ? (await game.system.api.pid.fromPIDBest({ pid }))[0] : null) ?? (uuid ? await fromUuid(uuid) : null);
+        careerCache.set(key, found ?? null);
+      }
+      const career = careerCache.get(key);
+      //Career can't be found (e.g. the content module is not active)
+      if (!career) continue;
+      const rolled = member.id === rolledId;
+      if (!rolled && !PENRandomCareer.isAutoPromotion(career.system.ranks[member.system.careerLevel])) continue;
+      const state = {
+        career,
+        level: member.system.careerLevel,
+        promotions: 0,
+        position: PENRandomCareer.resolvePosition(member, familyInfo),
+        yearPromoted: member.system.yearPromoted,
+        nextPromotion: member.system.nextPromotion,
+      };
+      const changed = await PENRandomCareer.careerYear(member, state, year, rolled);
+      //No promotion, but a new wait may have been rolled
+      if (!changed && state.nextPromotion === member.system.nextPromotion) continue;
+      updates.push({
+        _id: member.id,
+        "system.careerLevel": state.level,
+        "system.careers": [
+          {
             name: state.career.name,
             pid: state.career.flags?.Pendragon?.pidFlag?.id,
             uuid: state.career.uuid,
-          });
-          if( oldCareer != state.career.uuid || oldRank != state.level) {
-            updates.push({
-              _id: member.id,
-              "system.careerLevel": state.level,
-              "system.careers": careers,
-              "system.yearPromoted": state.yearPromoted,
-              "system.nextPromotion": state.nextPromotion,
-            })
-            if (member.id === rolledId) {
-              msgString += `<div><strong>${member.name}</strong> ${state.career.name}: ` + game.i18n.localize('PEN.level') + ` ${state.level} [${roll})]</div>`;
-            } else {
-              msgString += `<div><strong>${member.name}</strong> ${state.career.name}: ` + game.i18n.localize('PEN.level') + ` ${state.level}</div>`;
-            }
-          }
-        }
+          },
+        ],
+        "system.yearPromoted": state.yearPromoted,
+        "system.nextPromotion": state.nextPromotion,
+      });
+      if (!changed) continue;
+      promoted++;
+      msgString +=
+        `<div><strong>${foundry.utils.escapeHTML(member.name)}</strong> ` +
+        `${foundry.utils.escapeHTML(state.career.name)}: ${game.i18n.localize("PEN.level")} ${state.level}` +
+        (rolled ? ` [${roll}]` : "") +
+        "</div>";
     }
-    if (updates.length === 0) msgString += "<div>" + game.i18n.localize('PEN.none') + "</div>"
-    //Create Chat Message for Family Deaths
+    if (promoted === 0) msgString += "<div>" + game.i18n.localize("PEN.none") + "</div>";
+    //Create Chat Message for Family Promotions
     await ChatMessage.create({
       content: msgString,
       speaker: ChatMessage.getSpeaker({ actor }),
     });
-
-    if (updates.length>0) {
-      await actor.updateEmbeddedDocuments("Item", updates)
-      await actor.update({ "system.status.familycareers": false });
-    }
+    if (updates.length > 0) await actor.updateEmbeddedDocuments("Item", updates);
+    await actor.update({ "system.status.familycareers": false });
   }
 }
