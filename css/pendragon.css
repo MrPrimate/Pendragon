@@ -1,6 +1,8 @@
 @layer core, legacy, modern;
 @import "core.css" layer(core);
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fondamento:ital@0;1&display=swap");
 
 .application {
   header.window-header {
@@ -172,7 +174,7 @@
   border-bottom: 1px gray solid;
   height: 45px;
   background-color: rgba(128, 128, 128, 0.3);
-  font-family: "Herb";
+  font-family: "Fondamento";
   font-size: 20px;
   color: black;
 }
@@ -194,13 +196,13 @@
 .Pendragon .sheet-body .tab,
 .Pendragon .sheet-body .tab .editor {
   height: 100%;
-  font-family: "AGaramondPro";
+  font-family: "EBGaramond";
   font-size: 14px;
 }
 
 .Pendragon .tox .tox-editor-container {
   background: #fff;
-  font-family: "AGaramondPro";
+  font-family: "EBGaramond";
   font-size: 14px;
 }
 
@@ -209,7 +211,7 @@
 }
 
 .Pendragon .charname-input input {
-  font-family: "Herb";
+  font-family: "Fondamento";
   font-size: 30px;
   height: fit-content;
   color: darkred;
@@ -220,18 +222,18 @@
 }
 
 .Pendragon .charname {
-  font-family: "Herb";
+  font-family: "Fondamento";
   font-size: 30px;
 }
 
 .Pendragon .tab-name {
-  font-family: "Herb";
+  font-family: "Fondamento";
   font-size: 20px;
-  padding: 8px 0px !important;
+  padding: 8px 0px;
 }
 
 .Pendragon .stat-name {
-  font-family: "AGaramondPro";
+  font-family: "EBGaramond";
   font-size: 20px;
   color: black;
 }
@@ -253,7 +255,7 @@
 }
 
 .Pendragon .stat-name-input input {
-  font-family: "AGaramondPro";
+  font-family: "EBGaramond";
   font-size: 20px;
   font-weight: bold;
   margin-top: 3px;
@@ -274,7 +276,7 @@
 }
 
 .Pendragon .dam-name-input input {
-  font-family: "AGaramondPro";
+  font-family: "EBGaramond";
   font-size: 20px;
   font-weight: bold;
   height: 26px;
@@ -291,7 +293,7 @@
 }
 
 .Pendragon .history-input input {
-  font-family: "AGaramondPro";
+  font-family: "EBGaramond";
   font-size: 20px;
   color: black;
   height: fit-content;
@@ -646,7 +648,7 @@
 }
 
 .Pendragon .history-doc input {
-  font-family: AGaramondPro;
+  font-family: EBGaramond;
   background-image: none;
   font-size: 20px;
   font-weight: bold;
@@ -663,7 +665,7 @@
 }
 
 .Pendragon .background-doc p {
-  font-family: AGaramondPro;
+  font-family: EBGaramond;
   font-size: 20px;
   color: black;
 }
@@ -690,14 +692,14 @@
 }
 
 .Pendragon .npc-name {
-  font-family: "AGaramondPro";
+  font-family: "EBGaramond";
   font-size: 16px;
   color: black;
   padding-left: 0px;
 }
 
 .Pendragon .npc-name-display {
-  font-family: "AGaramondPro";
+  font-family: "EBGaramond";
   font-size: 16px;
   font-weight: bold;
   padding: 1px 0px 0px 0px;
@@ -716,7 +718,7 @@
 }
 
 .Pendragon .follower-type {
-  font-family: "AGaramondPro";
+  font-family: "EBGaramond";
   font-size: 16px;
   color: black;
   padding-top: 3px;
@@ -728,7 +730,7 @@
 }
 
 .Pendragon .npcname-input input {
-  font-family: "Herb";
+  font-family: "Fondamento";
   font-size: 16px;
   height: fit-content;
   color: darkred;
@@ -738,7 +740,7 @@
 }
 
 .Pendragon .followername-input input {
-  font-family: "Herb";
+  font-family: "Fondamento";
   font-size: 16px;
   height: fit-content;
   color: #005b00;
@@ -749,7 +751,7 @@
 }
 
 .Pendragon .npc-name-input input {
-  font-family: "AGaramondPro";
+  font-family: "EBGaramond";
   font-size: 16px;
   font-weight: bold;
   padding: 0px;
@@ -867,7 +869,7 @@
   height: 200px;
   width: 360px;
   border: 1px gray solid;
-  font-family: AGaramondPro;
+  font-family: EBGaramond;
   font-size: 16px !important;
 }
 
@@ -878,7 +880,7 @@
   height: 200px;
   width: 402px;
   border: 1px gray solid;
-  font-family: AGaramondPro;
+  font-family: EBGaramond;
   font-size: 16px !important;
 }
 
@@ -890,7 +892,7 @@
   height: 672px;
   width: 360px;
   border: 1px gray solid;
-  font-family: AGaramondPro;
+  font-family: EBGaramond;
   margin: 10px;
 }
 
@@ -919,7 +921,7 @@
   padding-right: 10px;
   height: 580px;
   width: 360px;
-  font-family: AGaramondPro;
+  font-family: EBGaramond;
   margin: 10px;
 }
 
@@ -1111,13 +1113,13 @@
 }
 
 .Pendragon .stat-item {
-  font-family: "AGaramondPro";
+  font-family: "EBGaramond";
   font-size: 20px;
   color: black;
 }
 
 .Pendragon .stat-item input {
-  font-family: "AGaramondPro";
+  font-family: "EBGaramond";
   font-size: 20px;
   font-weight: bold;
   margin-top: 1px;
@@ -1249,21 +1251,21 @@
 }
 
 .Pendragon .white-title {
-  font-family: "AGaramondPro";
+  font-family: "EBGaramond";
   font-weight: bold;
   font-size: 20px;
   color: cornsilk;
 }
 
 .Pendragon .blue-title {
-  font-family: "AGaramondPro";
+  font-family: "EBGaramond";
   font-weight: bold;
   font-size: 20px;
   color: #034694;
 }
 
 .Pendragon .red-title {
-  font-family: "AGaramondPro";
+  font-family: "EBGaramond";
   font-weight: bold;
   font-size: 20px;
   color: darkred;
@@ -1325,7 +1327,7 @@
 }
 
 .Pendragon .court-name {
-  font-family: "AGaramondPro";
+  font-family: "EBGaramond";
   font-size: 20px;
   color: black;
   text-transform: capitalize;
@@ -1732,7 +1734,7 @@
 }
 
 .Pendragon.stats-input {
-  font-family: "AGaramondPro";
+  font-family: "EBGaramond";
   font-size: 20px;
   color: var(--pendragon-black);
 }

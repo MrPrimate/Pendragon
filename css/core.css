@@ -8,20 +8,6 @@
 }
 
 @font-face {
-  font-family: "Herb";
-  font-style: normal;
-  font-weight: 400;
-  src: url("../assets/jaf-herb-regular.ttf") format("woff2");
-}
-
-@font-face {
-  font-family: "AGaramondPro";
-  font-style: normal;
-  font-weight: 400;
-  src: url("../assets/AGaramondPro-Regular.otf") format("woff2");
-}
-
-@font-face {
   font-family: "Basteleur";
   font-style: normal;
   font-weight: 400;

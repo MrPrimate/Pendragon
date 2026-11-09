@@ -65,6 +65,7 @@ import RenderJournalEntrySheet from "./hooks/render-journal-entry-sheet.mjs";
 import createToken from "./hooks/create-token.mjs";
 import RenderRollTableSheet from "./hooks/render-roll-table-sheet.mjs";
 import { ActorImport } from "./apps/actor-import.mjs";
+import HighlightObjects from "./hooks/highlight-objects.mjs";
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -159,10 +160,12 @@ Hooks.on("ready", async function () {
   };
 });
 
-if (foundry.utils.isNewerVersion(game.version, "13")) {
-  Hooks.on("drawNote", drawNote);
-  Hooks.on("renderNoteConfig", RenderNoteConfig);
-}
+//if (foundry.utils.isNewerVersion(game.version, "13")) {
+Hooks.on("drawNote", drawNote);
+Hooks.on("renderNoteConfig", RenderNoteConfig);
+//}
+
+Hooks.on("highlightObjects", HighlightObjects);
 
 //Add sub-titles in Config Settings for Pendragon Game Settings
 Hooks.on("renderSettingsConfig", (app, html, options) => {

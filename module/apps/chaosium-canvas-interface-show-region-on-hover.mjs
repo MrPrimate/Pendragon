@@ -29,7 +29,6 @@ export default class ChaosiumCanvasInterfaceShowRegionOnHover extends ChaosiumCa
     if (game.user.isGM) {
       if (this.parent.parent.visibility === CONST.REGION_VISIBILITY.LAYER_UNLOCKED) {
         this.parent.parent.update({
-          "flags.Pendragon.ChaosiumCanvasInterfaceShowRegionOnHover": true,
           visibility: CONST.REGION_VISIBILITY.GAMEMASTER,
         });
       }
@@ -46,7 +45,6 @@ export default class ChaosiumCanvasInterfaceShowRegionOnHover extends ChaosiumCa
     if (game.user.isGM) {
       if (this.parent.parent.visibility === CONST.REGION_VISIBILITY.GAMEMASTER) {
         this.parent.parent.update({
-          "flags.Pendragon.ChaosiumCanvasInterfaceShowRegionOnHover": true,
           visibility: CONST.REGION_VISIBILITY.LAYER_UNLOCKED,
         });
       }

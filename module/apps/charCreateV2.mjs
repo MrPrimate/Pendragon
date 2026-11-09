@@ -2102,6 +2102,7 @@ export class PENCharCreateV2 {
     let born = [Number(usage.born1), Number(usage.born2)];
     let died = [Number(usage.died1), Number(usage.died2)];
     let knight = [usage.knight1, usage.knight2];
+    let marriedYear = actor.system.born - (await new Roll("1D2-1").evaluate()).total;
     //Loop through each potential parent
     for (let pCount = 0; pCount < 2; pCount++) {
       //If the parent has a name then create the family member
@@ -2128,6 +2129,7 @@ export class PENCharCreateV2 {
             gender: gender[pCount],
             born: born[pCount],
             died: diedYear,
+            married: marriedYear,
             glory,
             heroic,
           },
@@ -2469,6 +2471,7 @@ export class PENCharCreateV2 {
           "system.yearPromoted": 0,
           "system.profession": "",
           "system.nextPromotion": 0,
+          "system.married": 0,
         };
       });
     await Item.updateDocuments(family, { parent: actor });

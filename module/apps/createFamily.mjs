@@ -58,9 +58,9 @@ export class PENCreateFamily {
     let lastSibling = yearBorn;
     let siblings = this.checkFamily(actor, "brother", "sister");
     if (siblings.length > 0) {
-      let youngest = await this.checkAges(actor, siblings, "1D6", yearBorn);
-      if (!youngest) return false;
-      lastSibling = youngest;
+      let ages = await this.checkAges(actor, siblings, "1D6", yearBorn);
+      if (!ages.youngest) return false;
+      lastSibling = ages.youngest;
       msgString += this.lineString(game.i18n.localize("PEN.familyCreate.alreadyExist"));
     } else {
       let results = await this.addFamily("2D3", yearBorn, "1D6", "brother", "sister", true, 0, 0);
@@ -76,9 +76,9 @@ export class PENCreateFamily {
     let fatherBorn = yearBorn - 24; //fallback year
     let motherBorn = yearBorn - 22; //fallback year
     if (father.length > 0) {
-      let youngest = await this.checkAges(actor, father, "-1D6-21", yearBorn);
-      if (!youngest) return false;
-      fatherBorn = youngest;
+      let ages = await this.checkAges(actor, father, "-1D6-21", yearBorn);
+      if (!ages.youngest) return false;
+      fatherBorn = ages.youngest;
       msgString += this.existsString("father");
     } else {
       let results = await this.addFamily("1", yearBorn, "-1D6-21", "father", "", false, 4, lastSibling);
@@ -87,9 +87,9 @@ export class PENCreateFamily {
       fatherBorn = results.lastBorn;
     }
     if (mother.length > 0) {
-      let youngest = await this.checkAges(actor, mother, "+1D3-1", fatherBorn);
-      if (!youngest) return false;
-      motherBorn = youngest;
+      let ages = await this.checkAges(actor, mother, "+1D3-1", fatherBorn);
+      if (!ages.youngest) return false;
+      motherBorn = ages.youngest;
       msgString += this.existsString("mother");
     } else {
       let results = await this.addFamily("1", fatherBorn, "1D3-1", "mother", "", false, 4, lastSibling);
@@ -114,18 +114,24 @@ export class PENCreateFamily {
       msgString += this.headingString("PEN.familyCreate.piblings", side);
       let lastPibling = yearBorn;
       let piblings = this.checkFamily(actor, "uncle", "aunt", maternal);
+      let oldest = 0;
       if (piblings.length > 0) {
-        let youngest = await this.checkAges(actor, piblings, "1D6", parentBorn);
-        if (!youngest) return false;
-        lastPibling = youngest;
+        let ages = await this.checkAges(actor, piblings, "1D6", parentBorn);
+        if (!ages.youngest) return false;
+        lastPibling = ages.youngest;
+        oldest = ages.oldest;
         msgString += this.lineString(game.i18n.localize("PEN.familyCreate.alreadyExist"));
       } else {
         let results = await this.addFamily("1D3", parentBorn, "1D6", "uncle", "aunt", true, 0, 0, maternal);
+        oldest = results.members[0].system.born;
         familyAdd.push(...results.members);
         msgString += results.resultString;
         lastPibling = results.lastBorn;
         piblings = results.members;
       }
+
+      //Grandparents married at Oldest child less 1D2-1
+      oldest = Math.min(pCount === 1 ? fatherBorn : motherBorn, oldest) - (await new Roll("1D2-1").evaluate()).total;
 
       //Grandparents - need youngest aunt/uncle
       msgString += this.headingString("PEN.familyCreate.grandparents", side);
@@ -136,9 +142,9 @@ export class PENCreateFamily {
         grandfatherBorn = motherBorn - 24; //fallback year
       }
       if (grandfather.length > 0) {
-        let youngest = await this.checkAges(actor, grandfather, "-1D6-21", parentBorn);
-        if (!youngest) return false;
-        grandfatherBorn = youngest;
+        let ages = await this.checkAges(actor, grandfather, "-1D6-21", parentBorn);
+        if (!ages.youngest) return false;
+        grandfatherBorn = ages.youngest;
         msgString += this.existsString("grandfather");
       } else {
         let results = await this.addFamily(
@@ -152,13 +158,14 @@ export class PENCreateFamily {
           lastPibling,
           maternal,
         );
+        results.members[0].system.married = oldest;
         familyAdd.push(...results.members);
         msgString += results.resultString;
         grandfatherBorn = results.lastBorn;
       }
       if (grandmother.length > 0) {
-        let youngest = await this.checkAges(actor, grandmother, "+1D3-1", grandfatherBorn);
-        if (!youngest) return false;
+        let ages = await this.checkAges(actor, grandmother, "+1D3-1", grandfatherBorn);
+        if (!ages.youngest) return false;
         msgString += this.existsString("grandmother");
       } else {
         let results = await this.addFamily(
@@ -172,6 +179,7 @@ export class PENCreateFamily {
           lastPibling,
           maternal,
         );
+        results.members[0].system.married = oldest;
         familyAdd.push(...results.members);
         msgString += results.resultString;
       }
@@ -418,7 +426,9 @@ export class PENCreateFamily {
     }
     let updates = [];
     let youngest = Math.max(...members.map((item) => item.system.born));
+    let oldest = Math.min(...members.map((item) => item.system.born));
     if (youngest === 0) youngest = base;
+    if (oldest === 0) oldest = 9999;
     for (let member of members) {
       if (member.system.born > 0) continue;
       let ageRoll = new Roll(ageGap);
@@ -426,9 +436,10 @@ export class PENCreateFamily {
       let born = Math.min(youngest + ageResult.total, game.time.components.year);
       updates.push({ _id: member.id, "system.born": born });
       youngest = born;
+      if (born < oldest) oldest = born;
     }
     await actor.updateEmbeddedDocuments("Item", updates);
-    return youngest;
+    return { youngest, oldest };
   }
 
   //Delete Family members created this way

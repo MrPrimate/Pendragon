@@ -28,6 +28,26 @@ const SETTINGS = {
     default: true,
     requiresReload: true,
   },
+
+  childBearingStart: {
+    name: "PEN.Settings.childBearingStart",
+    hint: "PEN.Settings.childBearingStartHint",
+    scope: "world",
+    config: false,
+    type: Number,
+    default: 16,
+    requiresReload: true,
+  },
+
+  childBearingEnd: {
+    name: "PEN.Settings.childBearingEnd",
+    hint: "PEN.Settings.childBearingEndHint",
+    scope: "world",
+    config: false,
+    type: Number,
+    default: 45,
+    requiresReload: true,
+  },
 };
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;

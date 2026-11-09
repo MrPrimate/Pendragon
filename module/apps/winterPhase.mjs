@@ -76,6 +76,7 @@ export class PENWinter {
             "system.status.childbirth": false,
             "system.status.familysurvival": false,
             "system.status.familycareers": false,
+            "system.status.familychildbirth": false,
             "system.status.xp": false,
             "system.status.winter": false,
             "system.status.winterYear": 0,
@@ -110,6 +111,7 @@ export class PENWinter {
           "system.status.childbirth": true,
           "system.status.familysurvival": true,
           "system.status.familycareers": true,
+          "system.status.familychildbirth": true,
           "system.status.xp": true,
           "system.status.passiveGlory": true,
         });
@@ -132,6 +134,7 @@ export class PENWinter {
       childbirth: "PEN.childBirthSurvive",
       familysurvival: "PEN.familySurvival",
       familycareers: "PEN.familyCareers",
+      familychildbirth: "PEN.familyChildbirth",
       passiveGlory: "PEN.passive",
     };
     let incomplete = [];
@@ -214,6 +217,7 @@ export class PENWinter {
       "system.status.childbirth": toggle,
       "system.status.familysurvival": toggle,
       "system.status.familycareers": toggle,
+      "system.status.familychildbirth": toggle,
       "system.status.passiveGlory": toggle,
       "system.status.xp": toggle,
     });
@@ -272,6 +276,7 @@ export class PENWinter {
           "system.status.childbirth": active,
           "system.status.familysurvival": active,
           "system.status.familycareers": active,
+          "system.status.familychildbirth": active,
           "system.status.xp": active,
         });
       }
@@ -2279,6 +2284,7 @@ export class PENWinter {
     //One family member, picked on 1D20, can get a chance promotion this year
     const roll = await PENUtilities.simpleDiceRoll("1D20");
     const rolledId = family[roll - 1]?.id ?? "";
+    //const rolledId = "bP26fuTFiB2t2opu";
     for (const member of family) {
       const { pid, uuid } = member.system.careers[0];
       //Several family members often share a career, so look each one up once
@@ -2301,6 +2307,7 @@ export class PENWinter {
         position: PENRandomCareer.resolvePosition(member, familyInfo),
         yearPromoted: member.system.yearPromoted,
         nextPromotion: member.system.nextPromotion,
+        married: member.system.married,
       };
       const changed = await PENRandomCareer.careerYear(member, state, year, rolled);
       //No promotion, but a new wait may have been rolled
@@ -2317,6 +2324,7 @@ export class PENWinter {
         ],
         "system.yearPromoted": state.yearPromoted,
         "system.nextPromotion": state.nextPromotion,
+        "system.married": state.married,
       });
       if (!changed) continue;
       promoted++;
@@ -2334,5 +2342,97 @@ export class PENWinter {
     });
     if (updates.length > 0) await actor.updateEmbeddedDocuments("Item", updates);
     await actor.update({ "system.status.familycareers": false });
+  }
+
+  //Family Marriages
+  static async familyChildbirth(actor) {
+    if (!actor.system.status.familychildbirth) {
+      return;
+    }
+    const year = PENWinter.winterYear(actor);
+    //Living family members with a career and married is 0, oldest first to match the Family Record
+    const start = game.settings.get("Pendragon", "childBearingStart");
+    const end = game.settings.get("Pendragon", "childBearingEnd");
+    const family = actor.items.filter((itm) => {
+      const isFamily = itm.type === "family";
+      const isAlive = itm.system.died < 1;
+      const age = year - itm.system.born;
+      return isFamily && isAlive && age >= start && age <= end;
+    });
+    family.sort((a, b) => a.system.born - b.system.born);
+    const parents = [];
+    const newborns = [];
+    let msgString = "<h5>" + game.i18n.localize("PEN.familyChildbirth") + " (" + year + ")</h5>";
+    //3 rolls consolidated in to 1 list
+    for (let pCount = 1; pCount < 4; pCount++) {
+      const result = await PENUtilities.simpleDiceRoll("1D20");
+      if (result > family.length) continue;
+      parents.push(family[result - 1].id);
+    }
+    const counts = new Map();
+    parents.forEach((id) => {
+      if (id === null || id === undefined) return; // Skip invalid entries
+      counts.set(id, (counts.get(id) || 0) + 1);
+    });
+    //For each parent
+    for (let [key, births] of counts) {
+      let parent = family.find((itm) => itm.id === key);
+      let randomNames = game.settings.get("Pendragon", "randomFamilyNames");
+      if (!parent) continue;
+      for (let cCount = 1; cCount <= births; cCount++) {
+        const gender = (await new Roll("1d2").evaluate()).total === 2 ? "female" : "male";
+        const genderLabel = game.i18n.localize("PEN." + gender);
+        let childType = "cousin";
+        switch (parent.system.relation) {
+          case "grandfather":
+          case "grandmother":
+          case "grandparent":
+            childType = gender === "male" ? "uncle" : "aunt";
+            break;
+          case "father":
+          case "mother":
+          case "parent":
+            childType = gender === "male" ? "brother" : "sister";
+            break;
+          case "son":
+          case "daughter":
+          case "child":
+            childType = gender === "male" ? "brother" : "sister";
+            break;
+        }
+        const childName = randomNames
+          ? await PENRandomName.randomName({ doc: actor, gender })
+          : game.i18n.localize("PEN.child");
+        let description = "<p>" + game.i18n.localize("PEN.parent") + ": " + parent.name + "</p>";
+        if (births === 2) description += "<p>" + game.i18n.localize("PEN.twin") + "</p>";
+        if (births === 3) description += "<p>" + game.i18n.localize("PEN.triplet") + "</p>";
+        msgString +=
+          "<div>" +
+          childName +
+          ": " +
+          game.i18n.localize("PEN.familyRelationship." + childType) +
+          "(" +
+          genderLabel +
+          ")</div>";
+        newborns.push({
+          type: "family",
+          name: childName,
+          system: {
+            relation: childType,
+            born: year,
+            gender: genderLabel,
+            description: description,
+          },
+        });
+      }
+    }
+    if (newborns.length === 0) msgString += "<div>" + game.i18n.localize("PEN.none") + "</div>";
+    //Create Chat Message for Family Births
+    await ChatMessage.create({
+      content: msgString,
+      speaker: ChatMessage.getSpeaker({ actor }),
+    });
+    if (newborns.length > 0) await actor.createEmbeddedDocuments("Item", newborns);
+    await actor.update({ "system.status.familychildbirth": false });
   }
 }
