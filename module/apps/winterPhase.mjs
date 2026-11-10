@@ -2279,7 +2279,7 @@ export class PENWinter {
     const familyInfo = await PENRandomCareer.resolveFamily(actor);
     const careerCache = new Map();
     const updates = [];
-    let promoted = 0;
+    let promoted = 0; //Promotions and marriages reported
     let msgString = "<h5>" + game.i18n.localize("PEN.familyPromotions") + " (" + year + ")</h5>";
     //One family member, picked on 1D20, can get a chance promotion this year
     const roll = await PENUtilities.simpleDiceRoll("1D20");
@@ -2299,7 +2299,10 @@ export class PENWinter {
       //Career can't be found (e.g. the content module is not active)
       if (!career) continue;
       const rolled = member.id === rolledId;
-      if (!rolled && !PENRandomCareer.isAutoPromotion(career.system.ranks[member.system.careerLevel])) continue;
+      const rank = career.system.ranks[member.system.careerLevel];
+      const married = Number(member.system.married) || 0;
+      //Skip anyone with nothing to roll: no chance promotion, no automatic promotion and no marriage chance
+      if (!rolled && !PENRandomCareer.isAutoPromotion(rank) && !PENRandomCareer.canMarry(rank, { married })) continue;
       const state = {
         career,
         level: member.system.careerLevel,
@@ -2307,11 +2310,12 @@ export class PENWinter {
         position: PENRandomCareer.resolvePosition(member, familyInfo),
         yearPromoted: member.system.yearPromoted,
         nextPromotion: member.system.nextPromotion,
-        married: member.system.married,
+        married,
       };
       const changed = await PENRandomCareer.careerYear(member, state, year, rolled);
-      //No promotion, but a new wait may have been rolled
-      if (!changed && state.nextPromotion === member.system.nextPromotion) continue;
+      const marriedNow = state.married !== married;
+      //No promotion or marriage, but a new wait may have been rolled
+      if (!changed && !marriedNow && state.nextPromotion === member.system.nextPromotion) continue;
       updates.push({
         _id: member.id,
         "system.careerLevel": state.level,
@@ -2326,6 +2330,12 @@ export class PENWinter {
         "system.nextPromotion": state.nextPromotion,
         "system.married": state.married,
       });
+      if (marriedNow) {
+        promoted++;
+        msgString +=
+          `<div><strong>${foundry.utils.escapeHTML(member.name)}</strong> ` +
+          `${game.i18n.localize("PEN.married")} ${state.married}</div>`;
+      }
       if (!changed) continue;
       promoted++;
       msgString +=
