@@ -12,30 +12,22 @@
 
 form.pen-adventure-entry,
 div.pen-adventure-entry {
-  &.fixed-adventure-heading header.journal-header,
-  &.fixed-adventure-heading form.journal-header {
+  &.fixed-adventure-heading header.journal-header {
     display: none;
   }
 
-  nav.pages-list {
+  nav.toc {
     font-family: AGaramondPro;
 
     .page-heading {
       font-size: 1.2rem;
     }
-
-    .heading-link {
-      font-size: 1.2rem;
-    }
   }
 
   section.journal-entry-content {
-    form.journal-header {
+    header.journal-header input.title {
       font-family: AGaramondPro;
-
-      input[type="text"] {
-        color: var(--pendragon-darkred);
-      }
+      color: var(--pendragon-darkred);
     }
   }
 
