@@ -2192,15 +2192,8 @@ export class PENWinter {
     const ageOf = (itm) => year - itm.system.born;
     this.deathTables = await this.getDeathTables();
     let msgString = "<h5>" + game.i18n.localize("PEN.familyDeaths") + " (" + year + ")</h5>";
-    //Family Record, excludes cousins and other, children under 5 (covered by child survival), the dead,
-    //and anyone without a birth year as they can't be ordered by age
-    let family = actor.items
-      .filter((itm) => itm.type === "family")
-      .filter((itm) => Number(itm.system.died) < 1)
-      .filter((itm) => !["cousin", "other"].includes(itm.system.relation))
-      .filter((itm) => itm.system.born > 0 && ageOf(itm) >= 5);
-    //Oldest first
-    family.sort((a, b) => a.system.born - b.system.born);
+    //Family Record, oldest first
+    let family = PENWinter.familyRecord(actor, year);
     //Potential two rolls 1D20 & optionally 1D6
     const formulas = ["1D20", "1D6"];
     let deadFamily = [];
@@ -2354,84 +2347,71 @@ export class PENWinter {
     await actor.update({ "system.status.familycareers": false });
   }
 
-  //Family Marriages
+  //Family Childbirth (Noble's Handbook, Childbirth Roll)
+  //1D20 three times against the Family Record. A line rolled twice is identical twins, three times identical triplets
+  //Results on a blank line, the spouse (covered by the Childbirth step), anyone outside the child bearing ages
+  //or anyone who had a child last year (or whose partner did) are ignored
   static async familyChildbirth(actor) {
     if (!actor.system.status.familychildbirth) {
       return;
     }
     const year = PENWinter.winterYear(actor);
-    //Living family members with a career and married is 0, oldest first to match the Family Record
     const start = game.settings.get("Pendragon", "childBearingStart");
     const end = game.settings.get("Pendragon", "childBearingEnd");
-    const family = actor.items.filter((itm) => {
-      const isFamily = itm.type === "family";
-      const isAlive = itm.system.died < 1;
-      const age = year - itm.system.born;
-      return isFamily && isAlive && age >= start && age <= end;
-    });
-    family.sort((a, b) => a.system.born - b.system.born);
-    const parents = [];
+    const family = PENWinter.familyRecord(actor, year);
+    const births = new Map();
+    for (let rCount = 0; rCount < 3; rCount++) {
+      const result = await PENUtilities.simpleDiceRoll("1D20");
+      const parent = family[result - 1];
+      if (!parent || parent.system.relation === "spouse") continue;
+      const age = year - parent.system.born;
+      if (age < start || age > end) continue;
+      if (PENWinter.hadChildLastYear(actor, parent, year)) continue;
+      births.set(parent, (births.get(parent) ?? 0) + 1);
+    }
+
+    const randomNames = game.settings.get("Pendragon", "randomFamilyNames");
     const newborns = [];
     let msgString = "<h5>" + game.i18n.localize("PEN.familyChildbirth") + " (" + year + ")</h5>";
-    //3 rolls consolidated in to 1 list
-    for (let pCount = 1; pCount < 4; pCount++) {
-      const result = await PENUtilities.simpleDiceRoll("1D20");
-      if (result > family.length) continue;
-      parents.push(family[result - 1].id);
-    }
-    const counts = new Map();
-    parents.forEach((id) => {
-      if (id === null || id === undefined) return; // Skip invalid entries
-      counts.set(id, (counts.get(id) || 0) + 1);
-    });
-    //For each parent
-    for (let [key, births] of counts) {
-      let parent = family.find((itm) => itm.id === key);
-      let randomNames = game.settings.get("Pendragon", "randomFamilyNames");
-      if (!parent) continue;
-      for (let cCount = 1; cCount <= births; cCount++) {
-        const gender = (await new Roll("1d2").evaluate()).total === 2 ? "female" : "male";
-        const genderLabel = game.i18n.localize("PEN." + gender);
-        let childType = "cousin";
-        switch (parent.system.relation) {
-          case "grandfather":
-          case "grandmother":
-          case "grandparent":
-            childType = gender === "male" ? "uncle" : "aunt";
-            break;
-          case "father":
-          case "mother":
-          case "parent":
-            childType = gender === "male" ? "brother" : "sister";
-            break;
-          case "son":
-          case "daughter":
-          case "child":
-            childType = gender === "male" ? "brother" : "sister";
-            break;
-        }
-        const childName = randomNames
-          ? await PENRandomName.randomName({ doc: actor, gender })
-          : game.i18n.localize("PEN.child");
-        let description = "<p>" + game.i18n.localize("PEN.parent") + ": " + parent.name + "</p>";
-        if (births === 2) description += "<p>" + game.i18n.localize("PEN.twin") + "</p>";
-        if (births === 3) description += "<p>" + game.i18n.localize("PEN.triplet") + "</p>";
+    for (const [parent, count] of births) {
+      //Identical twins and triplets share a gender
+      const gender = (await new Roll("1D2").evaluate()).total === 2 ? "female" : "male";
+      const genderLabel = game.i18n.localize("PEN." + gender);
+      const relation = PENWinter.newbornRelation(parent.system.relation, gender);
+      const married = Number(parent.system.married) || 0;
+      let description =
+        "<p>" + game.i18n.localize("PEN.parent") + ": " + foundry.utils.escapeHTML(parent.name) + "</p>";
+      if (count === 2) description += "<p>" + game.i18n.localize("PEN.twinsIdentical") + "</p>";
+      if (count === 3) description += "<p>" + game.i18n.localize("PEN.tripletsIdentical") + "</p>";
+      //Unmarried parents have a bastard; the Player-knight decides whether the child is recognised
+      if (married === 0 || married > year) description += "<p>" + game.i18n.localize("PEN.bastard") + "</p>";
+      for (let cCount = 0; cCount < count; cCount++) {
+        //No name table means no random name, and a family item needs a name
+        const childName =
+          (randomNames ? await PENRandomName.randomName({ doc: actor, gender }) : null) ??
+          game.i18n.localize("PEN.child");
         msgString +=
-          "<div>" +
-          childName +
-          ": " +
-          game.i18n.localize("PEN.familyRelationship." + childType) +
-          "(" +
+          "<div><strong>" +
+          foundry.utils.escapeHTML(childName) +
+          "</strong>: " +
+          game.i18n.localize("PEN.familyRelationship." + relation) +
+          " (" +
           genderLabel +
-          ")</div>";
+          "), " +
+          game.i18n.localize("PEN.parent") +
+          ": " +
+          foundry.utils.escapeHTML(parent.name) +
+          "</div>";
         newborns.push({
           type: "family",
           name: childName,
           system: {
-            relation: childType,
+            relation,
             born: year,
             gender: genderLabel,
-            description: description,
+            maternal: parent.system.maternal,
+            parentId: parent.id,
+            description,
           },
         });
       }
@@ -2444,5 +2424,71 @@ export class PENWinter {
     });
     if (newborns.length > 0) await actor.createEmbeddedDocuments("Item", newborns);
     await actor.update({ "system.status.familychildbirth": false });
+  }
+
+  //Couples on the Family Record, and the relations of their children
+  static COUPLES = [
+    { partners: ["father", "mother", "parent"], children: ["brother", "sister", "sibling"] },
+    { partners: ["grandfather", "grandmother", "grandparent"], children: ["uncle", "aunt", "pibling"] },
+  ];
+
+  //A mother or couple who had a child last Winter Phase can't have another this year
+  //Children from Family Childbirth link to their parent. For a couple, a child added without that link
+  //is found by relation instead (e.g. a brother or sister born last year for the father or mother)
+  static hadChildLastYear(actor, member, year) {
+    const couple = PENWinter.COUPLES.find((cpl) => cpl.partners.includes(member.system.relation));
+    const sameSide = (itm) => itm.system.maternal === member.system.maternal;
+    const parents = new Set([member.id]);
+    if (couple) {
+      for (const itm of actor.items) {
+        if (itm.type === "family" && couple.partners.includes(itm.system.relation) && sameSide(itm))
+          parents.add(itm.id);
+      }
+    }
+    return actor.items.some(
+      (itm) =>
+        itm.type === "family" &&
+        itm.system.born === year - 1 &&
+        (parents.has(itm.system.parentId) ||
+          (!itm.system.parentId && couple?.children.includes(itm.system.relation) && sameSide(itm))),
+    );
+  }
+
+  //A newborn's relation to the Player-knight, from their parent's relation
+  //There is no niece/nephew relation, so children of siblings are "other"
+  static newbornRelation(parentRelation, gender) {
+    const female = gender === "female";
+    switch (parentRelation) {
+      case "grandfather":
+      case "grandmother":
+      case "grandparent":
+        return female ? "aunt" : "uncle";
+      case "father":
+      case "mother":
+      case "parent":
+        return female ? "sister" : "brother";
+      case "son":
+      case "daughter":
+      case "child":
+        return female ? "granddaughter" : "grandson";
+      case "uncle":
+      case "aunt":
+      case "pibling":
+        return "cousin";
+      default:
+        return "other";
+    }
+  }
+
+  //The Family Record: living family members aged 5 or over, oldest first
+  //Excludes cousins and other, children under 5 (covered by child survival), the dead,
+  //and anyone without a birth year as they can't be ordered by age
+  static familyRecord(actor, year) {
+    return actor.items
+      .filter((itm) => itm.type === "family")
+      .filter((itm) => Number(itm.system.died) < 1)
+      .filter((itm) => !["cousin", "other"].includes(itm.system.relation))
+      .filter((itm) => itm.system.born > 0 && year - itm.system.born >= 5)
+      .sort((a, b) => a.system.born - b.system.born);
   }
 }

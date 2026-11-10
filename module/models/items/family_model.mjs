@@ -23,6 +23,7 @@ export class FamilyData extends foundry.abstract.TypeDataModel {
       barrenMarriage: new BooleanField({ initial: false }),
       blessed: new BooleanField({ initial: false }),
       maternal: new BooleanField({ initial: false }),
+      parentId: new StringField({ required: true, blank: true, initial: "" }), //Id of the parent's family item on the same actor
       born: new NumberField({ ...requiredInteger, initial: 0 }),
       married: new NumberField({ ...requiredInteger, initial: 0 }),
       glory: new NumberField({ ...requiredInteger, initial: 0 }),

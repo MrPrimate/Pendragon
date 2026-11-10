@@ -66,6 +66,19 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     if (relation && !(relation in sheetData.relationType)) {
       sheetData.relationType[relation] = game.i18n.localize("PEN.familyRelationship." + relation);
     }
+    //Parent: any other family member on the same actor
+    sheetData.parentOptions = null;
+    if (this.item.parent) {
+      sheetData.parentOptions = Object.fromEntries(
+        this.item.parent.items
+          .filter((itm) => itm.type === "family" && itm.id !== this.item.id)
+          .sort((a, b) => a.system.born - b.system.born)
+          .map((itm) => [
+            itm.id,
+            itm.name + " (" + game.i18n.localize("PEN.familyRelationship." + itm.system.relation) + ")",
+          ]),
+      );
+    }
     sheetData.showParental = false;
     if (
       ["uncle", "aunt", "pibling", "grandfather", "grandmother", "grandparent", "cousin"].includes(
