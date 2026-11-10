@@ -56,11 +56,13 @@ export class PENCreateFamily {
     //Siblings - calculate first to generate youngest age
     msgString += this.headingString("PEN.familyCreate.siblings");
     let lastSibling = yearBorn;
+    let oldestChild = yearBorn;
     let siblings = this.checkFamily(actor, "brother", "sister");
     if (siblings.length > 0) {
       let ages = await this.checkAges(actor, siblings, "1D6", yearBorn);
       if (!ages.youngest) return false;
       lastSibling = ages.youngest;
+      oldestChild = Math.min(yearBorn, ages.oldest);
       msgString += this.lineString(game.i18n.localize("PEN.familyCreate.alreadyExist"));
     } else {
       let results = await this.addFamily("2D3", yearBorn, "1D6", "brother", "sister", true, 0, 0);
@@ -75,6 +77,10 @@ export class PENCreateFamily {
     let mother = this.checkFamily(actor, "mother");
     let fatherBorn = yearBorn - 24; //fallback year
     let motherBorn = yearBorn - 22; //fallback year
+    //Parents married at their oldest child's birth less 1D2-1, unless an existing parent already has a year
+    const parentsMarried =
+      [...father, ...mother].map((itm) => Number(itm.system.married) || 0).find((married) => married > 0) ??
+      oldestChild - (await new Roll("1D2-1").evaluate()).total;
     if (father.length > 0) {
       let ages = await this.checkAges(actor, father, "-1D6-21", yearBorn);
       if (!ages.youngest) return false;
@@ -82,6 +88,7 @@ export class PENCreateFamily {
       msgString += this.existsString("father");
     } else {
       let results = await this.addFamily("1", yearBorn, "-1D6-21", "father", "", false, 4, lastSibling);
+      for (const member of results.members) member.system.married = parentsMarried;
       familyAdd.push(...results.members);
       msgString += results.resultString;
       fatherBorn = results.lastBorn;
@@ -93,6 +100,7 @@ export class PENCreateFamily {
       msgString += this.existsString("mother");
     } else {
       let results = await this.addFamily("1", fatherBorn, "1D3-1", "mother", "", false, 4, lastSibling);
+      for (const member of results.members) member.system.married = parentsMarried;
       familyAdd.push(...results.members);
       msgString += results.resultString;
       motherBorn = results.lastBorn;
@@ -114,7 +122,7 @@ export class PENCreateFamily {
       msgString += this.headingString("PEN.familyCreate.piblings", side);
       let lastPibling = yearBorn;
       let piblings = this.checkFamily(actor, "uncle", "aunt", maternal);
-      let oldest = 0;
+      let oldest = Infinity;
       if (piblings.length > 0) {
         let ages = await this.checkAges(actor, piblings, "1D6", parentBorn);
         if (!ages.youngest) return false;
@@ -123,7 +131,7 @@ export class PENCreateFamily {
         msgString += this.lineString(game.i18n.localize("PEN.familyCreate.alreadyExist"));
       } else {
         let results = await this.addFamily("1D3", parentBorn, "1D6", "uncle", "aunt", true, 0, 0, maternal);
-        oldest = results.members[0].system.born;
+        oldest = Math.min(...results.members.map((member) => member.system.born));
         familyAdd.push(...results.members);
         msgString += results.resultString;
         lastPibling = results.lastBorn;
@@ -158,7 +166,7 @@ export class PENCreateFamily {
           lastPibling,
           maternal,
         );
-        results.members[0].system.married = oldest;
+        for (const member of results.members) member.system.married = oldest;
         familyAdd.push(...results.members);
         msgString += results.resultString;
         grandfatherBorn = results.lastBorn;
@@ -179,7 +187,7 @@ export class PENCreateFamily {
           lastPibling,
           maternal,
         );
-        results.members[0].system.married = oldest;
+        for (const member of results.members) member.system.married = oldest;
         familyAdd.push(...results.members);
         msgString += results.resultString;
       }
@@ -426,9 +434,9 @@ export class PENCreateFamily {
     }
     let updates = [];
     let youngest = Math.max(...members.map((item) => item.system.born));
-    let oldest = Math.min(...members.map((item) => item.system.born));
+    //Oldest known year of birth, ignoring members who don't have one yet
+    let oldest = Math.min(...members.map((item) => item.system.born).filter((born) => born > 0));
     if (youngest === 0) youngest = base;
-    if (oldest === 0) oldest = 9999;
     for (let member of members) {
       if (member.system.born > 0) continue;
       let ageRoll = new Roll(ageGap);
