@@ -2350,8 +2350,8 @@ export class PENWinter {
   //Family Childbirth (Noble's Handbook, Childbirth Roll)
   //1D20 three times against the Family Record. A line rolled twice is identical twins, three times identical triplets
   //Results on a blank line, the spouse (covered by the Childbirth step), a couple whose mother is outside the
-  //child bearing ages (or a single parent who is), or anyone who had a child last year (or whose partner did)
-  //are ignored
+  //child bearing ages (or a single parent who is), or anyone who had a child last year or this year (or whose
+  //partner did) are ignored
   //An unmarried member has a bastard, and that includes a widow or widower (Noble's Handbook: they remarry in time,
   //which isn't tracked)
   //A couple is one line for this: rolling both partners is twins, not two separate births
@@ -2383,7 +2383,7 @@ export class PENWinter {
       //The age limits are for the mother. Without a known mother on the Record, the rolled member is checked
       const mother = [parent, partner].find((itm) => itm && PENWinter.isFemale(itm)) ?? parent;
       if (!bearingAge(mother)) continue;
-      if (PENWinter.hadChildLastYear(actor, parent, year)) continue;
+      if (PENWinter.hadChildRecently(actor, parent, year)) continue;
       //A widow or widower is unmarried again: the child is theirs alone
       births.set(parent, { parent, partner, widowed: !!recorded && !partner, count: 1 });
     }
@@ -2518,9 +2518,9 @@ export class PENWinter {
     return partner && PENWinter.isAlive(partner) ? partner : null;
   }
 
-  //A mother or couple who had a child last Winter Phase can't have another this year
-  static hadChildLastYear(actor, member, year) {
-    return PENWinter.childrenOf(actor, member).some((itm) => itm.system.born === year - 1);
+  //A mother or couple who had a child last Winter Phase (or already this one) can't have another this year
+  static hadChildRecently(actor, member, year) {
+    return PENWinter.childrenOf(actor, member).some((itm) => itm.system.born >= year - 1 && itm.system.born <= year);
   }
 
   //The family members who are children of a member or their partner: those listing either as a parent.
