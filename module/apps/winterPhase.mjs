@@ -2357,7 +2357,8 @@ export class PENWinter {
   //Family Childbirth (Noble's Handbook, Childbirth Roll)
   //1D20 three times against the Family Record. A line rolled twice is identical twins, three times identical triplets
   //Results on a blank line, the spouse (covered by the Childbirth step), anyone outside the child bearing ages
-  //or anyone who had a child last year (or whose partner did) are ignored
+  //(or whose partner is), or anyone who had a child last year (or whose partner did) are ignored
+  //A couple is one line for this: rolling both partners is twins, not two separate births
   static async familyChildbirth(actor) {
     if (!actor.system.status.familychildbirth) {
       return;
@@ -2365,29 +2366,36 @@ export class PENWinter {
     const year = PENWinter.winterYear(actor);
     const start = game.settings.get("Pendragon", "childBearingStart");
     const end = game.settings.get("Pendragon", "childBearingEnd");
+    const bearingAge = (itm) => year - itm.system.born >= start && year - itm.system.born <= end;
     const family = PENWinter.familyRecord(actor, year);
+    //Keyed by the first partner rolled: { parent, partner, count }
     const births = new Map();
     for (let rCount = 0; rCount < 3; rCount++) {
       const result = await PENUtilities.simpleDiceRoll("1D20");
       const parent = family[result - 1];
       if (!parent || parent.system.relation === "spouse") continue;
-      const age = year - parent.system.born;
-      if (age < start || age > end) continue;
+      //The other parent is linked too when they are on the Record (the father or mother, or a grandparent)
+      const partner = PENWinter.partnerOf(actor, parent);
+      const birth = births.get(parent) ?? (partner ? births.get(partner) : undefined);
+      if (birth) {
+        birth.count++;
+        continue;
+      }
+      if (!bearingAge(parent) || (partner && !bearingAge(partner))) continue;
       if (PENWinter.hadChildLastYear(actor, parent, year)) continue;
-      births.set(parent, (births.get(parent) ?? 0) + 1);
+      births.set(parent, { parent, partner, count: 1 });
     }
 
     const randomNames = game.settings.get("Pendragon", "randomFamilyNames");
     const newborns = [];
     let msgString = "<h5>" + game.i18n.localize("PEN.familyChildbirth") + " (" + year + ")</h5>";
-    for (const [parent, count] of births) {
+    for (const { parent, partner, count } of births.values()) {
       //Identical twins and triplets share a gender
       const gender = (await new Roll("1D2").evaluate()).total === 2 ? "female" : "male";
       const genderLabel = game.i18n.localize("PEN." + gender);
       const relation = PENWinter.newbornRelation(parent.system.relation, gender);
-      const married = Number(parent.system.married) || 0;
-      //The other parent is linked too when they are on the Record (the father or mother, or a grandparent)
-      const partner = PENWinter.partnerOf(actor, parent);
+      //A couple on the Record (e.g. the father and mother) are taken to be married, as older records have no year
+      const married = partner ? year : Number(parent.system.married) || 0;
       const parentIds = partner ? [parent.id, partner.id] : [parent.id];
       const parentLabel =
         game.i18n.localize(partner ? "PEN.parents" : "PEN.parent") +
@@ -2436,7 +2444,21 @@ export class PENWinter {
       content: msgString,
       speaker: ChatMessage.getSpeaker({ actor }),
     });
-    if (newborns.length > 0) await actor.createEmbeddedDocuments("Item", newborns);
+    if (newborns.length > 0) {
+      const created = await actor.createEmbeddedDocuments("Item", newborns);
+      //Assign PIDs
+      const updates = [];
+      for (const newborn of created) {
+        const key = await game.system.api.pid.guessId(newborn);
+        updates.push({
+          _id: newborn.id,
+          "flags.Pendragon.pidFlag.id": key,
+          "flags.Pendragon.pidFlag.lang": game.i18n.lang,
+          "flags.Pendragon.pidFlag.priority": 0,
+        });
+      }
+      await actor.updateEmbeddedDocuments("Item", updates);
+    }
     await actor.update({ "system.status.familychildbirth": false });
   }
 
