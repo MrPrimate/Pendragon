@@ -4,6 +4,7 @@ import { PendragonItemSheet } from "./item-sheet.mjs";
 import { PENRandomName } from "../../apps/random-name.mjs";
 import { PENRandomCareer } from "../../apps/random-career.mjs";
 import { PENCreateFamily } from "../../apps/createFamily.mjs";
+import { FamilyData } from "../../models/items/family_model.mjs";
 
 export class PendragonFamilySheet extends PendragonItemSheet {
   #dragDrop;
@@ -66,13 +67,13 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     if (relation && !(relation in sheetData.relationType)) {
       sheetData.relationType[relation] = game.i18n.localize("PEN.familyRelationship." + relation);
     }
-    //Parents and spouse: the character (by actor UUID) or any other family member on the same actor
+    //Parents and spouse: the character (FamilyData.CHARACTER) or any other family member on the same actor
     sheetData.memberOptions = null;
     [sheetData.parentId0 = "", sheetData.parentId1 = ""] = this.item.system.parentIds;
     const actor = this.item.parent;
     if (actor) {
       sheetData.memberOptions = Object.fromEntries([
-        [actor.uuid, actor.name + " (" + game.i18n.localize("TYPES.Actor." + actor.type) + ")"],
+        [FamilyData.CHARACTER, actor.name + " (" + game.i18n.localize("TYPES.Actor." + actor.type) + ")"],
         ...actor.items
           .filter((itm) => itm.type === "family" && itm.id !== this.item.id)
           .sort((a, b) => a.system.born - b.system.born)
@@ -191,6 +192,16 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     unlinkFrom(actor.items.get(oldSpouseId), this.item.id);
     const newSpouse = actor.items.get(newSpouseId);
     if (newSpouse) {
+      //Taking the character's spouse: say so, as the character loses their link
+      if (newSpouse.system.spouseId === FamilyData.CHARACTER) {
+        ui.notifications.info(
+          game.i18n.format("PEN.spouseRelinked", {
+            name: newSpouse.name,
+            spouse: this.item.name,
+            character: actor.name,
+          }),
+        );
+      }
       unlinkFrom(actor.items.get(newSpouse.system.spouseId), newSpouse.id);
       updates.set(newSpouse.id, { _id: newSpouse.id, "system.spouseId": this.item.id });
     }

@@ -17,6 +17,31 @@ export class PendragonActor extends Actor {
    * is queried and has a roll executed directly from it).
    */
 
+  /**
+   * When family members are deleted, the family members left behind lose any parent or spouse link to them
+   * Only the user who deleted them makes the update
+   * @override
+   */
+  _onDeleteDescendantDocuments(parent, collection, documents, ids, options, userId) {
+    super._onDeleteDescendantDocuments(parent, collection, documents, ids, options, userId);
+    if (userId !== game.user.id || collection !== "items" || options.pendragonFamilyUnlinked) return;
+    const deleted = new Set(documents.filter((doc) => doc.type === "family").map((doc) => doc.id));
+    if (deleted.size === 0) return;
+    const unlink = this.items
+      .filter(
+        (itm) =>
+          itm.type === "family" &&
+          !deleted.has(itm.id) &&
+          (itm.system.parentIds.some((id) => deleted.has(id)) || deleted.has(itm.system.spouseId)),
+      )
+      .map((itm) => ({
+        _id: itm.id,
+        "system.parentIds": itm.system.parentIds.filter((id) => !deleted.has(id)),
+        "system.spouseId": deleted.has(itm.system.spouseId) ? "" : itm.system.spouseId,
+      }));
+    if (unlink.length > 0) this.updateEmbeddedDocuments("Item", unlink);
+  }
+
   prepareBaseData() {
     super.prepareBaseData();
     const actorData = this;

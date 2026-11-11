@@ -596,7 +596,8 @@ export class PENCreateFamily {
         "system.parentIds": itm.system.parentIds.filter((id) => !deleted.has(id)),
         "system.spouseId": deleted.has(itm.system.spouseId) ? "" : itm.system.spouseId,
       }));
-    await actor.deleteEmbeddedDocuments("Item", [...deleted]);
+    //Unlinked here and awaited (not by the actor's delete handler) so a family created straight after sees the result
+    await actor.deleteEmbeddedDocuments("Item", [...deleted], { pendragonFamilyUnlinked: true });
     if (unlink.length > 0) await actor.updateEmbeddedDocuments("Item", unlink);
   }
 }

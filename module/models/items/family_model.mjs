@@ -11,6 +11,10 @@ const {
 } = foundry.data.fields;
 
 export class FamilyData extends foundry.abstract.TypeDataModel {
+  //Stands for the character who owns the family item in parentIds and spouseId. A fixed value rather than the
+  //actor's UUID, so links survive duplicating, importing or exporting the actor and work for unlinked tokens
+  static CHARACTER = "character";
+
   static defineSchema() {
     const requiredInteger = { required: true, nullable: false, integer: true };
     return {
@@ -24,9 +28,9 @@ export class FamilyData extends foundry.abstract.TypeDataModel {
       blessed: new BooleanField({ initial: false }),
       maternal: new BooleanField({ initial: false }),
       //Ids of the parents' family items on the same actor (up to two; often one, as in-laws aren't recorded)
-      //A parent can also be the character, stored as the actor's UUID (e.g. Actor.<id>)
+      //A parent can also be the character, stored as FamilyData.CHARACTER
       parentIds: new ArrayField(new StringField({ required: true, blank: false })),
-      //Id of the spouse's family item on the same actor, or the actor's UUID for the character's own spouse
+      //Id of the spouse's family item on the same actor, or FamilyData.CHARACTER for the character's own spouse
       spouseId: new StringField({ required: true, blank: true, initial: "" }),
       born: new NumberField({ ...requiredInteger, initial: 0 }),
       married: new NumberField({ ...requiredInteger, initial: 0 }),
@@ -50,21 +54,19 @@ export class FamilyData extends foundry.abstract.TypeDataModel {
   //The character's spouse is married to the character
   async _preCreate(data, options, user) {
     if ((await super._preCreate(data, options, user)) === false) return false;
-    const actor = this.parent?.parent;
-    if (actor && this.relation === "spouse" && !this.spouseId)
-      this.parent.updateSource({ "system.spouseId": actor.uuid });
+    if (this.parent?.parent && this.relation === "spouse" && !this.spouseId)
+      this.parent.updateSource({ "system.spouseId": FamilyData.CHARACTER });
   }
 
   //Link to or unlink from the character when the relation changes to or from spouse
   async _preUpdate(changes, options, user) {
     if ((await super._preUpdate(changes, options, user)) === false) return false;
-    const actor = this.parent?.parent;
     const { relation, spouseId } = changes.system ?? {};
     //Leave it alone if the spouse is being set in the same update
-    if (!actor || relation === undefined || relation === this.relation) return;
+    if (!this.parent?.parent || relation === undefined || relation === this.relation) return;
     if (spouseId !== undefined && spouseId !== this.spouseId) return;
-    if (relation === "spouse" && !this.spouseId) changes.system.spouseId = actor.uuid;
-    else if (relation !== "spouse" && this.spouseId === actor.uuid) changes.system.spouseId = "";
+    if (relation === "spouse" && !this.spouseId) changes.system.spouseId = FamilyData.CHARACTER;
+    else if (relation !== "spouse" && this.spouseId === FamilyData.CHARACTER) changes.system.spouseId = "";
   }
 
   prepareDerivedData() {

@@ -8,6 +8,7 @@ import { SkillTrainingDialog } from "./skill-training-selection.mjs";
 import { PENRandomName } from "./random-name.mjs";
 import { PENRandomCareer } from "./random-career.mjs";
 import PENDialog from "../setup/pen-dialog.mjs";
+import { FamilyData } from "../models/items/family_model.mjs";
 
 export class PENWinter {
   static DEATH_TABLES = {
@@ -1927,7 +1928,7 @@ export class PENWinter {
         actor.items.find(
           (itm) => itm.type === "family" && itm.system.relation === "spouse" && Number(itm.system.died) < 1,
         );
-      const parentIds = spouse ? [actor.uuid, spouse.id] : [actor.uuid];
+      const parentIds = spouse ? [FamilyData.CHARACTER, spouse.id] : [FamilyData.CHARACTER];
       let newAdditions = [];
       for (let newFamily of newborn) {
         let died = "";
