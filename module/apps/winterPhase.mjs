@@ -2362,7 +2362,9 @@ export class PENWinter {
     const year = PENWinter.winterYear(actor);
     const start = game.settings.get("Pendragon", "childBearingStart");
     const end = game.settings.get("Pendragon", "childBearingEnd");
-    const bearingAge = (itm) => year - itm.system.born >= start && year - itm.system.born <= end;
+    //Someone without a year of birth can't be checked, so is taken to be within the ages
+    const bearingAge = (itm) =>
+      !(itm.system.born > 0) || (year - itm.system.born >= start && year - itm.system.born <= end);
     const family = PENWinter.familyRecord(actor, year);
     //Keyed by the first partner rolled: { parent, partner, widowed, count }
     const births = new Map();
