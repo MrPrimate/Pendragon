@@ -26,6 +26,17 @@ export class PENRandomName {
     return name || null;
   }
 
+  //Roll a name that isn't already taken (e.g. by a brother or sister), rerolling a few times
+  //roll = async function returning a name or null. Gives up and keeps the last name if the table is too small
+  static async uniqueName(roll, taken, attempts = 10) {
+    let name = null;
+    for (let attempt = 0; attempt < attempts; attempt++) {
+      name = await roll();
+      if (!name || !taken.has(name)) return name;
+    }
+    return name;
+  }
+
   //Returns the specified item type that applies to the document, or null
   //Embedded items (family, squire) use their owner's culture, religion etc
   static resolveCulture(doc, type = "culture") {

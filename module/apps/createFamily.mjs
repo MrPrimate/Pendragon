@@ -90,7 +90,20 @@ export class PENCreateFamily {
       oldestChild = Math.min(yearBorn, ages.oldest);
       msgString += this.lineString(game.i18n.localize("PEN.familyCreate.alreadyExist"));
     } else {
-      let results = await this.addFamily("2D3", yearBorn, "1D6", "brother", "sister", true, 0, 0);
+      //The Player-knight is their brother or sister too
+      let results = await this.addFamily(
+        "2D3",
+        yearBorn,
+        "1D6",
+        "brother",
+        "sister",
+        true,
+        0,
+        0,
+        "",
+        undefined,
+        new Set([actor.name]),
+      );
       familyAdd = results.members;
       msgString += results.resultString;
       lastSibling = results.lastBorn;
@@ -160,7 +173,21 @@ export class PENCreateFamily {
         oldest = ages.oldest;
         msgString += this.lineString(game.i18n.localize("PEN.familyCreate.alreadyExist"));
       } else {
-        let results = await this.addFamily("1D3", parentBorn, "1D6", "uncle", "aunt", true, 0, 0, maternal);
+        //This side's parent is their brother or sister too
+        const sideParentName = (pCount === 1 ? father : mother)[0]?.name;
+        let results = await this.addFamily(
+          "1D3",
+          parentBorn,
+          "1D6",
+          "uncle",
+          "aunt",
+          true,
+          0,
+          0,
+          maternal,
+          undefined,
+          new Set([sideParentName].filter(Boolean)),
+        );
         oldest = Math.min(...results.members.map((member) => member.system.born));
         familyAdd.push(...results.members);
         msgString += results.resultString;
@@ -310,6 +337,7 @@ export class PENCreateFamily {
   //diedBase - if died then year = 1D6 + diedBase
   //maternalCheck - if 'maternal' then set maternal to true
   //latestBorn - members who would be born after this year are not added
+  //taken - names already used by their brothers and sisters, so none of them is reused
   static async addFamily(
     formula,
     born,
@@ -321,6 +349,7 @@ export class PENCreateFamily {
     diedBase = 0,
     maternalCheck = "",
     latestBorn = game.time.components.year,
+    taken = new Set(),
   ) {
     let resultString = "";
     let maternal = false;
@@ -355,13 +384,16 @@ export class PENCreateFamily {
       }
 
       let memberName = game.i18n.localize("PEN.familyRelationship." + type);
-      //If game setting to roll random names
+      //If game setting to roll random names. Brothers and sisters don't share a name
       if (this.nameTables) {
         let table = female ? this.nameTables.female : this.nameTables.male;
-        let nameTableOut = await PENCharCreateV2.makeTableRoll(table);
-        let n2Roll = nameTableOut?.tableResults?.results[0]?.name;
+        let n2Roll = await PENRandomName.uniqueName(async () => {
+          let nameTableOut = await PENCharCreateV2.makeTableRoll(table);
+          return nameTableOut?.tableResults?.results[0]?.name || null;
+        }, taken);
         if (n2Roll) {
           memberName = n2Roll;
+          taken.add(memberName);
         }
       }
 

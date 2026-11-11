@@ -2416,11 +2416,15 @@ export class PENWinter {
       if (count === 3) description += "<p>" + game.i18n.localize("PEN.tripletsIdentical") + "</p>";
       //Unmarried parents have a bastard; the Player-knight decides whether the child is recognised
       if (married === 0 || married > year) description += "<p>" + game.i18n.localize("PEN.bastard") + "</p>";
+      //Brothers and sisters (including twins and triplets) don't share a name
+      const taken = PENWinter.siblingNames(actor, parent);
       for (let cCount = 0; cCount < count; cCount++) {
         //No name table means no random name, and a family item needs a name
-        const childName =
-          (randomNames ? await PENRandomName.randomName({ doc: actor, gender }) : null) ??
-          game.i18n.localize("PEN.child");
+        const randomName = randomNames
+          ? await PENRandomName.uniqueName(() => PENRandomName.randomName({ doc: actor, gender }), taken)
+          : null;
+        if (randomName) taken.add(randomName);
+        const childName = randomName ?? game.i18n.localize("PEN.child");
         msgString +=
           "<div><strong>" +
           foundry.utils.escapeHTML(childName) +
@@ -2495,21 +2499,33 @@ export class PENWinter {
   }
 
   //A mother or couple who had a child last Winter Phase can't have another this year
-  //A child born last year counts if it lists the member or their partner as a parent. For a couple, a
-  //child added by hand without parents is found by relation (e.g. a brother or sister for the father or mother)
   static hadChildLastYear(actor, member, year) {
+    return PENWinter.childrenOf(actor, member).some((itm) => itm.system.born === year - 1);
+  }
+
+  //The family members who are children of a member or their partner: those listing either as a parent.
+  //For a couple, a child added by hand without parents is found by relation (e.g. a brother or sister for
+  //the father or mother)
+  static childrenOf(actor, member) {
     const couple = PENWinter.COUPLES.find((cpl) => cpl.partners.includes(member.system.relation));
     const sameSide = (itm) => itm.system.maternal === member.system.maternal;
     const parents = new Set([member.id]);
     const partner = PENWinter.partnerOf(actor, member);
     if (partner) parents.add(partner.id);
-    return actor.items.some(
+    return actor.items.filter(
       (itm) =>
         itm.type === "family" &&
-        itm.system.born === year - 1 &&
         (itm.system.parentIds.some((id) => parents.has(id)) ||
           (itm.system.parentIds.length === 0 && couple?.children.includes(itm.system.relation) && sameSide(itm))),
     );
+  }
+
+  //Names a newborn's brothers and sisters already have, so a new child isn't given one of them.
+  //The father's and mother's children include the Player-knight
+  static siblingNames(actor, parent) {
+    const names = new Set(PENWinter.childrenOf(actor, parent).map((itm) => itm.name));
+    if (["father", "mother", "parent"].includes(parent.system.relation)) names.add(actor.name);
+    return names;
   }
 
   //A newborn's relation to the Player-knight, from their parent's relation
