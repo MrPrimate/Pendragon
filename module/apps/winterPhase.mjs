@@ -2352,6 +2352,8 @@ export class PENWinter {
   //Results on a blank line, the spouse (covered by the Childbirth step), a couple whose mother is outside the
   //child bearing ages (or a single parent who is), or anyone who had a child last year (or whose partner did)
   //are ignored
+  //An unmarried member has a bastard, and that includes a widow or widower (Noble's Handbook: they remarry in time,
+  //which isn't tracked)
   //A couple is one line for this: rolling both partners is twins, not two separate births
   static async familyChildbirth(actor) {
     if (!actor.system.status.familychildbirth) {
@@ -2362,14 +2364,15 @@ export class PENWinter {
     const end = game.settings.get("Pendragon", "childBearingEnd");
     const bearingAge = (itm) => year - itm.system.born >= start && year - itm.system.born <= end;
     const family = PENWinter.familyRecord(actor, year);
-    //Keyed by the first partner rolled: { parent, partner, count }
+    //Keyed by the first partner rolled: { parent, partner, widowed, count }
     const births = new Map();
     for (let rCount = 0; rCount < 3; rCount++) {
       const result = await PENUtilities.simpleDiceRoll("1D20");
       const parent = family[result - 1];
       if (!parent || parent.system.relation === "spouse") continue;
       //The other parent is linked too when they are on the Record (the father or mother, or a grandparent)
-      const partner = PENWinter.partnerOf(actor, parent);
+      const recorded = PENWinter.recordedPartnerOf(actor, parent);
+      const partner = recorded && PENWinter.isAlive(recorded) ? recorded : null;
       const birth = births.get(parent) ?? (partner ? births.get(partner) : undefined);
       if (birth) {
         birth.count++;
@@ -2379,19 +2382,21 @@ export class PENWinter {
       const mother = [parent, partner].find((itm) => itm && PENWinter.isFemale(itm)) ?? parent;
       if (!bearingAge(mother)) continue;
       if (PENWinter.hadChildLastYear(actor, parent, year)) continue;
-      births.set(parent, { parent, partner, count: 1 });
+      //A widow or widower is unmarried again: the child is theirs alone
+      births.set(parent, { parent, partner, widowed: !!recorded && !partner, count: 1 });
     }
 
     const randomNames = game.settings.get("Pendragon", "randomFamilyNames");
     const newborns = [];
     let msgString = "<h5>" + game.i18n.localize("PEN.familyChildbirth") + " (" + year + ")</h5>";
-    for (const { parent, partner, count } of births.values()) {
+    for (const { parent, partner, widowed, count } of births.values()) {
       //Identical twins and triplets share a gender
       const gender = (await new Roll("1D2").evaluate()).total === 2 ? "female" : "male";
       const genderLabel = game.i18n.localize("PEN." + gender);
       const relation = PENWinter.newbornRelation(parent.system.relation, gender);
       //A couple on the Record (e.g. the father and mother) are taken to be married, as older records have no year
-      const married = partner ? year : Number(parent.system.married) || 0;
+      //A widow or widower is unmarried
+      const married = partner ? year : widowed ? 0 : Number(parent.system.married) || 0;
       const parentIds = partner ? [parent.id, partner.id] : [parent.id];
       const parentLabel =
         game.i18n.localize(partner ? "PEN.parents" : "PEN.parent") +
@@ -2482,23 +2487,33 @@ export class PENWinter {
     return PENUtilities.genderType(member.system.gender) === "female";
   }
 
-  //The living partner of a family member, if the Record has one: their linked spouse or, for members without
+  //Is the family member alive?
+  static isAlive(member) {
+    return Number(member.system.died) < 1;
+  }
+
+  //The partner the Record has for a family member, living or dead: their linked spouse or, for members without
   //one, the father for the mother (and the other way round) or the other grandparent on the same side
-  static partnerOf(actor, member) {
+  //A living partner is preferred over a dead one
+  static recordedPartnerOf(actor, member) {
     const spouse = actor.items.get(member.system.spouseId);
-    if (spouse) return Number(spouse.system.died) < 1 ? spouse : null;
+    if (spouse) return spouse;
     const couple = PENWinter.COUPLES.find((cpl) => cpl.partners.includes(member.system.relation));
     if (!couple) return null;
-    return (
-      actor.items.find(
-        (itm) =>
-          itm.type === "family" &&
-          itm.id !== member.id &&
-          couple.partners.includes(itm.system.relation) &&
-          itm.system.maternal === member.system.maternal &&
-          Number(itm.system.died) < 1,
-      ) ?? null
+    const partners = actor.items.filter(
+      (itm) =>
+        itm.type === "family" &&
+        itm.id !== member.id &&
+        couple.partners.includes(itm.system.relation) &&
+        itm.system.maternal === member.system.maternal,
     );
+    return partners.find(PENWinter.isAlive) ?? partners[0] ?? null;
+  }
+
+  //The living partner of a family member, if the Record has one
+  static partnerOf(actor, member) {
+    const partner = PENWinter.recordedPartnerOf(actor, member);
+    return partner && PENWinter.isAlive(partner) ? partner : null;
   }
 
   //A mother or couple who had a child last Winter Phase can't have another this year
