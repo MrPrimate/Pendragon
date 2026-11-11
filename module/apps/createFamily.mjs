@@ -22,7 +22,27 @@ export class PENCreateFamily {
 
   //Start the process with an actor
   static async startFamily(actor) {
-    let addCousins = game.settings.get("Pendragon", "createCousins");
+    const yearBorn = await this.checkStart(actor);
+    if (!yearBorn) return false;
+    //Get the name tables once rather than for each family member
+    this.nameTables = await this.getNameTables(actor);
+    const run = this.newRun(actor, yearBorn);
+
+    //Siblings first, as the parents need the youngest one
+    const siblings = await this.addSiblings(run);
+    if (!siblings) return false;
+    const parents = await this.addParents(run, siblings);
+    if (!parents) return false;
+    for (const side of ["paternal", "maternal"]) {
+      if (!(await this.addSide(run, side, parents))) return false;
+    }
+    await this.saveFamily(run);
+    return true;
+  }
+
+  //Check the family can be created, and get the year the character was born (asking for it if it isn't set)
+  //Returns the year, or false if the family can't be created
+  static async checkStart(actor) {
     //For characters only
     if (actor.type != "character") {
       ui.notifications.warn("PEN.familyCreate.charOnly", { localize: true });
@@ -45,276 +65,281 @@ export class PENCreateFamily {
       }
       await actor.update({ "system.born": yearBorn });
     }
+    return yearBorn;
+  }
 
-    //Get the name tables once rather than for each family member
-    this.nameTables = await this.getNameTables(actor);
+  //A family creation run
+  //add = new family members to create. Their ids are set up front so children can link to their parents
+  //links = updates for existing members that get parent or spouse links, by id
+  //msg = the chat card
+  static newRun(actor, yearBorn) {
+    return {
+      actor,
+      yearBorn,
+      add: [],
+      links: new Map(),
+      msg: "<h5>" + game.i18n.localize("PEN.familyCreate.title") + "</h5>",
+    };
+  }
 
-    //New family members to be added. Their ids are set up front so children can link to their parents
-    let familyAdd = [];
-    //Existing members that get parent or spouse links from this run, by id
-    const linkUpdates = new Map();
-    //Set a link on new member data, or on an existing item that doesn't have one yet. Existing links are kept
-    const setLink = (member, key, value) => {
-      if (member instanceof Item) {
-        const current = member.system[key];
-        if (current.length > 0) return;
-        linkUpdates.set(member.id, { ...linkUpdates.get(member.id), _id: member.id, ["system." + key]: value });
-      } else {
-        member.system[key] = value;
-      }
-    };
-    const memberId = (member) => member.id ?? member._id;
-    //Link children to their parents
-    const linkParents = (children, parents) => {
-      const parentIds = parents.filter(Boolean).map(memberId);
-      if (parentIds.length === 0) return;
-      for (const child of children) setLink(child, "parentIds", parentIds);
-    };
-    //Link a couple to each other
-    const linkSpouses = (first, second) => {
-      if (!first || !second) return;
-      setLink(first, "spouseId", memberId(second));
-      setLink(second, "spouseId", memberId(first));
-    };
-    let msgString = "<h5>" + game.i18n.localize("PEN.familyCreate.title") + "</h5>";
-
-    //Siblings - calculate first to generate youngest age
-    msgString += this.headingString("PEN.familyCreate.siblings");
-    let lastSibling = yearBorn;
-    let oldestChild = yearBorn;
-    let siblings = this.checkFamily(actor, "brother", "sister");
-    if (siblings.length > 0) {
-      let ages = await this.checkAges(actor, siblings, "1D6", yearBorn);
-      if (!ages.youngest) return false;
-      lastSibling = ages.youngest;
-      oldestChild = Math.min(yearBorn, ages.oldest);
-      msgString += this.lineString(game.i18n.localize("PEN.familyCreate.alreadyExist"));
-    } else {
-      //The Player-knight is their brother or sister too
-      let results = await this.addFamily(
-        "2D3",
-        yearBorn,
-        "1D6",
-        "brother",
-        "sister",
-        true,
-        0,
-        0,
-        "",
-        undefined,
-        new Set([actor.name]),
-      );
-      familyAdd = results.members;
-      msgString += results.resultString;
-      lastSibling = results.lastBorn;
-      siblings = results.members;
+  //One step of the family: members who already exist get any missing years of birth, otherwise new ones are rolled
+  //existing = the existing members, ageGap and base = for their missing years of birth
+  //existsLine = chat line when they already exist, generate = rolls new members (returns addFamily's results)
+  //Returns { members, youngest, oldest } (years of birth), or null if the run has to stop
+  static async fillRelation(run, existing, ageGap, base, existsLine, generate) {
+    if (existing.length > 0) {
+      const ages = await this.checkAges(run.actor, existing, ageGap, base);
+      if (!ages.youngest) return null;
+      run.msg += existsLine;
+      return { members: existing, youngest: ages.youngest, oldest: ages.oldest };
     }
+    const results = await generate();
+    run.add.push(...results.members);
+    run.msg += results.resultString;
+    const oldest = Math.min(...results.members.map((member) => member.system.born));
+    return { members: results.members, youngest: results.lastBorn, oldest };
+  }
 
-    //Parents - need youngest sibling age
-    msgString += this.headingString("PEN.familyCreate.parents");
-    let father = this.checkFamily(actor, "father");
-    let mother = this.checkFamily(actor, "mother");
-    let fatherBorn = yearBorn - 24; //fallback year
-    let motherBorn = yearBorn - 22; //fallback year
-    //Parents married at their oldest child's birth less 1D2-1, unless an existing parent already has a year
-    const parentsMarried =
-      [...father, ...mother].map((itm) => Number(itm.system.married) || 0).find((married) => married > 0) ??
+  //Siblings: 2D3 of them, each 1D6 years younger than the last
+  static async addSiblings(run) {
+    run.msg += this.headingString("PEN.familyCreate.siblings");
+    return this.fillRelation(
+      run,
+      this.checkFamily(run.actor, "brother", "sister"),
+      "1D6",
+      run.yearBorn,
+      this.lineString(game.i18n.localize("PEN.familyCreate.alreadyExist")),
+      () =>
+        this.addFamily({
+          formula: "2D3",
+          born: run.yearBorn,
+          ageGap: "1D6",
+          first: "brother",
+          second: "sister",
+          //The Player-knight is their brother or sister too
+          taken: new Set([run.actor.name]),
+        }),
+    );
+  }
+
+  //Parents: need the youngest sibling, and married at their oldest child's birth less 1D2-1
+  //(unless an existing parent already has a year)
+  //Returns { father, mother, fatherBorn, motherBorn }, or null if the run has to stop
+  static async addParents(run, siblings) {
+    run.msg += this.headingString("PEN.familyCreate.parents");
+    const father = this.checkFamily(run.actor, "father");
+    const mother = this.checkFamily(run.actor, "mother");
+    const oldestChild = Math.min(run.yearBorn, siblings.oldest);
+    const married =
+      [...father, ...mother].map((itm) => Number(itm.system.married) || 0).find((year) => year > 0) ??
       oldestChild - (await new Roll("1D2-1").evaluate()).total;
-    if (father.length > 0) {
-      let ages = await this.checkAges(actor, father, "-1D6-21", yearBorn);
-      if (!ages.youngest) return false;
-      fatherBorn = ages.youngest;
-      msgString += this.existsString("father");
-    } else {
-      let results = await this.addFamily("1", yearBorn, "-1D6-21", "father", "", false, 4, lastSibling);
-      for (const member of results.members) member.system.married = parentsMarried;
-      familyAdd.push(...results.members);
-      msgString += results.resultString;
-      fatherBorn = results.lastBorn;
-      father = results.members;
-    }
-    if (mother.length > 0) {
-      let ages = await this.checkAges(actor, mother, "+1D3-1", fatherBorn);
-      if (!ages.youngest) return false;
-      motherBorn = ages.youngest;
-      msgString += this.existsString("mother");
-    } else {
-      let results = await this.addFamily("1", fatherBorn, "1D3-1", "mother", "", false, 4, lastSibling);
-      for (const member of results.members) member.system.married = parentsMarried;
-      familyAdd.push(...results.members);
-      msgString += results.resultString;
-      motherBorn = results.lastBorn;
-      mother = results.members;
-    }
-    linkParents(siblings, [mother[0], father[0]]);
-    linkSpouses(father[0], mother[0]);
+    const fatherStep = await this.fillRelation(
+      run,
+      father,
+      "-1D6-21",
+      run.yearBorn,
+      this.existsString("father"),
+      async () =>
+        this.withMarried(
+          await this.addFamily({
+            formula: "1",
+            born: run.yearBorn,
+            ageGap: "-1D6-21",
+            first: "father",
+            genderCheck: false,
+            diedChance: 4,
+            diedBase: siblings.youngest,
+          }),
+          married,
+        ),
+    );
+    if (!fatherStep) return null;
+    const motherStep = await this.fillRelation(
+      run,
+      mother,
+      "+1D3-1",
+      fatherStep.youngest,
+      this.existsString("mother"),
+      async () =>
+        this.withMarried(
+          await this.addFamily({
+            formula: "1",
+            born: fatherStep.youngest,
+            ageGap: "1D3-1",
+            first: "mother",
+            genderCheck: false,
+            diedChance: 4,
+            diedBase: siblings.youngest,
+          }),
+          married,
+        ),
+    );
+    if (!motherStep) return null;
+    this.linkParents(run, siblings.members, [motherStep.members[0], fatherStep.members[0]]);
+    this.linkSpouses(run, fatherStep.members[0], motherStep.members[0]);
+    return {
+      father: fatherStep.members,
+      mother: motherStep.members,
+      fatherBorn: fatherStep.youngest,
+      motherBorn: motherStep.youngest,
+    };
+  }
 
-    for (let pCount = 1; pCount <= 2; pCount++) {
-      let cousinCount = 0;
-      let maternal = "paternal";
-      let parentBorn = fatherBorn;
-      if (pCount === 2) {
-        maternal = "maternal";
-        parentBorn = motherBorn;
-      }
-      let side = " (" + game.i18n.localize("PEN.familyCreate." + maternal) + ")";
+  //One side of the family ("paternal" or "maternal"): aunts and uncles, grandparents and cousins
+  //Returns false if the run has to stop
+  static async addSide(run, side, parents) {
+    const maternal = side === "maternal";
+    const parent = maternal ? parents.mother : parents.father;
+    const parentBorn = maternal ? parents.motherBorn : parents.fatherBorn;
+    const suffix = " (" + game.i18n.localize("PEN.familyCreate." + side) + ")";
+    const piblings = await this.addPiblings(run, side, suffix, parent, parentBorn);
+    if (!piblings) return false;
+    const grandparents = await this.addGrandparents(run, side, suffix, parentBorn, piblings);
+    if (!grandparents) return false;
+    //This side's aunts, uncles and parent are the grandparents' children
+    this.linkParents(
+      run,
+      [...piblings.members, ...parent.slice(0, 1)],
+      [grandparents.grandmother[0], grandparents.grandfather[0]],
+    );
+    this.linkSpouses(run, grandparents.grandfather[0], grandparents.grandmother[0]);
+    await this.addCousins(run, side, suffix, piblings.members);
+    return true;
+  }
 
-      //Aunts/Uncles - needs parent ages to generate youngest
-      //2D3 of them in total (1D3 for each of maternal & paternal). 1D6 odd = uncle, even = aunt
-      //Age = father - 1D6, less 1D6 for each next one
-      msgString += this.headingString("PEN.familyCreate.piblings", side);
-      let lastPibling = yearBorn;
-      let piblings = this.checkFamily(actor, "uncle", "aunt", maternal);
-      let oldest = Infinity;
-      if (piblings.length > 0) {
-        let ages = await this.checkAges(actor, piblings, "1D6", parentBorn);
-        if (!ages.youngest) return false;
-        lastPibling = ages.youngest;
-        oldest = ages.oldest;
-        msgString += this.lineString(game.i18n.localize("PEN.familyCreate.alreadyExist"));
-      } else {
-        //This side's parent is their brother or sister too
-        const sideParentName = (pCount === 1 ? father : mother)[0]?.name;
-        let results = await this.addFamily(
-          "1D3",
-          parentBorn,
-          "1D6",
-          "uncle",
-          "aunt",
-          true,
-          0,
-          0,
-          maternal,
-          undefined,
-          new Set([sideParentName].filter(Boolean)),
-        );
-        oldest = Math.min(...results.members.map((member) => member.system.born));
-        familyAdd.push(...results.members);
-        msgString += results.resultString;
-        lastPibling = results.lastBorn;
-        piblings = results.members;
-      }
+  //Aunts/Uncles: need the parent's age. 1D3 of them on each side, 1D6 odd = uncle, even = aunt
+  //Age = parent - 1D6, less 1D6 for each next one
+  static async addPiblings(run, side, suffix, parent, parentBorn) {
+    run.msg += this.headingString("PEN.familyCreate.piblings", suffix);
+    return this.fillRelation(
+      run,
+      this.checkFamily(run.actor, "uncle", "aunt", side),
+      "1D6",
+      parentBorn,
+      this.lineString(game.i18n.localize("PEN.familyCreate.alreadyExist")),
+      () =>
+        this.addFamily({
+          formula: "1D3",
+          born: parentBorn,
+          ageGap: "1D6",
+          first: "uncle",
+          second: "aunt",
+          maternal: side === "maternal",
+          //This side's parent is their brother or sister too
+          taken: new Set([parent[0]?.name].filter(Boolean)),
+        }),
+    );
+  }
 
-      //Grandparents married at Oldest child less 1D2-1
-      oldest = Math.min(pCount === 1 ? fatherBorn : motherBorn, oldest) - (await new Roll("1D2-1").evaluate()).total;
-
-      //Grandparents - need youngest aunt/uncle
-      msgString += this.headingString("PEN.familyCreate.grandparents", side);
-      let grandfather = this.checkFamily(actor, "grandfather", "", maternal);
-      let grandmother = this.checkFamily(actor, "grandmother", "", maternal);
-      let grandfatherBorn = fatherBorn - 24; //fallback year
-      if (pCount === 2) {
-        grandfatherBorn = motherBorn - 24; //fallback year
-      }
-      if (grandfather.length > 0) {
-        let ages = await this.checkAges(actor, grandfather, "-1D6-21", parentBorn);
-        if (!ages.youngest) return false;
-        grandfatherBorn = ages.youngest;
-        msgString += this.existsString("grandfather");
-      } else {
-        let results = await this.addFamily(
-          "1",
-          parentBorn,
-          "-1D6-21",
-          "grandfather",
-          "",
-          false,
-          7,
-          lastPibling,
-          maternal,
-        );
-        for (const member of results.members) member.system.married = oldest;
-        familyAdd.push(...results.members);
-        msgString += results.resultString;
-        grandfatherBorn = results.lastBorn;
-        grandfather = results.members;
-      }
-      if (grandmother.length > 0) {
-        let ages = await this.checkAges(actor, grandmother, "+1D3-1", grandfatherBorn);
-        if (!ages.youngest) return false;
-        msgString += this.existsString("grandmother");
-      } else {
-        let results = await this.addFamily(
-          "1",
-          grandfatherBorn,
-          "1D3-1",
-          "grandmother",
-          "",
-          false,
-          4,
-          lastPibling,
-          maternal,
-        );
-        for (const member of results.members) member.system.married = oldest;
-        familyAdd.push(...results.members);
-        msgString += results.resultString;
-        grandmother = results.members;
-      }
-      //This side's aunts, uncles and parent are the grandparents' children
-      const sideParent = pCount === 1 ? father : mother;
-      linkParents([...piblings, ...sideParent.slice(0, 1)], [grandmother[0], grandfather[0]]);
-      linkSpouses(grandfather[0], grandmother[0]);
-
-      //Now add any cousins needed
-      //1D3-1 for each aunt/uncle, only those who have come of age (14+) and no older than the Player-knight
-      msgString += this.headingString("PEN.familyCreate.cousins", side);
-      let cousins = this.checkFamily(actor, "cousin", "", maternal);
-      if (cousins.length > 0) {
-        msgString += this.lineString(game.i18n.localize("PEN.familyCreate.alreadyExist"));
-      } else {
-        for (let pibling of piblings) {
-          let results = await this.addFamily(
-            "1D3-1",
-            Math.max(pibling.system.born + 20, yearBorn - 1),
-            "1D6",
-            "cousin",
-            "",
-            false,
-            0,
-            0,
+  //Grandparents: need the youngest aunt/uncle, and married at their oldest child's birth less 1D2-1
+  //Returns { grandfather, grandmother }, or null if the run has to stop
+  static async addGrandparents(run, side, suffix, parentBorn, piblings) {
+    const married = Math.min(parentBorn, piblings.oldest) - (await new Roll("1D2-1").evaluate()).total;
+    const maternal = side === "maternal";
+    run.msg += this.headingString("PEN.familyCreate.grandparents", suffix);
+    const grandfather = await this.fillRelation(
+      run,
+      this.checkFamily(run.actor, "grandfather", "", side),
+      "-1D6-21",
+      parentBorn,
+      this.existsString("grandfather"),
+      async () =>
+        this.withMarried(
+          await this.addFamily({
+            formula: "1",
+            born: parentBorn,
+            ageGap: "-1D6-21",
+            first: "grandfather",
+            genderCheck: false,
+            diedChance: 7,
+            diedBase: piblings.youngest,
             maternal,
-            game.time.components.year - 14,
-          );
-          if (addCousins) {
-            linkParents(results.members, [pibling]);
-            familyAdd.push(...results.members);
-            msgString += results.resultString;
-          }
-          cousinCount += results.members.length;
-        }
+          }),
+          married,
+        ),
+    );
+    if (!grandfather) return null;
+    const grandmother = await this.fillRelation(
+      run,
+      this.checkFamily(run.actor, "grandmother", "", side),
+      "+1D3-1",
+      grandfather.youngest,
+      this.existsString("grandmother"),
+      async () =>
+        this.withMarried(
+          await this.addFamily({
+            formula: "1",
+            born: grandfather.youngest,
+            ageGap: "1D3-1",
+            first: "grandmother",
+            genderCheck: false,
+            diedChance: 4,
+            diedBase: piblings.youngest,
+            maternal,
+          }),
+          married,
+        ),
+    );
+    if (!grandmother) return null;
+    return { grandfather: grandfather.members, grandmother: grandmother.members };
+  }
 
-        //Single entry for all the cousins on this side
-        if (!addCousins) {
-          let memberName = game.i18n.format("PEN.familyCreate.cousinCount", { count: cousinCount });
-          msgString += this.lineString(memberName);
-          if (cousinCount > 0) {
-            familyAdd.push({
-              type: "family",
-              name: memberName,
-              system: {
-                born: yearBorn,
-                relation: "cousin",
-                died: "",
-                source: "createFamily",
-                maternal: maternal === "maternal",
-              },
-            });
-          }
-        }
-      }
+  //Cousins: 1D3-1 for each aunt/uncle, only those who have come of age (14+) and no older than the Player-knight
+  //With the Create Cousins setting off, a single entry counts all the cousins on this side
+  static async addCousins(run, side, suffix, piblings) {
+    run.msg += this.headingString("PEN.familyCreate.cousins", suffix);
+    if (this.checkFamily(run.actor, "cousin", "", side).length > 0) {
+      run.msg += this.lineString(game.i18n.localize("PEN.familyCreate.alreadyExist"));
+      return;
     }
+    const addCousins = game.settings.get("Pendragon", "createCousins");
+    const maternal = side === "maternal";
+    let cousinCount = 0;
+    for (const pibling of piblings) {
+      const results = await this.addFamily({
+        formula: "1D3-1",
+        born: Math.max(pibling.system.born + 20, run.yearBorn - 1),
+        ageGap: "1D6",
+        first: "cousin",
+        genderCheck: false,
+        maternal,
+        latestBorn: game.time.components.year - 14,
+      });
+      cousinCount += results.members.length;
+      if (!addCousins) continue;
+      this.linkParents(run, results.members, [pibling]);
+      run.add.push(...results.members);
+      run.msg += results.resultString;
+    }
+    if (addCousins) return;
+    const memberName = game.i18n.format("PEN.familyCreate.cousinCount", { count: cousinCount });
+    run.msg += this.lineString(memberName);
+    if (cousinCount > 0) {
+      run.add.push({
+        type: "family",
+        name: memberName,
+        system: {
+          born: run.yearBorn,
+          relation: "cousin",
+          died: "",
+          source: "createFamily",
+          maternal,
+        },
+      });
+    }
+  }
 
-    //Create Chat Message for Family
+  //Post the chat card, create the new family members, then set their PIDs and the links on existing members
+  static async saveFamily(run) {
+    const { actor } = run;
     await ChatMessage.create({
-      content: msgString,
+      content: run.msg,
       speaker: ChatMessage.getSpeaker({ actor }),
     });
-    let newFamily = await actor.createEmbeddedDocuments("Item", familyAdd, { keepId: true });
-
-    //Assign PIDs
-    let updates = [];
-    for (let family of newFamily) {
-      let key = await game.system.api.pid.guessId(family);
+    const newFamily = await actor.createEmbeddedDocuments("Item", run.add, { keepId: true });
+    const updates = [];
+    for (const family of newFamily) {
+      const key = await game.system.api.pid.guessId(family);
       updates.push({
         _id: family.id,
         "flags.Pendragon.pidFlag.id": key,
@@ -322,11 +347,45 @@ export class PENCreateFamily {
         "flags.Pendragon.pidFlag.priority": 0,
       });
     }
-    await actor.updateEmbeddedDocuments("Item", [...updates, ...linkUpdates.values()]);
-    return true;
+    await actor.updateEmbeddedDocuments("Item", [...updates, ...run.links.values()]);
   }
 
-  //Add Family
+  //Set the year new members married (addFamily's results), returning the results
+  static withMarried(results, married) {
+    for (const member of results.members) member.system.married = married;
+    return results;
+  }
+
+  //Id of an existing family item or of new member data
+  static memberId(member) {
+    return member.id ?? member._id;
+  }
+
+  //Set a link on new member data, or on an existing item that doesn't have one yet. Existing links are kept
+  static setLink(run, member, key, value) {
+    if (member instanceof Item) {
+      if (member.system[key].length > 0) return;
+      run.links.set(member.id, { ...run.links.get(member.id), _id: member.id, ["system." + key]: value });
+    } else {
+      member.system[key] = value;
+    }
+  }
+
+  //Link children to their parents
+  static linkParents(run, children, parents) {
+    const parentIds = parents.filter(Boolean).map((parent) => this.memberId(parent));
+    if (parentIds.length === 0) return;
+    for (const child of children) this.setLink(run, child, "parentIds", parentIds);
+  }
+
+  //Link a couple to each other
+  static linkSpouses(run, first, second) {
+    if (!first || !second) return;
+    this.setLink(run, first, "spouseId", this.memberId(second));
+    this.setLink(run, second, "spouseId", this.memberId(first));
+  }
+
+  //Add Family, taking an object of:
   //formula = number of members
   //born = year born off which the members birth is based
   //ageGap = formula for the gap between members
@@ -335,25 +394,23 @@ export class PENCreateFamily {
   //genderCheck - if false uses the first (male) option
   //diedChance - roll under this score on 1D6 to die
   //diedBase - if died then year = 1D6 + diedBase
-  //maternalCheck - if 'maternal' then set maternal to true
+  //maternal - true for the mother's side of the family
   //latestBorn - members who would be born after this year are not added
   //taken - names already used by their brothers and sisters, so none of them is reused
-  static async addFamily(
+  static async addFamily({
     formula,
     born,
     ageGap,
     first,
-    second,
+    second = "",
     genderCheck = true,
     diedChance = 0,
     diedBase = 0,
-    maternalCheck = "",
+    maternal = false,
     latestBorn = game.time.components.year,
     taken = new Set(),
-  ) {
+  }) {
     let resultString = "";
-    let maternal = false;
-    if (maternalCheck === "maternal") maternal = true;
     let members = [];
     let rollResults = await PENUtilities.complexDiceRoll(formula);
     for (let i = 1; i <= rollResults.total; i++) {
