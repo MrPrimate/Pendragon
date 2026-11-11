@@ -89,7 +89,7 @@ export class PENRandomCareer {
           "system.careers": careerResult.careers,
           "system.yearPromoted": careerResult.result.yearPromoted,
           "system.nextPromotion": careerResult.result.nextPromotion,
-          "system.married": careerResult.result.married,
+          ...this.marriedUpdate(member, careerResult.result.married),
         });
         msgString +=
           "<div><strong>" +

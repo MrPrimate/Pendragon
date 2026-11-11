@@ -2321,7 +2321,7 @@ export class PENWinter {
         ],
         "system.yearPromoted": state.yearPromoted,
         "system.nextPromotion": state.nextPromotion,
-        "system.married": state.married,
+        ...PENRandomCareer.marriedUpdate(member, state.married),
       });
       if (marriedNow) {
         promoted++;
