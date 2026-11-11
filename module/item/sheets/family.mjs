@@ -66,19 +66,21 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     if (relation && !(relation in sheetData.relationType)) {
       sheetData.relationType[relation] = game.i18n.localize("PEN.familyRelationship." + relation);
     }
-    //Parents: any two other family members on the same actor
-    sheetData.parentOptions = null;
+    //Parents and spouse: the character (by actor UUID) or any other family member on the same actor
+    sheetData.memberOptions = null;
     [sheetData.parentId0 = "", sheetData.parentId1 = ""] = this.item.system.parentIds;
-    if (this.item.parent) {
-      sheetData.parentOptions = Object.fromEntries(
-        this.item.parent.items
+    const actor = this.item.parent;
+    if (actor) {
+      sheetData.memberOptions = Object.fromEntries([
+        [actor.uuid, actor.name + " (" + game.i18n.localize("TYPES.Actor." + actor.type) + ")"],
+        ...actor.items
           .filter((itm) => itm.type === "family" && itm.id !== this.item.id)
           .sort((a, b) => a.system.born - b.system.born)
           .map((itm) => [
             itm.id,
             itm.name + " (" + game.i18n.localize("PEN.familyRelationship." + itm.system.relation) + ")",
           ]),
-      );
+      ]);
     }
     sheetData.showParental = false;
     if (
@@ -173,6 +175,26 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     const ids = data.system?.parentIds;
     if (ids && !Array.isArray(ids)) data.system.parentIds = [...new Set(Object.values(ids).filter(Boolean))];
     return data;
+  }
+
+  //Keep spouses linked both ways: the new spouse links back (leaving any spouse they had), the old one is unlinked
+  async _processSubmitData(event, form, submitData, options = {}) {
+    const actor = this.item.parent;
+    const oldSpouseId = this.item.system.spouseId;
+    const newSpouseId = foundry.utils.getProperty(submitData, "system.spouseId");
+    await super._processSubmitData(event, form, submitData, options);
+    if (!actor || newSpouseId === undefined || newSpouseId === oldSpouseId) return;
+    const updates = new Map();
+    const unlinkFrom = (member, id) => {
+      if (member?.system.spouseId === id) updates.set(member.id, { _id: member.id, "system.spouseId": "" });
+    };
+    unlinkFrom(actor.items.get(oldSpouseId), this.item.id);
+    const newSpouse = actor.items.get(newSpouseId);
+    if (newSpouse) {
+      unlinkFrom(actor.items.get(newSpouse.system.spouseId), newSpouse.id);
+      updates.set(newSpouse.id, { _id: newSpouse.id, "system.spouseId": this.item.id });
+    }
+    if (updates.size > 0) await actor.updateEmbeddedDocuments("Item", [...updates.values()]);
   }
 
   //Handle toggle states

@@ -1920,7 +1920,14 @@ export class PENWinter {
       );
       await PENWinter.showAgingRollChat(html, actor);
 
-      //Create family members for each newborn
+      //Create family members for each newborn. The parents are the character and, unless the mother is
+      //someone else ("other"), their living spouse
+      const spouse =
+        decision !== "other" &&
+        actor.items.find(
+          (itm) => itm.type === "family" && itm.system.relation === "spouse" && Number(itm.system.died) < 1,
+        );
+      const parentIds = spouse ? [actor.uuid, spouse.id] : [actor.uuid];
       let newAdditions = [];
       for (let newFamily of newborn) {
         let died = "";
@@ -1937,6 +1944,7 @@ export class PENWinter {
             died: died,
             description: newFamily.notes,
             blessed: newFamily.blessed,
+            parentIds,
           },
           flags: {
             Pendragon: {
@@ -2438,9 +2446,11 @@ export class PENWinter {
     { partners: ["grandfather", "grandmother", "grandparent"], children: ["uncle", "aunt", "pibling"] },
   ];
 
-  //The living partner of a family member, if the Record has one: the father for the mother (and the
-  //other way round), or the other grandparent on the same side. Other relatives' spouses aren't recorded
+  //The living partner of a family member, if the Record has one: their linked spouse or, for members without
+  //one, the father for the mother (and the other way round) or the other grandparent on the same side
   static partnerOf(actor, member) {
+    const spouse = actor.items.get(member.system.spouseId);
+    if (spouse) return Number(spouse.system.died) < 1 ? spouse : null;
     const couple = PENWinter.COUPLES.find((cpl) => cpl.partners.includes(member.system.relation));
     if (!couple) return null;
     return (

@@ -52,18 +52,25 @@
       </div>
     {{/if}}
 
-    {{#if parentOptions}}
+    {{#if memberOptions}}
+      <br>
+      <div class="stat-name left bold new-row">{{localize 'PEN.spouse'}}</div>
+      <div class="stat-name centre">
+        <select class="centre" data-handle-change name="system.spouseId">
+          {{selectOptions memberOptions selected=item.system.spouseId blank=""}}
+        </select>
+      </div>
       <br>
       <div class="stat-name left bold new-row">{{localize 'PEN.parents'}}</div>
       <div class="stat-name centre">
         <select class="centre" data-handle-change name="system.parentIds.0">
-          {{selectOptions parentOptions selected=parentId0 blank=""}}
+          {{selectOptions memberOptions selected=parentId0 blank=""}}
         </select>
       </div>
       <div class="new-row"></div>
       <div class="stat-name centre">
         <select class="centre" data-handle-change name="system.parentIds.1">
-          {{selectOptions parentOptions selected=parentId1 blank=""}}
+          {{selectOptions memberOptions selected=parentId1 blank=""}}
         </select>
       </div>
     {{/if}}

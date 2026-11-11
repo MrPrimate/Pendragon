@@ -51,19 +51,30 @@ export class PENCreateFamily {
 
     //New family members to be added. Their ids are set up front so children can link to their parents
     let familyAdd = [];
-    //Existing members that get parent links from this run
-    const linkUpdates = [];
-    //Link children (new member data or existing items) to their parents. Existing links are kept
-    const linkParents = (children, parents) => {
-      const parentIds = parents.filter(Boolean).map((parent) => parent.id ?? parent._id);
-      if (parentIds.length === 0) return;
-      for (const child of children) {
-        if (child instanceof Item) {
-          if (child.system.parentIds.length === 0) linkUpdates.push({ _id: child.id, "system.parentIds": parentIds });
-        } else {
-          child.system.parentIds = parentIds;
-        }
+    //Existing members that get parent or spouse links from this run, by id
+    const linkUpdates = new Map();
+    //Set a link on new member data, or on an existing item that doesn't have one yet. Existing links are kept
+    const setLink = (member, key, value) => {
+      if (member instanceof Item) {
+        const current = member.system[key];
+        if (current.length > 0) return;
+        linkUpdates.set(member.id, { ...linkUpdates.get(member.id), _id: member.id, ["system." + key]: value });
+      } else {
+        member.system[key] = value;
       }
+    };
+    const memberId = (member) => member.id ?? member._id;
+    //Link children to their parents
+    const linkParents = (children, parents) => {
+      const parentIds = parents.filter(Boolean).map(memberId);
+      if (parentIds.length === 0) return;
+      for (const child of children) setLink(child, "parentIds", parentIds);
+    };
+    //Link a couple to each other
+    const linkSpouses = (first, second) => {
+      if (!first || !second) return;
+      setLink(first, "spouseId", memberId(second));
+      setLink(second, "spouseId", memberId(first));
     };
     let msgString = "<h5>" + game.i18n.localize("PEN.familyCreate.title") + "</h5>";
 
@@ -123,6 +134,7 @@ export class PENCreateFamily {
       mother = results.members;
     }
     linkParents(siblings, [mother[0], father[0]]);
+    linkSpouses(father[0], mother[0]);
 
     for (let pCount = 1; pCount <= 2; pCount++) {
       let cousinCount = 0;
@@ -214,6 +226,7 @@ export class PENCreateFamily {
       //This side's aunts, uncles and parent are the grandparents' children
       const sideParent = pCount === 1 ? father : mother;
       linkParents([...piblings, ...sideParent.slice(0, 1)], [grandmother[0], grandfather[0]]);
+      linkSpouses(grandfather[0], grandmother[0]);
 
       //Now add any cousins needed
       //1D3-1 for each aunt/uncle, only those who have come of age (14+) and no older than the Player-knight
@@ -282,7 +295,7 @@ export class PENCreateFamily {
         "flags.Pendragon.pidFlag.priority": 0,
       });
     }
-    await actor.updateEmbeddedDocuments("Item", [...updates, ...linkUpdates]);
+    await actor.updateEmbeddedDocuments("Item", [...updates, ...linkUpdates.values()]);
     return true;
   }
 
@@ -481,12 +494,19 @@ export class PENCreateFamily {
       .filter((itm) => itm.type === "family")
       .filter((itm) => itm.system.source === "createFamily");
     const deleted = new Set(members.map((i) => i.id));
-    //Members that stay (e.g. parents from the Parents step) lose any link to a deleted parent
+    //Members that stay (e.g. parents from the Parents step) lose any link to a deleted parent or spouse
     const unlink = actor.items
       .filter(
-        (itm) => itm.type === "family" && !deleted.has(itm.id) && itm.system.parentIds.some((id) => deleted.has(id)),
+        (itm) =>
+          itm.type === "family" &&
+          !deleted.has(itm.id) &&
+          (itm.system.parentIds.some((id) => deleted.has(id)) || deleted.has(itm.system.spouseId)),
       )
-      .map((itm) => ({ _id: itm.id, "system.parentIds": itm.system.parentIds.filter((id) => !deleted.has(id)) }));
+      .map((itm) => ({
+        _id: itm.id,
+        "system.parentIds": itm.system.parentIds.filter((id) => !deleted.has(id)),
+        "system.spouseId": deleted.has(itm.system.spouseId) ? "" : itm.system.spouseId,
+      }));
     await actor.deleteEmbeddedDocuments("Item", [...deleted]);
     if (unlink.length > 0) await actor.updateEmbeddedDocuments("Item", unlink);
   }
