@@ -9,6 +9,7 @@ import { PENRandomName } from "./random-name.mjs";
 import { PENRandomCareer } from "./random-career.mjs";
 import PENDialog from "../setup/pen-dialog.mjs";
 import { FamilyData } from "../models/items/family_model.mjs";
+import { PENCreateFamily } from "./createFamily.mjs";
 
 export class PENWinter {
   static DEATH_TABLES = {
@@ -1443,10 +1444,9 @@ export class PENWinter {
       { name: game.i18n.localize("PEN.self"), pid: "self" },
       { name: game.i18n.localize("PEN.other"), pid: "other" },
     ];
-    let spouse = await actor.items
-      .filter((itm) => itm.type === "family")
-      .filter((itm) => itm.system.relation === "spouse").length;
-    if (spouse > 0) {
+    //Only a living spouse can be the mother
+    const spouse = PENWinter.livingSpouse(actor);
+    if (spouse) {
       list.unshift({ name: game.i18n.localize("PEN.spouse"), pid: "spouse" });
     }
     let decision = await PENCharCreateV2.selectFromRadio("list", true, list, game.i18n.localize("PEN.childBirth"));
@@ -1529,11 +1529,7 @@ export class PENWinter {
 
       //If no chance of conception or if barren/barren marriage
       let barren = false;
-      if (
-        decision === "spouse" &&
-        (await actor.items.filter((itm) => itm.type === "family").filter((itm) => itm.system.relation === "spouse"))[0]
-          .system.barrenMarriage
-      ) {
+      if (decision === "spouse" && spouse.system.barrenMarriage) {
         barren = true;
       } else if (decision === "self") {
         barren = actor.system.status.barren;
@@ -1923,12 +1919,7 @@ export class PENWinter {
 
       //Create family members for each newborn. The parents are the character and, unless the mother is
       //someone else ("other"), their living spouse
-      const spouse =
-        decision !== "other" &&
-        actor.items.find(
-          (itm) => itm.type === "family" && itm.system.relation === "spouse" && Number(itm.system.died) < 1,
-        );
-      const parentIds = spouse ? [FamilyData.CHARACTER, spouse.id] : [FamilyData.CHARACTER];
+      const parentIds = spouse && decision !== "other" ? [FamilyData.CHARACTER, spouse.id] : [FamilyData.CHARACTER];
       let newAdditions = [];
       for (let newFamily of newborn) {
         let died = "";
@@ -1964,9 +1955,6 @@ export class PENWinter {
       //If mother dies then make updates to either spouse or actor
       if (motherDies) {
         if (decision === "spouse") {
-          let spouse = await actor.items
-            .filter((itm) => itm.type === "family")
-            .filter((itm) => itm.system.relation === "spouse")[0];
           await spouse.update({ "system.died": PENWinter.winterYear(actor) });
         } else if (decision === "self") {
           await actor.addStatus("dead");
@@ -1993,9 +1981,6 @@ export class PENWinter {
       //If mother Barren then make updates to either spouse or actor
       if (motherBarren) {
         if (decision === "spouse") {
-          let spouse = await actor.items
-            .filter((itm) => itm.type === "family")
-            .filter((itm) => itm.system.relation === "spouse")[0];
           await spouse.update({ "system.barrenMarriage": true });
         } else if (decision === "self") {
           await actor.update({ "system.status.barren": true });
@@ -2364,8 +2349,9 @@ export class PENWinter {
 
   //Family Childbirth (Noble's Handbook, Childbirth Roll)
   //1D20 three times against the Family Record. A line rolled twice is identical twins, three times identical triplets
-  //Results on a blank line, the spouse (covered by the Childbirth step), anyone outside the child bearing ages
-  //(or whose partner is), or anyone who had a child last year (or whose partner did) are ignored
+  //Results on a blank line, the spouse (covered by the Childbirth step), a couple whose mother is outside the
+  //child bearing ages (or a single parent who is), or anyone who had a child last year (or whose partner did)
+  //are ignored
   //A couple is one line for this: rolling both partners is twins, not two separate births
   static async familyChildbirth(actor) {
     if (!actor.system.status.familychildbirth) {
@@ -2389,7 +2375,9 @@ export class PENWinter {
         birth.count++;
         continue;
       }
-      if (!bearingAge(parent) || (partner && !bearingAge(partner))) continue;
+      //The age limits are for the mother. Without a known mother on the Record, the rolled member is checked
+      const mother = [parent, partner].find((itm) => itm && PENWinter.isFemale(itm)) ?? parent;
+      if (!bearingAge(mother)) continue;
       if (PENWinter.hadChildLastYear(actor, parent, year)) continue;
       births.set(parent, { parent, partner, count: 1 });
     }
@@ -2479,6 +2467,20 @@ export class PENWinter {
     { partners: ["father", "mother", "parent"], children: ["brother", "sister", "sibling"] },
     { partners: ["grandfather", "grandmother", "grandparent"], children: ["uncle", "aunt", "pibling"] },
   ];
+
+  //The character's living spouse (a family item), or undefined
+  static livingSpouse(actor) {
+    return actor.items.find(
+      (itm) => itm.type === "family" && itm.system.relation === "spouse" && Number(itm.system.died) < 1,
+    );
+  }
+
+  //A family member is female by their relation (e.g. mother, aunt) or, failing that, their recorded gender
+  static isFemale(member) {
+    const gender = PENCreateFamily.relationGender(member.system.relation);
+    if (gender) return gender === "female";
+    return PENUtilities.genderType(member.system.gender) === "female";
+  }
 
   //The living partner of a family member, if the Record has one: their linked spouse or, for members without
   //one, the father for the mother (and the other way round) or the other grandparent on the same side
