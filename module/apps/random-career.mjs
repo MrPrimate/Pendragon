@@ -280,6 +280,13 @@ export class PENRandomCareer {
     return true;
   }
 
+  //Update data for the marriage year a career ends up with. A year the career rolled (not one the member
+  //already had) is also kept in a flag, so undoing the careers clears only that year
+  static marriedUpdate(member, married) {
+    if (married === (Number(member.system.married) || 0)) return {};
+    return { "system.married": married, "flags.Pendragon.careerMarried": married };
+  }
+
   //An unmarried member on a rank with a marriage chance rolls for it every year
   static canMarry(rank, state) {
     return (rank?.marriage ?? 0) > 0 && !state.married;

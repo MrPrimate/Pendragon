@@ -356,6 +356,8 @@ export class PendragonFamilySheet extends PendragonItemSheet {
         "system.yearPromoted": result.yearPromoted,
         "system.nextPromotion": result.nextPromotion,
         "system.careerLevel": result.level,
+        //The history may have married them (e.g. a marriage chance, or marriage as the promotion)
+        ...PENRandomCareer.marriedUpdate(this.item, result.married),
       });
     } else {
       collection.push({
