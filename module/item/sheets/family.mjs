@@ -66,8 +66,9 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     if (relation && !(relation in sheetData.relationType)) {
       sheetData.relationType[relation] = game.i18n.localize("PEN.familyRelationship." + relation);
     }
-    //Parent: any other family member on the same actor
+    //Parents: any two other family members on the same actor
     sheetData.parentOptions = null;
+    [sheetData.parentId0 = "", sheetData.parentId1 = ""] = this.item.system.parentIds;
     if (this.item.parent) {
       sheetData.parentOptions = Object.fromEntries(
         this.item.parent.items
@@ -164,6 +165,14 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     this.element
       .querySelectorAll(".item-toggle")
       .forEach((n) => n.addEventListener("click", this.#onItemToggle.bind(this)));
+  }
+
+  //The two Parents dropdowns submit as system.parentIds.0 and .1: store them as a list without blanks or repeats
+  _processFormData(event, form, formData) {
+    const data = super._processFormData(event, form, formData);
+    const ids = data.system?.parentIds;
+    if (ids && !Array.isArray(ids)) data.system.parentIds = [...new Set(Object.values(ids).filter(Boolean))];
+    return data;
   }
 
   //Handle toggle states

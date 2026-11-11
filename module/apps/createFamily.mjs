@@ -49,8 +49,22 @@ export class PENCreateFamily {
     //Get the name tables once rather than for each family member
     this.nameTables = await this.getNameTables(actor);
 
-    //New family members to be added
+    //New family members to be added. Their ids are set up front so children can link to their parents
     let familyAdd = [];
+    //Existing members that get parent links from this run
+    const linkUpdates = [];
+    //Link children (new member data or existing items) to their parents. Existing links are kept
+    const linkParents = (children, parents) => {
+      const parentIds = parents.filter(Boolean).map((parent) => parent.id ?? parent._id);
+      if (parentIds.length === 0) return;
+      for (const child of children) {
+        if (child instanceof Item) {
+          if (child.system.parentIds.length === 0) linkUpdates.push({ _id: child.id, "system.parentIds": parentIds });
+        } else {
+          child.system.parentIds = parentIds;
+        }
+      }
+    };
     let msgString = "<h5>" + game.i18n.localize("PEN.familyCreate.title") + "</h5>";
 
     //Siblings - calculate first to generate youngest age
@@ -69,6 +83,7 @@ export class PENCreateFamily {
       familyAdd = results.members;
       msgString += results.resultString;
       lastSibling = results.lastBorn;
+      siblings = results.members;
     }
 
     //Parents - need youngest sibling age
@@ -92,6 +107,7 @@ export class PENCreateFamily {
       familyAdd.push(...results.members);
       msgString += results.resultString;
       fatherBorn = results.lastBorn;
+      father = results.members;
     }
     if (mother.length > 0) {
       let ages = await this.checkAges(actor, mother, "+1D3-1", fatherBorn);
@@ -104,7 +120,9 @@ export class PENCreateFamily {
       familyAdd.push(...results.members);
       msgString += results.resultString;
       motherBorn = results.lastBorn;
+      mother = results.members;
     }
+    linkParents(siblings, [mother[0], father[0]]);
 
     for (let pCount = 1; pCount <= 2; pCount++) {
       let cousinCount = 0;
@@ -170,6 +188,7 @@ export class PENCreateFamily {
         familyAdd.push(...results.members);
         msgString += results.resultString;
         grandfatherBorn = results.lastBorn;
+        grandfather = results.members;
       }
       if (grandmother.length > 0) {
         let ages = await this.checkAges(actor, grandmother, "+1D3-1", grandfatherBorn);
@@ -190,7 +209,11 @@ export class PENCreateFamily {
         for (const member of results.members) member.system.married = oldest;
         familyAdd.push(...results.members);
         msgString += results.resultString;
+        grandmother = results.members;
       }
+      //This side's aunts, uncles and parent are the grandparents' children
+      const sideParent = pCount === 1 ? father : mother;
+      linkParents([...piblings, ...sideParent.slice(0, 1)], [grandmother[0], grandfather[0]]);
 
       //Now add any cousins needed
       //1D3-1 for each aunt/uncle, only those who have come of age (14+) and no older than the Player-knight
@@ -213,6 +236,7 @@ export class PENCreateFamily {
             game.time.components.year - 14,
           );
           if (addCousins) {
+            linkParents(results.members, [pibling]);
             familyAdd.push(...results.members);
             msgString += results.resultString;
           }
@@ -245,7 +269,7 @@ export class PENCreateFamily {
       content: msgString,
       speaker: ChatMessage.getSpeaker({ actor }),
     });
-    let newFamily = await actor.createEmbeddedDocuments("Item", familyAdd);
+    let newFamily = await actor.createEmbeddedDocuments("Item", familyAdd, { keepId: true });
 
     //Assign PIDs
     let updates = [];
@@ -258,7 +282,7 @@ export class PENCreateFamily {
         "flags.Pendragon.pidFlag.priority": 0,
       });
     }
-    await actor.updateEmbeddedDocuments("Item", updates);
+    await actor.updateEmbeddedDocuments("Item", [...updates, ...linkUpdates]);
     return true;
   }
 
@@ -329,6 +353,7 @@ export class PENCreateFamily {
       }
 
       members.push({
+        _id: foundry.utils.randomID(),
         type: "family",
         name: memberName,
         system: {
@@ -455,9 +480,14 @@ export class PENCreateFamily {
     let members = actor.items
       .filter((itm) => itm.type === "family")
       .filter((itm) => itm.system.source === "createFamily");
-    await actor.deleteEmbeddedDocuments(
-      "Item",
-      members.map((i) => i.id),
-    );
+    const deleted = new Set(members.map((i) => i.id));
+    //Members that stay (e.g. parents from the Parents step) lose any link to a deleted parent
+    const unlink = actor.items
+      .filter(
+        (itm) => itm.type === "family" && !deleted.has(itm.id) && itm.system.parentIds.some((id) => deleted.has(id)),
+      )
+      .map((itm) => ({ _id: itm.id, "system.parentIds": itm.system.parentIds.filter((id) => !deleted.has(id)) }));
+    await actor.deleteEmbeddedDocuments("Item", [...deleted]);
+    if (unlink.length > 0) await actor.updateEmbeddedDocuments("Item", unlink);
   }
 }

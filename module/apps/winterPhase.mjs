@@ -2379,8 +2379,17 @@ export class PENWinter {
       const genderLabel = game.i18n.localize("PEN." + gender);
       const relation = PENWinter.newbornRelation(parent.system.relation, gender);
       const married = Number(parent.system.married) || 0;
-      let description =
-        "<p>" + game.i18n.localize("PEN.parent") + ": " + foundry.utils.escapeHTML(parent.name) + "</p>";
+      //The other parent is linked too when they are on the Record (the father or mother, or a grandparent)
+      const partner = PENWinter.partnerOf(actor, parent);
+      const parentIds = partner ? [parent.id, partner.id] : [parent.id];
+      const parentLabel =
+        game.i18n.localize(partner ? "PEN.parents" : "PEN.parent") +
+        ": " +
+        [parent, partner]
+          .filter(Boolean)
+          .map((itm) => foundry.utils.escapeHTML(itm.name))
+          .join(", ");
+      let description = "<p>" + parentLabel + "</p>";
       if (count === 2) description += "<p>" + game.i18n.localize("PEN.twinsIdentical") + "</p>";
       if (count === 3) description += "<p>" + game.i18n.localize("PEN.tripletsIdentical") + "</p>";
       //Unmarried parents have a bastard; the Player-knight decides whether the child is recognised
@@ -2398,9 +2407,7 @@ export class PENWinter {
           " (" +
           genderLabel +
           "), " +
-          game.i18n.localize("PEN.parent") +
-          ": " +
-          foundry.utils.escapeHTML(parent.name) +
+          parentLabel +
           "</div>";
         newborns.push({
           type: "family",
@@ -2410,7 +2417,7 @@ export class PENWinter {
             born: year,
             gender: genderLabel,
             maternal: parent.system.maternal,
-            parentId: parent.id,
+            parentIds,
             description,
           },
         });
@@ -2432,25 +2439,38 @@ export class PENWinter {
     { partners: ["grandfather", "grandmother", "grandparent"], children: ["uncle", "aunt", "pibling"] },
   ];
 
+  //The living partner of a family member, if the Record has one: the father for the mother (and the
+  //other way round), or the other grandparent on the same side. Other relatives' spouses aren't recorded
+  static partnerOf(actor, member) {
+    const couple = PENWinter.COUPLES.find((cpl) => cpl.partners.includes(member.system.relation));
+    if (!couple) return null;
+    return (
+      actor.items.find(
+        (itm) =>
+          itm.type === "family" &&
+          itm.id !== member.id &&
+          couple.partners.includes(itm.system.relation) &&
+          itm.system.maternal === member.system.maternal &&
+          Number(itm.system.died) < 1,
+      ) ?? null
+    );
+  }
+
   //A mother or couple who had a child last Winter Phase can't have another this year
-  //Children from Family Childbirth link to their parent. For a couple, a child added without that link
-  //is found by relation instead (e.g. a brother or sister born last year for the father or mother)
+  //A child born last year counts if it lists the member or their partner as a parent. For a couple, a
+  //child added by hand without parents is found by relation (e.g. a brother or sister for the father or mother)
   static hadChildLastYear(actor, member, year) {
     const couple = PENWinter.COUPLES.find((cpl) => cpl.partners.includes(member.system.relation));
     const sameSide = (itm) => itm.system.maternal === member.system.maternal;
     const parents = new Set([member.id]);
-    if (couple) {
-      for (const itm of actor.items) {
-        if (itm.type === "family" && couple.partners.includes(itm.system.relation) && sameSide(itm))
-          parents.add(itm.id);
-      }
-    }
+    const partner = PENWinter.partnerOf(actor, member);
+    if (partner) parents.add(partner.id);
     return actor.items.some(
       (itm) =>
         itm.type === "family" &&
         itm.system.born === year - 1 &&
-        (parents.has(itm.system.parentId) ||
-          (!itm.system.parentId && couple?.children.includes(itm.system.relation) && sameSide(itm))),
+        (itm.system.parentIds.some((id) => parents.has(id)) ||
+          (itm.system.parentIds.length === 0 && couple?.children.includes(itm.system.relation) && sameSide(itm))),
     );
   }
 
