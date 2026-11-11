@@ -243,12 +243,11 @@ export class PENRandomCareer {
     const deadEnd = rank.noPromotion || state.level >= ranks.length - 1;
 
     //Some ranks give an unmarried member a chance of marriage every year, whether or not a promotion is due
-    if (this.canMarry(rank, state) && (await this.marriageChance(rank))) {
-      state.married = year;
-      //For some ranks marriage is the promotion
-      if (rank.marriagePromotes && !deadEnd) {
-        return this.applyCareerChange(member, state, { career: state.career, level: state.level + 1 }, year);
-      }
+    if (this.canMarry(rank, state) && (await this.marriageChance(rank))) state.married = year;
+
+    //For some ranks marriage is the promotion, including for members who married before reaching the rank
+    if (!deadEnd && this.promotedByMarriage(rank, state, year)) {
+      return this.applyCareerChange(member, state, { career: state.career, level: state.level + 1 }, year);
     }
 
     if (deadEnd) return false; //Top rank or dead end
@@ -284,6 +283,11 @@ export class PENRandomCareer {
   //An unmarried member on a rank with a marriage chance rolls for it every year
   static canMarry(rank, state) {
     return (rank?.marriage ?? 0) > 0 && !state.married;
+  }
+
+  //A married member on a rank where marriage is the promotion moves up
+  static promotedByMarriage(rank, state, year) {
+    return !!rank?.marriagePromotes && state.married > 0 && state.married <= year;
   }
 
   //Replay a family member's career year by year from their 14th birthday to now (or their death)

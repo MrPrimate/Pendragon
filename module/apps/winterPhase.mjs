@@ -2301,8 +2301,15 @@ export class PENWinter {
       const rolled = member.id === rolledId;
       const rank = career.system.ranks[member.system.careerLevel];
       const married = Number(member.system.married) || 0;
-      //Skip anyone with nothing to roll: no chance promotion, no automatic promotion and no marriage chance
-      if (!rolled && !PENRandomCareer.isAutoPromotion(rank) && !PENRandomCareer.canMarry(rank, { married })) continue;
+      //Skip anyone with nothing to roll: no chance promotion, no automatic promotion, no marriage chance
+      //and no promotion from a marriage they already have
+      if (
+        !rolled &&
+        !PENRandomCareer.isAutoPromotion(rank) &&
+        !PENRandomCareer.canMarry(rank, { married }) &&
+        !PENRandomCareer.promotedByMarriage(rank, { married }, year)
+      )
+        continue;
       const state = {
         career,
         level: member.system.careerLevel,
