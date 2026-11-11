@@ -323,16 +323,7 @@ export class PENCreateFamily {
       speaker: ChatMessage.getSpeaker({ actor }),
     });
     const newFamily = await actor.createEmbeddedDocuments("Item", run.add, { keepId: true });
-    const updates = [];
-    for (const family of newFamily) {
-      const key = await game.system.api.pid.guessId(family);
-      updates.push({
-        _id: family.id,
-        "flags.Pendragon.pidFlag.id": key,
-        "flags.Pendragon.pidFlag.lang": game.i18n.lang,
-        "flags.Pendragon.pidFlag.priority": 0,
-      });
-    }
+    const updates = game.system.api.pid.guessIdUpdates(newFamily);
     await actor.updateEmbeddedDocuments("Item", [...updates, ...run.links.values()]);
   }
 

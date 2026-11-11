@@ -2466,18 +2466,7 @@ export class PENWinter {
     });
     if (newborns.length > 0) {
       const created = await actor.createEmbeddedDocuments("Item", newborns);
-      //Assign PIDs
-      const updates = [];
-      for (const newborn of created) {
-        const key = await game.system.api.pid.guessId(newborn);
-        updates.push({
-          _id: newborn.id,
-          "flags.Pendragon.pidFlag.id": key,
-          "flags.Pendragon.pidFlag.lang": game.i18n.lang,
-          "flags.Pendragon.pidFlag.priority": 0,
-        });
-      }
-      await actor.updateEmbeddedDocuments("Item", updates);
+      await actor.updateEmbeddedDocuments("Item", game.system.api.pid.guessIdUpdates(created));
     }
     await actor.update({ "system.status.familychildbirth": false });
   }
