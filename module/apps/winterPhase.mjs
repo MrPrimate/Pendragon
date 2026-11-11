@@ -2350,9 +2350,9 @@ export class PENWinter {
   //Family Childbirth (Noble's Handbook, Childbirth Roll)
   //1D20 three times against the Family Record. A line rolled twice is identical twins, three times identical triplets
   //Both members of a couple rolled is fraternal twins (and with one of them rolled twice, triplets)
-  //Results on a blank line, the spouse (covered by the Childbirth step), a couple whose mother is outside the
-  //child bearing ages (or a single parent who is), or anyone who had a child last year or this year (or whose
-  //partner did) are ignored
+  //Results on a blank line, the character's spouse (covered by the Childbirth step), a couple whose mother is
+  //outside the child bearing ages (or a single parent who is), or anyone who had a child last year or this year
+  //(or whose partner did) are ignored
   //An unmarried member has a bastard, and that includes a widow or widower (Noble's Handbook: they remarry in time,
   //which isn't tracked)
   static async familyChildbirth(actor) {
@@ -2372,7 +2372,7 @@ export class PENWinter {
     for (let rCount = 0; rCount < 3; rCount++) {
       const result = await PENUtilities.simpleDiceRoll("1D20");
       const parent = family[result - 1];
-      if (!parent || parent.system.relation === "spouse") continue;
+      if (!parent || PENWinter.isCharacterSpouse(parent)) continue;
       //The other parent is linked too when they are on the Record (the father or mother, or a grandparent)
       const recorded = PENWinter.recordedPartnerOf(actor, parent);
       const partner = recorded && PENWinter.isAlive(recorded) ? recorded : null;
@@ -2480,8 +2480,14 @@ export class PENWinter {
   //The character's living spouse (a family item), or undefined
   static livingSpouse(actor) {
     return actor.items.find(
-      (itm) => itm.type === "family" && itm.system.relation === "spouse" && Number(itm.system.died) < 1,
+      (itm) => itm.type === "family" && PENWinter.isCharacterSpouse(itm) && Number(itm.system.died) < 1,
     );
+  }
+
+  //A spouse who is married to the character: not one relinked to another family member
+  //A spouse without a link (from before links were kept) is taken to be the character's
+  static isCharacterSpouse(member) {
+    return member.system.relation === "spouse" && [FamilyData.CHARACTER, ""].includes(member.system.spouseId);
   }
 
   //A family member is female by their relation (e.g. mother, aunt) or, failing that, their recorded gender
