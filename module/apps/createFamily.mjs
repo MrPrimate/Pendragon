@@ -368,13 +368,15 @@ export class PENCreateFamily {
 
   //The couple to link from the members found for each partner (e.g. the fathers and the mothers). A neutral
   //relation (e.g. parent) is found for both, so it goes to the partner its gender fits and is never both
+  //Members who fit are placed first, so a lone woman is the second partner (e.g. the mother), not the first
   //Returns [first, second], either of which can be undefined
   static pickCouple(firsts, seconds) {
     const gender = (member) =>
       this.relationGender(member.system.relation) || PENUtilities.genderType(member.system.gender);
-    const first = firsts.find((member) => gender(member) !== "female") ?? firsts[0];
-    const others = seconds.filter((member) => member !== first);
-    const second = others.find((member) => gender(member) !== "male") ?? others[0];
+    let first = firsts.find((member) => gender(member) !== "female");
+    let second = seconds.find((member) => member !== first && gender(member) !== "male");
+    first ??= firsts.find((member) => member !== second);
+    second ??= seconds.find((member) => member !== first);
     return [first, second];
   }
 
