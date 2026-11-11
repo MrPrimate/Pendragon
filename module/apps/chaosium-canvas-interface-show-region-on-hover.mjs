@@ -10,33 +10,96 @@ export default class ChaosiumCanvasInterfaceShowRegionOnHover extends ChaosiumCa
   }
 
   /**
-   * Flag marking a region this behavior (or the highlight key) has shown to the GM, so only those are hidden again
+   * Type name of this behavior
    * @type {string}
    */
-  static SHOWN_FLAG = "regionShownOnHover";
+  static TYPE = "ChaosiumCanvasInterfaceShowRegionOnHover";
 
   /**
-   * Was the region shown by this behavior (and is it still shown)?
+   * Uuids of the regions the GM is hovering over with shift held. Kept on this client only
+   * @type {Set<string>}
+   */
+  static #hovered = new Set();
+
+  /**
+   * Is the GM holding the highlight objects key. Kept on this client only
+   * @type {boolean}
+   */
+  static #highlighting = false;
+
+  /**
+   * Can this behavior reveal the region? Only regions that are otherwise hidden outside the region layer
    * @param {RegionDocument} region
    * @returns {boolean}
    */
-  static isShown(region) {
+  static canReveal(region) {
     return (
-      region.visibility === CONST.REGION_VISIBILITY.GAMEMASTER &&
-      region.getFlag("Pendragon", ChaosiumCanvasInterfaceShowRegionOnHover.SHOWN_FLAG) === true
+      region.visibility === CONST.REGION_VISIBILITY.LAYER_UNLOCKED &&
+      region.behaviors.some(
+        (behavior) => behavior.disabled === false && behavior.type === ChaosiumCanvasInterfaceShowRegionOnHover.TYPE,
+      )
     );
   }
 
   /**
-   * Update data to show (to the GM) or hide a region, marking it as shown by this behavior
-   * @param {boolean} show
-   * @returns {object}
+   * Is the region currently revealed to this GM by hover or the highlight key?
+   * @param {RegionDocument} region
+   * @returns {boolean}
    */
-  static showUpdate(show) {
-    return {
-      visibility: show ? CONST.REGION_VISIBILITY.GAMEMASTER : CONST.REGION_VISIBILITY.LAYER_UNLOCKED,
-      [`flags.Pendragon.${ChaosiumCanvasInterfaceShowRegionOnHover.SHOWN_FLAG}`]: show,
-    };
+  static isRevealed(region) {
+    if (!game.user.isGM) return false;
+    if (
+      !ChaosiumCanvasInterfaceShowRegionOnHover.#highlighting &&
+      !ChaosiumCanvasInterfaceShowRegionOnHover.#hovered.has(region.uuid)
+    ) {
+      return false;
+    }
+    return ChaosiumCanvasInterfaceShowRegionOnHover.canReveal(region);
+  }
+
+  /**
+   * Show or hide the regions on the current scene while the highlight key is held
+   * @param {boolean} active
+   */
+  static setHighlighting(active) {
+    ChaosiumCanvasInterfaceShowRegionOnHover.#highlighting = active;
+    for (const region of canvas.scene?.regions ?? []) {
+      if (ChaosiumCanvasInterfaceShowRegionOnHover.canReveal(region)) {
+        region.object?.renderFlags.set({ refreshState: true });
+      }
+    }
+  }
+
+  /**
+   * Show or hide a region the GM is hovering over
+   * @param {RegionDocument} region
+   * @param {boolean} hovered
+   */
+  static #setHovered(region, hovered) {
+    const set = ChaosiumCanvasInterfaceShowRegionOnHover.#hovered;
+    if (set.has(region.uuid) === hovered) return;
+    if (hovered) set.add(region.uuid);
+    else set.delete(region.uuid);
+    region.object?.renderFlags.set({ refreshState: true });
+  }
+
+  /**
+   * Make the Region placeable show revealed regions. This is display only: the Region document is not changed, so
+   * nothing is sent to other clients or left behind on a reload
+   */
+  static registerRegionClass() {
+    class PendragonRegion extends CONFIG.Region.objectClass {
+      /**
+       * @inheritdoc
+       * @returns {boolean}
+       */
+      get isVisible() {
+        const visible = super.isVisible;
+        if (visible || this.hasPreview || this.isFilteredOut) return visible;
+        return ChaosiumCanvasInterfaceShowRegionOnHover.isRevealed(this.document);
+      }
+    }
+    CONFIG.Region.objectClass = PendragonRegion;
   }
 
   /**
@@ -57,10 +120,7 @@ export default class ChaosiumCanvasInterfaceShowRegionOnHover extends ChaosiumCa
       return false;
     }
     if (game.user.isGM) {
-      const region = this.parent.parent;
-      if (region.visibility === CONST.REGION_VISIBILITY.LAYER_UNLOCKED) {
-        region.update(ChaosiumCanvasInterfaceShowRegionOnHover.showUpdate(true));
-      }
+      ChaosiumCanvasInterfaceShowRegionOnHover.#setHovered(this.parent.parent, true);
       return true;
     }
     return false;
@@ -72,11 +132,7 @@ export default class ChaosiumCanvasInterfaceShowRegionOnHover extends ChaosiumCa
    */
   async _handleMouseOutEvent() {
     if (game.user.isGM) {
-      //Only hide regions this behavior showed, not ones the GM made GM only
-      const region = this.parent.parent;
-      if (ChaosiumCanvasInterfaceShowRegionOnHover.isShown(region)) {
-        region.update(ChaosiumCanvasInterfaceShowRegionOnHover.showUpdate(false));
-      }
+      ChaosiumCanvasInterfaceShowRegionOnHover.#setHovered(this.parent.parent, false);
       return true;
     }
     return false;
