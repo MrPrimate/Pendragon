@@ -1,6 +1,7 @@
 import { PENCharCreateV2 } from "./charCreateV2.mjs";
 import { PENUtilities } from "./utilities.mjs";
 import { PENRandomName } from "./random-name.mjs";
+import { FamilyData } from "../models/items/family_model.mjs";
 
 export class PENCreateFamily {
   static FEMALE_RELATIONS = ["mother", "sister", "aunt", "grandmother", "daughter", "granddaughter"];
@@ -584,18 +585,7 @@ export class PENCreateFamily {
       .filter((itm) => itm.system.source === "createFamily");
     const deleted = new Set(members.map((i) => i.id));
     //Members that stay (e.g. parents from the Parents step) lose any link to a deleted parent or spouse
-    const unlink = actor.items
-      .filter(
-        (itm) =>
-          itm.type === "family" &&
-          !deleted.has(itm.id) &&
-          (itm.system.parentIds.some((id) => deleted.has(id)) || deleted.has(itm.system.spouseId)),
-      )
-      .map((itm) => ({
-        _id: itm.id,
-        "system.parentIds": itm.system.parentIds.filter((id) => !deleted.has(id)),
-        "system.spouseId": deleted.has(itm.system.spouseId) ? "" : itm.system.spouseId,
-      }));
+    const unlink = FamilyData.unlinkUpdates(actor, deleted);
     //Unlinked here and awaited (not by the actor's delete handler) so a family created straight after sees the result
     await actor.deleteEmbeddedDocuments("Item", [...deleted], { pendragonFamilyUnlinked: true });
     if (unlink.length > 0) await actor.updateEmbeddedDocuments("Item", unlink);

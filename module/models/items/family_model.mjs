@@ -51,6 +51,23 @@ export class FamilyData extends foundry.abstract.TypeDataModel {
     };
   }
 
+  //Update data for the family members left behind when some are deleted (deleted = a Set of item ids):
+  //they lose any parent or spouse link to a deleted member
+  static unlinkUpdates(actor, deleted) {
+    return actor.items
+      .filter(
+        (itm) =>
+          itm.type === "family" &&
+          !deleted.has(itm.id) &&
+          (itm.system.parentIds.some((id) => deleted.has(id)) || deleted.has(itm.system.spouseId)),
+      )
+      .map((itm) => ({
+        _id: itm.id,
+        "system.parentIds": itm.system.parentIds.filter((id) => !deleted.has(id)),
+        "system.spouseId": deleted.has(itm.system.spouseId) ? "" : itm.system.spouseId,
+      }));
+  }
+
   //The character's spouse is married to the character
   async _preCreate(data, options, user) {
     if ((await super._preCreate(data, options, user)) === false) return false;
