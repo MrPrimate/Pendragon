@@ -1,41 +1,21 @@
 /**
  * Highlight Objects
- * @param {ApplicationV2} active
+ * While the GM holds the highlight key, regions with an active Show Region On Hover behavior are shown to the GM
+ * @param {boolean} active
  */
 export default function (active) {
-  if (game.user.isGM) {
-    if (active) {
-      const regions = canvas.scene.regions
-        .filter(
-          (doc) =>
-            doc.visibility === CONST.REGION_VISIBILITY.LAYER_UNLOCKED &&
-            doc.behaviors.find(
-              (doc) => doc.disabled === false && doc.type === "ChaosiumCanvasInterfaceShowRegionOnHover",
-            ),
-        )
-        .map((doc) => {
-          return {
-            _id: doc.id,
-            visibility: CONST.REGION_VISIBILITY.GAMEMASTER,
-          };
-        });
-      canvas.scene.updateEmbeddedDocuments("Region", regions);
-    } else {
-      const regions = canvas.scene.regions
-        .filter(
-          (doc) =>
-            doc.visibility === CONST.REGION_VISIBILITY.GAMEMASTER &&
-            doc.behaviors.find(
-              (doc) => doc.disabled === false && doc.type === "ChaosiumCanvasInterfaceShowRegionOnHover",
-            ),
-        )
-        .map((doc) => {
-          return {
-            _id: doc.id,
-            visibility: CONST.REGION_VISIBILITY.LAYER_UNLOCKED,
-          };
-        });
-      canvas.scene.updateEmbeddedDocuments("Region", regions);
-    }
-  }
+  if (!game.user.isGM || !canvas.scene) return;
+  const [from, to] = active
+    ? [CONST.REGION_VISIBILITY.LAYER_UNLOCKED, CONST.REGION_VISIBILITY.GAMEMASTER]
+    : [CONST.REGION_VISIBILITY.GAMEMASTER, CONST.REGION_VISIBILITY.LAYER_UNLOCKED];
+  const regions = canvas.scene.regions
+    .filter(
+      (doc) =>
+        doc.visibility === from &&
+        doc.behaviors.some(
+          (behavior) => behavior.disabled === false && behavior.type === "ChaosiumCanvasInterfaceShowRegionOnHover",
+        ),
+    )
+    .map((doc) => ({ _id: doc.id, visibility: to }));
+  if (regions.length > 0) canvas.scene.updateEmbeddedDocuments("Region", regions);
 }
