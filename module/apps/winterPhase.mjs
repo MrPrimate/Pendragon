@@ -2414,13 +2414,18 @@ export class PENWinter {
       }[count];
       //Unmarried parents have a bastard; the Player-knight decides whether the child is recognised
       const bastard = married === 0 || married > year;
+      //The newborn's relationship and side come from whichever partner is the character's relative (e.g. a son
+      //married to the character's former spouse), so it doesn't matter which of them was rolled
+      const relative =
+        [parent, partner].find((itm) => itm && PENWinter.newbornRelation(itm.system.relation, "male") !== "other") ??
+        parent;
       //Brothers and sisters (including twins and triplets) don't share a name
-      const taken = PENWinter.siblingNames(actor, parent);
+      const taken = PENWinter.siblingNames(actor, relative);
       //Each partner's rolls are identical children, who share a gender
       for (const size of rolls.values()) {
         const gender = (await new Roll("1D2").evaluate()).total === 2 ? "female" : "male";
         const genderLabel = game.i18n.localize("PEN." + gender);
-        const relation = PENWinter.newbornRelation(parent.system.relation, gender);
+        const relation = PENWinter.newbornRelation(relative.system.relation, gender);
         let description = "<p>" + parentLabel + "</p>";
         if (multiple) description += "<p>" + game.i18n.localize(multiple) + "</p>";
         //An identical pair within fraternal triplets
@@ -2450,7 +2455,7 @@ export class PENWinter {
               relation,
               born: year,
               gender: genderLabel,
-              maternal: parent.system.maternal,
+              maternal: relative.system.maternal,
               parentIds,
               description,
             },
