@@ -287,6 +287,13 @@ export class PENRandomCareer {
     return { "system.married": married, "flags.Pendragon.careerMarried": married };
   }
 
+  //A member starting on this rank is married: above a rank where marriage is the promotion (e.g. Knight Consort),
+  //or Wife or higher in the Ladies career, whose marriage comes from the maidInWaiting special instead
+  static startsMarried(career, startLevel) {
+    if (career.flags?.Pendragon?.pidFlag?.id === "i.career.path-of-the-family-ladies") return startLevel > 1;
+    return (career.system?.ranks ?? []).slice(0, startLevel).some((rank) => rank.marriagePromotes);
+  }
+
   //An unmarried member on a rank with a marriage chance rolls for it every year
   static canMarry(rank, state) {
     return (rank?.marriage ?? 0) > 0 && !state.married;
@@ -306,9 +313,9 @@ export class PENRandomCareer {
     const died = Number(member.system.died) || 0;
     const currentYear = game.time.components.year;
     const lastYear = died > 0 ? Math.min(died, currentYear) : currentYear;
-    //A bit of a fudge to deal with careers starting as wife
+    //A bit of a fudge to deal with careers starting on a married rank
     let married = Number(member.system.married) || 0;
-    if (!married && career.flags?.Pendragon?.pidFlag?.id === "i.career.path-of-the-family-ladies" && startLevel > 1) {
+    if (!married && this.startsMarried(career, startLevel)) {
       married = Math.min(born + 15 + (await new Roll("1D5").evaluate()).total, lastYear);
     }
     const state = {
