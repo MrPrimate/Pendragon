@@ -125,7 +125,8 @@ export class PENCreateFamily {
 
   //Parents: need the youngest sibling, and married at their oldest child's birth less 1D2-1
   //(unless an existing parent already has a year). Both get the year, unless they already have one
-  //Returns { father, mother, fatherBorn, motherBorn }, or null if the run has to stop
+  //Returns { father, mother, fatherBorn, motherBorn } (father and mother hold the couple to link, at most one
+  //each), or null if the run has to stop
   static async addParents(run, siblings) {
     run.msg += this.headingString("PEN.familyCreate.parents");
     const father = this.checkFamily(run.actor, "father");
@@ -163,11 +164,12 @@ export class PENCreateFamily {
     );
     if (!motherStep) return null;
     this.setMarried(run, [...fatherStep.members, ...motherStep.members], married);
-    this.linkParents(run, siblings.members, [motherStep.members[0], fatherStep.members[0]]);
-    this.linkSpouses(run, fatherStep.members[0], motherStep.members[0]);
+    const [fatherMember, motherMember] = this.pickCouple(fatherStep.members, motherStep.members);
+    this.linkParents(run, siblings.members, [motherMember, fatherMember]);
+    this.linkSpouses(run, fatherMember, motherMember);
     return {
-      father: fatherStep.members,
-      mother: motherStep.members,
+      father: [fatherMember].filter(Boolean),
+      mother: [motherMember].filter(Boolean),
       fatherBorn: fatherStep.youngest,
       motherBorn: motherStep.youngest,
     };
@@ -188,9 +190,9 @@ export class PENCreateFamily {
     this.linkParents(
       run,
       [...piblings.members, ...parent.slice(0, 1)],
-      [grandparents.grandmother[0], grandparents.grandfather[0]],
+      [grandparents.grandmother, grandparents.grandfather],
     );
-    this.linkSpouses(run, grandparents.grandfather[0], grandparents.grandmother[0]);
+    this.linkSpouses(run, grandparents.grandfather, grandparents.grandmother);
     await this.addCousins(run, side, suffix, piblings.members);
     return true;
   }
@@ -221,7 +223,7 @@ export class PENCreateFamily {
 
   //Grandparents: need the youngest aunt/uncle, and married at their oldest child's birth less 1D2-1
   //(unless an existing grandparent already has a year). Both get the year, unless they already have one
-  //Returns { grandfather, grandmother }, or null if the run has to stop
+  //Returns { grandfather, grandmother } (the couple to link, either can be undefined), or null if the run has to stop
   static async addGrandparents(run, side, suffix, parentBorn, piblings) {
     const grandfathers = this.checkFamily(run.actor, "grandfather", "", side);
     const grandmothers = this.checkFamily(run.actor, "grandmother", "", side);
@@ -267,7 +269,8 @@ export class PENCreateFamily {
     );
     if (!grandmother) return null;
     this.setMarried(run, [...grandfather.members, ...grandmother.members], married);
-    return { grandfather: grandfather.members, grandmother: grandmother.members };
+    const [grandfatherMember, grandmotherMember] = this.pickCouple(grandfather.members, grandmother.members);
+    return { grandfather: grandfatherMember, grandmother: grandmotherMember };
   }
 
   //Cousins: 1D3-1 for each aunt/uncle, only those who have come of age (14+) and no older than the Player-knight
@@ -361,6 +364,18 @@ export class PENCreateFamily {
     } else {
       member.system[key] = value;
     }
+  }
+
+  //The couple to link from the members found for each partner (e.g. the fathers and the mothers). A neutral
+  //relation (e.g. parent) is found for both, so it goes to the partner its gender fits and is never both
+  //Returns [first, second], either of which can be undefined
+  static pickCouple(firsts, seconds) {
+    const gender = (member) =>
+      this.relationGender(member.system.relation) || PENUtilities.genderType(member.system.gender);
+    const first = firsts.find((member) => gender(member) !== "female") ?? firsts[0];
+    const others = seconds.filter((member) => member !== first);
+    const second = others.find((member) => gender(member) !== "male") ?? others[0];
+    return [first, second];
   }
 
   //Link children to their parents
