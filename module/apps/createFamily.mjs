@@ -123,35 +123,24 @@ export class PENCreateFamily {
   }
 
   //Parents: need the youngest sibling, and married at their oldest child's birth less 1D2-1
-  //(unless an existing parent already has a year)
+  //(unless an existing parent already has a year). Both get the year, unless they already have one
   //Returns { father, mother, fatherBorn, motherBorn }, or null if the run has to stop
   static async addParents(run, siblings) {
     run.msg += this.headingString("PEN.familyCreate.parents");
     const father = this.checkFamily(run.actor, "father");
     const mother = this.checkFamily(run.actor, "mother");
     const oldestChild = Math.min(run.yearBorn, siblings.oldest);
-    const married =
-      [...father, ...mother].map((itm) => Number(itm.system.married) || 0).find((year) => year > 0) ??
-      oldestChild - (await new Roll("1D2-1").evaluate()).total;
-    const fatherStep = await this.fillRelation(
-      run,
-      father,
-      "-1D6-21",
-      run.yearBorn,
-      this.existsString("father"),
-      async () =>
-        this.withMarried(
-          await this.addFamily({
-            formula: "1",
-            born: run.yearBorn,
-            ageGap: "-1D6-21",
-            first: "father",
-            genderCheck: false,
-            diedChance: 4,
-            diedBase: siblings.youngest,
-          }),
-          married,
-        ),
+    const married = await this.coupleMarried([...father, ...mother], oldestChild);
+    const fatherStep = await this.fillRelation(run, father, "-1D6-21", run.yearBorn, this.existsString("father"), () =>
+      this.addFamily({
+        formula: "1",
+        born: run.yearBorn,
+        ageGap: "-1D6-21",
+        first: "father",
+        genderCheck: false,
+        diedChance: 4,
+        diedBase: siblings.youngest,
+      }),
     );
     if (!fatherStep) return null;
     const motherStep = await this.fillRelation(
@@ -160,21 +149,19 @@ export class PENCreateFamily {
       "+1D3-1",
       fatherStep.youngest,
       this.existsString("mother"),
-      async () =>
-        this.withMarried(
-          await this.addFamily({
-            formula: "1",
-            born: fatherStep.youngest,
-            ageGap: "1D3-1",
-            first: "mother",
-            genderCheck: false,
-            diedChance: 4,
-            diedBase: siblings.youngest,
-          }),
-          married,
-        ),
+      () =>
+        this.addFamily({
+          formula: "1",
+          born: fatherStep.youngest,
+          ageGap: "1D3-1",
+          first: "mother",
+          genderCheck: false,
+          diedChance: 4,
+          diedBase: siblings.youngest,
+        }),
     );
     if (!motherStep) return null;
+    this.setMarried(run, [...fatherStep.members, ...motherStep.members], married);
     this.linkParents(run, siblings.members, [motherStep.members[0], fatherStep.members[0]]);
     this.linkSpouses(run, fatherStep.members[0], motherStep.members[0]);
     return {
@@ -232,55 +219,53 @@ export class PENCreateFamily {
   }
 
   //Grandparents: need the youngest aunt/uncle, and married at their oldest child's birth less 1D2-1
+  //(unless an existing grandparent already has a year). Both get the year, unless they already have one
   //Returns { grandfather, grandmother }, or null if the run has to stop
   static async addGrandparents(run, side, suffix, parentBorn, piblings) {
-    const married = Math.min(parentBorn, piblings.oldest) - (await new Roll("1D2-1").evaluate()).total;
+    const grandfathers = this.checkFamily(run.actor, "grandfather", "", side);
+    const grandmothers = this.checkFamily(run.actor, "grandmother", "", side);
+    const married = await this.coupleMarried([...grandfathers, ...grandmothers], Math.min(parentBorn, piblings.oldest));
     const maternal = side === "maternal";
     run.msg += this.headingString("PEN.familyCreate.grandparents", suffix);
     const grandfather = await this.fillRelation(
       run,
-      this.checkFamily(run.actor, "grandfather", "", side),
+      grandfathers,
       "-1D6-21",
       parentBorn,
       this.existsString("grandfather"),
-      async () =>
-        this.withMarried(
-          await this.addFamily({
-            formula: "1",
-            born: parentBorn,
-            ageGap: "-1D6-21",
-            first: "grandfather",
-            genderCheck: false,
-            diedChance: 7,
-            diedBase: piblings.youngest,
-            maternal,
-          }),
-          married,
-        ),
+      () =>
+        this.addFamily({
+          formula: "1",
+          born: parentBorn,
+          ageGap: "-1D6-21",
+          first: "grandfather",
+          genderCheck: false,
+          diedChance: 7,
+          diedBase: piblings.youngest,
+          maternal,
+        }),
     );
     if (!grandfather) return null;
     const grandmother = await this.fillRelation(
       run,
-      this.checkFamily(run.actor, "grandmother", "", side),
+      grandmothers,
       "+1D3-1",
       grandfather.youngest,
       this.existsString("grandmother"),
-      async () =>
-        this.withMarried(
-          await this.addFamily({
-            formula: "1",
-            born: grandfather.youngest,
-            ageGap: "1D3-1",
-            first: "grandmother",
-            genderCheck: false,
-            diedChance: 4,
-            diedBase: piblings.youngest,
-            maternal,
-          }),
-          married,
-        ),
+      () =>
+        this.addFamily({
+          formula: "1",
+          born: grandfather.youngest,
+          ageGap: "1D3-1",
+          first: "grandmother",
+          genderCheck: false,
+          diedChance: 4,
+          diedBase: piblings.youngest,
+          maternal,
+        }),
     );
     if (!grandmother) return null;
+    this.setMarried(run, [...grandfather.members, ...grandmother.members], married);
     return { grandfather: grandfather.members, grandmother: grandmother.members };
   }
 
@@ -350,10 +335,25 @@ export class PENCreateFamily {
     await actor.updateEmbeddedDocuments("Item", [...updates, ...run.links.values()]);
   }
 
-  //Set the year new members married (addFamily's results), returning the results
-  static withMarried(results, married) {
-    for (const member of results.members) member.system.married = married;
-    return results;
+  //The year a couple married: an existing member's year if they have one, otherwise their oldest child's year
+  //of birth less 1D2-1
+  static async coupleMarried(existing, oldestChild) {
+    return (
+      existing.map((itm) => Number(itm.system.married) || 0).find((year) => year > 0) ??
+      oldestChild - (await new Roll("1D2-1").evaluate()).total
+    );
+  }
+
+  //Give a couple (new member data or existing items) the year they married. An existing year is kept
+  static setMarried(run, members, married) {
+    for (const member of members) {
+      if (Number(member.system.married) > 0) continue;
+      if (member instanceof Item) {
+        run.links.set(member.id, { ...run.links.get(member.id), _id: member.id, "system.married": married });
+      } else {
+        member.system.married = married;
+      }
+    }
   }
 
   //Id of an existing family item or of new member data
