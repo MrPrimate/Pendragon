@@ -302,7 +302,7 @@ export class PENRandomCareer {
     //A bit of a fudge to deal with careers starting as wife
     let married = Number(member.system.married) || 0;
     if (!married && career.flags?.Pendragon?.pidFlag?.id === "i.career.path-of-the-family-ladies" && startLevel > 1) {
-      married = born + 15 + (await new Roll("1D5").evaluate()).total;
+      married = Math.min(born + 15 + (await new Roll("1D5").evaluate()).total, lastYear);
     }
     const state = {
       career,
