@@ -160,10 +160,8 @@ Hooks.on("ready", async function () {
   };
 });
 
-//if (foundry.utils.isNewerVersion(game.version, "13")) {
 Hooks.on("drawNote", drawNote);
 Hooks.on("renderNoteConfig", RenderNoteConfig);
-//}
 
 Hooks.on("highlightObjects", HighlightObjects);
 

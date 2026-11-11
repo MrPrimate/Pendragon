@@ -2277,7 +2277,6 @@ export class PENWinter {
     //One family member, picked on 1D20, can get a chance promotion this year
     const roll = await PENUtilities.simpleDiceRoll("1D20");
     const rolledId = family[roll - 1]?.id ?? "";
-    //const rolledId = "bP26fuTFiB2t2opu";
     for (const member of family) {
       const { pid, uuid } = member.system.careers[0];
       //Several family members often share a career, so look each one up once
