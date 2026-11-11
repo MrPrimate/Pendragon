@@ -2460,6 +2460,8 @@ export class PENCharCreateV2 {
   }
 
   static async deleteFamilyCareers(actor) {
+    //Parents' and grandparents' marriage years are set when the family is created, not by their careers
+    const keepMarried = ["father", "mother", "parent", "grandfather", "grandmother", "grandparent"];
     let family = actor.items
       .filter((itm) => itm.type === "family")
       .filter((itm) => itm.system.careers.length > 0)
@@ -2471,7 +2473,7 @@ export class PENCharCreateV2 {
           "system.yearPromoted": 0,
           "system.profession": "",
           "system.nextPromotion": 0,
-          "system.married": 0,
+          ...(keepMarried.includes(itm.system.relation) ? {} : { "system.married": 0 }),
         };
       });
     await Item.updateDocuments(family, { parent: actor });
