@@ -2349,12 +2349,12 @@ export class PENWinter {
 
   //Family Childbirth (Noble's Handbook, Childbirth Roll)
   //1D20 three times against the Family Record. A line rolled twice is identical twins, three times identical triplets
+  //Both members of a couple rolled is fraternal twins (and with one of them rolled twice, triplets)
   //Results on a blank line, the spouse (covered by the Childbirth step), a couple whose mother is outside the
   //child bearing ages (or a single parent who is), or anyone who had a child last year or this year (or whose
   //partner did) are ignored
   //An unmarried member has a bastard, and that includes a widow or widower (Noble's Handbook: they remarry in time,
   //which isn't tracked)
-  //A couple is one line for this: rolling both partners is twins, not two separate births
   static async familyChildbirth(actor) {
     if (!actor.system.status.familychildbirth) {
       return;
@@ -2366,7 +2366,8 @@ export class PENWinter {
     const bearingAge = (itm) =>
       !(itm.system.born > 0) || (year - itm.system.born >= start && year - itm.system.born <= end);
     const family = PENWinter.familyRecord(actor, year);
-    //Keyed by the first partner rolled: { parent, partner, widowed, count }
+    //Keyed by the first partner rolled: { parent, partner, widowed, rolls }
+    //rolls = how often each of them was rolled. Each partner's rolls are identical children
     const births = new Map();
     for (let rCount = 0; rCount < 3; rCount++) {
       const result = await PENUtilities.simpleDiceRoll("1D20");
@@ -2377,7 +2378,7 @@ export class PENWinter {
       const partner = recorded && PENWinter.isAlive(recorded) ? recorded : null;
       const birth = births.get(parent) ?? (partner ? births.get(partner) : undefined);
       if (birth) {
-        birth.count++;
+        birth.rolls.set(parent, (birth.rolls.get(parent) ?? 0) + 1);
         continue;
       }
       //The age limits are for the mother. Without a known mother on the Record, the rolled member is checked
@@ -2385,17 +2386,13 @@ export class PENWinter {
       if (!bearingAge(mother)) continue;
       if (PENWinter.hadChildRecently(actor, parent, year)) continue;
       //A widow or widower is unmarried again: the child is theirs alone
-      births.set(parent, { parent, partner, widowed: !!recorded && !partner, count: 1 });
+      births.set(parent, { parent, partner, widowed: !!recorded && !partner, rolls: new Map([[parent, 1]]) });
     }
 
     const randomNames = game.settings.get("Pendragon", "randomFamilyNames");
     const newborns = [];
     let msgString = "<h5>" + game.i18n.localize("PEN.familyChildbirth") + " (" + year + ")</h5>";
-    for (const { parent, partner, widowed, count } of births.values()) {
-      //Identical twins and triplets share a gender
-      const gender = (await new Roll("1D2").evaluate()).total === 2 ? "female" : "male";
-      const genderLabel = game.i18n.localize("PEN." + gender);
-      const relation = PENWinter.newbornRelation(parent.system.relation, gender);
+    for (const { parent, partner, widowed, rolls } of births.values()) {
       //A couple on the Record (e.g. the father and mother) are taken to be married, as older records have no year
       //A widow or widower is unmarried
       const married = partner ? year : widowed ? 0 : Number(parent.system.married) || 0;
@@ -2407,42 +2404,58 @@ export class PENWinter {
           .filter(Boolean)
           .map((itm) => foundry.utils.escapeHTML(itm.name))
           .join(", ");
-      let description = "<p>" + parentLabel + "</p>";
-      if (count === 2) description += "<p>" + game.i18n.localize("PEN.twinsIdentical") + "</p>";
-      if (count === 3) description += "<p>" + game.i18n.localize("PEN.tripletsIdentical") + "</p>";
+      //Twins and triplets are identical when they all come from one member's rolls, fraternal when both partners
+      //were rolled
+      const count = [...rolls.values()].reduce((sum, rolled) => sum + rolled, 0);
+      const identical = rolls.size === 1;
+      const multiple = {
+        2: identical ? "PEN.twinsIdentical" : "PEN.twins",
+        3: identical ? "PEN.tripletsIdentical" : "PEN.triplets",
+      }[count];
       //Unmarried parents have a bastard; the Player-knight decides whether the child is recognised
-      if (married === 0 || married > year) description += "<p>" + game.i18n.localize("PEN.bastard") + "</p>";
+      const bastard = married === 0 || married > year;
       //Brothers and sisters (including twins and triplets) don't share a name
       const taken = PENWinter.siblingNames(actor, parent);
-      for (let cCount = 0; cCount < count; cCount++) {
-        //No name table means no random name, and a family item needs a name
-        const randomName = randomNames
-          ? await PENRandomName.uniqueName(() => PENRandomName.randomName({ doc: actor, gender }), taken)
-          : null;
-        if (randomName) taken.add(randomName);
-        const childName = randomName ?? game.i18n.localize("PEN.child");
-        msgString +=
-          "<div><strong>" +
-          foundry.utils.escapeHTML(childName) +
-          "</strong>: " +
-          game.i18n.localize("PEN.familyRelationship." + relation) +
-          " (" +
-          genderLabel +
-          "), " +
-          parentLabel +
-          "</div>";
-        newborns.push({
-          type: "family",
-          name: childName,
-          system: {
-            relation,
-            born: year,
-            gender: genderLabel,
-            maternal: parent.system.maternal,
-            parentIds,
-            description,
-          },
-        });
+      //Each partner's rolls are identical children, who share a gender
+      for (const size of rolls.values()) {
+        const gender = (await new Roll("1D2").evaluate()).total === 2 ? "female" : "male";
+        const genderLabel = game.i18n.localize("PEN." + gender);
+        const relation = PENWinter.newbornRelation(parent.system.relation, gender);
+        let description = "<p>" + parentLabel + "</p>";
+        if (multiple) description += "<p>" + game.i18n.localize(multiple) + "</p>";
+        //An identical pair within fraternal triplets
+        if (!identical && size === 2) description += "<p>" + game.i18n.localize("PEN.twinsIdentical") + "</p>";
+        if (bastard) description += "<p>" + game.i18n.localize("PEN.bastard") + "</p>";
+        for (let cCount = 0; cCount < size; cCount++) {
+          //No name table means no random name, and a family item needs a name
+          const randomName = randomNames
+            ? await PENRandomName.uniqueName(() => PENRandomName.randomName({ doc: actor, gender }), taken)
+            : null;
+          if (randomName) taken.add(randomName);
+          const childName = randomName ?? game.i18n.localize("PEN.child");
+          msgString +=
+            "<div><strong>" +
+            foundry.utils.escapeHTML(childName) +
+            "</strong>: " +
+            game.i18n.localize("PEN.familyRelationship." + relation) +
+            " (" +
+            genderLabel +
+            "), " +
+            parentLabel +
+            "</div>";
+          newborns.push({
+            type: "family",
+            name: childName,
+            system: {
+              relation,
+              born: year,
+              gender: genderLabel,
+              maternal: parent.system.maternal,
+              parentIds,
+              description,
+            },
+          });
+        }
       }
     }
     if (newborns.length === 0) msgString += "<div>" + game.i18n.localize("PEN.none") + "</div>";
