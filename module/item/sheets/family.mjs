@@ -16,7 +16,7 @@ export class PendragonFamilySheet extends PendragonItemSheet {
   static DEFAULT_OPTIONS = {
     position: {
       width: 560,
-      height: 675,
+      height: 725,
     },
     actions: {
       randomName: this._onRandomName,
@@ -37,6 +37,9 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     // each tab gets its own template
     attributes: {
       template: "systems/Pendragon/templates/item/family.attributes.hbs",
+    },
+    career: {
+      template: "systems/Pendragon/templates/item/family.career.hbs",
     },
     description: {
       template: "systems/Pendragon/templates/item/base.description.hbs",
@@ -141,7 +144,7 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     sheetData.careerLevels = await PENSelectLists.getCareerLevels(maxLevel);
     sheetData.careers = careers;
 
-    let parts = ["attributes", "description", "effects"];
+    let parts = ["attributes", "career", "description", "effects"];
     if (game.user.isGM) {
       parts.push("gmTab");
     }
@@ -154,6 +157,7 @@ export class PendragonFamilySheet extends PendragonItemSheet {
   async _preparePartContext(partId, context) {
     switch (partId) {
       case "attributes":
+      case "career":
       case "description":
       case "effects":
       case "gmTab":

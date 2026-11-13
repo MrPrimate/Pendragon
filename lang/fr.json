@@ -192,6 +192,7 @@
       "marriageChance": "Chance (1D6)",
       "marriagePromotes": "Promotion grâce au mariage",
       "mismatch": "Aucun lancer valide",
+      "notOfAge": "Les carrières commencent à 14 ans",
       "missingTable": "Table de rouleau manquante: {source}",
       "nextPromotion": "Éligible cette Année",
       "noLevel": "Impossible de calculer le niveau de carrière",
@@ -1915,6 +1916,7 @@
     "Tabs": {
       "attributes": "Attributs",
       "benefits": "Avantages",
+      "career": "Carrière",
       "biography": "Bio",
       "charcreate": "Créer",
       "combat": "Combat",

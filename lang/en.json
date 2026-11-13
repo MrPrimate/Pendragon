@@ -196,6 +196,7 @@
       "marriageChance": "Chance (1D6)",
       "marriagePromotes": "Promotion from marriage",
       "mismatch": "No valid rolls made",
+      "notOfAge": "Careers start at 14 years of age",
       "missingTable": "Missing Roll Table: {source}",
       "nextPromotion": "Eligble in Year",
       "noLevel": "Can't calculate the career level",
@@ -1954,6 +1955,7 @@
     "Tabs": {
       "attributes": "Attributes",
       "benefits": "Benefits",
+      "career": "Career",
       "biography": "Bio",
       "charcreate": "Create",
       "combat": "Combat",
