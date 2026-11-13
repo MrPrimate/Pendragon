@@ -192,6 +192,7 @@
       "marriageChance": "Chance (1D6)",
       "marriagePromotes": "Promotion grâce au mariage",
       "mismatch": "Aucun lancer valide",
+      "notOfAge": "Les carrières commencent à 14 ans",
       "missingTable": "Table de rouleau manquante: {source}",
       "nextPromotion": "Éligible cette Année",
       "noLevel": "Impossible de calculer le niveau de carrière",
@@ -460,7 +461,6 @@
       "title": "Création de famille",
       "invalidFamilyType": "{type} n'est pas un lien familial valide. Il a été ignoré",
       "invalidFormula": "{formula} n'est pas une formule de lancer valide",
-      "cousinCount": "Cousins ({count})",
       "parentsFirst": "Terminez d'abord l'étape Parents, elle définit la Gloire héritée"
     },
     "familyRelationship": {
@@ -1468,8 +1468,8 @@
       "childMortalityHint": "Lorsqu'il est désactivé, les tests de survie de l'enfant sont ignorés et les tragédies d'accouchement ne sont pas possibles.",
       "combatOptions": "Options de combat/dégâts",
       "combatOptionsHint": "Changer les paramètres de combat et dégâts",
-      "createCousins": "Créer des cousins",
-      "createCousinsHint": "Crée des cousins séparés plutôt qu'une seule entrée",
+      "extendedFamilyCareers": "Carrières des cousins et petits-enfants",
+      "extendedFamilyCareersHint": "Tire une carrière pour les cousins et petits-enfants liés à un parent lors de la création du personnage, et pendant la Phase d'Hiver lorsqu'ils atteignent l'âge requis. Leur place dans la famille dépend des enfants de leur parent. Une carrière peut toujours être tirée à la main pour tout membre de la famille",
       "critAdj": "Modificateur bonus de Critique",
       "critAdjHint": "Réduire les bonus de Critique lorsque toutes les parties ont un bonus",
       "delayDice": "Termine les lancers de dés",
@@ -1916,6 +1916,7 @@
     "Tabs": {
       "attributes": "Attributs",
       "benefits": "Avantages",
+      "career": "Carrière",
       "biography": "Bio",
       "charcreate": "Créer",
       "combat": "Combat",

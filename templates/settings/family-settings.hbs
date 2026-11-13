@@ -13,18 +13,18 @@
     <br>
 
     <div class="form-group">
-      <label class="bold">{{localize 'PEN.Settings.createCousins'}}</label>
+      <label class="bold">{{localize 'PEN.Settings.extendedFamilyCareers'}}</label>
       <div class="form-fields" style="flex: 1;">
-        <input type="checkbox" {{checked optSet.createCousins.value}} name="createCousins">
+        <input type="checkbox" {{checked optSet.extendedFamilyCareers.value}} name="extendedFamilyCareers" {{#unless isGM}}disabled{{/unless}}>
       </div>
-      <p class="settingNote">{{localize 'PEN.Settings.createCousinsHint'}}</p>
+      <p class="settingNote">{{localize 'PEN.Settings.extendedFamilyCareersHint'}}</p>
     </div>
     <br>
 
     <div class="form-group">
       <label class="bold">{{localize 'PEN.Settings.familyDecrepitude'}}</label>
       <div class="form-fields" style="flex: 1;">
-        <input type="checkbox" {{checked optSet.familyDecrepitude.value}} name="familyDecrepitude">
+        <input type="checkbox" {{checked optSet.familyDecrepitude.value}} name="familyDecrepitude" {{#unless isGM}}disabled{{/unless}}>
       </div>
       <p class="settingNote">{{localize 'PEN.Settings.familyDecrepitudeHint'}}</p>
     </div>
@@ -33,7 +33,7 @@
     <div class="form-group">
       <label class="bold">{{localize 'PEN.Settings.childBearingStart'}}</label>
       <div class="form-fields" style="flex: 1;">
-        <input  style="text-align:right;" type="number" value={{optSet.childBearingStart.value}} name="childBearingStart">
+        <input  style="text-align:right;" type="number" value={{optSet.childBearingStart.value}} name="childBearingStart" {{#unless isGM}}disabled{{/unless}}>
       </div>
       <p class="settingNote">{{localize 'PEN.Settings.childBearingStartHint'}}</p>
     </div>
@@ -42,7 +42,7 @@
     <div class="form-group">
       <label class="bold">{{localize 'PEN.Settings.childBearingEnd'}}</label>
       <div class="form-fields" style="flex: 1;">
-        <input  style="text-align:right;" type="number" value={{optSet.childBearingEnd.value}} name="childBearingEnd">
+        <input  style="text-align:right;" type="number" value={{optSet.childBearingEnd.value}} name="childBearingEnd" {{#unless isGM}}disabled{{/unless}}>
       </div>
       <p class="settingNote">{{localize 'PEN.Settings.childBearingEndHint'}}</p>
     </div>

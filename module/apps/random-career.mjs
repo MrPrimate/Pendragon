@@ -42,14 +42,8 @@ export class PENRandomCareer {
     const family = await this.resolveFamily(actor);
     //If handin doc is a character we are rolling on all the family who don't have a career yet
     if (doc instanceof Actor && doc.type === "character") {
-      //This works for Piblings, Siblings & Children.  Can't work out order for Grandchildren - would expect this to be done from parents family tree
       members = family.items.filter(
-        (itm) =>
-          (this.PIBLINGS.includes(itm.system.relation) ||
-            this.SIBLINGS.includes(itm.system.relation) ||
-            this.CHILDREN.includes(itm.system.relation)) &&
-          itm.system.age >= 14 &&
-          !itm.system.careers.length,
+        (itm) => this.autoRollCareer(itm) && itm.system.age >= 14 && !itm.system.careers.length,
       );
       //Else if doc is a family item roll on just this member
     } else if (doc instanceof Item && doc.type === "family") {
@@ -140,13 +134,11 @@ export class PENRandomCareer {
           table = this.resolveSiblingTable(doc, info);
           break;
         }
-        case "son":
-        case "daughter":
-        case "child":
+        //Children, and when rolled by hand anyone else (e.g. cousins or other). Without a position in the family
+        //(no linked parent, or a relation that has none) they use the martial or non-martial tables
+        default:
           table = this.resolveChildTable(doc, info);
           break;
-        default:
-          return null;
       }
       if (!table) {
         ui.notifications.warn("PEN.career.missingTable", { format: { source: doc.system.relation } });
@@ -167,6 +159,18 @@ export class PENRandomCareer {
       }
     }
     return false;
+  }
+
+  //Is a career rolled for this family member automatically, in character creation and the Winter Phase?
+  //Anyone can have one rolled by hand on their sheet. Aunts and uncles, siblings and children always are.
+  //Cousins and grandchildren are with the Careers for Cousins and Grandchildren setting, when they are linked to a
+  //parent, as their position in the family comes from their parent's children. This also leaves out a single entry
+  //that counts all the cousins on one side, as older Family Creation made
+  static autoRollCareer(member) {
+    const relation = member.system.relation;
+    if ([...this.PIBLINGS, ...this.SIBLINGS, ...this.CHILDREN].includes(relation)) return true;
+    if (![...this.COUSINS, ...this.GRANDCHILDREN].includes(relation)) return false;
+    return game.settings.get("Pendragon", "extendedFamilyCareers") && member.system.parentIds.length > 0;
   }
 
   //Get the Career tables. A missing table is only a problem when it is needed, so it is left as null
@@ -406,6 +410,16 @@ export class PENRandomCareer {
     let group = family.items.filter(
       (itm) => relationGroup.includes(itm.system.relation) && itm.system.maternal === member.system.maternal,
     );
+    //Cousins and grandchildren are ordered among their parent's children rather than all of them
+    //Without a parent there is nothing to order them among
+    if (relationGroup === this.COUSINS || relationGroup === this.GRANDCHILDREN) {
+      const parentIds = member.system.parentIds;
+      if (!parentIds.length) return null;
+      group = family.items.filter(
+        (itm) =>
+          relationGroup.includes(itm.system.relation) && itm.system.parentIds.some((id) => parentIds.includes(id)),
+      );
+    }
     switch (member.system.relation) {
       case "uncle":
       case "aunt":
@@ -436,7 +450,11 @@ export class PENRandomCareer {
       }
       case "son":
       case "daughter":
-      case "child": {
+      case "child":
+      case "cousin":
+      case "grandson":
+      case "granddaughter":
+      case "grandchild": {
         //The eldest martial child is the heir (1),
         //the next eldest martial child is the spare (2),
         //and the third eldest martial child is the prayer (3).

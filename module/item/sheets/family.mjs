@@ -16,7 +16,7 @@ export class PendragonFamilySheet extends PendragonItemSheet {
   static DEFAULT_OPTIONS = {
     position: {
       width: 560,
-      height: 675,
+      height: 725,
     },
     actions: {
       randomName: this._onRandomName,
@@ -38,6 +38,9 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     attributes: {
       template: "systems/Pendragon/templates/item/family.attributes.hbs",
     },
+    career: {
+      template: "systems/Pendragon/templates/item/family.career.hbs",
+    },
     description: {
       template: "systems/Pendragon/templates/item/base.description.hbs",
     },
@@ -58,8 +61,13 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     };
     sheetData.showRandomName = true;
     sheetData.showCareer = this.item.system.age >= 14;
-    sheetData.showRandomCareer = this.item.system.age >= 14;
-    if (Number(this.item.system.died) > 0) sheetData.showRandomCareer = false;
+    //Anyone living who has come of age can have a career rolled by hand (hidden again below if they have one)
+    sheetData.showRandomCareer = this.item.system.age >= 14 && !(Number(this.item.system.died) > 0);
+    //Older Family Creation made a single "Cousins (n)" entry that counts all the cousins on one side. It stands for
+    //a group rather than a person, so it gets no career. Individual cousins are linked to a parent
+    if (PENRandomCareer.COUSINS.includes(this.item.system.relation) && !this.item.system.parentIds.length) {
+      sheetData.showRandomCareer = false;
+    }
 
     sheetData.relationType = PENSelectLists.getRelationTypes();
     //Keep any relation no longer offered so the dropdown still shows it
@@ -136,7 +144,7 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     sheetData.careerLevels = await PENSelectLists.getCareerLevels(maxLevel);
     sheetData.careers = careers;
 
-    let parts = ["attributes", "description", "effects"];
+    let parts = ["attributes", "career", "description", "effects"];
     if (game.user.isGM) {
       parts.push("gmTab");
     }
@@ -149,6 +157,7 @@ export class PendragonFamilySheet extends PendragonItemSheet {
   async _preparePartContext(partId, context) {
     switch (partId) {
       case "attributes":
+      case "career":
       case "description":
       case "effects":
       case "gmTab":
