@@ -2102,6 +2102,7 @@ export class PENCharCreateV2 {
     let born = [Number(usage.born1), Number(usage.born2)];
     let died = [Number(usage.died1), Number(usage.died2)];
     let knight = [usage.knight1, usage.knight2];
+    let marriedYear = actor.system.born - (await new Roll("1D2-1").evaluate()).total;
     //Loop through each potential parent
     for (let pCount = 0; pCount < 2; pCount++) {
       //If the parent has a name then create the family member
@@ -2128,6 +2129,7 @@ export class PENCharCreateV2 {
             gender: gender[pCount],
             born: born[pCount],
             died: diedYear,
+            married: marriedYear,
             glory,
             heroic,
           },
@@ -2458,6 +2460,9 @@ export class PENCharCreateV2 {
   }
 
   static async deleteFamilyCareers(actor) {
+    //Only a marriage year the careers rolled is cleared, not one from family creation, typed in or imported
+    const careerMarried = (itm) =>
+      itm.system.married > 0 && itm.getFlag("Pendragon", "careerMarried") === itm.system.married;
     let family = actor.items
       .filter((itm) => itm.type === "family")
       .filter((itm) => itm.system.careers.length > 0)
@@ -2469,6 +2474,7 @@ export class PENCharCreateV2 {
           "system.yearPromoted": 0,
           "system.profession": "",
           "system.nextPromotion": 0,
+          ...(careerMarried(itm) ? { "system.married": 0, "flags.Pendragon.careerMarried": null } : {}),
         };
       });
     await Item.updateDocuments(family, { parent: actor });

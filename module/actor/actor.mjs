@@ -4,6 +4,7 @@ import { PENUtilities } from "../apps/utilities.mjs";
 import { PENWinter } from "../apps/winterPhase.mjs";
 import { PENactorItemDrop } from "./actor-itemDrop.mjs";
 import { WieldState } from "../models/items/weapon_model.mjs";
+import { FamilyData } from "../models/items/family_model.mjs";
 
 //Extend the base Actor Class
 export class PendragonActor extends Actor {
@@ -16,6 +17,22 @@ export class PendragonActor extends Actor {
    * available both inside and outside of character sheets (such as if an actor
    * is queried and has a roll executed directly from it).
    */
+
+  /**
+   * When family members are deleted, the family members left behind lose any parent or spouse link to them
+   * Only the user who deleted them makes the update
+   * @override
+   */
+  _onDeleteDescendantDocuments(parent, collection, documents, ids, options, userId) {
+    super._onDeleteDescendantDocuments(parent, collection, documents, ids, options, userId);
+    if (userId !== game.user.id || collection !== "items" || options.pendragonFamilyUnlinked) return;
+    const deleted = new Set(documents.filter((doc) => doc.type === "family").map((doc) => doc.id));
+    if (deleted.size === 0) return;
+    const unlink = FamilyData.unlinkUpdates(this, deleted);
+    //Delete handlers aren't awaited, so code that needs the result first unlinks itself
+    //(see PENCreateFamily.deleteFamily)
+    if (unlink.length > 0) this.updateEmbeddedDocuments("Item", unlink);
+  }
 
   prepareBaseData() {
     super.prepareBaseData();

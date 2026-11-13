@@ -4,6 +4,7 @@ import { PendragonItemSheet } from "./item-sheet.mjs";
 import { PENRandomName } from "../../apps/random-name.mjs";
 import { PENRandomCareer } from "../../apps/random-career.mjs";
 import { PENCreateFamily } from "../../apps/createFamily.mjs";
+import { FamilyData } from "../../models/items/family_model.mjs";
 
 export class PendragonFamilySheet extends PendragonItemSheet {
   #dragDrop;
@@ -65,6 +66,22 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     const relation = this.item.system.relation;
     if (relation && !(relation in sheetData.relationType)) {
       sheetData.relationType[relation] = game.i18n.localize("PEN.familyRelationship." + relation);
+    }
+    //Parents and spouse: the character (FamilyData.CHARACTER) or any other family member on the same actor
+    sheetData.memberOptions = null;
+    [sheetData.parentId0 = "", sheetData.parentId1 = ""] = this.item.system.parentIds;
+    const actor = this.item.parent;
+    if (actor) {
+      sheetData.memberOptions = Object.fromEntries([
+        [FamilyData.CHARACTER, actor.name + " (" + game.i18n.localize("TYPES.Actor." + actor.type) + ")"],
+        ...actor.items
+          .filter((itm) => itm.type === "family" && itm.id !== this.item.id)
+          .sort((a, b) => a.system.born - b.system.born)
+          .map((itm) => [
+            itm.id,
+            itm.name + " (" + game.i18n.localize("PEN.familyRelationship." + itm.system.relation) + ")",
+          ]),
+      ]);
     }
     sheetData.showParental = false;
     if (
@@ -151,6 +168,44 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     this.element
       .querySelectorAll(".item-toggle")
       .forEach((n) => n.addEventListener("click", this.#onItemToggle.bind(this)));
+  }
+
+  //The two Parents dropdowns submit as system.parentIds.0 and .1: store them as a list without blanks or repeats
+  _processFormData(event, form, formData) {
+    const data = super._processFormData(event, form, formData);
+    const ids = data.system?.parentIds;
+    if (ids && !Array.isArray(ids)) data.system.parentIds = [...new Set(Object.values(ids).filter(Boolean))];
+    return data;
+  }
+
+  //Keep spouses linked both ways: the new spouse links back (leaving any spouse they had), the old one is unlinked
+  async _processSubmitData(event, form, submitData, options = {}) {
+    const actor = this.item.parent;
+    const oldSpouseId = this.item.system.spouseId;
+    const newSpouseId = foundry.utils.getProperty(submitData, "system.spouseId");
+    await super._processSubmitData(event, form, submitData, options);
+    if (!actor || newSpouseId === undefined || newSpouseId === oldSpouseId) return;
+    const updates = new Map();
+    const unlinkFrom = (member, id) => {
+      if (member?.system.spouseId === id) updates.set(member.id, { _id: member.id, "system.spouseId": "" });
+    };
+    unlinkFrom(actor.items.get(oldSpouseId), this.item.id);
+    const newSpouse = actor.items.get(newSpouseId);
+    if (newSpouse) {
+      //Taking the character's spouse: say so, as the character loses their link
+      if (newSpouse.system.spouseId === FamilyData.CHARACTER) {
+        ui.notifications.info(
+          game.i18n.format("PEN.spouseRelinked", {
+            name: newSpouse.name,
+            spouse: this.item.name,
+            character: actor.name,
+          }),
+        );
+      }
+      unlinkFrom(actor.items.get(newSpouse.system.spouseId), newSpouse.id);
+      updates.set(newSpouse.id, { _id: newSpouse.id, "system.spouseId": this.item.id });
+    }
+    if (updates.size > 0) await actor.updateEmbeddedDocuments("Item", [...updates.values()]);
   }
 
   //Handle toggle states
@@ -301,6 +356,8 @@ export class PendragonFamilySheet extends PendragonItemSheet {
         "system.yearPromoted": result.yearPromoted,
         "system.nextPromotion": result.nextPromotion,
         "system.careerLevel": result.level,
+        //The history may have married them (e.g. a marriage chance, or marriage as the promotion)
+        ...PENRandomCareer.marriedUpdate(this.item, result.married),
       });
     } else {
       collection.push({

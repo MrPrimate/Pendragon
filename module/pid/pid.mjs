@@ -53,6 +53,20 @@ export class PID {
     return PID.getPrefix(document) + PENUtilities.toKebabCase(document.name);
   }
 
+  /**
+   * Update data that gives each embedded document the PID guessed from its name
+   * @param {Document[]} documents
+   * @returns {object[]}
+   */
+  static guessIdUpdates(documents) {
+    return documents.map((document) => ({
+      _id: document.id,
+      "flags.Pendragon.pidFlag.id": PID.guessId(document),
+      "flags.Pendragon.pidFlag.lang": game.i18n.lang,
+      "flags.Pendragon.pidFlag.priority": 0,
+    }));
+  }
+
   static guessFromClassData(documentClass, document) {
     for (const type in PID.#documentNameLookup) {
       if (documentClass.prototype instanceof PID.#documentNameLookup[type]) {

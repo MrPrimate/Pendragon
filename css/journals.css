@@ -16,8 +16,8 @@ div.pen-adventure-entry {
     display: none;
   }
 
-  nav.toc {
-    font-family: AGaramondPro;
+  nav.pages-list {
+    font-family: "EB Garamond";
 
     .page-heading {
       font-size: 1.2rem;
@@ -25,9 +25,12 @@ div.pen-adventure-entry {
   }
 
   section.journal-entry-content {
-    header.journal-header input.title {
-      font-family: AGaramondPro;
-      color: var(--pendragon-darkred);
+    form.journal-header {
+      font-family: "EB Garamond";
+
+      input[type="text"] {
+        color: var(--pendragon-darkred);
+      }
     }
   }
 
@@ -51,7 +54,7 @@ div.pen-adventure-entry {
     /* font-family: Arial; */
 
     h1 {
-      font-family: Herb;
+      font-family: Fondamento;
       border-bottom: none;
       color: var(--pendragon-darkred);
       text-transform: uppercase;
@@ -76,7 +79,7 @@ div.pen-adventure-entry {
 
       &.title2 {
         border-bottom: none;
-        font-family: "Herb";
+        font-family: "Fondamento";
         font-size: 26px;
         color: darkred;
         font-weight: bold;
@@ -135,6 +138,7 @@ div.pen-adventure-entry {
       font-style: italic;
       .external a.content-link.broken {
         text-decoration: none;
+        text-shadow: none;
         color: var(--pendragon-darkred);
       }
     }
@@ -183,6 +187,7 @@ div.pen-adventure-entry {
     .external a.content-link.broken {
       text-decoration: none;
       color: black;
+      text-shadow: none;
     }
 
     .external-object {
@@ -342,7 +347,7 @@ div.pen-adventure-entry {
       margin: 0px;
       row-gap: 0px;
       column-gap: 0px;
-      font-family: "AGaramondPro";
+      font-family: "EB Garamond";
       font-size: 18px;
       border-bottom: 3px solid rgb(50, 25, 0);
     }
@@ -350,13 +355,13 @@ div.pen-adventure-entry {
     .tableHeader {
       background: rgb(50, 25, 0);
       color: cornsilk;
-      font-family: AGaramondPro;
+      font-family: "EB Garamond";
       font-size: 18px;
       padding: 0px 2px 0px 2px;
     }
 
     .chrontitle {
-      font-family: "Herb";
+      font-family: "Fondamento";
       font-size: 30px;
       color: darkred;
       font-weight: bold;
@@ -479,13 +484,13 @@ div.pen-adventure-entry {
     }
 
     .main-title {
-      font-family: "Herb";
+      font-family: "Fondamento";
       font-size: 32px;
       border: none;
     }
 
     .solotitle {
-      font-family: "AGaramondPro";
+      font-family: "EB Garamond";
       color: darkred;
       font-size: 48px;
       text-align: center;
@@ -519,6 +524,7 @@ div.pen-adventure-entry {
       .external a.content-link.broken {
         text-decoration: none;
         color: var(--tbkred);
+        text-shadow: none;
       }
       .speech {
         text-align: justify;

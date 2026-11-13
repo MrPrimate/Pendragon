@@ -9,6 +9,27 @@
     <li><div class="stat-name left">{{localize 'PEN.soloScenarios'}} {{localize 'PEN.manual'}}</div></li>
 
     <li><div class="stat-name left">{{localize 'PEN.personalEvents'}} {{localize 'PEN.manual'}}</div></li>
+    <li>
+      <div class="stat-name left bold clickable" data-action="familysurvival">{{localize 'PEN.familySurvival'}}
+        {{#unless system.status.familysurvival}}
+          <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+        {{/unless}}
+      </div>
+    </li>
+    <li>
+      <div class="stat-name left bold clickable" data-action="familycareers">{{localize 'PEN.familyCareers'}}
+        {{#unless system.status.familycareers}}
+          <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+        {{/unless}}
+      </div>
+    </li>
+    <li>
+      <div class="stat-name left bold clickable" data-action="familyChildbirth">{{localize 'PEN.familyChildbirth'}}
+        {{#unless system.status.familychildbirth}}
+          <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+        {{/unless}}
+      </div>
+    </li>
     <li><div class="stat-name left bold clickable" data-action="xpChecks">{{localize 'PEN.xpRoll'}}
       {{#unless system.status.xp}}
         <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
@@ -127,20 +148,7 @@
         {{/unless}}
       </div>
     </li>
-    <li>
-      <div class="stat-name left bold clickable" data-action="familysurvival">{{localize 'PEN.familySurvival'}}
-        {{#unless system.status.familysurvival}}
-          <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
-        {{/unless}}
-      </div>
-    </li>
-    <li>
-      <div class="stat-name left bold clickable" data-action="familycareers">{{localize 'PEN.familyCareers'}}
-        {{#unless system.status.familycareers}}
-          <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
-        {{/unless}}
-      </div>
-    </li>
+
   </ul>
   <div class="tabHelpIcon">
     {{#if showHelp}}

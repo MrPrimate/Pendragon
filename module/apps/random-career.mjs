@@ -89,6 +89,7 @@ export class PENRandomCareer {
           "system.careers": careerResult.careers,
           "system.yearPromoted": careerResult.result.yearPromoted,
           "system.nextPromotion": careerResult.result.nextPromotion,
+          ...this.marriedUpdate(member, careerResult.result.married),
         });
         msgString +=
           "<div><strong>" +
@@ -238,13 +239,27 @@ export class PENRandomCareer {
   static async careerYear(member, state, year, allowChance) {
     const ranks = state.career.system.ranks;
     const rank = ranks[state.level];
-    if (!rank || rank.noPromotion || state.level >= ranks.length - 1) return false; //Top rank or dead end
+    if (!rank) return false;
+    const deadEnd = rank.noPromotion || state.level >= ranks.length - 1;
+
+    //Some ranks give an unmarried member a chance of marriage every year, whether or not a promotion is due
+    if (this.canMarry(rank, state) && (await this.marriageChance(rank))) state.married = year;
+
+    //For some ranks marriage is the promotion, including for members who married before reaching the rank
+    if (!deadEnd && this.promotedByMarriage(rank, state, year)) {
+      return this.applyCareerChange(member, state, { career: state.career, level: state.level + 1 }, year);
+    }
+
+    if (deadEnd) return false; //Top rank or dead end
+    if (rank.marriagePromotes) return false; //Only promoted by marriage
     if (state.nextPromotion > year) return false; //Too young, or hasn't served long enough yet
     if (!this.isAutoPromotion(rank) && !allowChance) return false;
+
     //Special ranks decide their own result; null means a normal step up
     let next = null;
     if (rank.special && rank.special !== "none") next = await this.specialOutcome(member, state, rank.special, year);
     next ??= { career: state.career, level: state.level + 1 };
+    if (next.married && !state.married) state.married = next.married;
 
     //No change: keep yearPromoted, just roll a new wait
     if (next.career === state.career && next.level === state.level) {
@@ -252,13 +267,41 @@ export class PENRandomCareer {
       state.nextPromotion = nextPromotion;
       return false;
     }
+    return this.applyCareerChange(member, state, next, year);
+  }
 
+  //Move a family member to a new rank or career. Always returns true
+  static async applyCareerChange(member, state, next, year) {
     //Uses up one of their rolled promotions, even if it skips ranks or changes career
     state.promotions++;
     state.career = next.career;
     state.level = next.level;
     Object.assign(state, await this.careerTiming(member, state.career, state.level, { from: year }));
     return true;
+  }
+
+  //Update data for the marriage year a career ends up with. A year the career rolled (not one the member
+  //already had) is also kept in a flag, so undoing the careers clears only that year
+  static marriedUpdate(member, married) {
+    if (married === (Number(member.system.married) || 0)) return {};
+    return { "system.married": married, "flags.Pendragon.careerMarried": married };
+  }
+
+  //A member starting on this rank is married: above a rank where marriage is the promotion (e.g. Knight Consort),
+  //or Wife or higher in the Ladies career, whose marriage comes from the maidInWaiting special instead
+  static startsMarried(career, startLevel) {
+    if (career.flags?.Pendragon?.pidFlag?.id === "i.career.path-of-the-family-ladies") return startLevel > 1;
+    return (career.system?.ranks ?? []).slice(0, startLevel).some((rank) => rank.marriagePromotes);
+  }
+
+  //An unmarried member on a rank with a marriage chance rolls for it every year
+  static canMarry(rank, state) {
+    return (rank?.marriage ?? 0) > 0 && !state.married;
+  }
+
+  //A married member on a rank where marriage is the promotion moves up
+  static promotedByMarriage(rank, state, year) {
+    return !!rank?.marriagePromotes && state.married > 0 && state.married <= year;
   }
 
   //Replay a family member's career year by year from their 14th birthday to now (or their death)
@@ -270,17 +313,23 @@ export class PENRandomCareer {
     const died = Number(member.system.died) || 0;
     const currentYear = game.time.components.year;
     const lastYear = died > 0 ? Math.min(died, currentYear) : currentYear;
+    //A bit of a fudge to deal with careers starting on a married rank
+    let married = Number(member.system.married) || 0;
+    if (!married && this.startsMarried(career, startLevel)) {
+      married = Math.min(born + 15 + (await new Roll("1D5").evaluate()).total, lastYear);
+    }
     const state = {
       career,
       level: startLevel,
       promotions: 0,
       position,
       ...(await this.careerTiming(member, career, startLevel)),
+      married: married,
     };
     for (let year = born + 15; year <= lastYear; year++) {
       await this.careerYear(member, state, year, state.promotions < rolledPromotions);
     }
-    return state; //{ career, level, promotions, position, yearPromoted, nextPromotion }
+    return state; //{ career, level, promotions, position, yearPromoted, nextPromotion, married }
   }
 
   //Return { career, level }, or null to just go up one rank
@@ -296,7 +345,7 @@ export class PENRandomCareer {
       case "maidInWaiting": {
         //1D6+15: due at 21 means a 6 was rolled, therefore rank 1, otherwise rank 2
         const dueAge = state.nextPromotion - (Number(member.system.born) || 0);
-        return { career: state.career, level: dueAge === 21 ? 1 : 2 };
+        return { career: state.career, level: dueAge === 21 ? 1 : 2, married: dueAge === 21 ? 0 : year };
       }
       case "maidenOfLake": {
         //After 10 years in the rank
@@ -305,7 +354,7 @@ export class PENRandomCareer {
         if (total < 5) {
           const careers = await game.system.api.pid.fromPIDBest({ pid: "i.career.path-of-the-family-ladies" });
           const newCareer = careers?.[0] ?? null;
-          if (newCareer) return { career: newCareer, level: 2 };
+          if (newCareer) return { career: newCareer, level: 2, married: year };
         }
         //5-6 she becomes a Lady of the Lake
         return { career: state.career, level: Math.max(2, state.level + 1) };
@@ -313,6 +362,12 @@ export class PENRandomCareer {
       default:
         return null;
     }
+  }
+
+  //Roll 1D6 against the rank's marriage chance (1 = always, 5 = 5-6). Returns true if they marry
+  static async marriageChance(rank) {
+    const roll = (await new Roll("1D6").evaluate()).total;
+    return roll >= rank.marriage;
   }
 
   //Resolve Family & establish gender

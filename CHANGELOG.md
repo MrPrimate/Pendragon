@@ -10,6 +10,7 @@
 - There is an extra step at the end of Character Creation to roll for Careers
 
 ### WinterPhase (MrPrimate/Dangermouse)
+
 - Childbirth & child survival rolls re-labelled in Winterphase
 - Extended family survival rolls added (Family Record)
 - Family career in Winterphase will add careers for those 14+ without a career (Piblings, Siblings and Children only)
@@ -19,6 +20,7 @@
 ### Misc
 
 - PID Flag code updated to v14. Objects in world and compendia are treated equally - so highest priority irrespective of where they are(JamesB & Mr Primate)
+- Some font changes
 
 ## 14.25
 

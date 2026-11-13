@@ -263,7 +263,6 @@ Hooks.once("init", () => {
             options.mode = foundry.applications.sheets.journal.JournalEntrySheet.VIEW_MODES.SINGLE;
             options.pageId = playerPageId;
           }
-          console.log(entry, options);
           return entry.sheet.render({ force: true, ...options });
         }
       }

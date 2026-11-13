@@ -22,6 +22,7 @@ export default class ChaosiumCanvasInterfaceInit extends ChaosiumCanvasInterface
     ];
 
     super.initSelf();
+    ChaosiumCanvasInterfaceShowRegionOnHover.registerRegionClass();
     const dataModels = {};
     const typeIcons = {};
     const types = [];
