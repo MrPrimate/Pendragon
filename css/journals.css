@@ -12,8 +12,7 @@
 
 form.pen-adventure-entry,
 div.pen-adventure-entry {
-  &.fixed-adventure-heading header.journal-header,
-  &.fixed-adventure-heading form.journal-header {
+  &.fixed-adventure-heading header.journal-header {
     display: none;
   }
 
@@ -21,10 +20,6 @@ div.pen-adventure-entry {
     font-family: "EB Garamond";
 
     .page-heading {
-      font-size: 1.2rem;
-    }
-
-    .heading-link {
       font-size: 1.2rem;
     }
   }
