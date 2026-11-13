@@ -9,13 +9,13 @@ const SETTINGS = {
     requiresReload: true,
   },
 
-  createCousins: {
-    name: "PEN.Settings.createCousins",
-    hint: "PEN.Settings.createCousinsHint",
-    scope: "user",
+  extendedFamilyCareers: {
+    name: "PEN.Settings.extendedFamilyCareers",
+    hint: "PEN.Settings.extendedFamilyCareersHint",
+    scope: "world",
     config: false,
     type: Boolean,
-    default: true,
+    default: false,
     requiresReload: true,
   },
 
@@ -140,6 +140,11 @@ export class PENFamilySettings extends HandlebarsApplicationMixin(ApplicationV2)
    */
   static async formHandler(event, form, formData) {
     const settings = foundry.utils.expandObject(formData.object);
-    await Promise.all(Object.entries(settings).map(([key, value]) => game.settings.set("Pendragon", key, value)));
+    //Players can open this menu for their own settings, but only the GM can change world settings
+    await Promise.all(
+      Object.entries(settings)
+        .filter(([key]) => SETTINGS[key] && (SETTINGS[key].scope !== "world" || game.user.isGM))
+        .map(([key, value]) => game.settings.set("Pendragon", key, value)),
+    );
   }
 }

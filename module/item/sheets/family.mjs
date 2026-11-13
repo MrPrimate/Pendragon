@@ -58,8 +58,13 @@ export class PendragonFamilySheet extends PendragonItemSheet {
     };
     sheetData.showRandomName = true;
     sheetData.showCareer = this.item.system.age >= 14;
-    sheetData.showRandomCareer = this.item.system.age >= 14;
-    if (Number(this.item.system.died) > 0) sheetData.showRandomCareer = false;
+    //Anyone living who has come of age can have a career rolled by hand (hidden again below if they have one)
+    sheetData.showRandomCareer = this.item.system.age >= 14 && !(Number(this.item.system.died) > 0);
+    //Older Family Creation made a single "Cousins (n)" entry that counts all the cousins on one side. It stands for
+    //a group rather than a person, so it gets no career. Individual cousins are linked to a parent
+    if (PENRandomCareer.COUSINS.includes(this.item.system.relation) && !this.item.system.parentIds.length) {
+      sheetData.showRandomCareer = false;
+    }
 
     sheetData.relationType = PENSelectLists.getRelationTypes();
     //Keep any relation no longer offered so the dropdown still shows it

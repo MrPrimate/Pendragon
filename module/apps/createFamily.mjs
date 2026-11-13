@@ -274,16 +274,13 @@ export class PENCreateFamily {
   }
 
   //Cousins: 1D3-1 for each aunt/uncle, only those who have come of age (14+) and no older than the Player-knight
-  //With the Create Cousins setting off, a single entry counts all the cousins on this side
   static async addCousins(run, side, suffix, piblings) {
     run.msg += this.headingString("PEN.familyCreate.cousins", suffix);
     if (this.checkFamily(run.actor, "cousin", "", side).length > 0) {
       run.msg += this.lineString(game.i18n.localize("PEN.familyCreate.alreadyExist"));
       return;
     }
-    const addCousins = game.settings.get("Pendragon", "createCousins");
     const maternal = side === "maternal";
-    let cousinCount = 0;
     for (const pibling of piblings) {
       const results = await this.addFamily({
         formula: "1D3-1",
@@ -294,27 +291,9 @@ export class PENCreateFamily {
         maternal,
         latestBorn: game.time.components.year - 14,
       });
-      cousinCount += results.members.length;
-      if (!addCousins) continue;
       this.linkParents(run, results.members, [pibling]);
       run.add.push(...results.members);
       run.msg += results.resultString;
-    }
-    if (addCousins) return;
-    const memberName = game.i18n.format("PEN.familyCreate.cousinCount", { count: cousinCount });
-    run.msg += this.lineString(memberName);
-    if (cousinCount > 0) {
-      run.add.push({
-        type: "family",
-        name: memberName,
-        system: {
-          born: run.yearBorn,
-          relation: "cousin",
-          died: "",
-          source: "createFamily",
-          maternal,
-        },
-      });
     }
   }
 
