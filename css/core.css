@@ -28,6 +28,20 @@
   src: url("../assets/ElMessiri-VariableFont_wght.ttf") format("woff2");
 }
 
+@font-face {
+  font-family: "EBGaramond";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../assets/EBGaramond-Regular.ttf") format("woff2");
+}
+
+@font-face {
+  font-family: "Fondamento";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../assets/Fondamento-Regular.ttf") format("woff2");
+}
+
 :root {
   --pendragon-blue: oklch(0.545 0.14 248.1);
   --pendragon-red: #ab0f14;

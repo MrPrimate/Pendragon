@@ -16,8 +16,8 @@ div.pen-adventure-entry {
     display: none;
   }
 
-  nav.pages-list {
-    font-family: "EB Garamond";
+  nav.toc {
+    font-family: "EBGaramond";
 
     .page-heading {
       font-size: 1.2rem;
@@ -25,12 +25,9 @@ div.pen-adventure-entry {
   }
 
   section.journal-entry-content {
-    form.journal-header {
-      font-family: "EB Garamond";
-
-      input[type="text"] {
-        color: var(--pendragon-darkred);
-      }
+    header.journal-header input.title {
+      font-family: "EBGaramond";
+      color: var(--pendragon-darkred);
     }
   }
 
@@ -347,7 +344,7 @@ div.pen-adventure-entry {
       margin: 0px;
       row-gap: 0px;
       column-gap: 0px;
-      font-family: "EB Garamond";
+      font-family: "EBGaramond";
       font-size: 18px;
       border-bottom: 3px solid rgb(50, 25, 0);
     }
@@ -355,7 +352,7 @@ div.pen-adventure-entry {
     .tableHeader {
       background: rgb(50, 25, 0);
       color: cornsilk;
-      font-family: "EB Garamond";
+      font-family: "EBGaramond";
       font-size: 18px;
       padding: 0px 2px 0px 2px;
     }
@@ -490,7 +487,7 @@ div.pen-adventure-entry {
     }
 
     .solotitle {
-      font-family: "EB Garamond";
+      font-family: "EBGaramond";
       color: darkred;
       font-size: 48px;
       text-align: center;
