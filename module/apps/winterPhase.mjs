@@ -1391,6 +1391,7 @@ export class PENWinter {
     }
     //Child Survival Roll for all family members under 5, not just the Player-knight's children, as the Family Record
     //leaves out children under 5 because they are covered by this roll
+    //Cousins are left out: they are never on the Family Record, only on the Family Tree
     //Anyone born this year is left out: the Family Childbirth step can be run before this one, and a newborn's
     //first survival roll is next winter, as for the Player-knight's own newborns
     const year = PENWinter.winterYear(actor);
@@ -1399,6 +1400,7 @@ export class PENWinter {
       .filter(
         (itm) =>
           Number(itm.system.died) < 1 &&
+          !PENRandomCareer.COUSINS.includes(itm.system.relation) &&
           year - itm.system.born >= 1 &&
           year - itm.system.born < 5 &&
           !itm.system.blessed,
