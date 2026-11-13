@@ -143,6 +143,7 @@
 
     "barren": "Stérile",
     "barrenMarriage": "Mariage stérile",
+    "bastard": "Bâtard",
     "base": "Base",
     "baseAbbr": "Base",
     "baseMod": "Modificateur",
@@ -1173,6 +1174,7 @@
     "spendPoints": "Dépense de Points",
     "spendPrestige": "Dépense de Prestige",
     "spouse": "Épouse",
+    "spouseRelinked": "{name} était l'épouse de {character} et est désormais l'épouse de {spouse}",
     "squire": "Écuyer",
     "squired": "Devenir Écuyer",
     "squireImprove": "Amélioration de l'écuyer",

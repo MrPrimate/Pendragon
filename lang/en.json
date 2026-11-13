@@ -147,6 +147,7 @@
 
     "barren": "Barren",
     "barrenMarriage": "Barren Marriage",
+    "bastard": "Bastard",
     "base": "Base",
     "baseAbbr": "Base",
     "baseMod": "Modifier",
@@ -1174,6 +1175,7 @@
     "spendPoints": "Spend Points",
     "spendPrestige": "Spend Prestige",
     "spouse": "Spouse",
+    "spouseRelinked": "{name} was {character}'s spouse and is now the spouse of {spouse}",
     "squire": "Squire",
     "squired": "Became a squire",
     "squireImprove": "Squire Improvement",

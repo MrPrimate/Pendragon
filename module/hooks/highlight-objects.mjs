@@ -1,41 +1,12 @@
+import ChaosiumCanvasInterfaceShowRegionOnHover from "../apps/chaosium-canvas-interface-show-region-on-hover.mjs";
+
 /**
  * Highlight Objects
- * @param {ApplicationV2} active
+ * While the GM holds the highlight key, regions with an active Show Region On Hover behavior are shown to that GM.
+ * This is only a display state on this client, the regions themselves are not updated
+ * @param {boolean} active
  */
 export default function (active) {
-  if (game.user.isGM) {
-    if (active) {
-      const regions = canvas.scene.regions
-        .filter(
-          (doc) =>
-            doc.visibility === CONST.REGION_VISIBILITY.LAYER_UNLOCKED &&
-            doc.behaviors.find(
-              (doc) => doc.disabled === false && doc.type === "ChaosiumCanvasInterfaceShowRegionOnHover",
-            ),
-        )
-        .map((doc) => {
-          return {
-            _id: doc.id,
-            visibility: CONST.REGION_VISIBILITY.GAMEMASTER,
-          };
-        });
-      canvas.scene.updateEmbeddedDocuments("Region", regions);
-    } else {
-      const regions = canvas.scene.regions
-        .filter(
-          (doc) =>
-            doc.visibility === CONST.REGION_VISIBILITY.GAMEMASTER &&
-            doc.behaviors.find(
-              (doc) => doc.disabled === false && doc.type === "ChaosiumCanvasInterfaceShowRegionOnHover",
-            ),
-        )
-        .map((doc) => {
-          return {
-            _id: doc.id,
-            visibility: CONST.REGION_VISIBILITY.LAYER_UNLOCKED,
-          };
-        });
-      canvas.scene.updateEmbeddedDocuments("Region", regions);
-    }
-  }
+  if (!game.user.isGM) return;
+  ChaosiumCanvasInterfaceShowRegionOnHover.setHighlighting(active);
 }
