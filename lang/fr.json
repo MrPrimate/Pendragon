@@ -1,4 +1,11 @@
 {
+  "PEN.noFamilyEvent": "No family random event this year",
+  "PEN.noRandomEventTable": "No family random event table exists",
+  "PEN.familyRandomEvents": "Family Random Event",
+  "PEN.familyRandomEventsDesc": "Family Random Event (semi-automated)",
+  "PEN.familyInvalidResult": "Invalid Random Event result",
+  "PEN.seeHistory": "see history event",
+
   "PEN.actionNote.disarmCritical": "L’adversaire perd son emprise sur l’arme ou l’objet, qui vole hors de portée ou tombe aux pieds du personnage.",
   "PEN.actionNote.disarmed": "L’adversaire perd son emprise sur son arme ou son objet, qui tombe à portée de main.",
   "PEN.actionNote.disarmedCritical": "Vous perdez l’emprise sur votre arme ou votre objet, qui vole hors de portée ou tombe aux pieds de votre adversaire.",

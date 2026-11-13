@@ -2,7 +2,6 @@
 @import "core.css" layer(core);
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 
-
 .application {
   header.window-header {
     .invalid-pid {

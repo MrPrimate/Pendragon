@@ -8,7 +8,7 @@ export class PendragonHistorySheet extends PendragonItemSheet {
   static DEFAULT_OPTIONS = {
     position: {
       width: 560,
-      height: 450,
+      height: 500,
     },
   };
 

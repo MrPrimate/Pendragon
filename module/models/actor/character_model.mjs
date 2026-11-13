@@ -205,6 +205,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         familysurvival: new BooleanField({ initial: false }),
         familycareers: new BooleanField({ initial: false }),
         familychildbirth: new BooleanField({ initial: false }),
+        familyrandomevents: new BooleanField({ initial: false }),
         passiveGlory: new BooleanField({ initial: false }),
         xp: new BooleanField({ initial: false }),
         barren: new BooleanField({ initial: false }),

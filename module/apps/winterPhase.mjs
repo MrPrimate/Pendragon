@@ -18,6 +18,8 @@ export class PENWinter {
     elder: "rt..table-2-10-causeofdeath-elder",
   };
 
+  static RANDOM_EVENT_TABLE = "rt..table-2-17-random-family-events";
+
   //
   //Only living, player owned characters take part in the Winter Phase
   //
@@ -84,6 +86,7 @@ export class PENWinter {
             "system.status.winterYear": 0,
             "system.status.passiveGlory": false,
             "system.passglory.inyear": 0,
+            "system.status.familyrandomevents": false,
           });
         }
       }
@@ -116,6 +119,7 @@ export class PENWinter {
           "system.status.familychildbirth": true,
           "system.status.xp": true,
           "system.status.passiveGlory": true,
+          "system.status.familyrandomevents": true,
         });
       }
     }
@@ -137,6 +141,7 @@ export class PENWinter {
       familysurvival: "PEN.familySurvival",
       familycareers: "PEN.familyCareers",
       familychildbirth: "PEN.familyChildbirth",
+      familyrandomevents: "PEN.familyRandomEvents",
       passiveGlory: "PEN.passive",
     };
     let incomplete = [];
@@ -222,6 +227,7 @@ export class PENWinter {
       "system.status.familychildbirth": toggle,
       "system.status.passiveGlory": toggle,
       "system.status.xp": toggle,
+      "system.status.familyrandomevents": toggle,
     });
     ui.notifications.warn(message);
   }
@@ -280,6 +286,7 @@ export class PENWinter {
           "system.status.familycareers": active,
           "system.status.familychildbirth": active,
           "system.status.xp": active,
+          "system.status.familyrandomevents": active,
         });
       }
     }
@@ -2609,5 +2616,63 @@ export class PENWinter {
       .filter((itm) => !["cousin", "other"].includes(itm.system.relation))
       .filter((itm) => itm.system.born > 0 && year - itm.system.born >= 5)
       .sort((a, b) => a.system.born - b.system.born);
+  }
+
+  //Family Random Event (Noble's Handbook)
+  //1D20 against the Family Record.
+  //Results on a blank line are ignored
+  //Then roll on Random Family Events table - will need to resolve outcome manually
+  static async familyRandomEvents(actor) {
+    if (!actor.system.status.familyrandomevents) {
+      return;
+    }
+    const year = PENWinter.winterYear(actor);
+    const table = (await game.system.api.pid.fromPIDBest({ pid: this.RANDOM_EVENT_TABLE }))[0];
+    if (!table) {
+      ui.notifications.warn("PEN.noRandomEventTable", { localize: true });
+      return;
+    }
+    const family = PENWinter.familyRecord(actor, year);
+    let msgString = "<h5>" + game.i18n.localize("PEN.familyRandomEvents") + " (" + year + ")</h5>";
+    let result = await PENUtilities.simpleDiceRoll("1D20");
+    let member = family[result - 1];
+    //Ignore rolls if greater than list of relevant family members
+    if (!member) {
+      msgString += `<div>` + game.i18n.localize("PEN.noFamilyEvent") + `</div>`;
+    } else {
+      let rollResults = await PENUtilities.tableDiceRoll(table);
+      let title = rollResults.results[0]?.name ?? null;
+      let description = rollResults.results[0]?.description ?? null;
+      if (!title) {
+        msgString += `<div>` + game.i18n.localize("PEN.familyInvalidResult") + `</div>`;
+      } else {
+        msgString += "<div>" + member.name + ": " + title + " (" + game.i18n.localize("PEN.seeHistory") + ")</div>";
+        //If description exists add it to a History item
+        if (description) {
+          //Add a History Item to show the spend
+          const itemData = {
+            name: member.name + " (" + title + ")",
+            type: "history",
+            system: {
+              description: description,
+              year: year,
+              glory: 0,
+            },
+          };
+          let newHist = await Item.create(itemData, { parent: actor });
+          let key = await game.system.api.pid.guessId(newHist);
+          await newHist.update({
+            "flags.Pendragon.pidFlag.id": key,
+            "flags.Pendragon.pidFlag.lang": game.i18n.lang,
+            "flags.Pendragon.pidFlag.priority": 0,
+          });
+        }
+      }
+    }
+    await ChatMessage.create({
+      content: msgString,
+      speaker: ChatMessage.getSpeaker({ actor }),
+    });
+    //await actor.update({ "system.status.familyrandomevents": false });
   }
 }

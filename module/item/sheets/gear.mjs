@@ -9,7 +9,7 @@ export class PendragonGearSheet extends PendragonItemSheet {
     classes: ["Pendragon", "sheet", "itemV2"],
     position: {
       width: 560,
-      height: 480,
+      height: 500,
     },
   };
 

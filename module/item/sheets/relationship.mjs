@@ -8,7 +8,7 @@ export class PendragonRelationshipSheet extends PendragonItemSheet {
   static DEFAULT_OPTIONS = {
     position: {
       width: 610,
-      height: 480,
+      height: 500,
     },
   };
 

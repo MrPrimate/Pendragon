@@ -30,6 +30,13 @@
         {{/unless}}
       </div>
     </li>
+    <li>
+      <div class="stat-name left bold clickable" data-action="familyRandomEvents">{{localize 'PEN.familyRandomEventsDesc'}}
+        {{#unless system.status.familyrandomevents}}
+          <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>
+        {{/unless}}
+      </div>
+    </li>
     <li><div class="stat-name left bold clickable" data-action="xpChecks">{{localize 'PEN.xpRoll'}}
       {{#unless system.status.xp}}
         <a class="large-icon" data-tooltip="{{localize 'PEN.completed'}}"><i class="fas fa-check"></i></a>

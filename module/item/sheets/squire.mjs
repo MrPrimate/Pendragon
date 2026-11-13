@@ -10,7 +10,7 @@ export class PendragonSquireSheet extends PendragonItemSheet {
   static DEFAULT_OPTIONS = {
     position: {
       width: 560,
-      height: 470,
+      height: 500,
     },
     actions: {
       randomName: this._onRandomName,

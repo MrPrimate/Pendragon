@@ -5,7 +5,7 @@ export class PendragonItem extends Item {
   constructor(data, context) {
     if (typeof data.img === "undefined") {
       if (data.type === "skill") {
-        data.img = "icons/svg/book.svg";
+        data.img = "systems/Pendragon/assets/Icons/white-book.svg";
       } else if (data.type === "trait") {
         data.img = "systems/Pendragon/assets/Icons/knight-banner.svg";
       } else if (data.type === "passion") {
@@ -19,7 +19,7 @@ export class PendragonItem extends Item {
       } else if (data.type === "family") {
         data.img = "systems/Pendragon/assets/Icons/griffin-shield.svg";
       } else if (data.type === "gear") {
-        data.img = "icons/svg/item-bag.svg";
+        data.img = "systems/Pendragon/assets/Icons/swap-bag.svg";
       } else if (data.type === "culture") {
         data.img = "systems/Pendragon/assets/Icons/trumpet-flag.svg";
       } else if (data.type === "religion") {
