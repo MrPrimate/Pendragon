@@ -1389,23 +1389,31 @@ export class PENWinter {
     if (!actor.system.status.childbirth) {
       return;
     }
-    //Child Survival Roll
+    //Child Survival Roll for all family members under 5, not just the Player-knight's children, as the Family Record
+    //leaves out children under 5 because they are covered by this roll
+    //Anyone born this year is left out: the Family Childbirth step can be run before this one, and a newborn's
+    //first survival roll is next winter, as for the Player-knight's own newborns
+    const year = PENWinter.winterYear(actor);
     let children = actor.items
       .filter((itm) => itm.type === "family")
       .filter(
         (itm) =>
           Number(itm.system.died) < 1 &&
-          ["son", "daughter", "child"].includes(itm.system.relation) &&
-          PENWinter.winterYear(actor) - itm.system.born < 5 &&
+          year - itm.system.born >= 1 &&
+          year - itm.system.born < 5 &&
           !itm.system.blessed,
       );
     if (children.length > 0 && game.settings.get("Pendragon", "childMortality")) {
       let cldChng = [];
       for (const child of children) {
         let result = await PENUtilities.simpleDiceRoll("1D20");
-        let adjRes = result + actor.system.impoverished;
-        if (actor.system.sol === "poor") {
-          adjRes = adjRes - 1;
+        let adjRes = result;
+        //The Player-knight's poverty and standard of living only affect their own children, not other households
+        if (PENRandomCareer.CHILDREN.includes(child.system.relation)) {
+          adjRes += actor.system.impoverished;
+          if (actor.system.sol === "poor") {
+            adjRes = adjRes - 1;
+          }
         }
         let died = "";
         let label = game.i18n.localize("PEN.survived");
@@ -2252,7 +2260,7 @@ export class PENWinter {
     const added = (await PENRandomCareer.randomCareer(actor, true)) ?? [];
     const newCareers = new Set(added.map((upd) => upd._id));
 
-    //Living family members with a career, oldest first to match the Family Record
+    //Living family members with a career, including those not on the Family Record (e.g. cousins), oldest first
     const family = actor.items
       .filter(
         (itm) =>
@@ -2268,9 +2276,11 @@ export class PENWinter {
     const updates = [];
     let promoted = 0; //Promotions and marriages reported
     let msgString = "<h5>" + game.i18n.localize("PEN.familyPromotions") + " (" + year + ")</h5>";
-    //One family member, picked on 1D20, can get a chance promotion this year
+    //One family member, picked on 1D20 from the Family Record, can get a chance promotion this year
+    //Anyone not on the Record (e.g. cousins) is only promoted automatically or by marriage. A roll on someone
+    //without a career, or with a career added this year, counts for nothing
     const roll = await PENUtilities.simpleDiceRoll("1D20");
-    const rolledId = family[roll - 1]?.id ?? "";
+    const rolledId = PENWinter.familyRecord(actor, year)[roll - 1]?.id ?? "";
     for (const member of family) {
       const { pid, uuid } = member.system.careers[0];
       //Several family members often share a career, so look each one up once
