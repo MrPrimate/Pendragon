@@ -1,6 +1,6 @@
 {
   "PEN.noFamilyEvent": "No family random event this year",
-  "PEN.noRandomEventTable": "No family random event table exists",
+  "PEN.noRandomEventTable": "No Random Family Events table found in the installed modules or the world",
   "PEN.familyRandomEvents": "Family Random Event",
   "PEN.familyRandomEventsDesc": "Family Random Event (semi-automated)",
   "PEN.familyInvalidResult": "Invalid Random Event result",

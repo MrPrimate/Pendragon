@@ -2639,7 +2639,7 @@ export class PENWinter {
     const histories = [];
     //Family members still to get an event. Each Second Event adds one more roll on the Record
     let memberRolls = 1;
-    //Second Events chain on 1 in 20, so cap them to rule out a runaway loop
+    //Second Events chain on 1 in 20, so cap the extra family members they add. this is EXTREMELY unlikely to be hit
     let secondEvents = 0;
     while (memberRolls > 0) {
       memberRolls--;
@@ -2651,14 +2651,15 @@ export class PENWinter {
       for (;;) {
         const rollResults = await PENUtilities.tableDiceRoll(table);
         result = rollResults.results[0];
-        if (rollResults.roll.total !== this.RANDOM_EVENT_SECOND || secondEvents >= 10) break;
+        if (rollResults.roll.total !== this.RANDOM_EVENT_SECOND) break;
+        if (secondEvents >= 10) continue;
         secondEvents++;
         memberRolls++;
         lines.push(name + ": " + foundry.utils.escapeHTML(result?.name ?? ""));
       }
       const title = result?.name;
       if (!title) {
-        lines.push(game.i18n.localize("PEN.familyInvalidResult"));
+        lines.push(name + ": " + game.i18n.localize("PEN.familyInvalidResult"));
         continue;
       }
       //The details go in a History item, as most events need a decision from the player

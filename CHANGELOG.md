@@ -15,7 +15,8 @@
 - Extended family survival rolls added (Family Record)
 - Family career in Winterphase will add careers for those 14+ without a career (Piblings, Siblings and Children only)
 - Also make career improvement checks and rolls in Winterphase
-- TODO: Extended Family Childbirth, Marriages & Random Events
+- Extended Family Childbirth rolls added (Family Record)
+- Family Random Event step added: rolls a family member on the Family Record and an event on the Noble's Handbook Random Family Events table, including Second Events. The event details are added to the character's History for the player to resolve
 
 ### Misc
 

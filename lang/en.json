@@ -985,7 +985,7 @@
   "PEN.noneNoMore": "None/No More",
   "PEN.nonknightly": "Non-Knightly Skill",
   "PEN.noPrestige": "You have no prestige points to spend",
-  "PEN.noRandomEventTable": "No family random event table exists",
+  "PEN.noRandomEventTable": "No Random Family Events table found in the installed modules or the world",
   "PEN.noRelation": "You need to allow relationships in the Game Settings",
   "PEN.noReligion": "No Religion set on this actor",
   "PEN.noReligions": "No Religions found in the world or the compendia",
