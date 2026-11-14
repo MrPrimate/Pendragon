@@ -18,7 +18,7 @@ export class PENRandomName {
     const culture = this.resolveCulture(doc, "culture");
     const table = await this.getNameTable(type, culture);
     if (!table) {
-      ui.notifications.warn("PEN.noRandomEventTable", { localize: true });
+      ui.notifications.warn("PEN.noNameTable", { localize: true });
       return null;
     }
     const tableResults = await PENUtilities.tableDiceRoll(table);
