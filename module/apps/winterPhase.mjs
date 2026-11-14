@@ -2647,21 +2647,26 @@ export class PENWinter {
       //Ignore rolls past the end of the Family Record
       if (!member) continue;
       const name = foundry.utils.escapeHTML(member.name);
-      let result;
-      for (;;) {
+      let result = null;
+      //A world table with only Second Event left to draw never gives anything else, so limit the rerolls.
+      //Running out leaves no result, which is reported as invalid
+      for (let attempt = 0; attempt < 20; attempt++) {
         const rollResults = await PENUtilities.tableDiceRoll(table);
         result = rollResults.results[0];
         if (rollResults.roll.total !== this.RANDOM_EVENT_SECOND) break;
+        const secondName = result?.name;
+        result = null;
         if (secondEvents >= 10) continue;
         secondEvents++;
         memberRolls++;
-        lines.push(name + ": " + foundry.utils.escapeHTML(result?.name ?? ""));
+        lines.push(name + ": " + foundry.utils.escapeHTML(secondName ?? ""));
       }
-      const title = result?.name;
-      if (!title) {
+      if (!result?.name && !result?.description) {
         lines.push(name + ": " + game.i18n.localize("PEN.familyInvalidResult"));
         continue;
       }
+      //A result with only a description still counts, under a general title
+      const title = result.name || game.i18n.localize("PEN.familyRandomEvents");
       //The details go in a History item, as most events need a decision from the player
       if (!result.description) {
         lines.push(name + ": " + foundry.utils.escapeHTML(title));
