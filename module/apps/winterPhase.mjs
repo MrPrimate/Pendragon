@@ -2673,6 +2673,6 @@ export class PENWinter {
       content: msgString,
       speaker: ChatMessage.getSpeaker({ actor }),
     });
-    //await actor.update({ "system.status.familyrandomevents": false });
+    await actor.update({ "system.status.familyrandomevents": false });
   }
 }
