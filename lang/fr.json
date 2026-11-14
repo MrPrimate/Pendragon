@@ -5,6 +5,7 @@
   "PEN.familyRandomEventsDesc": "Family Random Event (semi-automated)",
   "PEN.familyInvalidResult": "Invalid Random Event result",
   "PEN.seeHistory": "see history event",
+  "PEN.secondEvent": "Second Event!",
 
   "PEN.actionNote.disarmCritical": "L’adversaire perd son emprise sur l’arme ou l’objet, qui vole hors de portée ou tombe aux pieds du personnage.",
   "PEN.actionNote.disarmed": "L’adversaire perd son emprise sur son arme ou son objet, qui tombe à portée de main.",

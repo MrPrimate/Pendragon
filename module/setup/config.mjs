@@ -60,3 +60,8 @@ PENDRAGON.familyRelationships = {
   cousin: "PEN.familyRelationship.cousin",
   other: "PEN.familyRelationship.other",
 };
+
+//Names of the Random Family Events table result that gives a Second Event (Winter Phase Family Random Event)
+//Each entry is a localization key or a plain name; matching ignores case and surrounding spaces.
+//Modules can push their own names, e.g. for translated or custom tables
+PENDRAGON.familyRandomEventSecond = ["PEN.secondEvent", "Second Event!"];

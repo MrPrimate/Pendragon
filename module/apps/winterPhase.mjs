@@ -19,8 +19,6 @@ export class PENWinter {
   };
 
   static RANDOM_EVENT_TABLE = "rt..table-2-17-random-family-events";
-  //Roll on the Random Family Events table that gives a Second Event
-  static RANDOM_EVENT_SECOND = 11;
 
   //
   //Only living, player owned characters take part in the Winter Phase
@@ -2634,6 +2632,12 @@ export class PENWinter {
       ui.notifications.warn("PEN.noRandomEventTable", { localize: true });
       return;
     }
+    //Second Event is matched on the result name, not the roll, so custom and translated tables work.
+    //The names are in CONFIG.PENDRAGON.familyRandomEventSecond, so modules can add their own
+    const secondEventNames = new Set(
+      (CONFIG.PENDRAGON.familyRandomEventSecond ?? []).map((n) => game.i18n.localize(n).trim().toLowerCase()),
+    );
+    const isSecondEvent = (result) => secondEventNames.has((result?.name ?? "").trim().toLowerCase());
     const family = PENWinter.familyRecord(actor, year);
     const lines = [];
     const histories = [];
@@ -2653,7 +2657,7 @@ export class PENWinter {
       for (let attempt = 0; attempt < 20; attempt++) {
         const rollResults = await PENUtilities.tableDiceRoll(table);
         result = rollResults.results[0];
-        if (rollResults.roll.total !== this.RANDOM_EVENT_SECOND) break;
+        if (!isSecondEvent(result)) break;
         const secondName = result?.name;
         result = null;
         if (secondEvents >= 10) continue;

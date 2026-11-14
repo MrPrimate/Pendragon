@@ -1402,6 +1402,7 @@
   "PEN.rollWrite": "Do you want to select or roll them randomly?",
   "PEN.score": "Current Value",
   "PEN.scoreHint": "Enter the target score for the roll",
+  "PEN.secondEvent": "Second Event!",
   "PEN.secondary": "Secondary",
   "PEN.secondaryHand": "Secondary Hand",
   "PEN.seeHistory": "see history event",
