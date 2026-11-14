@@ -19,6 +19,8 @@ export class PENWinter {
   };
 
   static RANDOM_EVENT_TABLE = "rt..table-2-17-random-family-events";
+  //Roll on the Random Family Events table that gives a Second Event
+  static RANDOM_EVENT_SECOND = 11;
 
   //
   //Only living, player owned characters take part in the Winter Phase
@@ -2619,9 +2621,9 @@ export class PENWinter {
   }
 
   //Family Random Event (Noble's Handbook)
-  //1D20 against the Family Record.
-  //Results on a blank line are ignored
-  //Then roll on Random Family Events table - will need to resolve outcome manually
+  //1D20 against the Family Record. A blank line means no event this year
+  //Otherwise roll on the Random Family Events table - the outcome is resolved by hand
+  //"Second Event!" rolls for another family member and event, and rerolls the event for the current member
   static async familyRandomEvents(actor) {
     if (!actor.system.status.familyrandomevents) {
       return;
@@ -2633,46 +2635,64 @@ export class PENWinter {
       return;
     }
     const family = PENWinter.familyRecord(actor, year);
-    let msgString = "<h5>" + game.i18n.localize("PEN.familyRandomEvents") + " (" + year + ")</h5>";
-    let result = await PENUtilities.simpleDiceRoll("1D20");
-    let member = family[result - 1];
-    //Ignore rolls if greater than list of relevant family members
-    if (!member) {
-      msgString += `<div>` + game.i18n.localize("PEN.noFamilyEvent") + `</div>`;
-    } else {
-      let rollResults = await PENUtilities.tableDiceRoll(table);
-      let title = rollResults.results[0]?.name ?? null;
-      let description = rollResults.results[0]?.description ?? null;
-      if (!title) {
-        msgString += `<div>` + game.i18n.localize("PEN.familyInvalidResult") + `</div>`;
-      } else {
-        msgString += "<div>" + member.name + ": " + title + " (" + game.i18n.localize("PEN.seeHistory") + ")</div>";
-        //If description exists add it to a History item
-        if (description) {
-          //Add a History Item to show the spend
-          const itemData = {
-            name: member.name + " (" + title + ")",
-            type: "history",
-            system: {
-              description: description,
-              year: year,
-              glory: 0,
-            },
-          };
-          let newHist = await Item.create(itemData, { parent: actor });
-          let key = await game.system.api.pid.guessId(newHist);
-          await newHist.update({
-            "flags.Pendragon.pidFlag.id": key,
-            "flags.Pendragon.pidFlag.lang": game.i18n.lang,
-            "flags.Pendragon.pidFlag.priority": 0,
-          });
-        }
+    const lines = [];
+    const histories = [];
+    //Family members still to get an event. Each Second Event adds one more roll on the Record
+    let memberRolls = 1;
+    //Second Events chain on 1 in 20, so cap them to rule out a runaway loop
+    let secondEvents = 0;
+    while (memberRolls > 0) {
+      memberRolls--;
+      const member = family[(await PENUtilities.simpleDiceRoll("1D20")) - 1];
+      //Ignore rolls past the end of the Family Record
+      if (!member) continue;
+      const name = foundry.utils.escapeHTML(member.name);
+      let result;
+      for (;;) {
+        const rollResults = await PENUtilities.tableDiceRoll(table);
+        result = rollResults.results[0];
+        if (rollResults.roll.total !== this.RANDOM_EVENT_SECOND || secondEvents >= 10) break;
+        secondEvents++;
+        memberRolls++;
+        lines.push(name + ": " + foundry.utils.escapeHTML(result?.name ?? ""));
       }
+      const title = result?.name;
+      if (!title) {
+        lines.push(game.i18n.localize("PEN.familyInvalidResult"));
+        continue;
+      }
+      //The details go in a History item, as most events need a decision from the player
+      if (!result.description) {
+        lines.push(name + ": " + foundry.utils.escapeHTML(title));
+        continue;
+      }
+      lines.push(name + ": " + foundry.utils.escapeHTML(title) + " (" + game.i18n.localize("PEN.seeHistory") + ")");
+      histories.push({
+        name: member.name + " (" + title + ")",
+        type: "history",
+        system: {
+          description: result.description,
+          year: year,
+          glory: 0,
+        },
+      });
     }
+    if (lines.length === 0) lines.push(game.i18n.localize("PEN.noFamilyEvent"));
+    const msgString =
+      "<h5>" +
+      game.i18n.localize("PEN.familyRandomEvents") +
+      " (" +
+      year +
+      ")</h5>" +
+      lines.map((line) => "<div>" + line + "</div>").join("");
     await ChatMessage.create({
       content: msgString,
       speaker: ChatMessage.getSpeaker({ actor }),
     });
+    if (histories.length > 0) {
+      const created = await actor.createEmbeddedDocuments("Item", histories);
+      await actor.updateEmbeddedDocuments("Item", game.system.api.pid.guessIdUpdates(created));
+    }
     await actor.update({ "system.status.familyrandomevents": false });
   }
 }
